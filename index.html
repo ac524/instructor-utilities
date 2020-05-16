@@ -1,0 +1,121 @@
+<!Doctype>
+<html lang="en-us">
+    <head>
+        <title>Test</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    </head>
+    <body>
+
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Group Picker</h1>
+            </div>
+        </div>
+
+        <div class="container">
+            
+            <div id="status-message" class="alert"></div>
+
+            <ul id="all-groups" class="list-group">
+
+            </ul>
+
+            <div class="mt-4 d-flex">
+                <button id="next-group" class="btn btn-primary">Select Group</button>
+                <button id="reset-list" class="btn btn-secondary ml-auto">Reset</button>
+            </div>
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script>
+
+            const selections = [
+                    'Group 1',
+                    'Group 2',
+                    'Group 3',
+                    'Group 4'
+                ],
+                selected = [],
+                groupListEl = $('#all-groups'),
+                resetButtonEl = $('#reset-list'),
+                nextButtonEl = $('#next-group'),
+                statusMessageEl = $('#status-message');
+
+            const setStatusMessage = ( message, status = 'info' ) => {
+
+                let previousStatus = statusMessageEl.data( 'status' );
+
+                if( previousStatus && previousStatus !== status ) 
+
+                    // Remove the previous status class
+                    statusMessageEl.removeClass( 'alert-'+ previousStatus );
+
+                statusMessageEl
+                    .data( 'status', status )
+                    .addClass( 'alert-'+ status )
+                    .text( message );
+
+            };
+
+            const displayItems = () => {
+
+                groupListEl.empty();
+
+                selections
+                    .forEach( groupName => {
+
+                    groupListEl.append(
+                        `<li class="list-group-item">${groupName}</li>`
+                    );
+
+                } );
+
+            };
+
+            const startList = () => {
+
+                selected.length = 0;
+                nextButtonEl.prop('disabled', false);
+                setStatusMessage( selected.length + ' groups called on.' );
+                displayItems();
+
+            };
+
+            resetButtonEl.on( 'click', startList );
+
+            nextButtonEl.on('click', () => {
+
+                groupListEl
+                    .children( '.list-group-item-success' )
+                    .removeClass( 'list-group-item-success' )
+                    .addClass( 'list-group-item-dark' );
+
+                if( selections.length === selected.length ) {
+
+                    setStatusMessage( 'Presentations Complete', 'success' );
+
+                    nextButtonEl.prop('disabled', true);
+                    return;
+
+                }
+
+                let remainingGroups = selections.filter( groupName => !selected.includes( groupName ) ),
+                    nextGroup = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
+                    nextGroupIndex = selections.indexOf( nextGroup );
+
+                groupListEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
+                
+                selected.push( nextGroup );
+
+                let groupWord = 'group' + ( selected.length === 1 ? '' : 's' );
+
+                setStatusMessage( `${selected.length} ${groupWord} called on.` );
+
+            });
+
+            startList();
+
+        </script>
+    </body>
+</html>
