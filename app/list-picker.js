@@ -1,85 +1,103 @@
-const selections = [
-        'Group 1',
-        'Group 2',
-        'Group 3',
-        'Group 4'
-    ],
-    selected = [],
-    groupListEl = $('#all-groups'),
-    resetButtonEl = $('#reset-list'),
-    nextButtonEl = $('#next-group'),
-    statusMessageEl = $('#status-message');
+// List Walker Application
+function RandomListWalker() {
 
-const setStatusMessage = ( message, status = 'info' ) => {
+    Object.assign( this, {
 
-    let previousStatus = statusMessageEl.data( 'status' );
+        options: [
+            'Group 1',
+            'Group 2',
+            'Group 3',
+            'Group 4'
+        ],
+        selected: [],
+        listEl: $('#all-groups'),
+        resetButtonEl: $('#reset-list'),
+        nextButtonEl: $('#next-group'),
+        statusMessageEl: $('#status-message'),
 
-    if( previousStatus && previousStatus !== status ) 
+        setStatusMessage: function( message, status = 'info' ) {
 
-        // Remove the previous status class
-        statusMessageEl.removeClass( 'alert-'+ previousStatus );
+            let previousStatus = this.statusMessageEl.data( 'status' );
 
-    statusMessageEl
-        .data( 'status', status )
-        .addClass( 'alert-'+ status )
-        .text( message );
+            if( previousStatus && previousStatus !== status ) 
+        
+                // Remove the previous status class
+                this.statusMessageEl.removeClass( 'alert-'+ previousStatus );
+        
+            this.statusMessageEl
+                .data( 'status', status )
+                .addClass( 'alert-'+ status )
+                .text( message );
 
-};
+        },
 
-const displayItems = () => {
+        displayItems: function() {
 
-    groupListEl.empty();
+            let walker = this;
+            walker.listEl.empty();
 
-    selections
-        .forEach( groupName => {
+            this.options
+                .forEach( groupName => {
+        
+                    walker.listEl.append(
+                        `<li class="list-group-item">${groupName}</li>`
+                    );
+            
+                } );
 
-        groupListEl.append(
-            `<li class="list-group-item">${groupName}</li>`
-        );
+        },
 
-    } );
+        startList: function() {
 
-};
+            this.selected.length = 0;
+            this.nextButtonEl.prop('disabled', false);
+            this.setStatusMessage( this.selected.length + ' groups called on.' );
+            this.displayItems();
 
-const startList = () => {
+        },
 
-    selected.length = 0;
-    nextButtonEl.prop('disabled', false);
-    setStatusMessage( selected.length + ' groups called on.' );
-    displayItems();
+        nextListItem: function() {
 
-};
+            let walker = this;
 
-resetButtonEl.on( 'click', startList );
+            this.listEl
+                .children( '.list-group-item-success' )
+                .removeClass( 'list-group-item-success' )
+                .addClass( 'list-group-item-dark' );
 
-nextButtonEl.on('click', () => {
+            if( this.options.length === this.selected.length ) {
 
-    groupListEl
-        .children( '.list-group-item-success' )
-        .removeClass( 'list-group-item-success' )
-        .addClass( 'list-group-item-dark' );
+                this.setStatusMessage( 'Presentations Complete', 'success' );
 
-    if( selections.length === selected.length ) {
+                this.nextButtonEl.prop('disabled', true);
+                return;
 
-        setStatusMessage( 'Presentations Complete', 'success' );
+            }
 
-        nextButtonEl.prop('disabled', true);
-        return;
+            let remainingGroups = this.options.filter( groupName => !walker.selected.includes( groupName ) ),
+                nextGroup = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
+                nextGroupIndex = this.options.indexOf( nextGroup );
 
-    }
+            this.listEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
 
-    let remainingGroups = selections.filter( groupName => !selected.includes( groupName ) ),
-        nextGroup = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
-        nextGroupIndex = selections.indexOf( nextGroup );
+            this.selected.push( nextGroup );
 
-    groupListEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
+            let groupWord = 'group' + ( this.selected.length === 1 ? '' : 's' );
 
-    selected.push( nextGroup );
+            this.setStatusMessage( `${this.selected.length} ${groupWord} called on.` );
 
-    let groupWord = 'group' + ( selected.length === 1 ? '' : 's' );
+        }
 
-    setStatusMessage( `${selected.length} ${groupWord} called on.` );
+    });
 
-});
+    this.resetButtonEl.on( 'click', this.startList.bind( this ) );
 
-startList();
+    this.nextButtonEl.on('click', this.nextListItem.bind( this ) );
+
+}
+
+// Create the app
+const walker = new RandomListWalker();
+
+// Start the list walk through
+walker.startList();
