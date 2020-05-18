@@ -15,18 +15,31 @@
         <div class="container">
             
             <div id="status-message" class="alert"></div>
-
-            <div id="all-groups" class="list-group">
-
+            <div class="mb-3 d-flex">
+                <button id="reset-list" class="btn btn-secondary">Reset</button>
+                <button id="next-group" class="btn btn-success ml-auto">Next</button>
             </div>
+            <div class="row">
+                
+                <div class="col-9">
 
-            <div class="mt-4 d-flex">
-                <button id="add-item" class="btn btn-success">Add Item</button>
-            </div>
+                    <div id="all-groups" class="list-group">
 
-            <div class="mt-4 d-flex">
-                <button id="next-group" class="btn btn-primary">Select Group</button>
-                <button id="reset-list" class="btn btn-secondary ml-auto">Reset</button>
+                    </div>
+        
+                    <div class="mt-4 d-flex">
+                        <button id="add-item" class="btn btn-success">Add Item</button>
+                    </div>
+
+                </div>
+                <div class="col-3">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <p class="card-title m-0">Current: <span id="current-name">None</span></p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
