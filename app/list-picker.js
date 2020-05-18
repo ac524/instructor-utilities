@@ -1,16 +1,151 @@
-// List Walker Application
-function RandomListWalker() {
+const storageName = 'walker-lists';
+
+/**
+ * ItemList class constructor
+ * @param {string} key 
+ */
+function ItemList( key, name = '' ) {
+
+    const storageKey = key +'-'+ storageName;
+    // Load or create the target list
+    const list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
+
+    console.log( 'create list', list );
+
+    Object.defineProperty( this, 'all', {
+        get: function() {
+            return list;
+        }
+    } )
+
+    Object.assign( this, {
+        
+        name: name,
+
+        save: function() {
+
+            localStorage.setItem( storageKey, JSON.stringify( list ) );
+
+        },
+
+        update: function( index, value ) {
+
+            if( value !== list[index] ) {
+                list[index] = value;
+                this.save();
+            }
+
+        },
+
+        add: function( item ) {
+
+            if( ! list.includes( item ) ) {
+
+                list.push( item );
+                this.save();
+
+            }
+
+        },
+
+        remove: function( item ) {
+
+            const index = list.indexOf( item );
+
+            if( index > -1 )
+
+                list.splice( index, 1 );
+
+        }
+
+    });
+
+}
+
+/**
+ * ItemLists class constructor
+ */
+function ItemLists() {
+
+    const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new ItemList( key, name ) ] ) );
+    const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
+
+    const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
+
+    console.log( lists );
+
+    Object.defineProperty( this, 'all', {
+        get: function() {
+            return Object.entries( lists );
+        }
+    } )
 
     Object.assign( this, {
 
-        options: [
-            'Group 1',
-            'Group 2',
-            'Group 3',
-            'Group 4'
-        ],
+        save: function() {
+
+            // console.log( 'save', serialize( lists ) );
+
+            localStorage.setItem( storageName, serialize( lists ) );
+
+            return this;
+
+        },
+
+        getIndex: function( index ) {
+
+            const entries = Object.entries( lists );
+            return entries[index] ? entries[index][1] : false;
+
+        },
+        
+        get: function( key ) {
+
+            return lists[key] || false;
+
+        },
+
+        new: function( name = 'Default' ) {
+            
+            // Use the current time as a key
+            const key = Date.now();
+
+            const newList = new ItemList( key, name );
+
+            lists[key] = newList;
+
+            this.save();
+
+            return newList;
+
+        },
+
+        delete: function( index ) {
+
+            lists.splice( index, 1 );
+
+            return this;
+
+        }
+
+    })
+
+}
+
+/**
+ * RandomListWalker class constructor
+ */
+function RandomListWalker() {
+
+    const lists = new ItemLists();
+    const walker = this;
+
+    Object.assign( this, {
+        lists: lists,
+        currentList: lists.getIndex(0) || lists.new(),
         selected: [],
         listEl: $('#all-groups'),
+        addItemButtonEl: $('#add-item'),
         resetButtonEl: $('#reset-list'),
         nextButtonEl: $('#next-group'),
         statusMessageEl: $('#status-message'),
@@ -31,17 +166,27 @@ function RandomListWalker() {
 
         },
 
+        addItem: function() {
+
+            this.currentList.add( 'Item '+ (this.currentList.all.length + 1) );
+
+            this.startList();
+
+        },
+
         displayItems: function() {
 
             let walker = this;
             walker.listEl.empty();
 
-            this.options
-                .forEach( groupName => {
-        
-                    walker.listEl.append(
-                        `<li class="list-group-item">${groupName}</li>`
-                    );
+            this.currentList.all
+                .forEach( ( groupName, i ) => {
+                    
+                    const inputEl = $(`<input value="${groupName}" class="list-group-item" />`);
+                    
+                    inputEl.data( 'index', i );
+
+                    walker.listEl.append( inputEl );
             
                 } );
 
@@ -65,7 +210,7 @@ function RandomListWalker() {
                 .removeClass( 'list-group-item-success' )
                 .addClass( 'list-group-item-dark' );
 
-            if( this.options.length === this.selected.length ) {
+            if( this.currentList.all.length === this.selected.length ) {
 
                 this.setStatusMessage( 'Presentations Complete', 'success' );
 
@@ -74,9 +219,9 @@ function RandomListWalker() {
 
             }
 
-            let remainingGroups = this.options.filter( groupName => !walker.selected.includes( groupName ) ),
+            let remainingGroups = this.currentList.all.filter( groupName => !walker.selected.includes( groupName ) ),
                 nextGroup = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
-                nextGroupIndex = this.options.indexOf( nextGroup );
+                nextGroupIndex = this.currentList.all.indexOf( nextGroup );
 
             this.listEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
 
@@ -89,6 +234,17 @@ function RandomListWalker() {
         }
 
     });
+
+    this.listEl.on( 'keyup', '.list-group-item', function() {
+
+        const inputEl = $(this);
+        const itemIndex = inputEl.data( 'index' );
+
+        walker.currentList.update( itemIndex, inputEl.val() );
+
+    } );
+
+    this.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
 
     this.resetButtonEl.on( 'click', this.startList.bind( this ) );
 
