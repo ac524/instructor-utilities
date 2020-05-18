@@ -183,7 +183,7 @@ function RandomListWalker() {
             this.currentList.all
                 .forEach( ( groupName, i ) => {
                     
-                    const inputEl = $(`<input value="${groupName}" class="list-group-item" />`);
+                    const inputEl = $(`<input value="${groupName}" class="list-group-item col-4" />`);
                     
                     inputEl.data( 'index', i );
 

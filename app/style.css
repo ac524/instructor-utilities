@@ -1,0 +1,10 @@
+.list-group.flex-wrap {
+    border-left: 1px solid rgba(0,0,0,.125);
+    border-top: 1px solid rgba(0,0,0,.125);
+}
+.list-group.flex-wrap .list-group-item {
+    border-radius: 0;
+    border: 1px solid rgba(0,0,0,.125);
+    border-left: none;
+    border-top: none;
+}
