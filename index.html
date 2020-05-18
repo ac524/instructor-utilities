@@ -8,7 +8,7 @@
 
         <div class="jumbotron">
             <div class="container">
-                <h1>Group Picker</h1>
+                <h1>Item Picker</h1>
             </div>
         </div>
 
@@ -19,9 +19,9 @@
                 <button id="reset-list" class="btn btn-secondary">Reset</button>
                 <button id="next-group" class="btn btn-success ml-auto">Next</button>
             </div>
-            <div class="row">
+            <div class="row d-flex flex-column-reverse flex-md-row">
                 
-                <div class="col-9">
+                <div class="col-md-9">
 
                     <div id="all-groups" class="list-group">
 
@@ -32,10 +32,10 @@
                     </div>
 
                 </div>
-                <div class="col-3">
+                <div class="col-md-3 mb-3 mb-md-0">
                     <div class="card text-white bg-primary">
                         <div class="card-body">
-                            <p class="card-title m-0">Current: <span id="current-name">None</span></p>
+                            <p class="card-title m-0">Current: <span id="current-name" class="badge badge-light">None</span></p>
                         </div>
                     </div>
                 </div>

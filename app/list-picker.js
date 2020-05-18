@@ -10,7 +10,7 @@ function ItemList( key, name = '' ) {
     // Load or create the target list
     const list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
 
-    console.log( 'create list', list );
+    // console.log( 'create list', list );
 
     Object.defineProperty( this, 'all', {
         get: function() {
@@ -72,7 +72,7 @@ function ItemLists() {
 
     const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
 
-    console.log( lists );
+    // console.log( lists );
 
     Object.defineProperty( this, 'all', {
         get: function() {
@@ -149,6 +149,7 @@ function RandomListWalker() {
         resetButtonEl: $('#reset-list'),
         nextButtonEl: $('#next-group'),
         statusMessageEl: $('#status-message'),
+        currentItemEl: $('#current-name'),
 
         setStatusMessage: function( message, status = 'info' ) {
 
@@ -195,8 +196,9 @@ function RandomListWalker() {
         startList: function() {
 
             this.selected.length = 0;
+            this.currentItemEl.text( 'None' );
             this.nextButtonEl.prop('disabled', false);
-            this.setStatusMessage( this.selected.length + ' groups called on.' );
+            this.setStatusMessage( this.selected.length + ' items selected.' );
             this.displayItems();
 
         },
@@ -212,7 +214,7 @@ function RandomListWalker() {
 
             if( this.currentList.all.length === this.selected.length ) {
 
-                this.setStatusMessage( 'Presentations Complete', 'success' );
+                this.setStatusMessage( 'List Complete', 'success' );
 
                 this.nextButtonEl.prop('disabled', true);
                 return;
@@ -220,16 +222,17 @@ function RandomListWalker() {
             }
 
             let remainingGroups = this.currentList.all.filter( groupName => !walker.selected.includes( groupName ) ),
-                nextGroup = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
-                nextGroupIndex = this.currentList.all.indexOf( nextGroup );
+                nextItem = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
+                nextGroupIndex = this.currentList.all.indexOf( nextItem );
 
             this.listEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
 
-            this.selected.push( nextGroup );
+            this.selected.push( nextItem );
 
-            let groupWord = 'group' + ( this.selected.length === 1 ? '' : 's' );
+            let itemWord = 'item' + ( this.selected.length === 1 ? '' : 's' );
 
-            this.setStatusMessage( `${this.selected.length} ${groupWord} called on.` );
+            this.currentItemEl.text( nextItem );
+            this.setStatusMessage( `${this.selected.length} ${itemWord} selected.` );
 
         }
 
