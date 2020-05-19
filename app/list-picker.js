@@ -187,7 +187,7 @@ function RandomListWalker() {
                 .forEach( ( groupName, i ) => {
                     
                     const itemEl = $(
-                        `<div class="input-group list-group-item col-4">
+                        `<div class="input-group list-group-item col-12 col-sm-6 col-md-4">
                             <input type="text" value="${groupName}" class="form-control item-label">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-danger" data-action="remove">X</span>
