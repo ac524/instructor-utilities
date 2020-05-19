@@ -28,6 +28,12 @@ function ItemList( key, name = '' ) {
 
         },
 
+        get: function( index ) {
+
+            return list[index];
+
+        },
+
         update: function( index, value ) {
 
             if( value !== list[index] ) {
@@ -48,13 +54,10 @@ function ItemList( key, name = '' ) {
 
         },
 
-        remove: function( item ) {
+        remove: function( index ) {
 
-            const index = list.indexOf( item );
-
-            if( index > -1 )
-
-                list.splice( index, 1 );
+            list.splice( index, 1 );
+            this.save();
 
         }
 
@@ -183,11 +186,18 @@ function RandomListWalker() {
             this.currentList.all
                 .forEach( ( groupName, i ) => {
                     
-                    const inputEl = $(`<input value="${groupName}" class="list-group-item col-4" />`);
+                    const itemEl = $(
+                        `<div class="input-group list-group-item col-4">
+                            <input type="text" value="${groupName}" class="form-control item-label">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-danger" data-action="remove">X</span>
+                            </div>
+                        </div>`
+                    );
                     
-                    inputEl.data( 'index', i );
+                    itemEl.data( 'index', i );
 
-                    walker.listEl.append( inputEl );
+                    walker.listEl.append( itemEl );
             
                 } );
 
@@ -238,14 +248,29 @@ function RandomListWalker() {
 
     });
 
-    this.listEl.on( 'keyup', '.list-group-item', function() {
+    this.listEl
+        .on( 'keyup', '.item-label', function() {
 
-        const inputEl = $(this);
-        const itemIndex = inputEl.data( 'index' );
+            const inputEl = $(this);
+            const itemIndex = inputEl.closest('.input-group').data( 'index' );
 
-        walker.currentList.update( itemIndex, inputEl.val() );
+            walker.currentList.update( itemIndex, inputEl.val() );
 
-    } );
+        } )
+        .on( 'click', '[data-action]', function() {
+
+            const buttonEl = $(this);
+            const itemIndex = buttonEl.closest('.input-group').data( 'index' );
+            const action = buttonEl.data( 'action' );
+
+            if( action === 'remove' ) {
+
+                walker.currentList.remove( itemIndex );
+                walker.startList();
+
+            }
+
+        } );
 
     this.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
 

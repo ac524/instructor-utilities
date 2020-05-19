@@ -8,3 +8,20 @@
     border-left: none;
     border-top: none;
 }
+
+.input-group.list-group-item {
+    display: flex;
+    padding: 0;
+}
+
+.input-group.list-group-item .form-control {
+    background: transparent;
+}
+
+
+.input-group.list-group-item .form-control,
+.input-group.list-group-item .input-group-text,
+.input-group.list-group-item .btn {
+    border: none;
+    border-radius: 0;
+}
