@@ -1,85 +1,287 @@
-const selections = [
-        'Group 1',
-        'Group 2',
-        'Group 3',
-        'Group 4'
-    ],
-    selected = [],
-    groupListEl = $('#all-groups'),
-    resetButtonEl = $('#reset-list'),
-    nextButtonEl = $('#next-group'),
-    statusMessageEl = $('#status-message');
+const storageName = 'walker-lists';
 
-const setStatusMessage = ( message, status = 'info' ) => {
+/**
+ * ItemList class constructor
+ * @param {string} key 
+ */
+function ItemList( key, name = '' ) {
 
-    let previousStatus = statusMessageEl.data( 'status' );
+    const storageKey = key +'-'+ storageName;
+    // Load or create the target list
+    const list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
 
-    if( previousStatus && previousStatus !== status ) 
+    // console.log( 'create list', list );
 
-        // Remove the previous status class
-        statusMessageEl.removeClass( 'alert-'+ previousStatus );
+    Object.defineProperty( this, 'all', {
+        get: function() {
+            return list;
+        }
+    } )
 
-    statusMessageEl
-        .data( 'status', status )
-        .addClass( 'alert-'+ status )
-        .text( message );
+    Object.assign( this, {
+        
+        name: name,
 
-};
+        save: function() {
 
-const displayItems = () => {
+            localStorage.setItem( storageKey, JSON.stringify( list ) );
 
-    groupListEl.empty();
+        },
 
-    selections
-        .forEach( groupName => {
+        get: function( index ) {
 
-        groupListEl.append(
-            `<li class="list-group-item">${groupName}</li>`
-        );
+            return list[index];
 
-    } );
+        },
 
-};
+        update: function( index, value ) {
 
-const startList = () => {
+            if( value !== list[index] ) {
+                list[index] = value;
+                this.save();
+            }
 
-    selected.length = 0;
-    nextButtonEl.prop('disabled', false);
-    setStatusMessage( selected.length + ' groups called on.' );
-    displayItems();
+        },
 
-};
+        add: function( item ) {
 
-resetButtonEl.on( 'click', startList );
+            if( ! list.includes( item ) ) {
 
-nextButtonEl.on('click', () => {
+                list.push( item );
+                this.save();
 
-    groupListEl
-        .children( '.list-group-item-success' )
-        .removeClass( 'list-group-item-success' )
-        .addClass( 'list-group-item-dark' );
+            }
 
-    if( selections.length === selected.length ) {
+        },
 
-        setStatusMessage( 'Presentations Complete', 'success' );
+        remove: function( index ) {
 
-        nextButtonEl.prop('disabled', true);
-        return;
+            list.splice( index, 1 );
+            this.save();
 
-    }
+        }
 
-    let remainingGroups = selections.filter( groupName => !selected.includes( groupName ) ),
-        nextGroup = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
-        nextGroupIndex = selections.indexOf( nextGroup );
+    });
 
-    groupListEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
+}
 
-    selected.push( nextGroup );
+/**
+ * ItemLists class constructor
+ */
+function ItemLists() {
 
-    let groupWord = 'group' + ( selected.length === 1 ? '' : 's' );
+    const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new ItemList( key, name ) ] ) );
+    const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
 
-    setStatusMessage( `${selected.length} ${groupWord} called on.` );
+    const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
 
-});
+    // console.log( lists );
 
-startList();
+    Object.defineProperty( this, 'all', {
+        get: function() {
+            return Object.entries( lists );
+        }
+    } )
+
+    Object.assign( this, {
+
+        save: function() {
+
+            // console.log( 'save', serialize( lists ) );
+
+            localStorage.setItem( storageName, serialize( lists ) );
+
+            return this;
+
+        },
+
+        getIndex: function( index ) {
+
+            const entries = Object.entries( lists );
+            return entries[index] ? entries[index][1] : false;
+
+        },
+        
+        get: function( key ) {
+
+            return lists[key] || false;
+
+        },
+
+        new: function( name = 'Default' ) {
+            
+            // Use the current time as a key
+            const key = Date.now();
+
+            const newList = new ItemList( key, name );
+
+            lists[key] = newList;
+
+            this.save();
+
+            return newList;
+
+        },
+
+        delete: function( index ) {
+
+            lists.splice( index, 1 );
+
+            return this;
+
+        }
+
+    })
+
+}
+
+/**
+ * RandomListWalker class constructor
+ */
+function RandomListWalker() {
+
+    const lists = new ItemLists();
+    const walker = this;
+
+    Object.assign( this, {
+        lists: lists,
+        currentList: lists.getIndex(0) || lists.new(),
+        selected: [],
+        listEl: $('#all-groups'),
+        addItemButtonEl: $('#add-item'),
+        resetButtonEl: $('#reset-list'),
+        nextButtonEl: $('#next-group'),
+        statusMessageEl: $('#status-message'),
+        currentItemEl: $('#current-name'),
+
+        setStatusMessage: function( message, status = 'info' ) {
+
+            let previousStatus = this.statusMessageEl.data( 'status' );
+
+            if( previousStatus && previousStatus !== status ) 
+        
+                // Remove the previous status class
+                this.statusMessageEl.removeClass( 'alert-'+ previousStatus );
+        
+            this.statusMessageEl
+                .data( 'status', status )
+                .addClass( 'alert-'+ status )
+                .text( message );
+
+        },
+
+        addItem: function() {
+
+            this.currentList.add( 'Item '+ (this.currentList.all.length + 1) );
+
+            this.startList();
+
+        },
+
+        displayItems: function() {
+
+            let walker = this;
+            walker.listEl.empty();
+
+            this.currentList.all
+                .forEach( ( groupName, i ) => {
+                    
+                    const itemEl = $(
+                        `<div class="input-group list-group-item col-12 col-sm-6 col-md-4">
+                            <input type="text" value="${groupName}" class="form-control item-label">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-danger" data-action="remove">X</span>
+                            </div>
+                        </div>`
+                    );
+                    
+                    itemEl.data( 'index', i );
+
+                    walker.listEl.append( itemEl );
+            
+                } );
+
+        },
+
+        startList: function() {
+
+            this.selected.length = 0;
+            this.currentItemEl.text( 'None' );
+            this.nextButtonEl.prop('disabled', false);
+            this.setStatusMessage( this.selected.length + ' items selected.' );
+            this.displayItems();
+
+        },
+
+        nextListItem: function() {
+
+            let walker = this;
+
+            this.listEl
+                .children( '.list-group-item-success' )
+                .removeClass( 'list-group-item-success' )
+                .addClass( 'list-group-item-dark' );
+
+            if( this.currentList.all.length === this.selected.length ) {
+
+                this.setStatusMessage( 'List Complete', 'success' );
+
+                this.nextButtonEl.prop('disabled', true);
+                return;
+
+            }
+
+            let remainingGroups = this.currentList.all.filter( groupName => !walker.selected.includes( groupName ) ),
+                nextItem = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
+                nextGroupIndex = this.currentList.all.indexOf( nextItem );
+
+            this.listEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
+
+            this.selected.push( nextItem );
+
+            let itemWord = 'item' + ( this.selected.length === 1 ? '' : 's' );
+
+            this.currentItemEl.text( nextItem );
+            this.setStatusMessage( `${this.selected.length} ${itemWord} selected.` );
+
+        }
+
+    });
+
+    this.listEl
+        .on( 'keyup', '.item-label', function() {
+
+            const inputEl = $(this);
+            const itemIndex = inputEl.closest('.input-group').data( 'index' );
+
+            walker.currentList.update( itemIndex, inputEl.val() );
+
+        } )
+        .on( 'click', '[data-action]', function() {
+
+            const buttonEl = $(this);
+            const itemIndex = buttonEl.closest('.input-group').data( 'index' );
+            const action = buttonEl.data( 'action' );
+
+            if( action === 'remove' ) {
+
+                walker.currentList.remove( itemIndex );
+                walker.startList();
+
+            }
+
+        } );
+
+    this.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
+
+    this.resetButtonEl.on( 'click', this.startList.bind( this ) );
+
+    this.nextButtonEl.on('click', this.nextListItem.bind( this ) );
+
+}
+
+// Create the app
+const walker = new RandomListWalker();
+
+// Start the list walk through
+walker.startList();
