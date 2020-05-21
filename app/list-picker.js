@@ -239,6 +239,9 @@ function RandomListWalker() {
                         `<div class="input-group list-group-item col-12 col-sm-6 col-md-4">
                             <input type="text" value="${groupName}" class="form-control item-label">
                             <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
+                                </div>
                                 <button class="btn btn-outline-danger" data-action="remove">X</span>
                             </div>
                         </div>`
@@ -282,7 +285,12 @@ function RandomListWalker() {
                 nextItem = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
                 nextGroupIndex = this.currentList.all.indexOf( nextItem );
 
-            this.listEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
+            const itemEl = this.listEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
+            const checkboxEl = itemEl.find('.toggle-select');
+
+            console.log(checkboxEl);
+
+            checkboxEl.attr("checked", !checkboxEl.attr("checked"));
 
             this.selected.push( nextItem );
 
@@ -302,6 +310,36 @@ function RandomListWalker() {
             const itemIndex = inputEl.closest('.input-group').data( 'index' );
 
             walker.currentList.update( itemIndex, inputEl.val() );
+
+        } )
+        .on( 'change', '.toggle-select', function() {
+
+            const checkboxEl = $(this);
+            const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
+            const item = walker.currentList.get( itemIndex );
+
+            if( walker.selected.includes( item ) ) {
+
+                walker.selected.splice( walker.selected.indexOf( item ), 1 );
+                walker.listEl.children().eq( itemIndex ).removeClass( 'list-group-item-success list-group-item-dark' );
+
+            } else {
+
+                walker.listEl
+                    .children( '.list-group-item-success' )
+                    .removeClass( 'list-group-item-success' )
+                    .addClass( 'list-group-item-dark' );
+
+                walker.listEl.children().eq( itemIndex ).addClass( 'list-group-item-success' );
+
+                walker.selected.push( item );
+
+                let itemWord = 'item' + ( walker.selected.length === 1 ? '' : 's' );
+
+                walker.currentItemEl.text( item );
+                walker.setStatusMessage( `${walker.selected.length} ${itemWord} selected.` );
+
+            }
 
         } )
         .on( 'click', '[data-action]', function() {

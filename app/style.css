@@ -24,4 +24,5 @@
 .input-group.list-group-item .btn {
     border: none;
     border-radius: 0;
+    background: transparent;
 }
