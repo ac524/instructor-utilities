@@ -10,13 +10,7 @@ function ItemList( key, name = '' ) {
     // Load or create the target list
     const list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
 
-    // console.log( 'create list', list );
-
-    Object.defineProperty( this, 'all', {
-        get: function() {
-            return list;
-        }
-    } )
+    this.all = list;
 
     Object.assign( this, {
         
@@ -180,8 +174,7 @@ function RandomListWalker() {
 
         displayItems: function() {
 
-            let walker = this;
-            walker.listEl.empty();
+            this.listEl.empty();
 
             this.currentList.all
                 .forEach( ( groupName, i ) => {
@@ -197,7 +190,7 @@ function RandomListWalker() {
                     
                     itemEl.data( 'index', i );
 
-                    walker.listEl.append( itemEl );
+                    this.listEl.append( itemEl );
             
                 } );
 
@@ -215,8 +208,6 @@ function RandomListWalker() {
 
         nextListItem: function() {
 
-            let walker = this;
-
             this.listEl
                 .children( '.list-group-item-success' )
                 .removeClass( 'list-group-item-success' )
@@ -231,7 +222,7 @@ function RandomListWalker() {
 
             }
 
-            let remainingGroups = this.currentList.all.filter( groupName => !walker.selected.includes( groupName ) ),
+            let remainingGroups = this.currentList.all.filter( groupName => !this.selected.includes( groupName ) ),
                 nextItem = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
                 nextGroupIndex = this.currentList.all.indexOf( nextItem );
 
