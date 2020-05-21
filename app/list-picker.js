@@ -1,11 +1,15 @@
 const storageName = 'walker-lists';
 
 /**
- * ItemList class constructor
- * @param {string} key 
+ * Collection class for managing the entries and selection state for a target list.
  */
 class ItemList {
 
+    /**
+     * ItemList class constructor
+     * @param {string} key 
+     * @param {string} name 
+     */
     constructor( key, name = '' ) {
 
         const storageKey = key +'-'+ storageName;
@@ -31,6 +35,9 @@ class ItemList {
             }
         } );
 
+        /**
+         * @returns {ItemList}
+         */
         const save = () => {
 
             localStorage.setItem( storageKey, JSON.stringify( list ) );
@@ -39,6 +46,9 @@ class ItemList {
 
         }
 
+        /**
+         * @returns {ItemList}
+         */
         const saveSelected = () => {
 
             localStorage.setItem( selectStorageKey, JSON.stringify( selectList ) );
@@ -73,13 +83,21 @@ class ItemList {
 
     }
 
+    /**
+     * @returns {ItemList}
+     */
     resetSelected() {
 
         this.selected.length = 0;
         this.saveSelected();
 
+        return this;
+
     }
 
+    /**
+     * @returns {ItemList}
+     */
     selectRandom() {
 
         let unusedIndexes = this.all.map( ( groupName, i ) => i ).filter( ( i ) => !this.selected.includes( i ) );
@@ -96,6 +114,10 @@ class ItemList {
 
     }
 
+    /**
+     * @param {number} targetIndex
+     * @returns {ItemList}
+     */
     select( targetIndex ) {
 
         if( !this.isSelected( targetIndex ) ) {
@@ -110,6 +132,10 @@ class ItemList {
 
     }
 
+    /**
+     * @param {number} targetIndex
+     * @returns {ItemList}
+     */
     unselect( targetIndex ) {
 
         const position = this.selected.indexOf( targetIndex );
@@ -126,12 +152,21 @@ class ItemList {
 
     }
 
+    /**
+     * @param {number} index
+     * @returns {boolean}
+     */
     isSelected( index ) {
 
         return this.selected.includes( index );
 
     }
     
+    /**
+     * @param {number} index
+     * @param {string} value
+     * @returns {ItemList}
+     */
     update( index, value ) {
 
         if( value !== this.all[index] ) {
@@ -143,6 +178,10 @@ class ItemList {
 
     }
 
+    /**
+     * @param {string} item
+     * @returns {ItemList}
+     */
     add( item ) {
 
         if( ! this.all.includes( item ) ) {
@@ -156,6 +195,10 @@ class ItemList {
 
     }
 
+    /**
+     * @param {number} index
+     * @returns {ItemList}
+     */
     remove( index ) {
 
         this.all.splice( index, 1 );
@@ -168,10 +211,13 @@ class ItemList {
 }
 
 /**
- * ItemLists class constructor
+ * Collection class for managing defined lists.
  */
 class ItemLists {
 
+    /**
+     * ItemLists class constructor.
+     */
     constructor() {
 
         const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new ItemList( key, name ) ] ) );
@@ -225,6 +271,10 @@ class ItemLists {
 
     }
 
+    /**
+     * @param {string} name 
+     * @returns {ItemList}
+     */
     new( name = 'Default' ) {
             
         // Use the current time as a key
@@ -240,6 +290,10 @@ class ItemLists {
 
     }
 
+    /**
+     * @param {string} key
+     * @returns {ItemLists}
+     */
     delete( key ) {
 
         delete this.lists[key];
@@ -349,8 +403,11 @@ class ListView {
                 );
                 
                 itemEl
+                    // Set the data
                     .data( 'index', i )
+                    // Navigate to the selected checkbox
                     .find( '.toggle-select' )
+                    // Set the toggle state
                     .prop( 'checked', isSelected );
 
                 this.el.append( itemEl );
