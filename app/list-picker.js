@@ -8,15 +8,24 @@ function ItemList( key, name = '' ) {
 
     const storageKey = key +'-'+ storageName;
     // Load or create the target list
-    const list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
+    let list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
 
-    this.all = list;
+    Object.defineProperty( this, 'all', {
+        get: function() {
+            return list;
+        },
+        set: function( value ) {
+            list = value;
+        }
+    } )
 
     Object.assign( this, {
         
         name: name,
 
         save: function() {
+
+            console.log( 'save', storageKey, list );
 
             localStorage.setItem( storageKey, JSON.stringify( list ) );
 
@@ -81,8 +90,6 @@ function ItemLists() {
 
         save: function() {
 
-            // console.log( 'save', serialize( lists ) );
-
             localStorage.setItem( storageName, serialize( lists ) );
 
             return this;
@@ -129,6 +136,54 @@ function ItemLists() {
 
 }
 
+function ListImportExport( walker ) {
+
+    Object.assign( this, {
+        importButtonEl: $('#import-list'),
+        exportButtonEl: $('#export-list'),
+        importExportEl: $('#import-export'),
+    } );
+
+    const isOpen = () => this.importExportEl.is(':visible');
+    const toggle = () => this.importExportEl.toggle();
+
+    const importList = () => {
+
+        if( isOpen() ) {
+            
+            var newList = JSON.parse( this.importExportEl.find('.form-control').val() );
+
+            if( newList ) {
+
+                walker.currentList.all = newList;
+                walker.currentList.save();
+                walker.startList();
+
+            }
+
+        }
+
+        toggle();
+
+    }
+
+    const exportList = () => {
+
+        if( !isOpen() ) {
+            
+            this.importExportEl.find('.form-control').val( JSON.stringify( walker.currentList.all ) );
+
+        }
+
+        toggle();
+
+    }
+
+    this.importButtonEl.on( 'click', importList );
+    this.exportButtonEl.on( 'click', exportList );
+
+}
+
 /**
  * RandomListWalker class constructor
  */
@@ -141,6 +196,7 @@ function RandomListWalker() {
         lists: lists,
         currentList: lists.getIndex(0) || lists.new(),
         selected: [],
+        importExport: new ListImportExport( this ),
         listEl: $('#all-groups'),
         addItemButtonEl: $('#add-item'),
         resetButtonEl: $('#reset-list'),
