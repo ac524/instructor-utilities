@@ -73,6 +73,13 @@ class ItemList {
 
     }
 
+    resetSelected() {
+
+        this.selected.length = 0;
+        this.saveSelected();
+
+    }
+
     selectRandom() {
 
         let unusedIndexes = this.all.map( ( groupName, i ) => i ).filter( ( i ) => !this.selected.includes( i ) );
@@ -485,7 +492,7 @@ class RandomListWalker {
 
     restartList() {
 
-        this.currentList.selected.length = 0;
+        this.currentList.resetSelected();
         this.nextButtonEl.prop('disabled', false);
 
         this.startList();
