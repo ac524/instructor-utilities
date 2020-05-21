@@ -39,9 +39,18 @@ class ItemList {
 
         }
 
+        const saveSelected = () => {
+
+            localStorage.setItem( selectStorageKey, JSON.stringify( selectList ) );
+
+            return this;
+
+        }
+
         Object.assign( this, {
             name,
-            save
+            save,
+            saveSelected
         } )
 
     }
@@ -54,13 +63,20 @@ class ItemList {
 
     get currentIndex() {
 
-        return this.selected[ this.selected.length - 1 ] || null;
+        return this.selected[ this.selected.length - 1 ] >= 0 ? this.selected[ this.selected.length - 1 ] : null;
 
     }
 
     get current() {
 
         return this.all[this.currentIndex] || null;
+
+    }
+
+    resetSelected() {
+
+        this.selected.length = 0;
+        this.saveSelected();
 
     }
 
@@ -72,7 +88,7 @@ class ItemList {
 
             let nextItemIndex = unusedIndexes[ Math.floor(Math.random() * unusedIndexes.length) ];
     
-            this.selected.push( nextItemIndex );
+            this.select( nextItemIndex );
 
         }
 
@@ -82,9 +98,13 @@ class ItemList {
 
     select( targetIndex ) {
 
-        if( !this.isSelected( targetIndex ) )
-
+        if( !this.isSelected( targetIndex ) ) {
+            
             this.selected.push( targetIndex );
+            this.saveSelected();
+
+        }
+
 
         return this;
 
@@ -94,9 +114,13 @@ class ItemList {
 
         const position = this.selected.indexOf( targetIndex );
 
-        if( position > -1 )
+        if( position > -1 ) {
 
             this.selected.splice( position, 1 );
+            this.saveSelected();
+
+        }
+
 
         return this;
 
@@ -302,6 +326,8 @@ class ListView {
         list.all
             .forEach( ( groupName, i ) => {
 
+                console.log();
+
                 const isSelected = list.isSelected(i);
                 const isCurrent = i === list.currentIndex;
                 
@@ -386,7 +412,7 @@ class RandomListWalker {
             if( action === 'remove' ) {
 
                 this.currentList.remove( itemIndex );
-                this.startList();
+                this.restartList();
 
             }
 
@@ -399,7 +425,7 @@ class RandomListWalker {
 
         this.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
 
-        this.resetButtonEl.on( 'click', this.startList.bind( this ) );
+        this.resetButtonEl.on( 'click', this.restartList.bind( this ) );
 
         this.nextButtonEl.on('click', this.nextListItem.bind( this ) );
         
@@ -425,6 +451,7 @@ class RandomListWalker {
 
         if( this.currentList.isComplete ) {
             
+            this.currentItemEl.text( this.currentList.current );
             this.setStatusMessage( 'List Complete', 'success' );
             this.nextButtonEl.prop('disabled', true);
 
@@ -432,9 +459,18 @@ class RandomListWalker {
 
             let itemWord = 'item' + ( this.currentList.selected.length === 1 ? '' : 's' );
 
-            this.currentItemEl.text( this.currentList.current );
             this.setStatusMessage( `${this.currentList.selected.length} ${itemWord} selected.` );
+            
+            if( this.currentList.selected.length ) {
+                
+                this.currentItemEl.text( this.currentList.current );
 
+            } else {
+                
+                this.currentItemEl.text( 'No Selection' );
+
+            }
+            
         }
 
     }
@@ -443,16 +479,23 @@ class RandomListWalker {
 
         this.currentList.add( 'Item '+ (this.currentList.all.length + 1) );
 
-        this.startList();
+        this.restartList();
 
     }
 
     startList() {
 
-        this.currentList.selected.length = 0;
-        this.currentItemEl.text( 'None' );
-        this.nextButtonEl.prop('disabled', false);
         this.render();
+
+    }
+
+
+    restartList() {
+
+        this.currentList.resetSelected();
+        this.nextButtonEl.prop('disabled', false);
+
+        this.startList();
 
     }
 
