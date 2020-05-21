@@ -4,364 +4,480 @@ const storageName = 'walker-lists';
  * ItemList class constructor
  * @param {string} key 
  */
-function ItemList( key, name = '' ) {
+class ItemList {
 
-    const storageKey = key +'-'+ storageName;
-    // Load or create the target list
-    let list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
+    constructor( key, name = '' ) {
 
-    Object.defineProperty( this, 'all', {
-        get: function() {
-            return list;
-        },
-        set: function( value ) {
-            list = value;
-        }
-    } )
+        const storageKey = key +'-'+ storageName;
+        const selectStorageKey = key +'-selected-'+ storageName;
 
-    Object.assign( this, {
-        
-        name: name,
+        // Load or create the target list
+        let list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
+        let selectList = JSON.parse( localStorage.getItem( selectStorageKey ) ) || [];
 
-        save: function() {
+        Object.defineProperty( this, 'all', {
+            get: function() {
+                return list;
+            },
+            set: function( value ) {
+                list.length = 0;
+                list.push( ...value );
+            }
+        } );
+    
+        Object.defineProperty( this, 'selected', {
+            get: function() {
+                return selectList;
+            }
+        } );
 
-            console.log( 'save', storageKey, list );
+        const save = () => {
 
             localStorage.setItem( storageKey, JSON.stringify( list ) );
 
-        },
+            return this;
 
-        get: function( index ) {
+        }
 
-            return list[index];
+        Object.assign( this, {
+            name,
+            save
+        } )
 
-        },
+    }
 
-        update: function( index, value ) {
+    get isComplete() {
 
-            if( value !== list[index] ) {
-                list[index] = value;
-                this.save();
-            }
+        return this.all.length === this.selected.length;
 
-        },
+    }
 
-        add: function( item ) {
+    get currentIndex() {
 
-            if( ! list.includes( item ) ) {
+        return this.selected[ this.selected.length - 1 ] || null;
 
-                list.push( item );
-                this.save();
+    }
 
-            }
+    get current() {
 
-        },
+        return this.all[this.currentIndex] || null;
 
-        remove: function( index ) {
+    }
 
-            list.splice( index, 1 );
+    selectRandom() {
+
+        let unusedIndexes = this.all.map( ( groupName, i ) => i ).filter( ( i ) => !this.selected.includes( i ) );
+
+        if( unusedIndexes.length ) {
+
+            let nextItemIndex = unusedIndexes[ Math.floor(Math.random() * unusedIndexes.length) ];
+    
+            this.selected.push( nextItemIndex );
+
+        }
+
+        return this;
+
+    }
+
+    select( targetIndex ) {
+
+        if( !this.isSelected( targetIndex ) )
+
+            this.selected.push( targetIndex );
+
+        return this;
+
+    }
+
+    unselect( targetIndex ) {
+
+        const position = this.selected.indexOf( targetIndex );
+
+        if( position > -1 )
+
+            this.selected.splice( position, 1 );
+
+        return this;
+
+    }
+
+    isSelected( index ) {
+
+        return this.selected.includes( index );
+
+    }
+    
+    update( index, value ) {
+
+        if( value !== this.all[index] ) {
+            this.all[index] = value;
+            this.save();
+        }
+
+        return this;
+
+    }
+
+    add( item ) {
+
+        if( ! this.all.includes( item ) ) {
+
+            this.all.push( item );
             this.save();
 
         }
 
-    });
+        return this;
+
+    }
+
+    remove( index ) {
+
+        this.all.splice( index, 1 );
+        this.save();
+
+        return this;
+
+    }
 
 }
 
 /**
  * ItemLists class constructor
  */
-function ItemLists() {
+class ItemLists {
 
-    const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new ItemList( key, name ) ] ) );
-    const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
+    constructor() {
 
-    const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
+        const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new ItemList( key, name ) ] ) );
+        const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
+    
+        const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
 
-    // console.log( lists );
+        Object.defineProperty( this, 'lists', {
+            get: function() {
+                return lists;
+            }
+        } );
+    
+        Object.defineProperty( this, 'all', {
+            get: function() {
+                return Object.entries( lists );
+            }
+        } );
 
-    Object.defineProperty( this, 'all', {
-        get: function() {
-            return Object.entries( lists );
-        }
-    } )
-
-    Object.assign( this, {
-
-        save: function() {
+        const save = () => {
 
             localStorage.setItem( storageName, serialize( lists ) );
 
             return this;
 
-        },
-
-        getIndex: function( index ) {
-
-            const entries = Object.entries( lists );
-            return entries[index] ? entries[index][1] : false;
-
-        },
-        
-        get: function( key ) {
-
-            return lists[key] || false;
-
-        },
-
-        new: function( name = 'Default' ) {
-            
-            // Use the current time as a key
-            const key = Date.now();
-
-            const newList = new ItemList( key, name );
-
-            lists[key] = newList;
-
-            this.save();
-
-            return newList;
-
-        },
-
-        delete: function( index ) {
-
-            lists.splice( index, 1 );
-
-            return this;
-
         }
 
-    })
+        Object.assign( this, {
+            save
+        } );
+
+    }
+
+    /**
+     * @param {number} index
+     * @returns {ItemList}
+     */
+    getIndex( index ) {
+
+        return this.all[index] ? this.all[index][1] : null;
+
+    }
+
+    /**
+     * @param {string} key
+     * @returns {ItemList}
+     */
+    get( key ) {
+
+        return lists[key] || false;
+
+    }
+
+    new( name = 'Default' ) {
+            
+        // Use the current time as a key
+        const key = Date.now();
+
+        const newList = new ItemList( key, name );
+
+        this.lists[key] = newList;
+
+        this.save();
+
+        return newList;
+
+    }
+
+    delete( key ) {
+
+        delete this.lists[key];
+
+        return this;
+
+    }
 
 }
 
-function ListImportExport( walker ) {
+class ListImportExport {
 
-    Object.assign( this, {
-        importButtonEl: $('#import-list'),
-        exportButtonEl: $('#export-list'),
-        importExportEl: $('#import-export'),
-    } );
+    constructor( walker ) {
 
-    const isOpen = () => this.importExportEl.is(':visible');
-    const toggle = () => this.importExportEl.toggle();
+        const importButtonEl = $('#import-list');
+        const exportButtonEl = $('#export-list');
+        const importExportEl = $('#import-export');
+    
+        importButtonEl.on( 'click', this.importList.bind(this) );
+        exportButtonEl.on( 'click', this.exportList.bind(this) );
 
-    const importList = () => {
+        Object.assign( this, {
+            walker,
+            importButtonEl,
+            exportButtonEl,
+            importExportEl
+        } );
 
-        if( isOpen() ) {
+    }
+
+    exportList() {
+    
+        if( !this.isOpen() ) {
+            
+            this.importExportEl.find('.form-control').val( JSON.stringify( this.walker.currentList.all ) );
+
+        }
+
+        this.toggle();
+
+    }
+
+    importList() {
+
+        if( this.isOpen() ) {
             
             var newList = JSON.parse( this.importExportEl.find('.form-control').val() );
 
             if( newList ) {
 
-                walker.currentList.all = newList;
-                walker.currentList.save();
-                walker.startList();
+                this.walker.currentList.all = newList;
+                this.walker.currentList.save();
+                this.walker.startList();
 
             }
 
         }
 
-        toggle();
+        this.toggle();
 
     }
 
-    const exportList = () => {
+    isOpen() { return this.importExportEl.is(':visible') }
 
-        if( !isOpen() ) {
-            
-            this.importExportEl.find('.form-control').val( JSON.stringify( walker.currentList.all ) );
+    toggle() { return this.importExportEl.toggle() }
 
-        }
+}
 
-        toggle();
+class ListView {
+
+    constructor() {
+
+        this.el = $('#list-items');
 
     }
 
-    this.importButtonEl.on( 'click', importList );
-    this.exportButtonEl.on( 'click', exportList );
+    /**
+     * @param {ItemList} list 
+     */
+    render( list ) {
+
+        this.el.empty();
+
+        list.all
+            .forEach( ( groupName, i ) => {
+
+                const isSelected = list.isSelected(i);
+                const isCurrent = i === list.currentIndex;
+                
+                let classModifiers = [];
+
+                if( isCurrent ) classModifiers.push('list-group-item-success');
+                else if( isSelected ) classModifiers.push('list-group-item-dark');
+
+                const itemEl = $(
+                    `<div class="input-group list-group-item col-12 col-sm-6 col-md-4 ${classModifiers.join(" ")}">
+                        <input type="text" value="${groupName}" class="form-control item-label">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
+                            </div>
+                            <button class="btn btn-outline-danger" data-action="remove">X</span>
+                        </div>
+                    </div>`
+                );
+                
+                itemEl
+                    .data( 'index', i )
+                    .find( '.toggle-select' )
+                    .prop( 'checked', isSelected );
+
+                this.el.append( itemEl );
+        
+            } );
+
+        return this;
+    }
 
 }
 
 /**
  * RandomListWalker class constructor
  */
-function RandomListWalker() {
+class RandomListWalker {
 
-    const lists = new ItemLists();
-    const walker = this;
+    constructor() {
 
-    Object.assign( this, {
-        lists: lists,
-        currentList: lists.getIndex(0) || lists.new(),
-        selected: [],
-        importExport: new ListImportExport( this ),
-        listEl: $('#all-groups'),
-        addItemButtonEl: $('#add-item'),
-        resetButtonEl: $('#reset-list'),
-        nextButtonEl: $('#next-group'),
-        statusMessageEl: $('#status-message'),
-        currentItemEl: $('#current-name'),
+        this.lists = new ItemLists();
+        this.currentList = this.lists.getIndex(0) || this.lists.new();
+        this.importExport = new ListImportExport( this );
+        this.view = new ListView();
+        this.statusMessageEl = $('#status-message');
+        this.currentItemEl = $('#current-name');
+        this.nextButtonEl = $('#next-group');
+        this.addItemButtonEl = $('#add-item');
+        this.resetButtonEl = $('#reset-list');
 
-        setStatusMessage: function( message, status = 'info' ) {
+        const saveOnInputChange = (e) =>  {
 
-            let previousStatus = this.statusMessageEl.data( 'status' );
+            const inputEl = $(e.target);
+            const itemIndex = inputEl.closest('.input-group').data( 'index' );
 
-            if( previousStatus && previousStatus !== status ) 
-        
-                // Remove the previous status class
-                this.statusMessageEl.removeClass( 'alert-'+ previousStatus );
-        
-            this.statusMessageEl
-                .data( 'status', status )
-                .addClass( 'alert-'+ status )
-                .text( message );
-
-        },
-
-        addItem: function() {
-
-            this.currentList.add( 'Item '+ (this.currentList.all.length + 1) );
-
-            this.startList();
-
-        },
-
-        displayItems: function() {
-
-            this.listEl.empty();
-
-            this.currentList.all
-                .forEach( ( groupName, i ) => {
-                    
-                    const itemEl = $(
-                        `<div class="input-group list-group-item col-12 col-sm-6 col-md-4">
-                            <input type="text" value="${groupName}" class="form-control item-label">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
-                                </div>
-                                <button class="btn btn-outline-danger" data-action="remove">X</span>
-                            </div>
-                        </div>`
-                    );
-                    
-                    itemEl.data( 'index', i );
-
-                    this.listEl.append( itemEl );
-            
-                } );
-
-        },
-
-        startList: function() {
-
-            this.selected.length = 0;
-            this.currentItemEl.text( 'None' );
-            this.nextButtonEl.prop('disabled', false);
-            this.setStatusMessage( this.selected.length + ' items selected.' );
-            this.displayItems();
-
-        },
-
-        nextListItem: function() {
-
-            this.listEl
-                .children( '.list-group-item-success' )
-                .removeClass( 'list-group-item-success' )
-                .addClass( 'list-group-item-dark' );
-
-            if( this.currentList.all.length === this.selected.length ) {
-
-                this.setStatusMessage( 'List Complete', 'success' );
-
-                this.nextButtonEl.prop('disabled', true);
-                return;
-
-            }
-
-            let remainingGroups = this.currentList.all.filter( groupName => !this.selected.includes( groupName ) ),
-                nextItem = remainingGroups[ Math.floor(Math.random() * remainingGroups.length) ],
-                nextGroupIndex = this.currentList.all.indexOf( nextItem );
-
-            const itemEl = this.listEl.children().eq( nextGroupIndex ).addClass( 'list-group-item-success' );
-            const checkboxEl = itemEl.find('.toggle-select');
-
-            console.log(checkboxEl);
-
-            checkboxEl.attr("checked", !checkboxEl.attr("checked"));
-
-            this.selected.push( nextItem );
-
-            let itemWord = 'item' + ( this.selected.length === 1 ? '' : 's' );
-
-            this.currentItemEl.text( nextItem );
-            this.setStatusMessage( `${this.selected.length} ${itemWord} selected.` );
+            this.currentList.update( itemIndex, inputEl.val() );
 
         }
 
-    });
+        const onToggleSelect = (e) => {
 
-    this.listEl
-        .on( 'keyup', '.item-label', function() {
-
-            const inputEl = $(this);
-            const itemIndex = inputEl.closest('.input-group').data( 'index' );
-
-            walker.currentList.update( itemIndex, inputEl.val() );
-
-        } )
-        .on( 'change', '.toggle-select', function() {
-
-            const checkboxEl = $(this);
+            const checkboxEl = $(e.target);
             const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
-            const item = walker.currentList.get( itemIndex );
 
-            if( walker.selected.includes( item ) ) {
+            this.currentList.isSelected( itemIndex )
 
-                walker.selected.splice( walker.selected.indexOf( item ), 1 );
-                walker.listEl.children().eq( itemIndex ).removeClass( 'list-group-item-success list-group-item-dark' );
+                ? this.currentList.unselect( itemIndex )
 
-            } else {
+                : this.currentList.select( itemIndex );
 
-                walker.listEl
-                    .children( '.list-group-item-success' )
-                    .removeClass( 'list-group-item-success' )
-                    .addClass( 'list-group-item-dark' );
+            this.render();
 
-                walker.listEl.children().eq( itemIndex ).addClass( 'list-group-item-success' );
+        }
 
-                walker.selected.push( item );
+        const onButtonAction = (e) => {
 
-                let itemWord = 'item' + ( walker.selected.length === 1 ? '' : 's' );
-
-                walker.currentItemEl.text( item );
-                walker.setStatusMessage( `${walker.selected.length} ${itemWord} selected.` );
-
-            }
-
-        } )
-        .on( 'click', '[data-action]', function() {
-
-            const buttonEl = $(this);
+            const buttonEl = $(e.target);
             const itemIndex = buttonEl.closest('.input-group').data( 'index' );
             const action = buttonEl.data( 'action' );
 
             if( action === 'remove' ) {
 
-                walker.currentList.remove( itemIndex );
-                walker.startList();
+                this.currentList.remove( itemIndex );
+                this.startList();
 
             }
 
-        } );
+        }
 
-    this.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
+        this.view.el
+            .on( 'keyup', '.item-label', saveOnInputChange )
+            .on( 'change', '.toggle-select', onToggleSelect )
+            .on( 'click', '[data-action]', onButtonAction );
 
-    this.resetButtonEl.on( 'click', this.startList.bind( this ) );
+        this.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
 
-    this.nextButtonEl.on('click', this.nextListItem.bind( this ) );
+        this.resetButtonEl.on( 'click', this.startList.bind( this ) );
+
+        this.nextButtonEl.on('click', this.nextListItem.bind( this ) );
+        
+    }
+
+    setStatusMessage( message, status = 'info' ) {
+
+        let previousStatus = this.statusMessageEl.data( 'status' );
+
+        if( previousStatus && previousStatus !== status ) 
+    
+            // Remove the previous status class
+            this.statusMessageEl.removeClass( 'alert-'+ previousStatus );
+    
+        this.statusMessageEl
+            .data( 'status', status )
+            .addClass( 'alert-'+ status )
+            .text( message );
+
+    }
+
+    displayListStatus() {
+
+        if( this.currentList.isComplete ) {
+            
+            this.setStatusMessage( 'List Complete', 'success' );
+            this.nextButtonEl.prop('disabled', true);
+
+        } else {
+
+            let itemWord = 'item' + ( this.currentList.selected.length === 1 ? '' : 's' );
+
+            this.currentItemEl.text( this.currentList.current );
+            this.setStatusMessage( `${this.currentList.selected.length} ${itemWord} selected.` );
+
+        }
+
+    }
+
+    addItem() {
+
+        this.currentList.add( 'Item '+ (this.currentList.all.length + 1) );
+
+        this.startList();
+
+    }
+
+    startList() {
+
+        this.currentList.selected.length = 0;
+        this.currentItemEl.text( 'None' );
+        this.nextButtonEl.prop('disabled', false);
+        this.render();
+
+    }
+
+    nextListItem() {
+
+        if( this.currentList.isComplete )
+
+            // Exit early if the list is already done. Nothing to do here!
+            return this;
+
+        this.currentList.selectRandom();
+
+        this.render();
+
+        return this;
+
+    }
+
+    render() {
+
+        this.view.render( this.currentList );
+
+        this.displayListStatus();
+
+    }
 
 }
 
