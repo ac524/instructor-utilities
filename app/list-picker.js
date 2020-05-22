@@ -1,11 +1,30 @@
 const storageName = 'walker-lists';
 
+class Item {
+
+    /**
+     * @param {string} label 
+     * @param {boolean} isDisabled
+     */
+    constructor( { label, isDisabled = false } ) {
+
+        this.label = label;
+        this.isDisabled = isDisabled;
+
+    }
+
+}
+
 /**
- * ItemList class constructor
- * @param {string} key 
+ * Collection class for managing the entries and selection state for a target list.
  */
 class ItemList {
 
+    /**
+     * ItemList class constructor
+     * @param {string} key 
+     * @param {string} name 
+     */
     constructor( key, name = '' ) {
 
         const storageKey = key +'-'+ storageName;
@@ -14,6 +33,13 @@ class ItemList {
         // Load or create the target list
         let list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
         let selectList = JSON.parse( localStorage.getItem( selectStorageKey ) ) || [];
+
+        // Migrate old data format if needed
+        if( list[0] && typeof list[0] === 'string' )
+
+            list = list.map( label => ({ label }) );
+
+        list = list.map( item => new Item( item ) );
 
         Object.defineProperty( this, 'all', {
             get: function() {
@@ -31,6 +57,9 @@ class ItemList {
             }
         } );
 
+        /**
+         * @returns {ItemList}
+         */
         const save = () => {
 
             localStorage.setItem( storageKey, JSON.stringify( list ) );
@@ -39,6 +68,9 @@ class ItemList {
 
         }
 
+        /**
+         * @returns {ItemList}
+         */
         const saveSelected = () => {
 
             localStorage.setItem( selectStorageKey, JSON.stringify( selectList ) );
@@ -73,13 +105,21 @@ class ItemList {
 
     }
 
+    /**
+     * @returns {ItemList}
+     */
     resetSelected() {
 
         this.selected.length = 0;
         this.saveSelected();
 
+        return this;
+
     }
 
+    /**
+     * @returns {ItemList}
+     */
     selectRandom() {
 
         let unusedIndexes = this.all.map( ( groupName, i ) => i ).filter( ( i ) => !this.selected.includes( i ) );
@@ -96,6 +136,10 @@ class ItemList {
 
     }
 
+    /**
+     * @param {number} targetIndex
+     * @returns {ItemList}
+     */
     select( targetIndex ) {
 
         if( !this.isSelected( targetIndex ) ) {
@@ -110,6 +154,10 @@ class ItemList {
 
     }
 
+    /**
+     * @param {number} targetIndex
+     * @returns {ItemList}
+     */
     unselect( targetIndex ) {
 
         const position = this.selected.indexOf( targetIndex );
@@ -126,16 +174,25 @@ class ItemList {
 
     }
 
+    /**
+     * @param {number} index
+     * @returns {boolean}
+     */
     isSelected( index ) {
 
         return this.selected.includes( index );
 
     }
     
-    update( index, value ) {
+    /**
+     * @param {number} index
+     * @param {string} value
+     * @returns {ItemList}
+     */
+    update( index, newLabel ) {
 
-        if( value !== this.all[index] ) {
-            this.all[index] = value;
+        if( newLabel !== this.all[index].label ) {
+            this.all[index].label = newLabel;
             this.save();
         }
 
@@ -143,19 +200,23 @@ class ItemList {
 
     }
 
-    add( item ) {
+    /**
+     * @param {string} item
+     * @returns {ItemList}
+     */
+    add( label ) {
 
-        if( ! this.all.includes( item ) ) {
-
-            this.all.push( item );
-            this.save();
-
-        }
+        this.all.push( new Item( { label } ) );
+        this.save();
 
         return this;
 
     }
 
+    /**
+     * @param {number} index
+     * @returns {ItemList}
+     */
     remove( index ) {
 
         this.all.splice( index, 1 );
@@ -168,10 +229,13 @@ class ItemList {
 }
 
 /**
- * ItemLists class constructor
+ * Collection class for managing defined lists.
  */
 class ItemLists {
 
+    /**
+     * ItemLists class constructor.
+     */
     constructor() {
 
         const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new ItemList( key, name ) ] ) );
@@ -225,6 +289,10 @@ class ItemLists {
 
     }
 
+    /**
+     * @param {string} name 
+     * @returns {ItemList}
+     */
     new( name = 'Default' ) {
             
         // Use the current time as a key
@@ -240,6 +308,10 @@ class ItemLists {
 
     }
 
+    /**
+     * @param {string} key
+     * @returns {ItemLists}
+     */
     delete( key ) {
 
         delete this.lists[key];
@@ -324,9 +396,7 @@ class ListView {
         this.el.empty();
 
         list.all
-            .forEach( ( groupName, i ) => {
-
-                console.log();
+            .forEach( ( item, i ) => {
 
                 const isSelected = list.isSelected(i);
                 const isCurrent = i === list.currentIndex;
@@ -338,7 +408,7 @@ class ListView {
 
                 const itemEl = $(
                     `<div class="input-group list-group-item col-12 col-sm-6 col-md-4 ${classModifiers.join(" ")}">
-                        <input type="text" value="${groupName}" class="form-control item-label">
+                        <input type="text" value="${item.label}" class="form-control item-label">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
@@ -349,8 +419,11 @@ class ListView {
                 );
                 
                 itemEl
+                    // Set the data
                     .data( 'index', i )
+                    // Navigate to the selected checkbox
                     .find( '.toggle-select' )
+                    // Set the toggle state
                     .prop( 'checked', isSelected );
 
                 this.el.append( itemEl );
@@ -451,7 +524,7 @@ class RandomListWalker {
 
         if( this.currentList.isComplete ) {
             
-            this.currentItemEl.text( this.currentList.current );
+            this.currentItemEl.text( this.currentList.current.label );
             this.setStatusMessage( 'List Complete', 'success' );
             this.nextButtonEl.prop('disabled', true);
 
@@ -463,7 +536,7 @@ class RandomListWalker {
             
             if( this.currentList.selected.length ) {
                 
-                this.currentItemEl.text( this.currentList.current );
+                this.currentItemEl.text( this.currentList.current.label );
 
             } else {
                 
