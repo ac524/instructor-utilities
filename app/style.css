@@ -18,11 +18,14 @@
     background: transparent;
 }
 
-
 .input-group.list-group-item .form-control,
 .input-group.list-group-item .input-group-text,
 .input-group.list-group-item .btn {
     border: none;
     border-radius: 0;
     background: transparent;
+}
+.input-group.list-group-item .btn-outline-secondary:hover,
+.input-group.list-group-item .btn-outline-secondary:focus {
+    color: #212529;
 }
