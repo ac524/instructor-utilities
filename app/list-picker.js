@@ -380,8 +380,6 @@ class ListView {
         list.all
             .forEach( ( groupName, i ) => {
 
-                console.log();
-
                 const isSelected = list.isSelected(i);
                 const isCurrent = i === list.currentIndex;
                 
