@@ -29,3 +29,14 @@
 .input-group.list-group-item .btn-outline-secondary:focus {
     color: #212529;
 }
+
+.list-group.list-disabled {
+    border-left: 1px solid rgba(0,0,0,.0625);
+    border-top: 1px solid rgba(0,0,0,.0625);
+}
+.list-disabled .list-group-item {
+    opacity: .5;
+}
+.list-disabled .list-group-item:hover {
+    opacity: 1;
+}
