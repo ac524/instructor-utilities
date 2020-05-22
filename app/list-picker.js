@@ -1,5 +1,20 @@
 const storageName = 'walker-lists';
 
+class Item {
+
+    /**
+     * @param {string} label 
+     * @param {boolean} isDisabled
+     */
+    constructor( { label, isDisabled = false } ) {
+
+        this.label = label;
+        this.isDisabled = isDisabled;
+
+    }
+
+}
+
 /**
  * Collection class for managing the entries and selection state for a target list.
  */
@@ -18,6 +33,13 @@ class ItemList {
         // Load or create the target list
         let list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
         let selectList = JSON.parse( localStorage.getItem( selectStorageKey ) ) || [];
+
+        // Migrate old data format if needed
+        if( list[0] && typeof list[0] === 'string' )
+
+            list = list.map( label => ({ label }) );
+
+        list = list.map( item => new Item( item ) );
 
         Object.defineProperty( this, 'all', {
             get: function() {
@@ -167,10 +189,10 @@ class ItemList {
      * @param {string} value
      * @returns {ItemList}
      */
-    update( index, value ) {
+    update( index, newLabel ) {
 
-        if( value !== this.all[index] ) {
-            this.all[index] = value;
+        if( newLabel !== this.all[index].label ) {
+            this.all[index].label = newLabel;
             this.save();
         }
 
@@ -182,14 +204,10 @@ class ItemList {
      * @param {string} item
      * @returns {ItemList}
      */
-    add( item ) {
+    add( label ) {
 
-        if( ! this.all.includes( item ) ) {
-
-            this.all.push( item );
-            this.save();
-
-        }
+        this.all.push( new Item( { label } ) );
+        this.save();
 
         return this;
 
@@ -378,7 +396,7 @@ class ListView {
         this.el.empty();
 
         list.all
-            .forEach( ( groupName, i ) => {
+            .forEach( ( item, i ) => {
 
                 const isSelected = list.isSelected(i);
                 const isCurrent = i === list.currentIndex;
@@ -390,7 +408,7 @@ class ListView {
 
                 const itemEl = $(
                     `<div class="input-group list-group-item col-12 col-sm-6 col-md-4 ${classModifiers.join(" ")}">
-                        <input type="text" value="${groupName}" class="form-control item-label">
+                        <input type="text" value="${item.label}" class="form-control item-label">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
