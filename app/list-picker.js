@@ -5,11 +5,38 @@ class Item {
     /**
      * @param {string} label 
      * @param {boolean} isDisabled
+     * @param {ItemList} list
      */
-    constructor( { label, isDisabled = false } ) {
+    constructor( { label, isDisabled = false }, list ) {
 
         this.label = label;
         this.isDisabled = isDisabled;
+
+        Object.defineProperty( this, 'index', {
+            get: () => list.all.indexOf( this )
+        } );
+
+        Object.defineProperty( this, 'isSelected', {
+            get: () => list.isSelected( this.index )
+        } );
+
+        Object.defineProperty( this, 'isCurrent', {
+            get: () => this.index === list.currentIndex
+        } );
+
+        this.toggleDisable = () => {
+
+            this.isDisabled = !this.isDisabled;
+
+            if( this.isDisabled && this.isSelected )
+
+                list.unselect( this.index );
+
+            list.save();
+
+            return this;
+
+        }
 
     }
 
@@ -39,7 +66,7 @@ class ItemList {
 
             list = list.map( label => ({ label }) );
 
-        list = list.map( item => new Item( item ) );
+        list = list.map( item => new Item( item, this ) );
 
         Object.defineProperty( this, 'all', {
             get: function() {
@@ -87,9 +114,21 @@ class ItemList {
 
     }
 
+    get enabled() {
+
+        return this.all.filter( item => !item.isDisabled );
+
+    }
+
+    get disabled() {
+
+        return this.all.filter( item => item.isDisabled );
+
+    }
+
     get isComplete() {
 
-        return this.all.length === this.selected.length;
+        return this.enabled.length === this.selected.length;
 
     }
 
@@ -99,6 +138,9 @@ class ItemList {
 
     }
 
+    /**
+     * @returns {Item}
+     */
     get current() {
 
         return this.all[this.currentIndex] || null;
@@ -122,7 +164,7 @@ class ItemList {
      */
     selectRandom() {
 
-        let unusedIndexes = this.all.map( ( groupName, i ) => i ).filter( ( i ) => !this.selected.includes( i ) );
+        let unusedIndexes = this.enabled.map( ( { index } ) => index ).filter( ( i ) => !this.selected.includes( i ) );
 
         if( unusedIndexes.length ) {
 
@@ -183,6 +225,15 @@ class ItemList {
         return this.selected.includes( index );
 
     }
+
+    /**
+     * @param {Item} item 
+     */
+    indexOf( item ) {
+
+        return this.all.indexOf( item );
+
+    }
     
     /**
      * @param {number} index
@@ -206,7 +257,7 @@ class ItemList {
      */
     add( label ) {
 
-        this.all.push( new Item( { label } ) );
+        this.all.push( new Item( { label }, this ) );
         this.save();
 
         return this;
@@ -385,6 +436,8 @@ class ListView {
     constructor() {
 
         this.el = $('#list-items');
+        this.enabledEl = $('#list-enabled-items');
+        this.disabledEl = $('#list-disabled-items');
 
     }
 
@@ -393,42 +446,53 @@ class ListView {
      */
     render( list ) {
 
-        this.el.empty();
+        this.enabledEl.empty();
+        this.disabledEl.empty();
 
-        list.all
-            .forEach( ( item, i ) => {
+        /**
+         * @param {Item} item 
+         */
+        const createItem = ( item ) => {
+            
+            const classModifiers = [];
+            const disableIcon = item.isDisabled ? 'fa-eye-slash' : 'fa-eye';
 
-                const isSelected = list.isSelected(i);
-                const isCurrent = i === list.currentIndex;
-                
-                let classModifiers = [];
+            if( item.isCurrent ) classModifiers.push('list-group-item-success');
+            else if( item.isSelected ) classModifiers.push('list-group-item-dark');
 
-                if( isCurrent ) classModifiers.push('list-group-item-success');
-                else if( isSelected ) classModifiers.push('list-group-item-dark');
-
-                const itemEl = $(
-                    `<div class="input-group list-group-item col-12 col-sm-6 col-md-4 ${classModifiers.join(" ")}">
-                        <input type="text" value="${item.label}" class="form-control item-label">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
-                            </div>
-                            <button class="btn btn-outline-danger" data-action="remove">X</span>
+            const itemEl = $(
+                `<div class="input-group list-group-item col-12 col-sm-6 col-md-4 ${classModifiers.join(" ")}">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
                         </div>
-                    </div>`
-                );
-                
-                itemEl
-                    // Set the data
-                    .data( 'index', i )
-                    // Navigate to the selected checkbox
-                    .find( '.toggle-select' )
-                    // Set the toggle state
-                    .prop( 'checked', isSelected );
+                    </div>
+                    <input type="text" value="${item.label}" class="form-control item-label">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" data-action="disable">
+                            <i class="fas ${disableIcon}"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" data-action="remove">
+                            <i class="fas fa-times"></i>
+                        </span>
+                    </div>
+                </div>`
+            );
+            
+            itemEl
+                // Set the data
+                .data( 'index', item.index )
+                // Navigate to the selected checkbox
+                .find( '.toggle-select' )
+                // Set the toggle state
+                .prop( 'checked', item.isSelected );
 
-                this.el.append( itemEl );
-        
-            } );
+            return itemEl;
+
+        }
+
+        list.enabled.forEach( ( item ) => this.enabledEl.append( createItem( item ) ) );
+        list.disabled.forEach( ( item ) => this.disabledEl.append( createItem( item ) ) );
 
         return this;
     }
@@ -478,7 +542,7 @@ class RandomListWalker {
 
         const onButtonAction = (e) => {
 
-            const buttonEl = $(e.target);
+            const buttonEl = $(e.currentTarget);
             const itemIndex = buttonEl.closest('.input-group').data( 'index' );
             const action = buttonEl.data( 'action' );
 
@@ -486,6 +550,11 @@ class RandomListWalker {
 
                 this.currentList.remove( itemIndex );
                 this.restartList();
+
+            } else if( action === 'disable' ) {
+
+                this.currentList.all[itemIndex].toggleDisable();
+                this.render();
 
             }
 
