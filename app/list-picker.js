@@ -524,7 +524,7 @@ class RandomListWalker {
 
         if( this.currentList.isComplete ) {
             
-            this.currentItemEl.text( this.currentList.current );
+            this.currentItemEl.text( this.currentList.current.label );
             this.setStatusMessage( 'List Complete', 'success' );
             this.nextButtonEl.prop('disabled', true);
 
@@ -536,7 +536,7 @@ class RandomListWalker {
             
             if( this.currentList.selected.length ) {
                 
-                this.currentItemEl.text( this.currentList.current );
+                this.currentItemEl.text( this.currentList.current.label );
 
             } else {
                 
