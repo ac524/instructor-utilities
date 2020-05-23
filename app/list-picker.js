@@ -451,6 +451,140 @@ class ListImportExport {
 
 }
 
+class ListControls {
+
+    constructor( walker ) {
+        
+        this.view = walker.view;
+        this.render = walker.render.bind(walker);
+
+        Object.defineProperty( this, 'currentList', {
+            get() {
+                return walker.currentList
+            }
+        } );
+
+        this.view.el
+            .on( 'keyup', '.item-label', this.saveOnInputChange.bind( this ) )
+            .on( 'change', '.toggle-select', this.onToggleSelect.bind( this ) )
+            .on( 'click', '[data-action]', this.onButtonAction.bind( this ) );
+
+        this.view.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
+
+        this.view.resetButtonEl.on( 'click', this.restartList.bind( this ) );
+
+        this.view.nextButtonEl.on('click', this.nextListItem.bind( this ) );
+
+    }
+
+    saveOnInputChange(e) {
+
+        const inputEl = $(e.target);
+        const itemIndex = inputEl.closest('.input-group').data( 'index' );
+
+        this.currentList.update( itemIndex, inputEl.val() );
+
+    }
+
+    onToggleSelect(e) {
+
+        const checkboxEl = $(e.target);
+        const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
+
+        this.currentList.isSelected( itemIndex )
+
+            ? this.currentList.unselect( itemIndex )
+
+            : this.currentList.select( itemIndex );
+
+        this.render();
+
+    }
+
+    onButtonAction(e) {
+
+        const buttonEl = $(e.currentTarget);
+        const itemIndex = buttonEl.closest('.input-group').data( 'index' );
+        const action = buttonEl.data( 'action' );
+
+        if( action === 'remove' ) {
+
+            this.currentList.remove( itemIndex );
+            this.restartList();
+
+        } else if( action === 'disable' ) {
+
+            this.currentList.all[itemIndex].toggleDisable();
+            this.render();
+
+        }
+
+    }
+
+    addItem() {
+
+        this.currentList.add( 'Item '+ (this.currentList.all.length + 1) );
+
+        this.restartList();
+
+    }
+
+    nextListItem() {
+
+        if( this.currentList.isComplete )
+
+            // Exit early if the list is already done. Nothing to do here!
+            return this;
+
+        this.currentList.selectRandom();
+
+        this.render();
+
+        return this;
+
+    }
+
+
+    restartList() {
+
+        this.currentList.resetSelected();
+
+        this.render();
+
+    }
+
+}
+
+class ListStatus {
+
+    constructor() {
+
+        this.el = $('#status-message');
+
+    }
+
+    get currentStatus() {
+
+        return this.el.data( 'status' );
+
+    }
+
+    set( message, status = 'info' ) {
+
+        if( this.currentStatus && this.currentStatus !== status ) 
+    
+            // Remove the previous status class
+            this.el.removeClass( 'alert-'+ this.currentStatus );
+    
+        this.el
+            .data( 'status', status )
+            .addClass( 'alert-'+ status )
+            .text( message );
+
+    }
+
+}
+
 class ListView {
 
     constructor() {
@@ -458,6 +592,12 @@ class ListView {
         this.el = $('#list-items');
         this.enabledEl = $('#list-enabled-items');
         this.disabledEl = $('#list-disabled-items');
+        this.nextButtonEl = $('#next-group');
+        this.addItemButtonEl = $('#add-item');
+        this.resetButtonEl = $('#reset-list');
+        this.currentItemEl = $('#current-name');
+
+        this.status = new ListStatus();
 
     }
 
@@ -514,7 +654,66 @@ class ListView {
         list.enabled.forEach( ( item ) => this.enabledEl.append( createItem( item ) ) );
         list.disabled.forEach( ( item ) => this.disabledEl.append( createItem( item ) ) );
 
+        this
+            .displayStatus( list )
+            .manageControls( list )
+            .displayCurrentItem( list );
+
         return this;
+
+    }
+
+    manageControls( list ) {
+
+        list.isComplete
+
+            ? this.nextButtonEl.prop('disabled', true)
+
+            : this.nextButtonEl.prop('disabled', false);
+
+
+        return this;
+
+    }
+
+    displayCurrentItem( list ) {
+
+        if( list.isComplete ) {
+
+            this.currentItemEl.text( list.current.label );
+
+        } else {
+
+            list.selected.length
+                
+                ? this.currentItemEl.text( list.current.label )
+
+                : this.currentItemEl.text( 'No Selection' );
+
+        }
+
+        return this;
+
+    }
+
+    /**
+     * @param {ItemList} list 
+     */
+    displayStatus( list ) {
+
+        if( list.isComplete ) {
+            
+            this.status.set( 'List Complete', 'success' );
+
+        } else {
+
+            let itemWord = 'item' + ( list.selected.length === 1 ? '' : 's' );
+            this.status.set( `${list.selected.length} ${itemWord} selected.` );
+            
+        }
+
+        return this;
+
     }
 
 }
@@ -530,157 +729,14 @@ class RandomListWalker {
         this.currentList = this.lists.getIndex(0) || this.lists.new();
         this.importExport = new ListImportExport( this );
         this.view = new ListView();
-        this.statusMessageEl = $('#status-message');
-        this.currentItemEl = $('#current-name');
-        this.nextButtonEl = $('#next-group');
-        this.addItemButtonEl = $('#add-item');
-        this.resetButtonEl = $('#reset-list');
-
-        const saveOnInputChange = (e) =>  {
-
-            const inputEl = $(e.target);
-            const itemIndex = inputEl.closest('.input-group').data( 'index' );
-
-            this.currentList.update( itemIndex, inputEl.val() );
-
-        }
-
-        const onToggleSelect = (e) => {
-
-            const checkboxEl = $(e.target);
-            const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
-
-            this.currentList.isSelected( itemIndex )
-
-                ? this.currentList.unselect( itemIndex )
-
-                : this.currentList.select( itemIndex );
-
-            this.render();
-
-        }
-
-        const onButtonAction = (e) => {
-
-            const buttonEl = $(e.currentTarget);
-            const itemIndex = buttonEl.closest('.input-group').data( 'index' );
-            const action = buttonEl.data( 'action' );
-
-            if( action === 'remove' ) {
-
-                this.currentList.remove( itemIndex );
-                this.restartList();
-
-            } else if( action === 'disable' ) {
-
-                this.currentList.all[itemIndex].toggleDisable();
-                this.render();
-
-            }
-
-        }
-
-        this.view.el
-            .on( 'keyup', '.item-label', saveOnInputChange )
-            .on( 'change', '.toggle-select', onToggleSelect )
-            .on( 'click', '[data-action]', onButtonAction );
-
-        this.addItemButtonEl.on( 'click', this.addItem.bind( this ) );
-
-        this.resetButtonEl.on( 'click', this.restartList.bind( this ) );
-
-        this.nextButtonEl.on('click', this.nextListItem.bind( this ) );
+        this.status = new ListStatus();
+        this.controls = new ListControls( this );
         
-    }
-
-    setStatusMessage( message, status = 'info' ) {
-
-        let previousStatus = this.statusMessageEl.data( 'status' );
-
-        if( previousStatus && previousStatus !== status ) 
-    
-            // Remove the previous status class
-            this.statusMessageEl.removeClass( 'alert-'+ previousStatus );
-    
-        this.statusMessageEl
-            .data( 'status', status )
-            .addClass( 'alert-'+ status )
-            .text( message );
-
-    }
-
-    displayListStatus() {
-
-        if( this.currentList.isComplete ) {
-            
-            this.currentItemEl.text( this.currentList.current.label );
-            this.setStatusMessage( 'List Complete', 'success' );
-            this.nextButtonEl.prop('disabled', true);
-
-        } else {
-
-            let itemWord = 'item' + ( this.currentList.selected.length === 1 ? '' : 's' );
-
-            this.setStatusMessage( `${this.currentList.selected.length} ${itemWord} selected.` );
-            
-            if( this.currentList.selected.length ) {
-                
-                this.currentItemEl.text( this.currentList.current.label );
-
-            } else {
-                
-                this.currentItemEl.text( 'No Selection' );
-
-            }
-            
-        }
-
-    }
-
-    addItem() {
-
-        this.currentList.add( 'Item '+ (this.currentList.all.length + 1) );
-
-        this.restartList();
-
-    }
-
-    startList() {
-
-        this.render();
-
-    }
-
-
-    restartList() {
-
-        this.currentList.resetSelected();
-        this.nextButtonEl.prop('disabled', false);
-
-        this.startList();
-
-    }
-
-    nextListItem() {
-
-        if( this.currentList.isComplete )
-
-            // Exit early if the list is already done. Nothing to do here!
-            return this;
-
-        this.currentList.selectRandom();
-
-        this.render();
-
-        return this;
-
     }
 
     render() {
 
         this.view.render( this.currentList );
-
-        this.displayListStatus();
 
     }
 
@@ -690,4 +746,4 @@ class RandomListWalker {
 const walker = new RandomListWalker();
 
 // Start the list walk through
-walker.startList();
+walker.render();
