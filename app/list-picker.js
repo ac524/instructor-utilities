@@ -12,31 +12,51 @@ class Item {
         this.label = label;
         this.isDisabled = isDisabled;
 
-        Object.defineProperty( this, 'index', {
-            get: () => list.all.indexOf( this )
+        Object.defineProperty( this, 'belongsTo', {
+            get: () => list
         } );
 
-        Object.defineProperty( this, 'isSelected', {
-            get: () => list.isSelected( this.index )
-        } );
+    }
 
-        Object.defineProperty( this, 'isCurrent', {
-            get: () => this.index === list.currentIndex
-        } );
+    /**
+     * The item's position in the list it belongs to.
+     * @returns {number}
+     */
+    get index() {
+        return this.belongsTo.all.indexOf( this );
+    }
 
-        this.toggleDisable = () => {
+    /**
+     * Flag for if this item's index exists in the list it belongs to.
+     * @returns {boolean}
+     */
+    get isSelected() {
+        return this.belongsTo.isSelected( this.index );
+    }
 
-            this.isDisabled = !this.isDisabled;
+    /**
+     * Flag for if this item's index is the last item selected.
+     * @returns {boolean}
+     */
+    get isCurrent() {
+        return this.index === this.belongsTo.currentIndex;
+    }
 
-            if( this.isDisabled && this.isSelected )
+    /**
+     * Modifies the item's disabled state and updates it's state in the list it belongs to.
+     * @returns {Item}
+     */
+    toggleDisable() {
 
-                list.unselect( this.index );
+        this.isDisabled = !this.isDisabled;
 
-            list.save();
+        if( this.isDisabled && this.isSelected )
 
-            return this;
+            this.belongsTo.unselect( this.index );
 
-        }
+        this.belongsTo.save();
+
+        return this;
 
     }
 
