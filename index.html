@@ -14,12 +14,12 @@
                         <select id="list-options" class="form-control form-control-sm"></select>
                     </div>
                     <div class="col-auto">
-                        <button id="new-list" class="btn btn-sm btn-success">Add New</button>
+                        <button id="new-list" class="btn btn-sm btn-success" data-list-action="newList" data-toggle="modal" data-target="#edit-list-modal">Add New</button>
                     </div>
                 </div>
                 <hr>
-                <h1><span id="current-list-title"></span> Item Picker</h1>
-                <button class="btn btn-sm btn-secondary" id="edit-list" data-list-action="editlist" data-toggle="modal" data-target="#edit-list-modal">Edit</button> <button class="btn btn-sm btn-danger"  id="delete-list">Delete</button>
+                <h1><span id="current-list-title"></span> Collection</h1>
+                <button class="btn btn-sm btn-secondary" id="edit-list" data-list-action="editList" data-toggle="modal" data-target="#edit-list-modal">Edit</button> <button class="btn btn-sm btn-danger"  id="delete-list">Delete</button>
             </div>
         </div>
 

@@ -135,7 +135,7 @@ class ItemList {
 
     get isComplete() {
 
-        return this.enabled.length === this.selected.length;
+        return this.enabled.length && this.enabled.length === this.selected.length;
 
     }
 
@@ -348,13 +348,6 @@ class ItemLists {
     }
 
     /**
-     * 
-     */
-    updateDetails( { name } ) {
-
-    }
-
-    /**
      * @param {number} index
      * @returns {ItemList}
      */
@@ -370,7 +363,7 @@ class ItemLists {
      */
     get( key ) {
 
-        return lists[key] || false;
+        return this.lists[key] || false;
 
     }
 
@@ -381,7 +374,7 @@ class ItemLists {
     new( name = 'Default' ) {
             
         // Use the current time as a key
-        const key = Date.now();
+        const key = Date.now().toString();
 
         const newList = new ItemList( key, name, this );
 
@@ -400,6 +393,8 @@ class ItemLists {
     delete( key ) {
 
         delete this.lists[key];
+
+        this.save();
 
         return this;
 
@@ -542,10 +537,14 @@ class ListModal {
 
 class ListControls {
 
+    /**
+     * @param {RandomListWalker} walker 
+     */
     constructor( walker ) {
         
         this.view = walker.view;
         this.lists = walker.lists;
+        this.selectList = walker.selectList.bind(walker);
         this.render = walker.render.bind(walker);
 
         Object.defineProperty( this, 'currentList', {
@@ -563,7 +562,15 @@ class ListControls {
 
         this.view.resetButtonEl.on( 'click', this.restartList.bind( this ) );
 
-        this.view.nextButtonEl.on('click', this.nextListItem.bind( this ) );
+        this.view.nextButtonEl.on( 'click', this.nextListItem.bind( this ) );
+
+        this.view.listOptionsEl.on( 'change', ( { currentTarget: { value } } ) => this.selectList( this.lists.get( value ) ) );
+
+        this.view.deleteListButtonEl.on( 'click', () => {
+            this.lists.delete( this.currentList.key );
+            this.selectList( this.lists.getIndex( 0 ) );
+            this.view.displayListOptions( this.lists, this.currentList.key );
+         } );
 
     }
 
@@ -576,7 +583,13 @@ class ListControls {
             .on( 'show.bs.modal', (e) => {
 
                 const actions = {
-                    editlist:  () => modal.setList( this.currentList ).render()
+                    editList:  () => modal.setList( this.currentList ).render(),
+                    newList: () => {
+                        const newList = this.lists.new( 'List '+ ( this.lists.all.length + 1 ) );
+                        modal.setList( newList ).render();
+                        this.selectList( newList );
+                        this.view.displayListOptions( this.lists, this.currentList.key );
+                    }
                 };
 
                 const action = e.relatedTarget.dataset.listAction;
@@ -584,7 +597,7 @@ class ListControls {
                 if( action && actions[action] ) actions[action]();
 
             } )
-            .on( 'hide.bs.modal', (e) => this.view.displayListOptions( this.lists ).displayListName( this.currentList ) );
+            .on( 'hide.bs.modal', (e) => this.view.displayListOptions( this.lists, this.currentList.key ).displayListName( this.currentList ) );
 
     }
 
@@ -724,6 +737,7 @@ class ListView {
 
         // List Collection Controls
         this.newListButtonEl = $('#new-list');
+        this.deleteListButtonEl = $('#delete-list');
 
         this.status = new ListStatus();
 
@@ -806,12 +820,19 @@ class ListView {
 
     /**
      * @param {ItemLists} lists 
+     * @param {string} currentKey
      */
-    displayListOptions( lists ) {
+    displayListOptions( lists, currentKey ) {
+
+        console.log( lists, currentKey );
 
         this.listOptionsEl.empty();
 
-        lists.all.forEach( ([key, list]) => this.listOptionsEl.append( `<option value="${key}">${list.name}</option>` ) );
+        lists.all.forEach( ([key, list]) => {
+            this.listOptionsEl.append(
+                $(`<option value="${key}">${list.name}</option>`).prop('selected', currentKey === key)
+            );
+        });
 
         return this;
 
@@ -875,16 +896,17 @@ class RandomListWalker {
     constructor() {
 
         this.lists = new ItemLists();
+        this.currentList;
         this.importExport = new ListImportExport( this );
         this.view = new ListView();
         this.status = new ListStatus();
         this.controls = new ListControls( this );
-        this.modal = new ListModal( this );
+        this.modal = new ListModal();
 
         this.controls.setupModal( this.modal );
 
-        this.view.displayListOptions( this.lists );
         this.selectList( this.lists.getIndex(0) || this.lists.new() );
+        this.view.displayListOptions( this.lists, this.currentList.key );
         
     }
 
@@ -894,7 +916,9 @@ class RandomListWalker {
     selectList( list ) {
 
         this.currentList = list;
-        this.view.displayListName( this.currentList );
+        this.view
+            .displayListName( this.currentList )
+            .render( this.currentList );
 
     }
 
