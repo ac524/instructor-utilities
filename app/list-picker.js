@@ -728,8 +728,8 @@ class ListView {
 
         } else {
 
-            let itemWord = 'item' + ( list.selected.length === 1 ? '' : 's' );
-            this.status.set( `${list.selected.length} ${itemWord} selected.` );
+            let itemWord = 'item' + ( list.enabled.length === 1 ? '' : 's' );
+            this.status.set( `${list.selected.length} out of ${list.enabled.length} ${itemWord} selected.` );
             
         }
 
