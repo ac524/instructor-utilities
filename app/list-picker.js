@@ -596,6 +596,8 @@ class ListView {
         this.addItemButtonEl = $('#add-item');
         this.resetButtonEl = $('#reset-list');
         this.currentItemEl = $('#current-name');
+        this.currentTitleEl = $('#current-list-title');
+        this.listOptionsEl = $('#list-options');
 
         this.status = new ListStatus();
 
@@ -676,6 +678,25 @@ class ListView {
 
     }
 
+    /**
+     * @param {ItemLists} lists 
+     */
+    displayListOptions( lists ) {
+
+        this.listOptionsEl.empty();
+
+        lists.all.forEach( ([key, list]) => this.listOptionsEl.append( `<option value="${key}">${list.name}</option>` ) );
+
+    }
+
+    displayListName( list ) {
+
+        this.currentTitleEl.text( list.name );
+
+        return this;
+
+    }
+
     displayCurrentItem( list ) {
 
         if( list.isComplete ) {
@@ -726,12 +747,24 @@ class RandomListWalker {
     constructor() {
 
         this.lists = new ItemLists();
-        this.currentList = this.lists.getIndex(0) || this.lists.new();
         this.importExport = new ListImportExport( this );
         this.view = new ListView();
         this.status = new ListStatus();
         this.controls = new ListControls( this );
+
+        this.view.displayListOptions( this.lists );
+        this.selectList( this.lists.getIndex(0) || this.lists.new() );
         
+    }
+
+    /**
+     * @param {ItemList} list 
+     */
+    selectList( list ) {
+
+        this.currentList = list;
+        this.view.displayListName( this.currentList );
+
     }
 
     render() {

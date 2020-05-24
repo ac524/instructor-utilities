@@ -9,7 +9,17 @@
 
         <div class="jumbotron">
             <div class="container">
-                <h1>Item Picker</h1>
+                <div class="form-row">
+                    <div class="col-auto">
+                        <select id="list-options" class="form-control"></select>
+                    </div>
+                    <div class="col-auto">
+                        <button id="new-list" class="btn btn-success">Add New</button>
+                    </div>
+                </div>
+                <hr>
+                <h1><span id="current-list-title"></span> Item Picker</h1>
+                <button class="btn btn-sm btn-secondary" id="edit-list">Edit</button> <button class="btn btn-sm btn-danger"  id="delete-list">Delete</button>
             </div>
         </div>
 
