@@ -1,4 +1,5 @@
 import ListStatus from './list-status';
+import Lists from '../../models/lists/lists';
 
 class ListView {
 
@@ -113,13 +114,13 @@ class ListView {
      * @param {Lists} lists 
      * @param {string} currentKey
      */
-    displayListOptions( lists, currentKey ) {
+    displayListOptions( lists ) {
 
         this.listOptionsEl.empty();
 
         lists.all.forEach( ([key, list]) => {
             this.listOptionsEl.append(
-                $(`<option value="${key}">${list.name}</option>`).prop('selected', currentKey === key)
+                $(`<option value="${key}">${list.name}</option>`).prop('selected', list.isCurrent )
             );
         });
 

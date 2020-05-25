@@ -60,10 +60,20 @@ class List {
 
     }
 
+    /**
+     * @returns {boolean}
+     */
     get isComplete() {
 
         return this.enabled.length && this.enabled.length === this.selected.length;
 
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    get isCurrent() {
+        return this.key === this.belongsTo.currentListKey;
     }
 
     get currentIndex() {
@@ -117,6 +127,17 @@ class List {
             this.select( nextItemIndex );
 
         }
+
+        return this;
+
+    }
+
+    /**
+     * @returns {List}
+     */
+    updateItem( index, update ) {
+
+        this.all[index].update( update );
 
         return this;
 

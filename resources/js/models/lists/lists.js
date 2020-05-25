@@ -17,15 +17,11 @@ class Lists {
     
         const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
 
+        this.currentListKey;
+
         Object.defineProperty( this, 'lists', {
             get: function() {
                 return lists;
-            }
-        } );
-    
-        Object.defineProperty( this, 'all', {
-            get: function() {
-                return Object.entries( lists );
             }
         } );
 
@@ -38,8 +34,29 @@ class Lists {
     
             },
             writable: false
-        } )
+        } );
 
+        // Create a default list if there isn't one
+        if( ! this.all.length ) this.lists.new();
+
+    }
+
+    get currentList() {
+
+        return this.currentListKey
+
+            ? this.get( this.currentListKey )
+
+            : this.getIndex( 0 )
+
+    }
+
+    get all() {
+        return Object.entries( this.lists );
+    }
+
+    get count() {
+        return this.all.length;
     }
 
     /**
@@ -59,6 +76,32 @@ class Lists {
     get( key ) {
 
         return this.lists[key] || false;
+
+    }
+
+
+    /**
+     * @param {number} index
+     * @returns {Lists}
+     */
+    selectIndex( index ) {
+
+        this.currentListKey = this.getIndex(0).key;
+
+        return this;
+
+    }
+
+
+    /**
+     * @param {string} key
+     * @returns {Lists}
+     */
+    select( key ) {
+
+        this.currentListKey = key;
+
+        return this;
 
     }
 
@@ -86,6 +129,10 @@ class Lists {
      * @returns {Lists}
      */
     delete( key ) {
+
+        if( this.lists[key].isCurrent )
+
+            this.currentListKey = null;
 
         delete this.lists[key];
 
