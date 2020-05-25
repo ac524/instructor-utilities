@@ -13,7 +13,7 @@ module.exports = {
 
     output: {
         path: path.resolve( __dirname ),
-        filename: 'js/[name].js',
+        filename: 'public/js/[name].js',
         chunkFilename: 'js/[name]-[chunkhash].js',
         publicPath: '/wp-content/themes/freeflow/'
     },
@@ -53,8 +53,8 @@ module.exports = {
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].css',
-            chunkFilename: 'css/[name]-[chunkhash].css',
+            filename: 'public/css/[name].css',
+            chunkFilename: 'public/css/[name]-[chunkhash].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
         })
     ],
