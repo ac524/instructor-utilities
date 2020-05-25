@@ -10,7 +10,9 @@ cache:
     - css
 # services:
 #   - mysql
-install:
-  - npm install
-script:
-  - npm run production
+before_install:
+  - npm run test
+# install:
+#   - npm install
+# script:
+#   - npm run production

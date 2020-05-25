@@ -1,12 +1,11 @@
 # build directories
-js/*
-css/*
+public/*
 
 # .DS_Store
 .DS_Store
 **/.DS_Store
 
-# Logs
+# Logsgit 
 logs
 *.log
 npm-debug.log*
