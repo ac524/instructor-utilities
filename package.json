@@ -8,7 +8,7 @@
     "watch": "webpack --hide-modules --mode=development --watch",
     "production": "webpack --hide-modules --mode=production",
     "predeploy": "npm run production",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d public"
   },
   "repository": {
     "type": "git",
