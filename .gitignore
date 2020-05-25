@@ -1,3 +1,7 @@
+# build directories
+js/*
+css/*
+
 # Logs
 logs
 *.log
