@@ -6,7 +6,11 @@ branches:
 cache:
   directories:
     - node_modules
+    - js
+    - css
 # services:
 #   - mysql
-before_install:
-  - npm test
+install:
+  - npm install
+script:
+  - npm run production
