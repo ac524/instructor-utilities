@@ -16,7 +16,7 @@ module.exports = {
         path: path.resolve( __dirname ),
         filename: 'public/js/[name].js',
         chunkFilename: 'js/[name]-[chunkhash].js',
-        publicPath: '/wp-content/themes/freeflow/'
+        publicPath: '/'
     },
 
     module: {
