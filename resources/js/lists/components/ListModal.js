@@ -1,6 +1,13 @@
+import ListItemPicker from '../controllers/ListItemPicker';
+
 class ListModal {
 
-    constructor() {
+    /**
+     * @param {ListItemPicker} listPicker 
+     */
+    constructor( listPicker ) {
+
+        this.app = listPicker;
 
         // Modal
         this.el = $('#edit-list-modal');
@@ -19,9 +26,11 @@ class ListModal {
 
         this.el
             .on( 'keyup', updateDataOnChange )
-            .on( 'click', '[data-modal-action]', ( { currentTarget } ) => {
+            .on( 'click', '[data-modal-action]', ( { currentTarget = false } ) => {
 
-                const action = currentTarget.dataset.modalAction;
+                const action = currentTarget && currentTarget.dataset.modalAction;
+
+                if( !action ) return;
 
                 const actions = {
                     saveAndClose:  () => {
@@ -29,17 +38,33 @@ class ListModal {
                     }
                 };
 
-                if( action && actions[action] ) actions[action]();
+                if( actions[action] ) actions[action]();
 
             } )
-            .on( 'show.bs.modal', (e) => this.render() )
+            .on( 'show.bs.modal', ( { relatedTarget = false } ) => {
+
+                const action = relatedTarget && relatedTarget.dataset.listAction;
+
+                if( !action ) return
+
+                const actions = {
+                    editList:  () => this.setList( this.app.lists.currentList ),
+                    newList: () => this.setList( this.app.newList() )
+                };
+
+                if( actions[action] ) actions[action]();
+
+                this.render();
+
+            })
             // Clear the displayed data after the modal has closed.
-            .on( 'hidden.bs.modal', (e) => this.resetData().render() );
+            .on( 'hidden.bs.modal', (e) => this.resetData().render() )
 
     }
 
     save() {
         this.list.update( this.data );
+        this.app.listsControls.render();
         return this;
     }
 

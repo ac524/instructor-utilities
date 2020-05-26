@@ -9,7 +9,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
 
     entry: {
-        lists: './resources/js/list-picker.js'
+        lists: './resources/js/lists/index.js'
     },
 
     output: {

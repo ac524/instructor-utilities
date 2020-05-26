@@ -60,10 +60,20 @@ class List {
 
     }
 
+    /**
+     * @returns {boolean}
+     */
     get isComplete() {
 
         return this.enabled.length && this.enabled.length === this.selected.length;
 
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    get isCurrent() {
+        return this.key === this.belongsTo.currentListKey;
     }
 
     get currentIndex() {
@@ -117,6 +127,19 @@ class List {
             this.select( nextItemIndex );
 
         }
+
+        return this;
+
+    }
+
+    /**
+     * @returns {List}
+     */
+    updateItem( index, update ) {
+
+        console.log( index, this.all );
+
+        this.all[index].update( update );
 
         return this;
 
@@ -223,6 +246,18 @@ class List {
     saveSelected() {
 
         localStorage.setItem( this.selectStorageKey, JSON.stringify( this.selected ) );
+
+        return this;
+
+    }
+
+    /**
+     * @returns {List}
+     */
+    import( items ) {
+
+        this.all = items.map( item => new ListItem( item, this ) );
+        this.save();
 
         return this;
 
