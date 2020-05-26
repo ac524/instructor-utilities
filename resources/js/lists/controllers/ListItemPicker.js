@@ -1,12 +1,10 @@
-import List from "./models/lists/list";
-import Lists from "./models/lists/lists";
-import ListModal from "./components/ListModal";
-import ListsControls from "./components/ListsControls";
-import ListStatus from "./components/ListStatus";
-import ListView from "./components/ListView";
-import ListImportExport from "./components/ListImportExport";
-
-import '../css/style.css';
+import List from "../models/list";
+import Lists from "../models/lists";
+import ListModal from "../components/ListModal";
+import ListsControls from "../components/ListsControls";
+import ListStatus from "../components/ListStatus";
+import ListView from "../components/ListView";
+import ListImportExport from "../components/ListImportExport";
 
 /**
  * RandomListWalker class constructor
@@ -91,11 +89,5 @@ class ListItemPicker {
     }
 
 }
-
-// Create the app
-const itemPicker = new ListItemPicker();
-
-// Start the list walk through
-itemPicker.render();
 
 export default ListItemPicker;

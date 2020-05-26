@@ -1,4 +1,4 @@
-import ListItemPicker from "../ListItemPicker";
+import ListItemPicker from "../controllers/ListItemPicker";
 import CurrentItem from "./CurrentItem";
 import ListControls from "./ListControls";
 

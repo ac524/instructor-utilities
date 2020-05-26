@@ -1,4 +1,4 @@
-import ListItemPicker from '../ListItemPicker';
+import ListItemPicker from '../controllers/ListItemPicker';
 
 class ListModal {
 
