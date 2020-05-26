@@ -137,6 +137,8 @@ class List {
      */
     updateItem( index, update ) {
 
+        console.log( index, this.all );
+
         this.all[index].update( update );
 
         return this;
@@ -244,6 +246,18 @@ class List {
     saveSelected() {
 
         localStorage.setItem( this.selectStorageKey, JSON.stringify( this.selected ) );
+
+        return this;
+
+    }
+
+    /**
+     * @returns {List}
+     */
+    import( items ) {
+
+        this.all = items.map( item => new ListItem( item, this ) );
+        this.save();
 
         return this;
 

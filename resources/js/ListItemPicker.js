@@ -1,12 +1,10 @@
 import List from "./models/lists/list";
 import Lists from "./models/lists/lists";
-import ListImportExport from "./models/lists/lists";
-import ListView from "./controllers/lists/list-view";
-import ListStatus from "./controllers/lists/list-status";
-// import ListControls from "./controllers/lists/list-controls";
 import ListModal from "./components/ListModal";
 import ListsControls from "./components/ListsControls";
-import ListControls from "./components/ListControls";
+import ListStatus from "./components/ListStatus";
+import ListView from "./components/ListView";
+import ListImportExport from "./components/ListImportExport";
 
 import '../css/style.css';
 
@@ -18,24 +16,18 @@ class ListItemPicker {
     constructor() {
 
         this.lists = new Lists();
-        this.currentList;
-        this.importExport = new ListImportExport( this );
-        this.view = new ListView();
-        this.status = new ListStatus();
+
         this.listsControls = new ListsControls( this );
-        this.listControls = new ListControls( this );
+        this.status = new ListStatus( this );
         this.modal = new ListModal( this );
+        this.view = new ListView( this );
+        this.importExport = new ListImportExport( this );
 
-        // this.controls.setupModal( this.modal );
-
-        this.selectList( this.lists.currentListKey );
-        
-        this.view.displayListOptions( this.lists );
+        this.selectList( this.lists.currentList.key );
         
     }
 
     /**
-     * 
      * @param {List} list 
      * @param {object} update 
      */
@@ -43,12 +35,7 @@ class ListItemPicker {
 
         list.update( update );
 
-        this.view.displayListOptions( this.lists );
-
-        if( list.isCurrent )
-
-            this.view.displayListName( this.currentList )
-
+        this.listsControls.render();
 
     }
 
@@ -59,9 +46,8 @@ class ListItemPicker {
 
         this.lists.select( listKey );
 
-        this.view
-            .displayListName( this.lists.currentList )
-            .render( this.lists.currentList );
+        this.listsControls.renderListName();
+        this.view.render();
 
     }
 
@@ -74,7 +60,7 @@ class ListItemPicker {
 
         this.selectList( newList.key );
 
-        this.view.displayListOptions( this.lists );
+        this.listsControls.render();
 
         return newList;
 
@@ -91,7 +77,7 @@ class ListItemPicker {
 
         if( wasCurrent ) this.selectList( this.lists.currentList.key );
 
-        this.view.displayListOptions( this.lists );
+        this.listsControls.render();
 
         return this;
 
@@ -99,16 +85,17 @@ class ListItemPicker {
 
     render() {
 
-        this.view.render( this.lists.currentList );
+        this.listsControls.render();
+        this.view.render();
 
     }
 
 }
 
 // Create the app
-const walker = new ListItemPicker();
+const itemPicker = new ListItemPicker();
 
 // Start the list walk through
-walker.render();
+itemPicker.render();
 
 export default ListItemPicker;

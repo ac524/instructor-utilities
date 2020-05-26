@@ -1,6 +1,11 @@
 class ListStatus {
 
-    constructor() {
+    /**
+     * @param {ListItemPicker} listPicker 
+     */
+    constructor( listPicker ) {
+
+        this.app = listPicker;
 
         this.el = $('#status-message');
 

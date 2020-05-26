@@ -12,10 +12,6 @@ class ListControls {
 
         this.itemsEl = $('#list-items');
 
-        // List Containers
-        this.enabledEl = $('#list-enabled-items');
-        this.disabledEl = $('#list-disabled-items');
-
         // List Selection Buttons
         this.nextButtonEl = $('#next-group');
         this.resetButtonEl = $('#reset-list');
@@ -62,8 +58,8 @@ class ListControls {
             ? this.currentList.unselect( itemIndex )
 
             : this.currentList.select( itemIndex );
-
-        this.render();
+            
+        this.app.view.render();
 
     }
 
@@ -93,7 +89,7 @@ class ListControls {
     addListItem( label ) {
 
         this.currentList.add( label ).resetSelected();
-        this.app.render();
+        this.app.view.render();
 
         return this;
 
@@ -106,7 +102,8 @@ class ListControls {
     deleteListItem( itemIndex ) {
 
         this.currentList.remove( itemIndex ).resetSelected();
-        this.app.render();
+
+        this.app.view.render();
 
         return this;
 
@@ -119,12 +116,16 @@ class ListControls {
     disableListItem( itemIndex ) {
 
         this.currentList.all[itemIndex].toggleDisable();
-        this.app.render();
+
+        this.app.view.render();
 
         return this;
 
     }
 
+    /**
+     * @returns {ListControls}
+     */
     nextListItem() {
 
         if( this.currentList.isComplete )
@@ -134,16 +135,33 @@ class ListControls {
 
         this.currentList.selectRandom();
 
-        this.app.render();
+        this.app.view.render();
 
         return this;
 
     }
 
+    /**
+     * @returns {ListControls}
+     */
     restartList() {
 
         this.currentList.resetSelected();
-        this.app.render();
+        
+        this.app.view.render();
+
+        return this;
+
+    }
+
+    /**
+     * @returns {ListControls}
+     */
+    render() {
+
+        this.nextButtonEl.prop( 'disabled', this.currentList.isComplete );
+
+        return this;
 
     }
 

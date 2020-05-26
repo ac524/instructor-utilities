@@ -64,6 +64,7 @@ class ListModal {
 
     save() {
         this.list.update( this.data );
+        this.app.listsControls.render();
         return this;
     }
 
