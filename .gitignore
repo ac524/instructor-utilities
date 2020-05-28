@@ -1,4 +1,11 @@
-# Logs
+# build directories
+public/*
+
+# .DS_Store
+.DS_Store
+**/.DS_Store
+
+# Logsgit 
 logs
 *.log
 npm-debug.log*
