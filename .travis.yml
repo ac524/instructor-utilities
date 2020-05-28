@@ -1,0 +1,18 @@
+language: node_js
+node_js: "12"
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - node_modules
+    - js
+    - css
+# services:
+#   - mysql
+before_install:
+  - npm run test
+# install:
+#   - npm install
+# script:
+#   - npm run production
