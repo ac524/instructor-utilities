@@ -11,10 +11,12 @@ class ListControls {
         this.app = listPicker;
 
         this.itemsEl = $('#list-items');
+        
 
         // List Selection Buttons
         this.nextButtonEl = $('#next-group');
         this.resetButtonEl = $('#reset-list');
+        this.disableItemButtonEl = $('#disable-current-item');
 
         // List Management Buttons
         this.addItemButtonEl = $('#add-item');
@@ -29,6 +31,10 @@ class ListControls {
         this.resetButtonEl.on( 'click', this.restartList.bind( this ) );
 
         this.nextButtonEl.on( 'click', this.nextListItem.bind( this ) );
+
+        this.disableItemButtonEl.on('click', this.disableCurrentItem.bind( this ));
+
+        
 
     }
 
@@ -123,6 +129,14 @@ class ListControls {
 
     }
 
+    disableCurrentItem ( ){
+         
+        if ( this.currentList.selected.length )
+        
+            this.disableListItem ( this.currentList.currentIndex );
+
+    }
+
     /**
      * @returns {ListControls}
      */
@@ -158,8 +172,10 @@ class ListControls {
      * @returns {ListControls}
      */
     render() {
-
+      
         this.nextButtonEl.prop( 'disabled', this.currentList.isComplete );
+
+        this.disableItemButtonEl.prop('disabled', !this.currentList.selected.length);
 
         return this;
 
