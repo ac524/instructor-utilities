@@ -37,7 +37,7 @@ class Lists {
         } );
 
         // Create a default list if there isn't one
-        if( ! this.all.length ) this.lists.new();
+        if( ! this.all.length ) this.new();
 
     }
 
