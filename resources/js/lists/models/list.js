@@ -1,7 +1,7 @@
-import Lists from "./lists";
-import ListItem from "./list-item";
+import Lists from "./Lists";
+import ListItem from "./ListItem";
 
-import { storageName } from "./lists";
+import { storageName } from "./Lists";
 
 /**
  * Collection class for managing the entries and selection state for a target list.

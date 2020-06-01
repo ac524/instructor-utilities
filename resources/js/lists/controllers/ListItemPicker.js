@@ -1,5 +1,5 @@
-import List from "../models/list";
-import Lists from "../models/lists";
+import List from "../models/List";
+import Lists from "../models/Lists";
 import ListModal from "../components/ListModal";
 import ListsControls from "../components/ListsControls";
 import ListStatus from "../components/ListStatus";
