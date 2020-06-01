@@ -47,8 +47,6 @@ class ListItem {
 
     save() {
 
-        console.log( this.belongsTo );
-
         if( this.belongsTo ) this.belongsTo.save();
 
         return this;
