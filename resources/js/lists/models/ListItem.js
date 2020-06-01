@@ -7,13 +7,16 @@ class ListItem {
      * @param {boolean} isDisabled
      * @param {List} list
      */
-    constructor( { label, isDisabled = false }, list ) {
+    constructor( { label = '', isDisabled = false } = {} ) {
 
         this.label = label;
         this.isDisabled = isDisabled;
 
+        let belongsTo;
+
         Object.defineProperty( this, 'belongsTo', {
-            get: () => list
+            get: () => belongsTo,
+            set: (list) => belongsTo = list
         } );
 
     }
@@ -23,7 +26,7 @@ class ListItem {
      * @returns {number}
      */
     get index() {
-        return this.belongsTo.all.indexOf( this );
+        return this.belongsTo ? this.belongsTo.all.indexOf( this ) : null;
     }
 
     /**
@@ -31,7 +34,7 @@ class ListItem {
      * @returns {boolean}
      */
     get isSelected() {
-        return this.belongsTo.isSelected( this.index );
+        return this.belongsTo ? this.belongsTo.isSelected( this.index ) : false;
     }
 
     /**
@@ -39,7 +42,25 @@ class ListItem {
      * @returns {boolean}
      */
     get isCurrent() {
-        return this.index === this.belongsTo.currentIndex;
+        return this.belongsTo ? this.index === this.belongsTo.currentIndex : false;
+    }
+
+    save() {
+
+        console.log( this.belongsTo );
+
+        if( this.belongsTo ) this.belongsTo.save();
+
+        return this;
+
+    }
+
+    unselect() {
+
+        if( this.belongsTo ) this.belongsTo.unselect( this.index );
+
+        return this;
+
     }
 
     /**
@@ -50,7 +71,7 @@ class ListItem {
 
         if( label !== this.label ) {
             this.label = label;
-            this.belongsTo.save();
+            this.save();
         }
 
         return this;
@@ -67,9 +88,9 @@ class ListItem {
 
         if( this.isDisabled && this.isSelected )
 
-            this.belongsTo.unselect( this.index );
+            this.unselect( this.index );
 
-        this.belongsTo.save();
+        this.save();
 
         return this;
 

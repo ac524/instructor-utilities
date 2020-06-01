@@ -5,6 +5,7 @@ import ListsControls from "../components/ListsControls";
 import ListStatus from "../components/ListStatus";
 import ListView from "../components/ListView";
 import ListImportExport from "../components/ListImportExport";
+import Store from "../store";
 
 /**
  * RandomListWalker class constructor
@@ -13,7 +14,9 @@ class ListItemPicker {
 
     constructor() {
 
-        this.lists = new Lists();
+        this.store = new Store;
+
+        this.store.init();
 
         this.listsControls = new ListsControls( this );
         this.status = new ListStatus( this );
@@ -23,6 +26,13 @@ class ListItemPicker {
 
         this.selectList( this.lists.currentList.key );
         
+    }
+
+    /**
+     * @returns {Lists}
+     */
+    get lists() {
+        return this.store.lists;
     }
 
     /**
@@ -42,7 +52,7 @@ class ListItemPicker {
      */
     selectList( listKey ) {
 
-        this.lists.select( listKey );
+        this.lists.selectList( listKey );
 
         this.listsControls.renderListName();
         this.view.render();
@@ -54,7 +64,7 @@ class ListItemPicker {
      */
     newList() {
 
-        const newList = this.lists.new( 'List '+ ( this.lists.count + 1 ) );
+        const newList = this.lists.createList( 'List '+ ( this.lists.count + 1 ) );
 
         this.selectList( newList.key );
 
@@ -71,7 +81,7 @@ class ListItemPicker {
 
         const wasCurrent = this.lists.get( listKey ).isCurrent;
 
-        this.lists.delete( listKey );
+        this.lists.deleteList( listKey );
 
         if( wasCurrent ) this.selectList( this.lists.currentList.key );
 
