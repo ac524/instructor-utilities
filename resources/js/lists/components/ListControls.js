@@ -1,4 +1,4 @@
-import List from "../models/list";
+import List from "../models/List";
 import ListItemPicker from "../controllers/ListItemPicker";
 
 class ListControls {
@@ -104,7 +104,7 @@ class ListControls {
      */
     addListItem( label ) {
 
-        this.currentList.add( label ).resetSelected();
+        this.currentList.createItem( label ).resetSelected();
         this.app.view.render();
 
         return this;

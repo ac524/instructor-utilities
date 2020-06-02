@@ -1,4 +1,4 @@
-import List from "../models/list";
+import List from "../models/List";
 import ListItemPicker from "../controllers/ListItemPicker";
 
 class ListImportExport {

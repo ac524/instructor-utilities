@@ -4,7 +4,7 @@
   "description": "Tools and utilities built for helping assist instructing bootcamp classes",
   "private": true,
   "scripts": {
-    "test": "echo \"Skip testing\" && exit 0",
+    "test": "jest",
     "watch": "webpack --hide-modules --mode=development --watch",
     "production": "webpack --hide-modules --mode=production",
     "predeploy": "npm run production",
@@ -24,16 +24,19 @@
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/polyfill": "^7.8.7",
-    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-env": "^7.10.2",
     "autoprefixer": "^9.8.0",
+    "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^6.0.1",
     "css-loader": "^3.5.3",
     "gh-pages": "^2.2.0",
+    "jest": "^26.0.1",
     "mini-css-extract-plugin": "^0.9.0",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^8.0.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
-  }
+  },
+  "dependencies": {}
 }
