@@ -11,6 +11,7 @@ cache:
 # services:
 #   - mysql
 before_install:
+  - npm i --only=dev
   - npm run test
 # install:
 #   - npm install
