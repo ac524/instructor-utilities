@@ -6,8 +6,6 @@ branches:
 cache:
   directories:
     - node_modules
-    - js
-    - css
 # services:
 #   - mysql
 before_install:
