@@ -125,4 +125,181 @@ describe( "ListItem", () => {
 
     });
 
+    describe( "save", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const item = new ListItem();
+
+            expect( item.save() ).toEqual( item );
+
+        } );
+
+        it( "should not call save on a parent list if one has not been set", () => {
+
+            const item = new ListItem();
+            const list = new List();
+            const mock = jest.spyOn( list, "save" );
+
+            item.save();
+
+            expect( mock ).not.toHaveBeenCalled();
+
+        } );
+
+        it( "should call save on a parent list if the item has been assigned to one", () => {
+
+            const item = new ListItem();
+            const list = new List();
+
+            const mock = jest.spyOn( list, "save" );
+
+            list.addItem( item );
+
+            item.save();
+
+            expect( mock ).toHaveBeenCalled();
+
+        } );
+
+    });
+
+    describe( "save", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const item = new ListItem();
+
+            expect( item.unselect() ).toEqual( item );
+
+        } );
+
+        it( "should not call unselect on a parent list if one has not been set", () => {
+
+            const item = new ListItem();
+            const list = new List();
+            const mock = jest.spyOn( list, "unselect" );
+
+            item.unselect();
+
+            expect( mock ).not.toHaveBeenCalled();
+
+        } );
+
+        it( "should call unselect on a parent list if the item has been assigned to one", () => {
+
+            const item = new ListItem();
+            const list = new List();
+
+            const mock = jest.spyOn( list, "unselect" );
+
+            list.addItem( item );
+
+            item.unselect();
+
+            expect( mock ).toHaveBeenCalled();
+
+        } );
+
+    } );
+
+    describe( "update", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const item = new ListItem();
+
+            expect( item.update({}) ).toEqual( item );
+
+        } );
+
+        it( "should update the label when passed an object with that property", () => {
+
+            const item = new ListItem( { label: 'First label' } );
+            const newItemData = { label: "New label" };
+
+            item.update( newItemData );
+
+            expect( item.label ).toEqual( newItemData.label );
+
+        } );
+
+        it( "should not call save if the label didn't change", () => {
+
+            const item = new ListItem( { label: 'Same label' } );
+            const newItemData = { label: "Same label" };
+
+            const mock = jest.spyOn( item, "save" );
+
+            item.update( newItemData );
+
+            expect( mock ).not.toHaveBeenCalled();
+
+        } );
+
+        it( "should call save if the label changed", () => {
+
+            const item = new ListItem( { label: 'First label' } );
+            const newItemData = { label: "New label" };
+
+            const mock = jest.spyOn( item, "save" );
+
+            item.update( newItemData );
+
+            expect( mock ).toHaveBeenCalled();
+
+        } );
+
+    } );
+
+    describe( "toggleDisable", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const item = new ListItem();
+
+            expect( item.update({}) ).toEqual( item );
+
+        } );
+
+        it( "should toggle the isDisabled property between true and false with each call", () => {
+
+            const item = new ListItem( { isDisabled: false } );
+
+            item.toggleDisable();
+
+            expect( item.isDisabled ).toEqual( true );
+
+            item.toggleDisable();
+
+            expect( item.isDisabled ).toEqual( false );
+
+        } );
+
+        it( "should unselect the item if it is selected and becomes disabled", () => {
+
+            const item = new ListItem( { isDisabled: false } );
+            const list = new List;
+
+            list.addItem( item ).select( item.index );
+
+            item.toggleDisable();
+
+            expect( item.isSelected ).toEqual( false );
+
+        });
+
+        it( "should call the save method", () => {
+
+            const item = new ListItem;
+            const mock = jest.spyOn( item, "save" );
+
+            item.toggleDisable();
+
+            expect( mock ).toHaveBeenCalled();
+
+        });
+
+    } );
+
 } );
