@@ -1,6 +1,7 @@
-import List from "./list";
+import List from "./List";
+import Store from "../store";
 
-export const storageName = 'walker-lists';
+// export const storageName = 'walker-lists';
 
 /**
  * Collection class for managing defined lists.
@@ -10,25 +11,37 @@ class Lists {
     /**
      * Lists class constructor.
      */
-    constructor() {
+    constructor( lists = [] ) {
 
-        const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new List( key, name, this ) ] ) );
-        const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
+        // const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new List( key, name, this ) ] ) );
+        // const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
     
-        const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
+        // const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
 
         this.currentListKey;
 
-        Object.defineProperty( this, 'lists', {
-            get: function() {
-                return lists;
-            }
+        // TODO convert plain object into a Map.
+        this.lists = {};
+
+        if( lists.length )
+
+            lists.forEach( (item) => this.addList( item ) );
+
+        let store;
+        Object.defineProperty( this, 'store', {
+            /**
+             * @returns {Store}
+             */
+            get: () => store,
+            set: (newStore) => store = newStore
         } );
 
         Object.defineProperty( this, 'save', {
             value: () => {
 
-                localStorage.setItem( storageName, serialize( lists ) );
+                if( this.store ) this.store.saveLists();
+
+                // localStorage.setItem( storageName, serialize( lists ) );
     
                 return this;
     
@@ -37,7 +50,7 @@ class Lists {
         } );
 
         // Create a default list if there isn't one
-        if( ! this.all.length ) this.new();
+        // if( ! this.all.length ) this.createList();
 
     }
 
@@ -57,6 +70,14 @@ class Lists {
 
     get count() {
         return this.all.length;
+    }
+
+    save() {
+
+        if( this.store ) this.store.saveLists();
+
+        return this;
+
     }
 
     /**
@@ -97,9 +118,24 @@ class Lists {
      * @param {string} key
      * @returns {Lists}
      */
-    select( key ) {
+    selectList( key ) {
 
         this.currentListKey = key;
+
+        this.currentList.load();
+
+        return this;
+
+    }
+
+    /**
+     * @param {List} list 
+     */
+    addList( list ) {
+
+        this.lists[list.key] = list;
+
+        list.belongsTo = this;
 
         return this;
 
@@ -109,16 +145,15 @@ class Lists {
      * @param {string} name 
      * @returns {List}
      */
-    new( name = 'Default' ) {
+    createList( name = 'Default' ) {
             
         // Use the current time as a key
+        // TODO update to a generated string
         const key = Date.now().toString();
 
-        const newList = new List( key, name, this );
+        const newList = new List( key, name );
 
-        this.lists[key] = newList;
-
-        this.save();
+        this.addList( newList );
 
         return newList;
 
@@ -128,7 +163,7 @@ class Lists {
      * @param {string} key
      * @returns {Lists}
      */
-    delete( key ) {
+    deleteList( key ) {
 
         if( this.lists[key].isCurrent )
 

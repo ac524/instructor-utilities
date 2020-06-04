@@ -1,7 +1,5 @@
-import Lists from "./lists";
-import ListItem from "./list-item";
-
-import { storageName } from "./lists";
+import ListItem from "./ListItem";
+import Store from "../store";
 
 /**
  * Collection class for managing the entries and selection state for a target list.
@@ -12,48 +10,63 @@ class List {
      * List class constructor
      * @param {string} key 
      * @param {string} name 
-     * @param {Lists} collection 
+     * @param {array} items 
+     * @param {array} selectedItems
      */
-    constructor( key, name = '', collection ) {
+    constructor( key = '', name = '', { items = [], selectedItems = [] } = {} ) {
 
+        this.key = key;
         this.name = name;
 
-        const storageKey = key +'-'+ storageName;
-        const selectStorageKey = key +'-selected-'+ storageName;
+        // Private properties to control access.
+        const currentItems = [];
+        const currentSelectedItems = [];
 
-        // Load or create the target list
-        let list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
-        let selectList = JSON.parse( localStorage.getItem( selectStorageKey ) ) || [];
+        let belongsTo = null;
 
-        // Migrate old data format if needed
-        if( list[0] && typeof list[0] === 'string' )
-
-            list = list.map( label => ({ label }) );
-
-        list = list.map( item => new ListItem( item, this ) );
+        const addList = ( listItems ) => listItems.forEach( this.addItem.bind( this ) );
 
         Object.defineProperty( this, 'all', {
-            get: () => list,
-            set: function( value ) {
-                list.length = 0;
-                list.push( ...value );
+            get: () => currentItems,
+            set: function( newItems ) {
+                currentItems.length = 0;
+                addList( newItems );
             }
         } );
     
-        Object.defineProperty( this, 'selected', { get: () => selectList } );
-        Object.defineProperty( this, 'key', { get: () => key } );
-        Object.defineProperty( this, 'storageKey', { get: () => storageKey } );
-        Object.defineProperty( this, 'selectStorageKey', { get: () => selectStorageKey } );
-        Object.defineProperty( this, 'belongsTo', { get: () => collection } );
+        Object.defineProperty( this, 'selected', {
+            get: () => currentSelectedItems,
+            set: function( itemIndexes ) {
+                currentSelectedItems.length = 0;
+                currentSelectedItems.push( ...itemIndexes );
+            }
+        } );
+
+        // Object.defineProperty( this, 'storageKey', { get: () => storageKey } );
+        // Object.defineProperty( this, 'selectStorageKey', { get: () => selectStorageKey } );
+
+        Object.defineProperty( this, 'belongsTo', {
+            get: () => belongsTo,
+            set: ( lists ) => belongsTo = lists
+        } );
+
+        this.all = items;
+        this.selected = selectedItems;
 
     }
 
+    /**
+     * List of enabled items.
+     */
     get enabled() {
 
         return this.all.filter( item => !item.isDisabled );
 
     }
 
+    /**
+     * List of disabled items.
+     */
     get disabled() {
 
         return this.all.filter( item => item.isDisabled );
@@ -65,7 +78,7 @@ class List {
      */
     get isComplete() {
 
-        return this.enabled.length && this.enabled.length === this.selected.length;
+        return this.enabled.length ? this.enabled.length === this.selected.length : false;
 
     }
 
@@ -88,6 +101,31 @@ class List {
     get current() {
 
         return this.all[this.currentIndex] || null;
+
+    }
+
+    /**
+     * @returns {Store}
+     */
+    get store() {
+
+        return this.belongsTo ? this.belongsTo.store : null;
+
+    }
+
+    load() {
+
+        if( this.store ) {
+
+            const { list, selectList } = this.store.loadListItemData( this.key );
+
+            if( list ) this.all = list;
+
+            if( selectList ) this.selected = selectList;
+
+        }
+
+        return this;
 
     }
 
@@ -132,12 +170,37 @@ class List {
 
     }
 
+
+    /**
+     * @param {string} item
+     * @returns {List}
+     */
+    createItem( label ) {
+
+        this.addItem( new ListItem( { label } ) );
+
+        return this;
+
+    }
+
+    /**
+     * @param {ListItem} listItem 
+     */
+    addItem( listItem ) {
+
+        listItem.belongsTo = this;
+
+        this.all.push( listItem );
+        this.save();
+
+        return this;
+        
+    }
+
     /**
      * @returns {List}
      */
     updateItem( index, update ) {
-
-        console.log( index, this.all );
 
         this.all[index].update( update );
 
@@ -157,7 +220,6 @@ class List {
             this.saveSelected();
 
         }
-
 
         return this;
 
@@ -203,23 +265,12 @@ class List {
     }
 
     /**
-     * @param {string} item
-     * @returns {List}
-     */
-    add( label ) {
-
-        this.all.push( new ListItem( { label }, this ) );
-        this.save();
-
-        return this;
-
-    }
-
-    /**
      * @param {number} index
      * @returns {List}
      */
     remove( index ) {
+
+        this.all[index].belongsTo = null;
 
         this.all.splice( index, 1 );
         this.save();
@@ -234,7 +285,7 @@ class List {
      */
     save() {
 
-        localStorage.setItem( this.storageKey, JSON.stringify( this.all ) );
+        if( this.store ) this.store.saveListItems( this.key, this.all );
 
         return this;
 
@@ -245,7 +296,7 @@ class List {
      */
     saveSelected() {
 
-        localStorage.setItem( this.selectStorageKey, JSON.stringify( this.selected ) );
+        if( this.store ) this.store.saveSelectedListItems( this.key, this.selected );
 
         return this;
 

@@ -1,4 +1,4 @@
-import List from "../models/list";
+import List from "../models/List";
 import ListItemPicker from "../controllers/ListItemPicker";
 
 class ListControls {
@@ -10,17 +10,19 @@ class ListControls {
 
         this.app = listPicker;
 
+        // Container for all list items
         this.itemsEl = $('#list-items');
-
+        
         // List Selection Buttons
         this.nextButtonEl = $('#next-group');
         this.resetButtonEl = $('#reset-list');
 
         // List Management Buttons
         this.addItemButtonEl = $('#add-item');
+        this.disableItemButtonEl = $('#disable-current-item');
 
         this.itemsEl
-            .on( 'keyup', '.item-label', this.saveOnInputChange.bind( this ) )
+            .on( 'keyup', '.item-label', this.onInputChange.bind( this ) )
             .on( 'change', '.toggle-select', this.onToggleSelect.bind( this ) )
             .on( 'click', '[data-action]', this.onButtonAction.bind( this ) );
 
@@ -29,6 +31,8 @@ class ListControls {
         this.resetButtonEl.on( 'click', this.restartList.bind( this ) );
 
         this.nextButtonEl.on( 'click', this.nextListItem.bind( this ) );
+
+        this.disableItemButtonEl.on('click', this.disableCurrentListItem.bind( this ));
 
     }
 
@@ -39,18 +43,26 @@ class ListControls {
         return this.app.lists.currentList;
     }
 
-    saveOnInputChange(e) {
+    /**
+     * Event handler for saving list items after the input for the label has been updated
+     * @param {*} param0 
+     */
+    onInputChange( { target } ) {
 
-        const inputEl = $(e.target);
+        const inputEl = $(target);
         const itemIndex = inputEl.closest('.input-group').data( 'index' );
 
         this.currentList.updateItem( itemIndex, { label: inputEl.val() } );
 
     }
 
-    onToggleSelect(e) {
+    /**
+     * Event handler for toggling the item's selection checkbox
+     * @param {*} param0 
+     */
+    onToggleSelect( { target } ) {
 
-        const checkboxEl = $(e.target);
+        const checkboxEl = $(target);
         const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
 
         this.currentList.isSelected( itemIndex )
@@ -63,7 +75,11 @@ class ListControls {
 
     }
 
-    onButtonAction(  { currentTarget } ) {
+    /**
+     * Event handler for item button clicks.
+     * @param {*} param0 
+     */
+    onButtonAction( { currentTarget } ) {
 
         const buttonEl = $(currentTarget);
         const action = buttonEl.data( 'action' );
@@ -88,7 +104,7 @@ class ListControls {
      */
     addListItem( label ) {
 
-        this.currentList.add( label ).resetSelected();
+        this.currentList.createItem( label ).resetSelected();
         this.app.view.render();
 
         return this;
@@ -118,6 +134,19 @@ class ListControls {
         this.currentList.all[itemIndex].toggleDisable();
 
         this.app.view.render();
+
+        return this;
+
+    }
+
+    /**
+     * @returns {ListControls}
+     */
+    disableCurrentListItem() {
+         
+        if ( this.currentList.selected.length )
+        
+            this.disableListItem ( this.currentList.currentIndex );
 
         return this;
 
@@ -158,8 +187,10 @@ class ListControls {
      * @returns {ListControls}
      */
     render() {
-
+      
         this.nextButtonEl.prop( 'disabled', this.currentList.isComplete );
+
+        this.disableItemButtonEl.prop('disabled', !this.currentList.selected.length);
 
         return this;
 

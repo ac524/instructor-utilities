@@ -1,5 +1,5 @@
 import ListItemPicker from "../controllers/ListItemPicker";
-import List from "../models/list";
+import List from "../models/List";
 
 class CurrentItem {
 
