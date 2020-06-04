@@ -39,7 +39,34 @@ describe( "List", () => {
 
         });
 
-    })
+    });
+
+    describe("disabled", () => {
+
+        it("should return an array of disabled items", () => {
+
+            const list = new List();
+
+            const item = new ListItem({isDisabled: true});
+            const item2 = new ListItem();
+
+            const expected = [item];
+
+            list.addItem(item).addItem(item2);
+
+            expect(list.disabled).toEqual(expect.arrayContaining(expected));
+
+        });
+
+        it("should return an empty array if no items are in the list", () => {
+
+            const list = new List();
+            
+            expect(list.disabled).toEqual([]);
+
+        });
+
+    });
 
     describe( "isComplete", () => {
 
