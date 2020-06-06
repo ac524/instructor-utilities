@@ -242,5 +242,52 @@ describe( "List", () => {
         } );
 
     });
+
+    describe( "load", () => {
+
+        it("should not load the list data from the store if it does not have access to one", () => {
+
+            const list = new List;
+            const store = new Store;
+
+            const loadMock = jest.spyOn( store, "loadListItemData" );
+            loadMock.mockImplementation( () => ({
+                list: [ new ListItem, new ListItem ],
+                selectList: []
+            })  );
+
+            list.load();
+
+            expect( loadMock ).not.toHaveBeenCalled();
+
+        });
+
+        it("should load list items and selected indexes when it has acces to a store", () => {
+
+            const list = new List;
+            const lists = new Lists;
+            const store = new Store;
+
+            const listItems = [ new ListItem({label: 'Item One'}), new ListItem({label: 'Item Two'}) ];
+            const selectedIndexes = [ 1 ];
+
+            store.setLists( lists );
+            lists.addList( list );
+
+            const loadMock = jest.spyOn( store, "loadListItemData" );
+            loadMock.mockImplementation( () => ({
+                list: listItems,
+                selectList: selectedIndexes
+            })  );
+
+            list.load();
+
+            expect( loadMock ).toHaveBeenCalled();
+            expect( list.all ).toEqual( listItems );
+            expect( list.selected ).toEqual( selectedIndexes );
+
+        });
+
+    });
     
 } );
