@@ -1,6 +1,7 @@
 import Lists from "../../../resources/js/lists/models/Lists";
 import List from "../../../resources/js/lists/models/List";
 import ListItem from "../../../resources/js/lists/models/ListItem";
+import Store from "../../../resources/js/lists/store";
 
 describe( "List", () => {
 
@@ -156,5 +157,41 @@ describe( "List", () => {
         } );
 
     } );
+
+    describe( "store", () => {
+
+        it( "should return null if not assigned to a list collection", () => {
+
+            const list = new List;
+
+            expect( list.store ).toEqual( null );
+
+        } );
+
+        it( "should return null if assigned to a list collection not set to a store", () => {
+
+            const list = new List;
+            const lists = new Lists;
+
+            lists.addList( list );
+
+            expect( list.store ).toEqual( null );
+
+        } );
+
+        it( "should return the store the list collection is set to when added to the collection", () => {
+
+            const list = new List;
+            const lists = new Lists;
+            const store = new Store;
+
+            store.setLists( lists );
+            lists.addList( list );
+
+            expect( list.store ).toEqual( store );
+
+        } );
+
+    });
     
 } );

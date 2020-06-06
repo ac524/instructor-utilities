@@ -27,7 +27,7 @@ class Lists {
 
             lists.forEach( (item) => this.addList( item ) );
 
-        let store;
+        let store = null;
         Object.defineProperty( this, 'store', {
             /**
              * @returns {Store}
