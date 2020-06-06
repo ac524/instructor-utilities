@@ -193,5 +193,54 @@ describe( "List", () => {
         } );
 
     });
+
+    describe( "update", () => {
+
+        it( "should update the 'name' property when passing in a new value", () => {
+
+            const list = new List;
+            const name = 'New Label';
+
+            list.update( { name } );
+
+            expect( list.name ).toEqual( name );
+
+        } );
+
+        it( "should not call the parent collection save method if the name does not change", () => {
+
+            const name = 'Label';
+            const list = new List( '', name );
+            const lists = new Lists;
+
+            const saveMock = jest.spyOn( lists, "save" );
+            saveMock.mockImplementation( () => lists  );
+
+            lists.addList( list );
+
+            list.update( { name } );
+
+            expect( saveMock ).not.toHaveBeenCalled();
+
+        } );
+
+        it( "should call the parent collection save method if the name does change", () => {
+
+            const name = 'Label';
+            const list = new List( '', name );
+            const lists = new Lists;
+            
+            const saveMock = jest.spyOn( lists, "save" );
+            saveMock.mockImplementation( () => lists  );
+
+            lists.addList( list );
+
+            list.update( { name: 'New Label' } );
+
+            expect( saveMock ).toHaveBeenCalled();
+
+        } );
+
+    });
     
 } );

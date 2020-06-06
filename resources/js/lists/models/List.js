@@ -129,11 +129,24 @@ class List {
 
     }
 
+    /**
+     * @param {Object} props
+     * @param {string} props.name
+     */
     update( { name } ) {
 
-        this.name = name;
+        let updated = false;
 
-        this.belongsTo.save();
+        if( this.name !== name ) {
+
+            this.name = name;
+            if(!updated) updated = true;
+
+        }
+
+        if( updated && this.belongsTo ) 
+
+            this.belongsTo.save();
 
         return this;
 

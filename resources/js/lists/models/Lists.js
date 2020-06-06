@@ -36,19 +36,6 @@ class Lists {
             set: (newStore) => store = newStore
         } );
 
-        Object.defineProperty( this, 'save', {
-            value: () => {
-
-                if( this.store ) this.store.saveLists();
-
-                // localStorage.setItem( storageName, serialize( lists ) );
-    
-                return this;
-    
-            },
-            writable: false
-        } );
-
         // Create a default list if there isn't one
         // if( ! this.all.length ) this.createList();
 
