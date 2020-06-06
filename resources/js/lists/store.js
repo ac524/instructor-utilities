@@ -49,7 +49,7 @@ export class Store {
             list = list.map( label => ({ label }) );
 
         return {
-            list: list.map( item => new ListItem( item, this ) ),
+            list: list.map( item => new ListItem( item ) ),
             selectList
         };
 

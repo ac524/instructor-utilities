@@ -27,26 +27,13 @@ class Lists {
 
             lists.forEach( (item) => this.addList( item ) );
 
-        let store;
+        let store = null;
         Object.defineProperty( this, 'store', {
             /**
              * @returns {Store}
              */
             get: () => store,
             set: (newStore) => store = newStore
-        } );
-
-        Object.defineProperty( this, 'save', {
-            value: () => {
-
-                if( this.store ) this.store.saveLists();
-
-                // localStorage.setItem( storageName, serialize( lists ) );
-    
-                return this;
-    
-            },
-            writable: false
         } );
 
         // Create a default list if there isn't one
