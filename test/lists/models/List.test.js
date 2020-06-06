@@ -126,5 +126,35 @@ describe( "List", () => {
         } );
 
     } );
+
+    describe( "current", () => {
+
+        it( "should return null if there are no selected items", () => {
+
+            const list = new List;
+            const item = new ListItem;
+
+            list.addItem( item );
+
+            expect( list.current ).toEqual( null );
+
+        } );
+
+        it( "should return the currently selected item when one has been selected", () => {
+
+            const list = new List;
+            const item1 = new ListItem( { label: 'One' } );
+            const item2 = new ListItem( { label: 'Two' } );
+            const item3 = new ListItem( { label: 'Three' } );
+
+            list
+                .addItem( item1 ).addItem( item2 ).addItem( item3 )
+                .select( 2 ).select( 0 );
+
+            expect( list.current ).toEqual( item1 );
+
+        } );
+
+    } );
     
 } );
