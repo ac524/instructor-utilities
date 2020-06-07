@@ -195,13 +195,15 @@ class List {
 
     /**
      * @param {string} item
-     * @returns {List}
+     * @returns {ListItem}
      */
     createItem( label ) {
 
-        this.addItem( new ListItem( { label } ) );
+        const newItem = new ListItem( { label } );
 
-        return this;
+        this.addItem( newItem );
+
+        return newItem;
 
     }
 

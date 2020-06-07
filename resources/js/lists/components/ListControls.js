@@ -104,7 +104,8 @@ class ListControls {
      */
     addListItem( label ) {
 
-        this.currentList.createItem( label ).resetSelected();
+        this.currentList.createItem( label );
+        this.currentList.resetSelected();
         this.app.view.render();
 
         return this;

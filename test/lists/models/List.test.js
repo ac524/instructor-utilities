@@ -514,5 +514,33 @@ describe( "List", () => {
         } );
 
     });
+
+    describe( "createItem", () => {
+
+        it( "should return a new ListItem with the given label", () => {
+
+            const list = new List;
+            const itemLabel = "New Item";
+
+            const item = list.createItem( itemLabel );
+
+            expect( item instanceof ListItem ).toEqual( true );
+            expect( item.label ).toEqual( itemLabel );
+
+        });
+
+        it( "should add one new list item with the given label", () => {
+
+            const list = new List;
+            const itemLabel = "New Item";
+
+            list.createItem( itemLabel );
+
+            expect( list.all.length ).toEqual( 1 );
+            expect( list.all[0].label ).toEqual( itemLabel );
+
+        } );
+
+    } );
     
 } );
