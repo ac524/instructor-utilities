@@ -289,5 +289,46 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "isSelected", () => {
+
+        it( "should should return true if given an index that is selected", () => {
+
+            const list = new List;
+            const itemToSelect = new ListItem;
+
+            list
+                .addItem( new ListItem ).addItem( itemToSelect )
+                .select( itemToSelect.index );
+
+            expect( list.isSelected( itemToSelect.index ) ).toEqual( true );
+
+        } );
+
+        it( "should should return false if given an index that is not selected", () => {
+
+            const list = new List;
+            const itemToSelect = new ListItem;
+            const itemNotToSelect = new ListItem;
+
+            list
+                .addItem( itemNotToSelect ).addItem( itemToSelect )
+                .select( itemToSelect.index );
+
+            expect( list.isSelected( itemNotToSelect.index ) ).toEqual( false );
+
+        } );
+
+        it( "should should return false if given an index that does not exist", () => {
+
+            const list = new List;
+
+            list.addItem( new ListItem ).addItem( new ListItem );
+
+            expect( list.isSelected( 3 ) ).toEqual( false );
+
+        } );
+
+    });
     
 } );
