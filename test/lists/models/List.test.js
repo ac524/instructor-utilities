@@ -330,5 +330,39 @@ describe( "List", () => {
         } );
 
     });
+
+    describe( "resetSelected", () => {
+
+        it( "should remove all selected items", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+            const item3 = new ListItem;
+
+            list
+                .addItem(item1).addItem(item2).addItem(item3)
+                .select(item1.index).select(item2.index).select(item3.index);
+            
+            list.resetSelected();
+
+            expect( list.selected.length ).toEqual(0);
+
+        } );
+
+        it( "should call the save method", () => {
+
+            const list = new List;
+            const saveMock = jest.spyOn( list, "saveSelected" );
+
+            saveMock.mockImplementation( () => list );
+
+            list.resetSelected();
+
+            expect( saveMock ).toHaveBeenCalled();
+
+        });
+
+    });
     
 } );
