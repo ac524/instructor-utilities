@@ -263,7 +263,7 @@ class List {
      */
     select( targetIndex ) {
 
-        if( !this.isSelected( targetIndex ) ) {
+        if( this.all[targetIndex] && !this.isSelected( targetIndex ) ) {
             
             this.selected.push( targetIndex );
             this.saveSelected();

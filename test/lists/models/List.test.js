@@ -592,5 +592,52 @@ describe( "List", () => {
         });
 
     } );
+
+    describe( "select", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+            const item = list.createItem( 'A' );
+
+            expect( list.select(item.index) ).toEqual( list );
+
+        });
+
+        it( "should add existing target indexes to the select list", () => {
+
+            const list = new List;
+            const item = list.createItem( 'A' );
+
+            list.select(item.index);
+
+            expect( list.selected ).toContain( item.index );
+
+        });
+
+        it( "should not add a target index to the select list if it does not exist", () => {
+
+            const list = new List;
+            const targetIndex = 0;
+
+            list.select(targetIndex);
+
+            expect( list.selected ).not.toContain( targetIndex );
+
+        });
+
+        it( "should not add duplicate indexes to the select list", () => {
+
+            const list = new List;
+            const item = list.createItem( 'A' );
+            const targetIndex = item.index;
+
+            list.select(targetIndex).select(targetIndex);
+
+            expect( list.selected.length ).toEqual( 1 );
+
+        });
+
+    } );
     
 } );
