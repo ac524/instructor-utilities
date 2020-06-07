@@ -736,5 +736,27 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "indexOf", () => {
+
+        it( "should return the index of a given item that exists", () => {
+            
+            const list = new List;
+            const item = list.createItem( "A" );
+
+            expect( list.indexOf( item ) ).toEqual( 0 );
+
+        } );
+
+        it( "should return -1 if the item does not exist", () => {
+            
+            const list = new List;
+            const item = new ListItem( "A" );
+
+            expect( list.indexOf( item ) ).toEqual( -1 );
+
+        } );
+
+    });
     
 } );
