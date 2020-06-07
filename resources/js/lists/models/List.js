@@ -249,7 +249,9 @@ class List {
      */
     updateItem( index, update ) {
 
-        this.all[index].update( update );
+        if( this.all[index] )
+        
+            this.all[index].update( update );
 
         return this;
 

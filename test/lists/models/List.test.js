@@ -566,5 +566,31 @@ describe( "List", () => {
         } );
 
     } );
+
+    describe( "updateItem", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.updateItem() ).toEqual( list );
+
+        });
+
+
+        it( "should update the target item with given details", () => {
+
+            const list = new List;
+            const newLabel = "New Label";
+
+            list.createItem( "Original Label" );
+
+            list.updateItem( 0, { label: newLabel } );
+
+            expect( list.all[0].label ).toEqual( newLabel );
+
+        });
+
+    } );
     
 } );
