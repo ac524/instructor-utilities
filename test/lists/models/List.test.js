@@ -364,5 +364,155 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "selectRandom", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.selectRandom() ).toEqual( list );
+
+        });
+
+        it( "should select one random item index", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+            const item3 = new ListItem;
+
+            list.addItems( [ item1, item2, item3 ] );
+
+            list.selectRandom();
+
+            expect( list.selected.length ).toEqual( 1 );
+            expect( [ item1.index, item2.index, item3.index ] ).toEqual( expect.arrayContaining( list.selected ) );
+
+        } );
+
+        it( "should not select a new item if all items are selected", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+
+            list
+                .addItems( [ item1, item2 ] )
+                .select( item1.index ).select( item2.index );
+
+            list.selectRandom();
+
+            expect( list.selected ).toEqual( [ item1.index, item2.index ] );
+
+        });
+
+    });
+
+    describe( "empty", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.empty() ).toEqual( list );
+
+        });
+
+        it( "should remove all items", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+
+            list.addItems( [ item1, item2 ] );
+
+            list.empty();
+
+            expect( list.all.length ).toEqual( 0 );
+
+        } );
+
+        it( "should remove all selected indexes", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+
+            list
+                .addItems( [ item1, item2 ] )
+                .select( item1.index );
+
+            list.empty();
+
+            expect( list.selected.length ).toEqual( 0 );
+
+        } );
+
+    });
+
+    describe( "addItems", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.addItems([]) ).toEqual( list );
+
+        });
+
+        it( "should add all given items", () => {
+
+            const list = new List;
+            const item1 = new ListItem({label: 'A'});
+            const item2 = new ListItem({label: 'B'});
+
+            list.addItems( [ item1, item2 ] );
+
+            expect( list.all ).toEqual( expect.arrayContaining( [ item1, item2 ] ) );
+
+        });
+
+    });
+
+    describe( "replaceItems", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.replaceItems([]) ).toEqual( list );
+
+        });
+
+        it( "should remove all existing items", () => {
+
+            const list = new List;
+            const item1 = new ListItem({label: 'A'});
+            const item2 = new ListItem({label: 'B'});
+            const item3 = new ListItem({label: 'C'});
+
+            list.addItems( [ item1, item2 ] );
+
+            list.replaceItems([ item3 ]);
+
+            expect( list.all ).not.toContain( item1 );
+            expect( list.all ).not.toContain( item2 );
+
+        } );
+
+        it( "should add all given items", () => {
+
+            const list = new List;
+            const item1 = new ListItem({label: 'A'});
+            const item2 = new ListItem({label: 'B'});
+
+            list.replaceItems([ item1, item2 ]);
+
+            expect( list.all ).toEqual( expect.arrayContaining( [ item1, item2 ] ) );
+
+        } );
+
+    });
     
 } );

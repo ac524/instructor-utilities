@@ -24,16 +24,13 @@ class List {
 
         let belongsTo = null;
 
-        const addList = ( listItems ) => listItems.forEach( this.addItem.bind( this ) );
-
+        // Control the access of the array to ensure we are always working with the same array instance.
         Object.defineProperty( this, 'all', {
             get: () => currentItems,
-            set: function( newItems ) {
-                currentItems.length = 0;
-                addList( newItems );
-            }
+            set: this.replaceItems.bind(this)
         } );
-    
+        
+        // Control the access of the array to ensure we are always working with the same array instance.
         Object.defineProperty( this, 'selected', {
             get: () => currentSelectedItems,
             set: function( itemIndexes ) {
@@ -155,6 +152,18 @@ class List {
     /**
      * @returns {List}
      */
+    empty() {
+
+        this.all.length = 0;
+        this.selected.length = 0;
+
+        return this;
+
+    }
+
+    /**
+     * @returns {List}
+     */
     resetSelected() {
 
         this.selected.length = 0;
@@ -197,7 +206,8 @@ class List {
     }
 
     /**
-     * @param {ListItem} listItem 
+     * @param {ListItem} listItem
+     * @returns {List}
      */
     addItem( listItem ) {
 
@@ -208,6 +218,28 @@ class List {
 
         return this;
         
+    }
+
+    /**
+     * @param {Array.<ListItem>} myObjects
+     * @returns {List}
+     */
+    addItems( items ) {
+
+        items.forEach( this.addItem.bind(this) );
+
+        return this;
+
+    }
+
+    /**
+     * @param {Array.<ListItem>} myObjects
+     * @returns {List}
+     */
+    replaceItems( items ) {
+
+        return this.empty().addItems( items );
+
     }
 
     /**
