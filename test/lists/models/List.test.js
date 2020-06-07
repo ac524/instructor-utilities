@@ -451,6 +451,30 @@ describe( "List", () => {
 
     });
 
+    describe( "addItem", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+            const listItem = new ListItem;
+
+            expect( list.addItem( listItem ) ).toEqual( list );
+
+        });
+
+        it( "should add the given item to the list", () => {
+
+            const list = new List;
+            const listItem = new ListItem({label: "A"});
+
+            list.addItem( listItem );
+
+            expect( list.all[0] ).toEqual( listItem );
+
+        } );
+
+    });
+
     describe( "addItems", () => {
 
         it( "should return the object it was called from", () => {
