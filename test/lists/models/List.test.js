@@ -638,6 +638,103 @@ describe( "List", () => {
 
         });
 
+        it( "should call saveSelected after a new index has been added", () => {
+
+            const list = new List;
+            const item = list.createItem( 'A' );
+            const mock = jest.spyOn( list, "saveSelected" );
+
+            list.select( item.index );
+
+            expect( mock ).toHaveBeenCalled();
+
+        });
+
+        it( "should not call saveSelected if the target index is not added to the select list", () => {
+
+            const list = new List;
+            const mock = jest.spyOn( list, "saveSelected" );
+
+            list.select( 0 );
+
+            expect( mock ).not.toHaveBeenCalled();
+
+        });
+
     } );
+
+    describe( "unselect", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+            const item = list.createItem( 'A' );
+
+            list.select( item.index );
+
+            expect( list.unselect(item.index) ).toEqual( list );
+
+        });
+
+        it( "should remove a target index from the select list", () => {
+
+            const list = new List;
+            const item = list.createItem( 'A' );
+
+            list
+                .select( item.index )
+                .unselect(item.index);
+
+            expect( list.selected ).not.toContain( item.index );
+
+        });
+
+        it( "should not remove an item from the select list if the target index is not selected", () => {
+
+            const list = new List;
+            const item1 = list.createItem( 'A' );
+            const item2 = list.createItem( 'B' );
+
+            list
+                .select( item1.index )
+                .unselect( item2.index );
+
+            expect( list.selected.length ).toEqual( 1 );
+            expect( list.selected ).toContain( item1.index );
+
+        });
+
+        it( "should call saveSelected if an index is removed from the select list", () => {
+
+            const list = new List;
+            const item = list.createItem( 'A' );
+
+            list.select( item.index );
+
+            const mock = jest.spyOn( list, "saveSelected" );
+
+            list.unselect( item.index );
+
+            expect( mock ).toHaveBeenCalled();
+
+        });
+
+        it( "should not call saveSelected if an index is not removed from the select list", () => {
+
+            const list = new List;
+            const item1 = list.createItem( 'A' );
+            const item2 = list.createItem( 'B' );
+
+            list.select( item1.index );
+
+            const mock = jest.spyOn( list, "saveSelected" );
+
+            list.unselect( item2.index );
+
+            expect( mock ).not.toHaveBeenCalled();
+
+        });
+
+    });
     
 } );
