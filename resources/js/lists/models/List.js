@@ -24,16 +24,13 @@ class List {
 
         let belongsTo = null;
 
-        const addList = ( listItems ) => listItems.forEach( this.addItem.bind( this ) );
-
+        // Control the access of the array to ensure we are always working with the same array instance.
         Object.defineProperty( this, 'all', {
             get: () => currentItems,
-            set: function( newItems ) {
-                currentItems.length = 0;
-                addList( newItems );
-            }
+            set: this.replaceItems.bind(this)
         } );
-    
+        
+        // Control the access of the array to ensure we are always working with the same array instance.
         Object.defineProperty( this, 'selected', {
             get: () => currentSelectedItems,
             set: function( itemIndexes ) {
@@ -155,6 +152,18 @@ class List {
     /**
      * @returns {List}
      */
+    empty() {
+
+        this.all.length = 0;
+        this.selected.length = 0;
+
+        return this;
+
+    }
+
+    /**
+     * @returns {List}
+     */
     resetSelected() {
 
         this.selected.length = 0;
@@ -186,18 +195,21 @@ class List {
 
     /**
      * @param {string} item
-     * @returns {List}
+     * @returns {ListItem}
      */
     createItem( label ) {
 
-        this.addItem( new ListItem( { label } ) );
+        const newItem = new ListItem( { label } );
 
-        return this;
+        this.addItem( newItem );
+
+        return newItem;
 
     }
 
     /**
-     * @param {ListItem} listItem 
+     * @param {ListItem} listItem
+     * @returns {List}
      */
     addItem( listItem ) {
 
@@ -211,11 +223,35 @@ class List {
     }
 
     /**
+     * @param {Array.<ListItem>} myObjects
+     * @returns {List}
+     */
+    addItems( items ) {
+
+        items.forEach( this.addItem.bind(this) );
+
+        return this;
+
+    }
+
+    /**
+     * @param {Array.<ListItem>} myObjects
+     * @returns {List}
+     */
+    replaceItems( items ) {
+
+        return this.empty().addItems( items );
+
+    }
+
+    /**
      * @returns {List}
      */
     updateItem( index, update ) {
 
-        this.all[index].update( update );
+        if( this.all[index] )
+        
+            this.all[index].update( update );
 
         return this;
 

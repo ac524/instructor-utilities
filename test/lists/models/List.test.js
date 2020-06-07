@@ -289,5 +289,308 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "isSelected", () => {
+
+        it( "should should return true if given an index that is selected", () => {
+
+            const list = new List;
+            const itemToSelect = new ListItem;
+
+            list
+                .addItem( new ListItem ).addItem( itemToSelect )
+                .select( itemToSelect.index );
+
+            expect( list.isSelected( itemToSelect.index ) ).toEqual( true );
+
+        } );
+
+        it( "should should return false if given an index that is not selected", () => {
+
+            const list = new List;
+            const itemToSelect = new ListItem;
+            const itemNotToSelect = new ListItem;
+
+            list
+                .addItem( itemNotToSelect ).addItem( itemToSelect )
+                .select( itemToSelect.index );
+
+            expect( list.isSelected( itemNotToSelect.index ) ).toEqual( false );
+
+        } );
+
+        it( "should should return false if given an index that does not exist", () => {
+
+            const list = new List;
+
+            list.addItem( new ListItem ).addItem( new ListItem );
+
+            expect( list.isSelected( 3 ) ).toEqual( false );
+
+        } );
+
+    });
+
+    describe( "resetSelected", () => {
+
+        it( "should remove all selected items", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+            const item3 = new ListItem;
+
+            list
+                .addItem(item1).addItem(item2).addItem(item3)
+                .select(item1.index).select(item2.index).select(item3.index);
+            
+            list.resetSelected();
+
+            expect( list.selected.length ).toEqual(0);
+
+        } );
+
+        it( "should call the save method", () => {
+
+            const list = new List;
+            const saveMock = jest.spyOn( list, "saveSelected" );
+
+            saveMock.mockImplementation( () => list );
+
+            list.resetSelected();
+
+            expect( saveMock ).toHaveBeenCalled();
+
+        });
+
+    });
+
+    describe( "selectRandom", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.selectRandom() ).toEqual( list );
+
+        });
+
+        it( "should select one random item index", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+            const item3 = new ListItem;
+
+            list.addItems( [ item1, item2, item3 ] );
+
+            list.selectRandom();
+
+            expect( list.selected.length ).toEqual( 1 );
+            expect( [ item1.index, item2.index, item3.index ] ).toEqual( expect.arrayContaining( list.selected ) );
+
+        } );
+
+        it( "should not select a new item if all items are selected", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+
+            list
+                .addItems( [ item1, item2 ] )
+                .select( item1.index ).select( item2.index );
+
+            list.selectRandom();
+
+            expect( list.selected ).toEqual( [ item1.index, item2.index ] );
+
+        });
+
+    });
+
+    describe( "empty", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.empty() ).toEqual( list );
+
+        });
+
+        it( "should remove all items", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+
+            list.addItems( [ item1, item2 ] );
+
+            list.empty();
+
+            expect( list.all.length ).toEqual( 0 );
+
+        } );
+
+        it( "should remove all selected indexes", () => {
+
+            const list = new List;
+            const item1 = new ListItem;
+            const item2 = new ListItem;
+
+            list
+                .addItems( [ item1, item2 ] )
+                .select( item1.index );
+
+            list.empty();
+
+            expect( list.selected.length ).toEqual( 0 );
+
+        } );
+
+    });
+
+    describe( "addItem", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+            const listItem = new ListItem;
+
+            expect( list.addItem( listItem ) ).toEqual( list );
+
+        });
+
+        it( "should add the given item to the list", () => {
+
+            const list = new List;
+            const listItem = new ListItem({label: "A"});
+
+            list.addItem( listItem );
+
+            expect( list.all[0] ).toEqual( listItem );
+
+        } );
+
+    });
+
+    describe( "addItems", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.addItems([]) ).toEqual( list );
+
+        });
+
+        it( "should add all given items", () => {
+
+            const list = new List;
+            const item1 = new ListItem({label: 'A'});
+            const item2 = new ListItem({label: 'B'});
+
+            list.addItems( [ item1, item2 ] );
+
+            expect( list.all ).toEqual( expect.arrayContaining( [ item1, item2 ] ) );
+
+        });
+
+    });
+
+    describe( "replaceItems", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.replaceItems([]) ).toEqual( list );
+
+        });
+
+        it( "should remove all existing items", () => {
+
+            const list = new List;
+            const item1 = new ListItem({label: 'A'});
+            const item2 = new ListItem({label: 'B'});
+            const item3 = new ListItem({label: 'C'});
+
+            list.addItems( [ item1, item2 ] );
+
+            list.replaceItems([ item3 ]);
+
+            expect( list.all ).not.toContain( item1 );
+            expect( list.all ).not.toContain( item2 );
+
+        } );
+
+        it( "should add all given items", () => {
+
+            const list = new List;
+            const item1 = new ListItem({label: 'A'});
+            const item2 = new ListItem({label: 'B'});
+
+            list.replaceItems([ item1, item2 ]);
+
+            expect( list.all ).toEqual( expect.arrayContaining( [ item1, item2 ] ) );
+
+        } );
+
+    });
+
+    describe( "createItem", () => {
+
+        it( "should return a new ListItem with the given label", () => {
+
+            const list = new List;
+            const itemLabel = "New Item";
+
+            const item = list.createItem( itemLabel );
+
+            expect( item instanceof ListItem ).toEqual( true );
+            expect( item.label ).toEqual( itemLabel );
+
+        });
+
+        it( "should add one new list item with the given label", () => {
+
+            const list = new List;
+            const itemLabel = "New Item";
+
+            list.createItem( itemLabel );
+
+            expect( list.all.length ).toEqual( 1 );
+            expect( list.all[0].label ).toEqual( itemLabel );
+
+        } );
+
+    } );
+
+    describe( "updateItem", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.updateItem() ).toEqual( list );
+
+        });
+
+
+        it( "should update the target item with given details", () => {
+
+            const list = new List;
+            const newLabel = "New Label";
+
+            list.createItem( "Original Label" );
+
+            list.updateItem( 0, { label: newLabel } );
+
+            expect( list.all[0].label ).toEqual( newLabel );
+
+        });
+
+    } );
     
 } );
