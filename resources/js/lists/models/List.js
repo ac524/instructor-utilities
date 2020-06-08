@@ -155,16 +155,15 @@ class List {
     empty() {
 
         this.all.length = 0;
-        this.selected.length = 0;
 
-        return this;
+        return this.emptySelected();
 
     }
 
     /**
      * @returns {List}
      */
-    resetSelected() {
+    emptySelected() {
 
         this.selected.length = 0;
         this.saveSelected();
@@ -263,7 +262,7 @@ class List {
      */
     select( targetIndex ) {
 
-        if( !this.isSelected( targetIndex ) ) {
+        if( this.all[targetIndex] && !this.isSelected( targetIndex ) ) {
             
             this.selected.push( targetIndex );
             this.saveSelected();
@@ -319,10 +318,14 @@ class List {
      */
     remove( index ) {
 
-        this.all[index].belongsTo = null;
+        if( this.all[index] ) {
 
-        this.all.splice( index, 1 );
-        this.save();
+            this.all[index].belongsTo = null;
+            this.all.splice( index, 1 );
+            this.emptySelected();
+            this.save();
+
+        }
 
         return this;
 
@@ -356,7 +359,7 @@ class List {
      */
     import( items ) {
 
-        this.all = items.map( item => new ListItem( item, this ) );
+        this.replaceItems( items.map( item => new ListItem( item, this ) ) );
         this.save();
 
         return this;
@@ -364,7 +367,7 @@ class List {
     }
 
     copy() {
-        return new List( this.key, this.name, this.belongsTo );
+        return new List( this.key, this.name, { items: this.all, selectedItems: this.selected } );
     }
 
 }
