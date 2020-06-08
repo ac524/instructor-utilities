@@ -331,7 +331,7 @@ describe( "List", () => {
 
     });
 
-    describe( "resetSelected", () => {
+    describe( "emptySelected", () => {
 
         it( "should remove all selected items", () => {
 
@@ -344,7 +344,7 @@ describe( "List", () => {
                 .addItem(item1).addItem(item2).addItem(item3)
                 .select(item1.index).select(item2.index).select(item3.index);
             
-            list.resetSelected();
+            list.emptySelected();
 
             expect( list.selected.length ).toEqual(0);
 
@@ -357,7 +357,7 @@ describe( "List", () => {
 
             saveMock.mockImplementation( () => list );
 
-            list.resetSelected();
+            list.emptySelected();
 
             expect( saveMock ).toHaveBeenCalled();
 
@@ -470,6 +470,29 @@ describe( "List", () => {
             list.addItem( listItem );
 
             expect( list.all[0] ).toEqual( listItem );
+
+        } );
+
+        it( "should set the list to the item's belongsTo property", () => {
+
+            const list = new List;
+            const listItem = new ListItem({label: "A"});
+
+            list.addItem( listItem );
+
+            expect( listItem.belongsTo ).toEqual( list );
+
+        } );
+
+        it( "should call save", () => {
+
+            const list = new List;
+            const listItem = new ListItem({label: "A"});
+            const mock = jest.spyOn( list, "save" );
+
+            list.addItem( listItem );
+
+            expect( mock ).toHaveBeenCalled();
 
         } );
 
@@ -756,6 +779,99 @@ describe( "List", () => {
             expect( list.indexOf( item ) ).toEqual( -1 );
 
         } );
+
+    });
+
+    describe( "remove", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+            const item = list.createItem( "A" );
+
+            expect( list.remove( item.index ) ).toEqual( list );
+
+        });
+
+        it( "should remove the item from the list if the index exists", () => {
+
+            const list = new List;
+            const item = list.createItem( "A" );
+
+            list.remove( item.index );
+
+            expect( list.all ).not.toContain( item );
+
+        });
+
+        it( "should not modify the list if the index does not exist", () => {
+
+            const list = new List;
+            const item = list.createItem( "A" );
+
+            list.remove( 1 );
+
+            expect( list.all.length ).toEqual( 1 );
+            expect( list.all ).toContain( item );
+
+        });
+
+        it( "should set the item's belongsTo property to null", () => {
+
+            const list = new List;
+            const item = list.createItem( "A" );
+
+            list.remove( item.index );
+
+            expect( item.belongsTo ).toEqual( null );
+
+        });
+
+        it( "should call save when an item is removed", () => {
+
+            const list = new List;
+            const item = list.createItem( "A" );
+            const mock = jest.spyOn( list, "save" );
+
+            list.remove( item.index );
+
+            expect( mock ).toHaveBeenCalled();
+
+        });
+
+        it( "should not call save when an item is not", () => {
+
+            const list = new List;
+            const mock = jest.spyOn( list, "save" );
+
+            list.remove( 0 );
+
+            expect( mock ).not.toHaveBeenCalled();
+
+        });
+
+        it( "should call emptySelected when an item is removed", () => {
+
+            const list = new List;
+            const item = list.createItem( "A" );
+            const mock = jest.spyOn( list, "emptySelected" );
+
+            list.remove( item.index );
+
+            expect( mock ).toHaveBeenCalled();
+
+        });
+
+        it( "should not call emptySelected when an item is not", () => {
+
+            const list = new List;
+            const mock = jest.spyOn( list, "emptySelected" );
+
+            list.remove( 0 );
+
+            expect( mock ).not.toHaveBeenCalled();
+
+        });
 
     });
     

@@ -155,16 +155,15 @@ class List {
     empty() {
 
         this.all.length = 0;
-        this.selected.length = 0;
 
-        return this;
+        return this.emptySelected();
 
     }
 
     /**
      * @returns {List}
      */
-    resetSelected() {
+    emptySelected() {
 
         this.selected.length = 0;
         this.saveSelected();
@@ -319,10 +318,14 @@ class List {
      */
     remove( index ) {
 
-        this.all[index].belongsTo = null;
+        if( this.all[index] ) {
 
-        this.all.splice( index, 1 );
-        this.save();
+            this.all[index].belongsTo = null;
+            this.all.splice( index, 1 );
+            this.emptySelected();
+            this.save();
+
+        }
 
         return this;
 
