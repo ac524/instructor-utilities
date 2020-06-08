@@ -938,5 +938,55 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "import", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.import([]) ).toEqual( list );
+
+        });
+
+        it( "should add a given list of objects as new ListItem objects", () => {
+
+            const list = new List;
+
+            list.import([ { label: "A" }, { label: "B" } ]);
+
+            expect( list.all.length ).toEqual( 2 );
+            expect( list.all[0] instanceof ListItem ).toEqual( true );
+            expect( list.all[0].label ).toEqual( "A" );
+            expect( list.all[1] instanceof ListItem ).toEqual( true );
+            expect( list.all[1].label ).toEqual( "B" );
+
+        });
+
+        it( "should remove existing items", () => {
+
+            const list = new List;
+            const item1 = list.createItem( "A" );
+
+            list.addItem( item1 );
+
+            list.import([ { label: "B" }, { label: "C" } ]);
+
+            expect( list.all ).not.toContain( item1 );
+
+        });
+
+        it( "should call the save method", () => {
+
+            const list = new List;
+            const mock = jest.spyOn( list, "save" );
+
+            list.import([]);
+
+            expect( mock ).toHaveBeenCalled();
+
+        });
+
+    });
     
 } );

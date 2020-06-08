@@ -359,7 +359,7 @@ class List {
      */
     import( items ) {
 
-        this.all = items.map( item => new ListItem( item, this ) );
+        this.replaceItems( items.map( item => new ListItem( item, this ) ) );
         this.save();
 
         return this;
