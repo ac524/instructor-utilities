@@ -988,5 +988,24 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "import", () => {
+
+        it( "should return a new List object that contains the same items", () => {
+
+            const list = new List;
+            const item1 = list.createItem("A");
+            
+            const listCopy = list.copy();
+
+            const item2 = listCopy.createItem( "B" );
+
+            expect( listCopy instanceof List ).toEqual( true );
+            expect( listCopy.all ).toContain( item1 );
+            expect( list.all ).not.toContain( item2 );
+
+        });
+
+    });
     
 } );

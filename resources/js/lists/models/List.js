@@ -367,7 +367,7 @@ class List {
     }
 
     copy() {
-        return new List( this.key, this.name, this.belongsTo );
+        return new List( this.key, this.name, { items: this.all, selectedItems: this.selected } );
     }
 
 }
