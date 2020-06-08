@@ -905,5 +905,38 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "saveSelected", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.saveSelected() ).toEqual( list );
+
+        });
+
+        it( "should call the store's saveSelectedListItems method with the list's key and selected list if it has access to one", () => {
+
+            const listKey = "test";
+            const list = new List( listKey );
+            const lists = new Lists;
+            const store = new Store;
+            const mock = jest.spyOn( store, "saveSelectedListItems" );
+            mock.mockImplementation( () => store );
+
+            lists.addList(list);
+            store.setLists(lists);
+
+            const item1 = list.createItem( "A" );
+            const item2 = list.createItem( "B" );
+
+            list.select(item1.index).select(item2.index);
+
+            expect( mock ).toHaveBeenCalledWith( listKey, list.selected );
+
+        });
+
+    });
     
 } );
