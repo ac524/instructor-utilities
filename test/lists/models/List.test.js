@@ -874,5 +874,36 @@ describe( "List", () => {
         });
 
     });
+
+    describe( "save", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.save() ).toEqual( list );
+
+        });
+
+        it( "should call the store's saveListItems method with the list's key and items if it has access to one", () => {
+
+            const listKey = "test";
+            const list = new List( listKey );
+            const lists = new Lists;
+            const store = new Store;
+            const mock = jest.spyOn( store, "saveListItems" );
+            mock.mockImplementation( () => store );
+
+            lists.addList(list);
+            store.setLists(lists);
+
+            list.createItem( "A" );
+            list.createItem( "B" );
+
+            expect( mock ).toHaveBeenCalledWith( listKey, list.all );
+
+        });
+
+    });
     
 } );
