@@ -996,6 +996,7 @@ describe( "List", () => {
             const list = new List;
             const item1 = list.createItem("A");
             
+            
             const listCopy = list.copy();
 
             const item2 = listCopy.createItem( "B" );
