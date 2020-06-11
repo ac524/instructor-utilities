@@ -36,9 +36,6 @@ class Lists {
             set: (newStore) => store = newStore
         } );
 
-        // Create a default list if there isn't one
-        // if( ! this.all.length ) this.createList();
-
     }
 
     get currentList() {

@@ -23,8 +23,6 @@ class ListItemPicker {
         this.modal = new ListModal( this );
         this.view = new ListView( this );
         this.importExport = new ListImportExport( this );
-
-        this.selectList( this.lists.currentList.key );
         
     }
 
