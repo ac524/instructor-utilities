@@ -868,7 +868,7 @@ describe( "List", () => {
 
             const list = new List;
 
-            expect( list.save() ).toEqual( list );
+            expect( list.saveItems() ).toEqual( list );
 
         });
 

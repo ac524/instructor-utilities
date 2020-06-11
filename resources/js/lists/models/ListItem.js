@@ -47,7 +47,7 @@ class ListItem {
 
     save() {
 
-        if( this.belongsTo ) this.belongsTo.save();
+        if( this.belongsTo ) this.belongsTo.saveItems();
 
         return this;
 
@@ -63,16 +63,18 @@ class ListItem {
 
     /**
      * @param {string} label
-     * @returns {ListItem}
+     * @returns {boolean}
      */
     update( { label } ) {
 
+        let updated = false;
+
         if( label !== this.label ) {
             this.label = label;
-            this.save();
+            updated = true;
         }
 
-        return this;
+        return updated;
 
     }
 
@@ -87,8 +89,6 @@ class ListItem {
         if( this.isDisabled && this.isSelected )
 
             this.unselect( this.index );
-
-        this.save();
 
         return this;
 

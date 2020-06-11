@@ -245,15 +245,15 @@ class List {
     }
 
     /**
-     * @returns {List}
+     * @returns {boolean}
      */
     updateItem( index, update ) {
 
         if( this.all[index] )
         
-            this.all[index].update( update );
+            return this.all[index].update( update );
 
-        return this;
+        return false;
 
     }
 
@@ -322,11 +322,18 @@ class List {
 
     }
 
+    /**
+     * Helper function to save both the items and the currently selected indexes.
+     * @returns {List}
+     */
+    saveListContent() {
+        return this.saveItems().saveSelected();
+    }
 
     /**
      * @returns {List}
      */
-    save() {
+    saveItems() {
 
         if( this.store ) this.store.saveListItems( this.key, this.all );
 
