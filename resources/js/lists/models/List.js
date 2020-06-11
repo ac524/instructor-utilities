@@ -135,6 +135,7 @@ class List {
     /**
      * @param {Object} props
      * @param {string} props.name
+     * @returns {boolean}
      */
     update( { name } ) {
 
@@ -147,11 +148,7 @@ class List {
 
         }
 
-        if( updated && this.belongsTo ) 
-
-            this.belongsTo.save();
-
-        return this;
+        return updated;
 
     }
 
@@ -172,7 +169,6 @@ class List {
     emptySelected() {
 
         this.selected.length = 0;
-        this.saveSelected();
 
         return this;
 
@@ -221,7 +217,6 @@ class List {
         listItem.belongsTo = this;
 
         this.all.push( listItem );
-        this.save();
 
         return this;
         
@@ -268,12 +263,9 @@ class List {
      */
     select( targetIndex ) {
 
-        if( this.all[targetIndex] && !this.isSelected( targetIndex ) ) {
+        if( this.all[targetIndex] && !this.isSelected( targetIndex ) )
             
             this.selected.push( targetIndex );
-            this.saveSelected();
-
-        }
 
         return this;
 
@@ -287,13 +279,7 @@ class List {
 
         const position = this.selected.indexOf( targetIndex );
 
-        if( position > -1 ) {
-
-            this.selected.splice( position, 1 );
-            this.saveSelected();
-
-        }
-
+        if( position > -1 ) this.selected.splice( position, 1 );
 
         return this;
 
@@ -329,7 +315,6 @@ class List {
             this.all[index].belongsTo = null;
             this.all.splice( index, 1 );
             this.emptySelected();
-            this.save();
 
         }
 
@@ -366,7 +351,6 @@ class List {
     import( items ) {
 
         this.replaceItems( items.map( item => new ListItem( item, this ) ) );
-        this.save();
 
         return this;
 

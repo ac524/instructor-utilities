@@ -350,19 +350,6 @@ describe( "List", () => {
 
         } );
 
-        it( "should call the save method", () => {
-
-            const list = new List;
-            const saveMock = jest.spyOn( list, "saveSelected" );
-
-            saveMock.mockImplementation( () => list );
-
-            list.emptySelected();
-
-            expect( saveMock ).toHaveBeenCalled();
-
-        });
-
     });
 
     describe( "selectRandom", () => {
