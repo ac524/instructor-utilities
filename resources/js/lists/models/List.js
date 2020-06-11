@@ -86,7 +86,13 @@ class List {
      * @returns {boolean}
      */
     get isCurrent() {
-        return this.key === this.belongsTo.currentListKey;
+
+        return this.belongsTo
+        
+            ? this.key === this.belongsTo.currentListKey
+            
+            : false;
+            
     }
 
     get currentIndex() {

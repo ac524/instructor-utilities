@@ -73,4 +73,33 @@ describe( "List", () => {
 
     } )
 
+    describe( "isCurrent", () => {
+        it( "should return true if it is the current list in a collection of lists", () =>{
+            const list = new List("test");
+            const lists = new Lists;
+
+            lists.addList( list ).selectList(list.key);
+
+            expect( list.isCurrent ).toEqual(true);
+
+        } );
+
+        it( "should return false if it has not been added to a collection", () =>{
+            const list = new List;
+            
+            expect( list.isCurrent ).toEqual(false);
+        });
+
+        it( "should should return false if it is NOT the current list in a collection", () =>{
+            const list = new List("test");
+            const lists = new Lists;
+
+            lists.addList( list );
+
+            expect( list.isCurrent ).toEqual(false);
+
+        })
+
+    });
+
 } );
