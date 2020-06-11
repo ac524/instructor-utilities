@@ -1037,4 +1037,32 @@ describe( "List", () => {
 
     });
 
+    describe("currentIndex", () => {
+        it("should return the index of the most recently selected item on the list", () => {
+            const list = new List;
+
+            list
+            .addItem(new ListItem)
+            .addItem(new ListItem)
+            .addItem(new ListItem)
+
+            list.select( 2 ).select( 0 );
+
+            expect( list.currentIndex ).toEqual( 0 );
+
+        });
+
+        it("should return null if no list items are currently selected", () => {
+            const list = new List;
+
+            list
+            .addItem(new ListItem)
+            .addItem(new ListItem)
+            .addItem(new ListItem)
+
+            expect( list.currentIndex ).toEqual( null );
+
+        });
+    });
+
 } );
