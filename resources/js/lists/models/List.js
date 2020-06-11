@@ -24,16 +24,13 @@ class List {
 
         let belongsTo = null;
 
-        const addList = ( listItems ) => listItems.forEach( this.addItem.bind( this ) );
-
+        // Control the access of the array to ensure we are always working with the same array instance.
         Object.defineProperty( this, 'all', {
             get: () => currentItems,
-            set: function( newItems ) {
-                currentItems.length = 0;
-                addList( newItems );
-            }
+            set: this.replaceItems.bind(this)
         } );
-    
+        
+        // Control the access of the array to ensure we are always working with the same array instance.
         Object.defineProperty( this, 'selected', {
             get: () => currentSelectedItems,
             set: function( itemIndexes ) {
@@ -135,11 +132,24 @@ class List {
 
     }
 
+    /**
+     * @param {Object} props
+     * @param {string} props.name
+     */
     update( { name } ) {
 
-        this.name = name;
+        let updated = false;
 
-        this.belongsTo.save();
+        if( this.name !== name ) {
+
+            this.name = name;
+            if(!updated) updated = true;
+
+        }
+
+        if( updated && this.belongsTo ) 
+
+            this.belongsTo.save();
 
         return this;
 
@@ -148,7 +158,18 @@ class List {
     /**
      * @returns {List}
      */
-    resetSelected() {
+    empty() {
+
+        this.all.length = 0;
+
+        return this.emptySelected();
+
+    }
+
+    /**
+     * @returns {List}
+     */
+    emptySelected() {
 
         this.selected.length = 0;
         this.saveSelected();
@@ -179,18 +200,21 @@ class List {
 
     /**
      * @param {string} item
-     * @returns {List}
+     * @returns {ListItem}
      */
     createItem( label ) {
 
-        this.addItem( new ListItem( { label } ) );
+        const newItem = new ListItem( { label } );
 
-        return this;
+        this.addItem( newItem );
+
+        return newItem;
 
     }
 
     /**
-     * @param {ListItem} listItem 
+     * @param {ListItem} listItem
+     * @returns {List}
      */
     addItem( listItem ) {
 
@@ -204,11 +228,35 @@ class List {
     }
 
     /**
+     * @param {Array.<ListItem>} myObjects
+     * @returns {List}
+     */
+    addItems( items ) {
+
+        items.forEach( this.addItem.bind(this) );
+
+        return this;
+
+    }
+
+    /**
+     * @param {Array.<ListItem>} myObjects
+     * @returns {List}
+     */
+    replaceItems( items ) {
+
+        return this.empty().addItems( items );
+
+    }
+
+    /**
      * @returns {List}
      */
     updateItem( index, update ) {
 
-        this.all[index].update( update );
+        if( this.all[index] )
+        
+            this.all[index].update( update );
 
         return this;
 
@@ -220,7 +268,7 @@ class List {
      */
     select( targetIndex ) {
 
-        if( !this.isSelected( targetIndex ) ) {
+        if( this.all[targetIndex] && !this.isSelected( targetIndex ) ) {
             
             this.selected.push( targetIndex );
             this.saveSelected();
@@ -276,10 +324,14 @@ class List {
      */
     remove( index ) {
 
-        this.all[index].belongsTo = null;
+        if( this.all[index] ) {
 
-        this.all.splice( index, 1 );
-        this.save();
+            this.all[index].belongsTo = null;
+            this.all.splice( index, 1 );
+            this.emptySelected();
+            this.save();
+
+        }
 
         return this;
 
@@ -313,7 +365,7 @@ class List {
      */
     import( items ) {
 
-        this.all = items.map( item => new ListItem( item, this ) );
+        this.replaceItems( items.map( item => new ListItem( item, this ) ) );
         this.save();
 
         return this;
@@ -321,7 +373,7 @@ class List {
     }
 
     copy() {
-        return new List( this.key, this.name, this.belongsTo );
+        return new List( this.key, this.name, { items: this.all, selectedItems: this.selected } );
     }
 
 }

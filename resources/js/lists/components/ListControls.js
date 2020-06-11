@@ -104,7 +104,8 @@ class ListControls {
      */
     addListItem( label ) {
 
-        this.currentList.createItem( label ).resetSelected();
+        this.currentList.createItem( label );
+        this.currentList.emptySelected();
         this.app.view.render();
 
         return this;
@@ -117,7 +118,7 @@ class ListControls {
      */
     deleteListItem( itemIndex ) {
 
-        this.currentList.remove( itemIndex ).resetSelected();
+        this.currentList.remove( itemIndex ).emptySelected();
 
         this.app.view.render();
 
@@ -175,7 +176,7 @@ class ListControls {
      */
     restartList() {
 
-        this.currentList.resetSelected();
+        this.currentList.emptySelected();
         
         this.app.view.render();
 

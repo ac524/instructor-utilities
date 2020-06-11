@@ -5,11 +5,11 @@ describe( "Lists", () => {
 
     describe( "store", () => {
 
-        it( "should be undefined by default", () => {
+        it( "should be null by default", () => {
 
             const lists = new Lists;
 
-            expect( typeof lists.store ).toEqual( "undefined" );
+            expect( lists.store ).toEqual( null );
 
         } );
 
