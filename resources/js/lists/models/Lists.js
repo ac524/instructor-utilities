@@ -56,6 +56,10 @@ class Lists {
         return this.all.length;
     }
 
+    get hasMultipleLists() {
+        return this.count > 1;
+    }
+
     save() {
 
         if( this.store ) this.store.saveLists();

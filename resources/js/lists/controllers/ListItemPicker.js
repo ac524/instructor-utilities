@@ -79,6 +79,11 @@ class ListItemPicker {
      */
     deleteList( listKey ) {
 
+        if( !this.lists.hasMultipleLists )
+
+            // Exit early and prevent the delete action if we don't have more than one list.
+            return this;
+
         const wasCurrent = this.lists.get( listKey ).isCurrent;
 
         this.lists.deleteList( listKey );
