@@ -49,7 +49,7 @@ class ListModal {
 
                 const actions = {
                     editList:  () => this.setList( this.app.lists.currentList ),
-                    newList: () => this.setList( this.app.newList() )
+                    newList: () => this.setList( this.app.lists.createList( 'List '+ ( this.app.lists.count + 1 ), false ) )
                 };
 
                 if( actions[action] ) actions[action]();
@@ -63,11 +63,20 @@ class ListModal {
     }
 
     save() {
-        const updated = this.list.update( this.data );
+        const isNewList = !this.app.lists.get( this.data.key );
+        const updated = this.list.update( this.data ) || isNewList;
+
+        if( isNewList ) {
+            this.app.lists.addList( this.list );
+            this.app.lists.selectList( this.list.key );
+        }
 
         if( updated ) {
             this.app.lists.save();
-            this.app.listsControls.render();
+            
+            isNewList
+                ? this.app.render()
+                : this.app.listsControls.render();
         }
         
         return this;
