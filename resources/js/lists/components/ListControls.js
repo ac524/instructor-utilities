@@ -173,8 +173,7 @@ class ListControls {
 
         if( this.currentList.isComplete )
 
-            // Exit early if the list is already done. Nothing to do here!
-            return this;
+            this.currentList.emptySelected();
 
         this.currentList.selectRandom().saveSelected();
 
@@ -202,7 +201,7 @@ class ListControls {
      */
     render() {
       
-        this.nextButtonEl.prop( 'disabled', this.currentList.isComplete );
+        this.nextButtonEl.text( this.currentList.isComplete ? 'Restart' : 'Next' );
 
         this.disableItemButtonEl.prop('disabled', !this.currentList.selected.length);
 
