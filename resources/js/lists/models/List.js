@@ -357,9 +357,7 @@ class List {
      */
     import( items ) {
 
-        this.replaceItems( items.map( item => new ListItem( item, this ) ) );
-
-        return this;
+        return this.replaceItems( items.map( item => new ListItem( item ) ) );
 
     }
 
