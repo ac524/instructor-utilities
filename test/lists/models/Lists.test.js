@@ -27,14 +27,14 @@ describe( "Lists", () => {
 
     } );
 
-    describe( "getIndex", () =>{
+    describe( "getByIndex", () =>{
 
         it("should return a list object for the matching index", () =>{
             const lists = new Lists;
             const list = new List("test");
             lists.addList(list)
             
-            const selectedList = lists.getIndex(0);
+            const selectedList = lists.getByIndex(0);
 
             expect( selectedList ).toEqual( list );
         });
@@ -42,7 +42,7 @@ describe( "Lists", () => {
 
         it("should return null if given an index that does not exist", () =>{
             const lists = new Lists;
-            const selectedList = lists.getIndex(0);
+            const selectedList = lists.getByIndex(0);
 
             expect( selectedList ).toEqual( null );
             

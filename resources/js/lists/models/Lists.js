@@ -44,7 +44,7 @@ class Lists {
 
             ? this.get( this.currentListKey )
 
-            : this.getIndex( 0 )
+            : this.getByIndex( 0 )
 
     }
 
@@ -72,7 +72,7 @@ class Lists {
      * @param {number} index
      * @returns {List}
      */
-    getIndex( index ) {
+    getByIndex( index ) {
 
         return this.all[index] ? this.all[index][1] : null;
 
@@ -95,7 +95,7 @@ class Lists {
      */
     selectIndex( index ) {
 
-        this.currentListKey = this.getIndex(index).key;
+        this.currentListKey = this.getByIndex(index).key;
 
         return this;
 
@@ -131,7 +131,8 @@ class Lists {
 
     /**
      * @param {string} name 
-     * @param {boolean} addList 
+     * @param {boolean} addList
+     * TODO Update unit tests for the new addList flag parameter
      * @returns {List}
      */
     createList( name = 'Default', addList = true ) {

@@ -55,7 +55,7 @@ class List {
     /**
      * List of enabled items.
      */
-    get enabled() {
+    get enabledItems() {
 
         return this.all.filter( item => !item.isDisabled );
 
@@ -64,7 +64,7 @@ class List {
     /**
      * List of disabled items.
      */
-    get disabled() {
+    get disabledItems() {
 
         return this.all.filter( item => item.isDisabled );
 
@@ -75,7 +75,7 @@ class List {
      */
     get isComplete() {
 
-        return this.enabled.length ? this.enabled.length === this.selected.length : false;
+        return this.enabledItems.length ? this.enabledItems.length === this.selected.length : false;
 
     }
 
@@ -92,7 +92,7 @@ class List {
             
     }
 
-    get currentIndex() {
+    get currentItemIndex() {
 
         return this.selected[ this.selected.length - 1 ] >= 0 ? this.selected[ this.selected.length - 1 ] : null;
 
@@ -101,9 +101,9 @@ class List {
     /**
      * @returns {ListItem}
      */
-    get current() {
+    get currentItem() {
 
-        return this.all[this.currentIndex] || null;
+        return this.all[this.currentItemIndex] || null;
 
     }
 
@@ -155,7 +155,7 @@ class List {
     /**
      * @returns {List}
      */
-    empty() {
+    emptyItems() {
 
         this.all.length = 0;
 
@@ -177,15 +177,15 @@ class List {
     /**
      * @returns {List}
      */
-    selectRandom() {
+    selectRandomItem() {
 
-        let unusedIndexes = this.enabled.map( ( { index } ) => index ).filter( ( i ) => !this.selected.includes( i ) );
+        let unusedIndexes = this.enabledItems.map( ( { index } ) => index ).filter( ( i ) => !this.selected.includes( i ) );
 
         if( unusedIndexes.length ) {
 
             let nextItemIndex = unusedIndexes[ Math.floor(Math.random() * unusedIndexes.length) ];
     
-            this.select( nextItemIndex );
+            this.selectItem( nextItemIndex );
 
         }
 
@@ -240,7 +240,7 @@ class List {
      */
     replaceItems( items ) {
 
-        return this.empty().addItems( items );
+        return this.emptyItems().addItems( items );
 
     }
 
@@ -261,9 +261,9 @@ class List {
      * @param {number} targetIndex
      * @returns {List}
      */
-    select( targetIndex ) {
+    selectItem( targetIndex ) {
 
-        if( this.all[targetIndex] && !this.isSelected( targetIndex ) )
+        if( this.all[targetIndex] && !this.isItemSelected( targetIndex ) )
             
             this.selected.push( targetIndex );
 
@@ -275,7 +275,7 @@ class List {
      * @param {number} targetIndex
      * @returns {List}
      */
-    unselect( targetIndex ) {
+    unselectItem( targetIndex ) {
 
         const position = this.selected.indexOf( targetIndex );
 
@@ -289,7 +289,7 @@ class List {
      * @param {number} index
      * @returns {boolean}
      */
-    isSelected( index ) {
+    isItemSelected( index ) {
 
         return this.selected.includes( index );
 
@@ -308,7 +308,7 @@ class List {
      * @param {number} index
      * @returns {List}
      */
-    remove( index ) {
+    removeItem( index ) {
 
         if( this.all[index] ) {
 
@@ -357,9 +357,7 @@ class List {
      */
     import( items ) {
 
-        this.replaceItems( items.map( item => new ListItem( item, this ) ) );
-
-        return this;
+        return this.replaceItems( items.map( item => new ListItem( item ) ) );
 
     }
 

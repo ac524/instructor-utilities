@@ -34,7 +34,7 @@ class ListItem {
      * @returns {boolean}
      */
     get isSelected() {
-        return this.belongsTo ? this.belongsTo.isSelected( this.index ) : false;
+        return this.belongsTo ? this.belongsTo.isItemSelected( this.index ) : false;
     }
 
     /**
@@ -42,7 +42,7 @@ class ListItem {
      * @returns {boolean}
      */
     get isCurrent() {
-        return this.belongsTo ? this.index === this.belongsTo.currentIndex : false;
+        return this.belongsTo ? this.index === this.belongsTo.currentItemIndex : false;
     }
 
     save() {
@@ -55,7 +55,7 @@ class ListItem {
 
     unselect() {
 
-        if( this.belongsTo ) this.belongsTo.unselect( this.index );
+        if( this.belongsTo ) this.belongsTo.unselectItem( this.index );
 
         return this;
 
@@ -88,7 +88,7 @@ class ListItem {
 
         if( this.isDisabled && this.isSelected )
 
-            this.unselect( this.index );
+            this.unselect();
 
         return this;
 

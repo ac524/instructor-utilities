@@ -15,7 +15,7 @@ describe( "List", () => {
 
     // });
 
-    describe("enabled", () => {
+    describe("enabledItems", () => {
 
         it("should return an array of enabled items", () => {
 
@@ -28,7 +28,7 @@ describe( "List", () => {
 
             list.addItem(item).addItem(item2);
 
-            expect(list.enabled).toEqual(expect.arrayContaining(expected));
+            expect(list.enabledItems).toEqual(expect.arrayContaining(expected));
 
         });
 
@@ -36,13 +36,13 @@ describe( "List", () => {
 
             const list = new List();
             
-            expect(list.enabled).toEqual([]);
+            expect(list.enabledItems).toEqual([]);
 
         });
 
     });
 
-    describe("disabled", () => {
+    describe("disabledItems", () => {
 
         it("should return an array of disabled items", () => {
 
@@ -55,7 +55,7 @@ describe( "List", () => {
 
             list.addItem(item).addItem(item2);
 
-            expect(list.disabled).toEqual(expect.arrayContaining(expected));
+            expect(list.disabledItems).toEqual(expect.arrayContaining(expected));
 
         });
 
@@ -63,7 +63,7 @@ describe( "List", () => {
 
             const list = new List();
             
-            expect(list.disabled).toEqual([]);
+            expect(list.disabledItems).toEqual([]);
 
         });
 
@@ -85,7 +85,7 @@ describe( "List", () => {
 
             list.addItem( new ListItem ).addItem( new ListItem );
 
-            list.select( 0 );
+            list.selectItem( 0 );
 
             expect(list.isComplete).toEqual(false);
 
@@ -97,7 +97,7 @@ describe( "List", () => {
 
             list.addItem( new ListItem ).addItem( new ListItem );
 
-            list.select( 0 ).select( 1 );
+            list.selectItem( 0 ).selectItem( 1 );
 
             expect(list.isComplete).toEqual(true);
 
@@ -128,7 +128,7 @@ describe( "List", () => {
 
     } );
 
-    describe( "current", () => {
+    describe( "currentItem", () => {
 
         it( "should return null if there are no selected items", () => {
 
@@ -137,7 +137,7 @@ describe( "List", () => {
 
             list.addItem( item );
 
-            expect( list.current ).toEqual( null );
+            expect( list.currentItem ).toEqual( null );
 
         } );
 
@@ -150,9 +150,9 @@ describe( "List", () => {
 
             list
                 .addItem( item1 ).addItem( item2 ).addItem( item3 )
-                .select( 2 ).select( 0 );
+                .selectItem( 2 ).selectItem( 0 );
 
-            expect( list.current ).toEqual( item1 );
+            expect( list.currentItem ).toEqual( item1 );
 
         } );
 
@@ -278,7 +278,7 @@ describe( "List", () => {
 
     });
 
-    describe( "isSelected", () => {
+    describe( "isItemSelected", () => {
 
         it( "should should return true if given an index that is selected", () => {
 
@@ -287,9 +287,9 @@ describe( "List", () => {
 
             list
                 .addItem( new ListItem ).addItem( itemToSelect )
-                .select( itemToSelect.index );
+                .selectItem( itemToSelect.index );
 
-            expect( list.isSelected( itemToSelect.index ) ).toEqual( true );
+            expect( list.isItemSelected( itemToSelect.index ) ).toEqual( true );
 
         } );
 
@@ -301,9 +301,9 @@ describe( "List", () => {
 
             list
                 .addItem( itemNotToSelect ).addItem( itemToSelect )
-                .select( itemToSelect.index );
+                .selectItem( itemToSelect.index );
 
-            expect( list.isSelected( itemNotToSelect.index ) ).toEqual( false );
+            expect( list.isItemSelected( itemNotToSelect.index ) ).toEqual( false );
 
         } );
 
@@ -313,7 +313,7 @@ describe( "List", () => {
 
             list.addItem( new ListItem ).addItem( new ListItem );
 
-            expect( list.isSelected( 3 ) ).toEqual( false );
+            expect( list.isItemSelected( 3 ) ).toEqual( false );
 
         } );
 
@@ -330,7 +330,7 @@ describe( "List", () => {
 
             list
                 .addItem(item1).addItem(item2).addItem(item3)
-                .select(item1.index).select(item2.index).select(item3.index);
+                .selectItem(item1.index).selectItem(item2.index).selectItem(item3.index);
             
             list.emptySelected();
 
@@ -340,13 +340,13 @@ describe( "List", () => {
 
     });
 
-    describe( "selectRandom", () => {
+    describe( "selectRandomItem", () => {
 
         it( "should return the object it was called from", () => {
 
             const list = new List;
 
-            expect( list.selectRandom() ).toEqual( list );
+            expect( list.selectRandomItem() ).toEqual( list );
 
         });
 
@@ -359,7 +359,7 @@ describe( "List", () => {
 
             list.addItems( [ item1, item2, item3 ] );
 
-            list.selectRandom();
+            list.selectRandomItem();
 
             expect( list.selected.length ).toEqual( 1 );
             expect( [ item1.index, item2.index, item3.index ] ).toEqual( expect.arrayContaining( list.selected ) );
@@ -374,9 +374,9 @@ describe( "List", () => {
 
             list
                 .addItems( [ item1, item2 ] )
-                .select( item1.index ).select( item2.index );
+                .selectItem( item1.index ).selectItem( item2.index );
 
-            list.selectRandom();
+            list.selectRandomItem();
 
             expect( list.selected ).toEqual( [ item1.index, item2.index ] );
 
@@ -384,13 +384,13 @@ describe( "List", () => {
 
     });
 
-    describe( "empty", () => {
+    describe( "emptyItems", () => {
 
         it( "should return the object it was called from", () => {
 
             const list = new List;
 
-            expect( list.empty() ).toEqual( list );
+            expect( list.emptyItems() ).toEqual( list );
 
         });
 
@@ -402,7 +402,7 @@ describe( "List", () => {
 
             list.addItems( [ item1, item2 ] );
 
-            list.empty();
+            list.emptyItems();
 
             expect( list.all.length ).toEqual( 0 );
 
@@ -416,9 +416,9 @@ describe( "List", () => {
 
             list
                 .addItems( [ item1, item2 ] )
-                .select( item1.index );
+                .selectItem( item1.index );
 
-            list.empty();
+            list.emptyItems();
 
             expect( list.selected.length ).toEqual( 0 );
 
@@ -596,14 +596,14 @@ describe( "List", () => {
 
     } );
 
-    describe( "select", () => {
+    describe( "selectItem", () => {
 
         it( "should return the object it was called from", () => {
 
             const list = new List;
             const item = list.createItem( 'A' );
 
-            expect( list.select(item.index) ).toEqual( list );
+            expect( list.selectItem(item.index) ).toEqual( list );
 
         });
 
@@ -612,7 +612,7 @@ describe( "List", () => {
             const list = new List;
             const item = list.createItem( 'A' );
 
-            list.select(item.index);
+            list.selectItem(item.index);
 
             expect( list.selected ).toContain( item.index );
 
@@ -623,7 +623,7 @@ describe( "List", () => {
             const list = new List;
             const targetIndex = 0;
 
-            list.select(targetIndex);
+            list.selectItem(targetIndex);
 
             expect( list.selected ).not.toContain( targetIndex );
 
@@ -635,7 +635,7 @@ describe( "List", () => {
             const item = list.createItem( 'A' );
             const targetIndex = item.index;
 
-            list.select(targetIndex).select(targetIndex);
+            list.selectItem(targetIndex).selectItem(targetIndex);
 
             expect( list.selected.length ).toEqual( 1 );
 
@@ -643,16 +643,16 @@ describe( "List", () => {
 
     } );
 
-    describe( "unselect", () => {
+    describe( "unselectItem", () => {
 
         it( "should return the object it was called from", () => {
 
             const list = new List;
             const item = list.createItem( 'A' );
 
-            list.select( item.index );
+            list.selectItem( item.index );
 
-            expect( list.unselect(item.index) ).toEqual( list );
+            expect( list.unselectItem(item.index) ).toEqual( list );
 
         });
 
@@ -662,8 +662,8 @@ describe( "List", () => {
             const item = list.createItem( 'A' );
 
             list
-                .select( item.index )
-                .unselect(item.index);
+                .selectItem( item.index )
+                .unselectItem(item.index);
 
             expect( list.selected ).not.toContain( item.index );
 
@@ -676,8 +676,8 @@ describe( "List", () => {
             const item2 = list.createItem( 'B' );
 
             list
-                .select( item1.index )
-                .unselect( item2.index );
+                .selectItem( item1.index )
+                .unselectItem( item2.index );
 
             expect( list.selected.length ).toEqual( 1 );
             expect( list.selected ).toContain( item1.index );
@@ -708,14 +708,14 @@ describe( "List", () => {
 
     });
 
-    describe( "remove", () => {
+    describe( "removeItem", () => {
 
         it( "should return the object it was called from", () => {
 
             const list = new List;
             const item = list.createItem( "A" );
 
-            expect( list.remove( item.index ) ).toEqual( list );
+            expect( list.removeItem( item.index ) ).toEqual( list );
 
         });
 
@@ -724,7 +724,7 @@ describe( "List", () => {
             const list = new List;
             const item = list.createItem( "A" );
 
-            list.remove( item.index );
+            list.removeItem( item.index );
 
             expect( list.all ).not.toContain( item );
 
@@ -735,7 +735,7 @@ describe( "List", () => {
             const list = new List;
             const item = list.createItem( "A" );
 
-            list.remove( 1 );
+            list.removeItem( 1 );
 
             expect( list.all.length ).toEqual( 1 );
             expect( list.all ).toContain( item );
@@ -747,7 +747,7 @@ describe( "List", () => {
             const list = new List;
             const item = list.createItem( "A" );
 
-            list.remove( item.index );
+            list.removeItem( item.index );
 
             expect( item.belongsTo ).toEqual( null );
 
@@ -759,7 +759,7 @@ describe( "List", () => {
             const item = list.createItem( "A" );
             const mock = jest.spyOn( list, "emptySelected" );
 
-            list.remove( item.index );
+            list.removeItem( item.index );
 
             expect( mock ).toHaveBeenCalled();
 
@@ -770,7 +770,7 @@ describe( "List", () => {
             const list = new List;
             const mock = jest.spyOn( list, "emptySelected" );
 
-            list.remove( 0 );
+            list.removeItem( 0 );
 
             expect( mock ).not.toHaveBeenCalled();
 
@@ -836,7 +836,7 @@ describe( "List", () => {
             const item1 = list.createItem( "A" );
             const item2 = list.createItem( "B" );
 
-            list.select(item1.index).select(item2.index);
+            list.selectItem(item1.index).selectItem(item2.index);
 
             list.saveSelected();
 
@@ -934,7 +934,7 @@ describe( "List", () => {
 
     });
 
-    describe("currentIndex", () => {
+    describe("currentItemIndex", () => {
         it("should return the index of the most recently selected item on the list", () => {
             const list = new List;
 
@@ -943,9 +943,9 @@ describe( "List", () => {
             .addItem(new ListItem)
             .addItem(new ListItem)
 
-            list.select( 2 ).select( 0 );
+            list.selectItem( 2 ).selectItem( 0 );
 
-            expect( list.currentIndex ).toEqual( 0 );
+            expect( list.currentItemIndex ).toEqual( 0 );
 
         });
 
@@ -957,7 +957,7 @@ describe( "List", () => {
             .addItem(new ListItem)
             .addItem(new ListItem)
 
-            expect( list.currentIndex ).toEqual( null );
+            expect( list.currentItemIndex ).toEqual( null );
 
         });
     });

@@ -1,6 +1,7 @@
 import ListItemPicker from "../controllers/ListItemPicker";
 import CurrentItem from "./CurrentItem";
 import ListControls from "./ListControls";
+import List from "../models/List";
 
 /**
  * @param {ListItem} item 
@@ -75,8 +76,8 @@ class ListView {
         this.enabledEl.empty();
         this.disabledEl.empty();
 
-        this.currentList.enabled.forEach( ( item ) => this.enabledEl.append( createItem( item ) ) );
-        this.currentList.disabled.forEach( ( item ) => this.disabledEl.append( createItem( item ) ) );
+        this.currentList.enabledItems.forEach( ( item ) => this.enabledEl.append( createItem( item ) ) );
+        this.currentList.disabledItems.forEach( ( item ) => this.disabledEl.append( createItem( item ) ) );
 
         this.displayStatus();
         this.currentItem.render();
@@ -102,8 +103,8 @@ class ListView {
 
         } else {
 
-            let itemWord = 'item' + ( this.currentList.enabled.length === 1 ? '' : 's' );
-            this.app.status.set( `${this.currentList.selected.length} out of ${this.currentList.enabled.length} ${itemWord} selected.` );
+            let itemWord = 'item' + ( this.currentList.enabledItems.length === 1 ? '' : 's' );
+            this.app.status.set( `${this.currentList.selected.length} out of ${this.currentList.enabledItems.length} ${itemWord} selected.` );
             
         }
 

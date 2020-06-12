@@ -36,7 +36,7 @@ describe( "ListItem", () => {
 
     } );
 
-    describe( 'isSelected', () => {
+    describe( "isSelected", () => {
 
         it( "should return false if not added to a list", () => {
             
@@ -62,7 +62,7 @@ describe( "ListItem", () => {
             const item = new ListItem();
             const list = new List();
 
-            list.addItem( item ).select( item.index );
+            list.addItem( item ).selectItem( item.index );
 
             expect( item.isSelected ).toEqual( true );
 
@@ -73,7 +73,7 @@ describe( "ListItem", () => {
             const item = new ListItem();
             const list = new List();
 
-            list.addItem( item ).select( item.index );
+            list.addItem( item ).selectItem( item.index );
 
             item.unselect();
 
@@ -115,9 +115,9 @@ describe( "ListItem", () => {
                 .addItem( item )
                 .addItem( item2 )
                 // Select the first
-                .select( item.index )
+                .selectItem( item.index )
                 // Then select the second
-                .select( item2.index );
+                .selectItem( item2.index );
 
             expect( item.isCurrent ).toEqual( false );
 
@@ -164,7 +164,7 @@ describe( "ListItem", () => {
 
     });
 
-    describe( "save", () => {
+    describe( "unselect", () => {
 
         it( "should return the object it was called from", () => {
 
@@ -178,7 +178,7 @@ describe( "ListItem", () => {
 
             const item = new ListItem();
             const list = new List();
-            const mock = jest.spyOn( list, "unselect" );
+            const mock = jest.spyOn( list, "unselectItem" );
 
             item.unselect();
 
@@ -191,7 +191,7 @@ describe( "ListItem", () => {
             const item = new ListItem();
             const list = new List();
 
-            const mock = jest.spyOn( list, "unselect" );
+            const mock = jest.spyOn( list, "unselectItem" );
 
             list.addItem( item );
 
@@ -269,7 +269,7 @@ describe( "ListItem", () => {
             const item = new ListItem( { isDisabled: false } );
             const list = new List;
 
-            list.addItem( item ).select( item.index );
+            list.addItem( item ).selectItem( item.index );
 
             item.toggleDisable();
 
