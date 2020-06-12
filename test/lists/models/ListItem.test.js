@@ -135,11 +135,11 @@ describe( "ListItem", () => {
 
         } );
 
-        it( "should not call save on a parent list if one has not been set", () => {
+        it( "should not call 'saveItems' on a parent list if one has not been set", () => {
 
             const item = new ListItem();
             const list = new List();
-            const mock = jest.spyOn( list, "save" );
+            const mock = jest.spyOn( list, "saveItems" );
 
             item.save();
 
@@ -147,12 +147,12 @@ describe( "ListItem", () => {
 
         } );
 
-        it( "should call save on a parent list if the item has been assigned to one", () => {
+        it( "should call 'saveItems' on a parent list if the item has been assigned to one", () => {
 
             const item = new ListItem();
             const list = new List();
 
-            const mock = jest.spyOn( list, "save" );
+            const mock = jest.spyOn( list, "saveItems" );
 
             list.addItem( item );
 
@@ -205,14 +205,6 @@ describe( "ListItem", () => {
 
     describe( "update", () => {
 
-        it( "should return the object it was called from", () => {
-
-            const item = new ListItem();
-
-            expect( item.update({}) ).toEqual( item );
-
-        } );
-
         it( "should update the label when passed an object with that property", () => {
 
             const item = new ListItem( { label: 'First label' } );
@@ -224,29 +216,25 @@ describe( "ListItem", () => {
 
         } );
 
-        it( "should not call save if the label didn't change", () => {
-
-            const item = new ListItem( { label: 'Same label' } );
-            const newItemData = { label: "Same label" };
-
-            const mock = jest.spyOn( item, "save" );
-
-            item.update( newItemData );
-
-            expect( mock ).not.toHaveBeenCalled();
-
-        } );
-
-        it( "should call save if the label changed", () => {
+        it( "should return true if the item was updated", () => {
 
             const item = new ListItem( { label: 'First label' } );
             const newItemData = { label: "New label" };
 
-            const mock = jest.spyOn( item, "save" );
+            const updated = item.update( newItemData );
 
-            item.update( newItemData );
+            expect( updated ).toEqual( true );
 
-            expect( mock ).toHaveBeenCalled();
+        } );
+        
+        it( "should return false if the item was not updated", () => {
+
+            const itemData = { label: 'Label' };
+            const item = new ListItem( itemData );
+
+            const updated = item.update( itemData );
+
+            expect( updated ).toEqual( false );
 
         } );
 
@@ -258,7 +246,7 @@ describe( "ListItem", () => {
 
             const item = new ListItem();
 
-            expect( item.update({}) ).toEqual( item );
+            expect( item.toggleDisable({}) ).toEqual( item );
 
         } );
 
@@ -286,17 +274,6 @@ describe( "ListItem", () => {
             item.toggleDisable();
 
             expect( item.isSelected ).toEqual( false );
-
-        });
-
-        it( "should call the save method", () => {
-
-            const item = new ListItem;
-            const mock = jest.spyOn( item, "save" );
-
-            item.toggleDisable();
-
-            expect( mock ).toHaveBeenCalled();
 
         });
 

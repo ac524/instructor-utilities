@@ -36,9 +36,6 @@ class Lists {
             set: (newStore) => store = newStore
         } );
 
-        // Create a default list if there isn't one
-        // if( ! this.all.length ) this.createList();
-
     }
 
     get currentList() {
@@ -152,13 +149,17 @@ class Lists {
      */
     deleteList( key ) {
 
-        if( this.lists[key].isCurrent )
+        if( this.lists[key] ) {
 
-            this.currentListKey = null;
+            if( this.lists[key].isCurrent )
+    
+                this.currentListKey = null;
+    
+            delete this.lists[key];
+    
+            this.save();
 
-        delete this.lists[key];
-
-        this.save();
+        }
 
         return this;
 
