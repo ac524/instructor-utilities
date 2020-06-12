@@ -69,11 +69,11 @@ class ListControls {
         const checkboxEl = $(target);
         const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
 
-        this.currentList.isSelected( itemIndex )
+        this.currentList.isItemSelected( itemIndex )
 
-            ? this.currentList.unselect( itemIndex )
+            ? this.currentList.unselectItem( itemIndex )
 
-            : this.currentList.select( itemIndex );
+            : this.currentList.selectItem( itemIndex );
 
         this.currentList.saveSelected();
             
@@ -128,7 +128,7 @@ class ListControls {
      */
     deleteListItem( itemIndex ) {
 
-        this.currentList.remove( itemIndex ).emptySelected();
+        this.currentList.removeItem( itemIndex ).emptySelected();
 
         this.app.view.render();
 
@@ -162,7 +162,7 @@ class ListControls {
          
         if ( this.currentList.selected.length )
         
-            this.disableListItem( this.currentList.currentIndex );
+            this.disableListItem( this.currentList.currentItemIndex );
 
         return this;
 
@@ -178,7 +178,7 @@ class ListControls {
             // Exit early if there are no selected items to undo.
             return this;
 
-        this.currentList.unselect( this.currentList.currentIndex ).saveSelected();
+        this.currentList.unselectItem( this.currentList.currentItemIndex ).saveSelected();
 
         this.app.view.render();
 
@@ -195,7 +195,7 @@ class ListControls {
 
             this.currentList.emptySelected();
 
-        this.currentList.selectRandom().saveSelected();
+        this.currentList.selectRandomItem().saveSelected();
 
         this.app.view.render();
 
