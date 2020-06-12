@@ -178,7 +178,7 @@ class ListControls {
             // Exit early if there are no selected items to undo.
             return this;
 
-        this.currentList.unselect( this.currentList.currentIndex );
+        this.currentList.unselect( this.currentList.currentIndex ).saveSelected();
 
         this.app.view.render();
 
