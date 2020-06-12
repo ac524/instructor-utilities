@@ -1,5 +1,6 @@
 import Lists from "../../../resources/js/lists/models/Lists";
 import Store from "../../../resources/js/lists/store";
+import List from "../../../resources/js/lists/models/List";
 
 describe( "Lists", () => {
 
@@ -25,5 +26,27 @@ describe( "Lists", () => {
         } );
 
     } );
+
+    describe( "getIndex", () =>{
+
+        it("should return a list object for the matching index", () =>{
+            const lists = new Lists;
+            const list = new List("test");
+            lists.addList(list)
+            
+            const selectedList = lists.getIndex(0);
+
+            expect( selectedList ).toEqual( list );
+        });
+
+
+        it("should return null if given an index that does not exist", () =>{
+            const lists = new Lists;
+            const selectedList = lists.getIndex(0);
+
+            expect( selectedList ).toEqual( null );
+            
+        })
+    })
 
 } );
