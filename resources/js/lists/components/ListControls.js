@@ -52,7 +52,9 @@ class ListControls {
         const inputEl = $(target);
         const itemIndex = inputEl.closest('.input-group').data( 'index' );
 
-        this.currentList.updateItem( itemIndex, { label: inputEl.val() } );
+        const updated = this.currentList.updateItem( itemIndex, { label: inputEl.val() } );
+
+        if( updated ) this.currentList.saveItems();
 
     }
 
@@ -70,6 +72,8 @@ class ListControls {
             ? this.currentList.unselect( itemIndex )
 
             : this.currentList.select( itemIndex );
+
+        this.currentList.saveSelected();
             
         this.app.view.render();
 
@@ -105,7 +109,11 @@ class ListControls {
     addListItem( label ) {
 
         this.currentList.createItem( label );
-        this.currentList.emptySelected();
+
+        this.currentList
+            .emptySelected()
+            .saveListContent();
+
         this.app.view.render();
 
         return this;
@@ -132,7 +140,12 @@ class ListControls {
      */
     disableListItem( itemIndex ) {
 
+        const wasSelected = this.currentList.all[itemIndex].isSelected;
+
         this.currentList.all[itemIndex].toggleDisable();
+        this.currentList.saveItems();
+
+        if( wasSelected ) this.currentList.saveSelected();
 
         this.app.view.render();
 
@@ -147,7 +160,7 @@ class ListControls {
          
         if ( this.currentList.selected.length )
         
-            this.disableListItem ( this.currentList.currentIndex );
+            this.disableListItem( this.currentList.currentIndex );
 
         return this;
 
@@ -163,7 +176,7 @@ class ListControls {
             // Exit early if the list is already done. Nothing to do here!
             return this;
 
-        this.currentList.selectRandom();
+        this.currentList.selectRandom().saveSelected();
 
         this.app.view.render();
 
@@ -176,7 +189,7 @@ class ListControls {
      */
     restartList() {
 
-        this.currentList.emptySelected();
+        this.currentList.emptySelected().saveSelected();
         
         this.app.view.render();
 

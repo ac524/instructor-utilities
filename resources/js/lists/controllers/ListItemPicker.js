@@ -64,6 +64,8 @@ class ListItemPicker {
 
         const newList = this.lists.createList( 'List '+ ( this.lists.count + 1 ) );
 
+        this.lists.save();
+
         this.selectList( newList.key );
 
         this.listsControls.render();
@@ -80,6 +82,7 @@ class ListItemPicker {
         const wasCurrent = this.lists.get( listKey ).isCurrent;
 
         this.lists.deleteList( listKey );
+        this.store.deleteList( listKey );
 
         if( wasCurrent ) this.selectList( this.lists.currentList.key );
 

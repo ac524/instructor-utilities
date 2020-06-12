@@ -36,12 +36,9 @@ export class Store {
 
     loadListItemData( listKey ) {
 
-        const storageKey = listKey +'-'+ this.key;
-        const selectStorageKey = listKey +'-selected-'+ this.key;
-
         // Load or create the target list
-        let list = JSON.parse( localStorage.getItem( storageKey ) ) || [];
-        let selectList = JSON.parse( localStorage.getItem( selectStorageKey ) ) || [];
+        let list = JSON.parse( localStorage.getItem( this.getListStorageKey( listKey ) ) ) || [];
+        let selectList = JSON.parse( localStorage.getItem( this.getListSelectedStorageKey( listKey ) ) ) || [];
 
         // Migrate old data format if needed
         if( list[0] && typeof list[0] === 'string' )
@@ -57,9 +54,7 @@ export class Store {
 
     saveListItems( listKey, items ) {
 
-        const storageKey = listKey +'-'+ this.key;
-
-        localStorage.setItem( storageKey, JSON.stringify( items ) );
+        localStorage.setItem( this.getListStorageKey( listKey ), JSON.stringify( items ) );
 
         return this;
 
@@ -67,9 +62,7 @@ export class Store {
 
     saveSelectedListItems( listKey, selected ) {
 
-        const selectStorageKey = listKey +'-selected-'+ this.key;
-
-        localStorage.setItem( selectStorageKey, JSON.stringify( selected ) );
+        localStorage.setItem( this.getListSelectedStorageKey( listKey ), JSON.stringify( selected ) );
 
         return this;
 
@@ -90,12 +83,32 @@ export class Store {
     }
 
     /**
+     * @param {string} listKey 
+     */
+    deleteList( listKey ) {
+        localStorage.removeItem( this.getListStorageKey( listKey ) );
+        localStorage.removeItem( this.getListSelectedStorageKey( listKey ) );
+    }
+
+    /**
+     * @param {string} listKey 
+     */
+    getListStorageKey( listKey ) {
+        return listKey +'-'+ this.key;
+    }
+
+    /**
+     * @param {string} listKey 
+     */
+    getListSelectedStorageKey( listKey ) {
+        return listKey +'-selected-'+ this.key;
+    }
+
+    /**
      * @returns {Lists}
      */
     init() {
-
         return this.setLists( new Lists( this.loadListsData() ) );
-
     }
 
 }

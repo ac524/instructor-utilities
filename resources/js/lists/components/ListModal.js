@@ -63,8 +63,13 @@ class ListModal {
     }
 
     save() {
-        this.list.update( this.data );
-        this.app.listsControls.render();
+        const updated = this.list.update( this.data );
+
+        if( updated ) {
+            this.app.lists.save();
+            this.app.listsControls.render();
+        }
+        
         return this;
     }
 
