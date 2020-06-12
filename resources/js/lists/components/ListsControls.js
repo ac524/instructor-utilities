@@ -59,6 +59,8 @@ class ListsControls {
      */
     render() {
 
+        this.deleteListButtonEl.prop( "disabled", !this.app.lists.hasMultipleLists );
+
         return this
             .renderListName()
             .renderListOptions();
