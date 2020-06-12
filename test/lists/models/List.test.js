@@ -196,7 +196,27 @@ describe( "List", () => {
 
     describe( "update", () => {
 
-        // TODO Add tests for boolean return
+        it( "should return true when given new property values", () => {
+
+            const list = new List;
+            const name = 'New Label';
+
+            const updated = list.update( { name } );
+
+            expect( updated ).toEqual( true );
+
+        });
+
+        it( "should return false when given matching property values", () => {
+
+            const name = 'Label';
+            const list = new List( 'test', name );
+
+            const updated = list.update( { name } );
+
+            expect( updated ).toEqual( false );
+
+        });
 
         it( "should update the 'name' property when passing in a new value", () => {
 
@@ -535,15 +555,31 @@ describe( "List", () => {
 
     describe( "updateItem", () => {
 
-        // TODO Update to boolean checks
-        // it( "should return the object it was called from", () => {
+        it( "should return true when given new property values", () => {
 
-        //     const list = new List;
+            const list = new List;
+            const label = 'New Label';
 
-        //     expect( list.updateItem() ).toEqual( list );
+            list.createItem( "Original Label" );
 
-        // });
+            const updated = list.updateItem( 0, { label } );
 
+            expect( updated ).toEqual( true );
+
+        });
+
+        it( "should return false when given matching property values", () => {
+
+            const label = 'Item Label';
+            const list = new List( 'test', name );
+
+            list.createItem( label );
+
+            const updated = list.updateItem( 0, { label } );
+
+            expect( updated ).toEqual( false );
+
+        });
 
         it( "should update the target item with given details", () => {
 
