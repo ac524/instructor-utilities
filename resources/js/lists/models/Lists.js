@@ -91,7 +91,7 @@ class Lists {
      */
     selectIndex( index ) {
 
-        this.currentListKey = this.getIndex(0).key;
+        this.currentListKey = this.getIndex(index).key;
 
         return this;
 
