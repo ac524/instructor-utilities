@@ -14,7 +14,8 @@ class ListControls {
         this.itemsEl = $('#list-items');
         
         // List Selection Buttons
-        this.nextButtonEl = $('#next-group');
+        this.prevButtonEl = $('#prev-item');
+        this.nextButtonEl = $('#next-item');
         this.resetButtonEl = $('#reset-list');
 
         // List Management Buttons
@@ -30,6 +31,7 @@ class ListControls {
 
         this.resetButtonEl.on( 'click', this.restartList.bind( this ) );
 
+        this.prevButtonEl.on( 'click', this.previousListItem.bind( this ) );
         this.nextButtonEl.on( 'click', this.nextListItem.bind( this ) );
 
         this.disableItemButtonEl.on('click', this.disableCurrentListItem.bind( this ));
@@ -169,6 +171,24 @@ class ListControls {
     /**
      * @returns {ListControls}
      */
+    previousListItem() {
+
+        if( !this.currentList.selected.length )
+
+            // Exit early if there are no selected items to undo.
+            return this;
+
+        this.currentList.unselect( this.currentList.currentIndex );
+
+        this.app.view.render();
+
+        return this;
+
+    }
+
+    /**
+     * @returns {ListControls}
+     */
     nextListItem() {
 
         if( this.currentList.isComplete )
@@ -201,9 +221,10 @@ class ListControls {
      */
     render() {
       
+        this.prevButtonEl.prop( 'disabled', !this.currentList.selected.length );
         this.nextButtonEl.text( this.currentList.isComplete ? 'Restart' : 'Next' );
 
-        this.disableItemButtonEl.prop('disabled', !this.currentList.selected.length);
+        this.disableItemButtonEl.prop( 'disabled', !this.currentList.selected.length );
 
         return this;
 
