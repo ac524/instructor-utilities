@@ -11,7 +11,7 @@ if( !itemPicker.lists.count ) {
     itemPicker.lists.save();
 }
 
-const firstList = itemPicker.lists.getIndex(0);
+const firstList = itemPicker.lists.getByIndex(0);
 itemPicker.selectList( firstList.key );
 
 // Start the list walk through
