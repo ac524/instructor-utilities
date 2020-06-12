@@ -131,7 +131,8 @@ class Lists {
 
     /**
      * @param {string} name 
-     * @param {boolean} addList 
+     * @param {boolean} addList
+     * TODO Update unit tests for the new addList flag parameter
      * @returns {List}
      */
     createList( name = 'Default', addList = true ) {
