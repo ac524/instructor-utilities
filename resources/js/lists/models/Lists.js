@@ -131,9 +131,10 @@ class Lists {
 
     /**
      * @param {string} name 
+     * @param {boolean} addList 
      * @returns {List}
      */
-    createList( name = 'Default' ) {
+    createList( name = 'Default', addList = true ) {
             
         // Use the current time as a key
         // TODO update to a generated string
@@ -141,7 +142,7 @@ class Lists {
 
         const newList = new List( key, name );
 
-        this.addList( newList );
+        if( addList ) this.addList( newList );
 
         return newList;
 

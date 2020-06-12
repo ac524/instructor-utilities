@@ -58,23 +58,6 @@ class ListItemPicker {
     }
 
     /**
-     * @returns {List}
-     */
-    newList() {
-
-        const newList = this.lists.createList( 'List '+ ( this.lists.count + 1 ) );
-
-        this.lists.save();
-
-        this.selectList( newList.key );
-
-        this.listsControls.render();
-
-        return newList;
-
-    }
-
-    /**
      * @param {string} listKey 
      */
     deleteList( listKey ) {
