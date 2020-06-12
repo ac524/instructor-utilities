@@ -196,6 +196,28 @@ describe( "List", () => {
 
     describe( "update", () => {
 
+        it( "should return true when given new property values", () => {
+
+            const list = new List;
+            const name = 'New Label';
+
+            const updated = list.update( { name } );
+
+            expect( updated ).toEqual( true );
+
+        });
+
+        it( "should return false when given matching property values", () => {
+
+            const name = 'Label';
+            const list = new List( 'test', name );
+
+            const updated = list.update( { name } );
+
+            expect( updated ).toEqual( false );
+
+        });
+
         it( "should update the 'name' property when passing in a new value", () => {
 
             const list = new List;
@@ -204,40 +226,6 @@ describe( "List", () => {
             list.update( { name } );
 
             expect( list.name ).toEqual( name );
-
-        } );
-
-        it( "should not call the parent collection save method if the name does not change", () => {
-
-            const name = 'Label';
-            const list = new List( '', name );
-            const lists = new Lists;
-
-            const saveMock = jest.spyOn( lists, "save" );
-            saveMock.mockImplementation( () => lists  );
-
-            lists.addList( list );
-
-            list.update( { name } );
-
-            expect( saveMock ).not.toHaveBeenCalled();
-
-        } );
-
-        it( "should call the parent collection save method if the name does change", () => {
-
-            const name = 'Label';
-            const list = new List( '', name );
-            const lists = new Lists;
-            
-            const saveMock = jest.spyOn( lists, "save" );
-            saveMock.mockImplementation( () => lists  );
-
-            lists.addList( list );
-
-            list.update( { name: 'New Label' } );
-
-            expect( saveMock ).toHaveBeenCalled();
 
         } );
 
@@ -349,19 +337,6 @@ describe( "List", () => {
             expect( list.selected.length ).toEqual(0);
 
         } );
-
-        it( "should call the save method", () => {
-
-            const list = new List;
-            const saveMock = jest.spyOn( list, "saveSelected" );
-
-            saveMock.mockImplementation( () => list );
-
-            list.emptySelected();
-
-            expect( saveMock ).toHaveBeenCalled();
-
-        });
 
     });
 
@@ -484,18 +459,6 @@ describe( "List", () => {
 
         } );
 
-        it( "should call save", () => {
-
-            const list = new List;
-            const listItem = new ListItem({label: "A"});
-            const mock = jest.spyOn( list, "save" );
-
-            list.addItem( listItem );
-
-            expect( mock ).toHaveBeenCalled();
-
-        } );
-
     });
 
     describe( "addItems", () => {
@@ -592,14 +555,31 @@ describe( "List", () => {
 
     describe( "updateItem", () => {
 
-        it( "should return the object it was called from", () => {
+        it( "should return true when given new property values", () => {
 
             const list = new List;
+            const label = 'New Label';
 
-            expect( list.updateItem() ).toEqual( list );
+            list.createItem( "Original Label" );
+
+            const updated = list.updateItem( 0, { label } );
+
+            expect( updated ).toEqual( true );
 
         });
 
+        it( "should return false when given matching property values", () => {
+
+            const label = 'Item Label';
+            const list = new List( 'test', name );
+
+            list.createItem( label );
+
+            const updated = list.updateItem( 0, { label } );
+
+            expect( updated ).toEqual( false );
+
+        });
 
         it( "should update the target item with given details", () => {
 
@@ -661,29 +641,6 @@ describe( "List", () => {
 
         });
 
-        it( "should call saveSelected after a new index has been added", () => {
-
-            const list = new List;
-            const item = list.createItem( 'A' );
-            const mock = jest.spyOn( list, "saveSelected" );
-
-            list.select( item.index );
-
-            expect( mock ).toHaveBeenCalled();
-
-        });
-
-        it( "should not call saveSelected if the target index is not added to the select list", () => {
-
-            const list = new List;
-            const mock = jest.spyOn( list, "saveSelected" );
-
-            list.select( 0 );
-
-            expect( mock ).not.toHaveBeenCalled();
-
-        });
-
     } );
 
     describe( "unselect", () => {
@@ -724,37 +681,6 @@ describe( "List", () => {
 
             expect( list.selected.length ).toEqual( 1 );
             expect( list.selected ).toContain( item1.index );
-
-        });
-
-        it( "should call saveSelected if an index is removed from the select list", () => {
-
-            const list = new List;
-            const item = list.createItem( 'A' );
-
-            list.select( item.index );
-
-            const mock = jest.spyOn( list, "saveSelected" );
-
-            list.unselect( item.index );
-
-            expect( mock ).toHaveBeenCalled();
-
-        });
-
-        it( "should not call saveSelected if an index is not removed from the select list", () => {
-
-            const list = new List;
-            const item1 = list.createItem( 'A' );
-            const item2 = list.createItem( 'B' );
-
-            list.select( item1.index );
-
-            const mock = jest.spyOn( list, "saveSelected" );
-
-            list.unselect( item2.index );
-
-            expect( mock ).not.toHaveBeenCalled();
 
         });
 
@@ -827,29 +753,6 @@ describe( "List", () => {
 
         });
 
-        it( "should call save when an item is removed", () => {
-
-            const list = new List;
-            const item = list.createItem( "A" );
-            const mock = jest.spyOn( list, "save" );
-
-            list.remove( item.index );
-
-            expect( mock ).toHaveBeenCalled();
-
-        });
-
-        it( "should not call save when an item is not", () => {
-
-            const list = new List;
-            const mock = jest.spyOn( list, "save" );
-
-            list.remove( 0 );
-
-            expect( mock ).not.toHaveBeenCalled();
-
-        });
-
         it( "should call emptySelected when an item is removed", () => {
 
             const list = new List;
@@ -875,13 +778,13 @@ describe( "List", () => {
 
     });
 
-    describe( "save", () => {
+    describe( "saveItems", () => {
 
         it( "should return the object it was called from", () => {
 
             const list = new List;
 
-            expect( list.save() ).toEqual( list );
+            expect( list.saveItems() ).toEqual( list );
 
         });
 
@@ -899,6 +802,8 @@ describe( "List", () => {
 
             list.createItem( "A" );
             list.createItem( "B" );
+
+            list.saveItems();
 
             expect( mock ).toHaveBeenCalledWith( listKey, list.all );
 
@@ -932,6 +837,8 @@ describe( "List", () => {
             const item2 = list.createItem( "B" );
 
             list.select(item1.index).select(item2.index);
+
+            list.saveSelected();
 
             expect( mock ).toHaveBeenCalledWith( listKey, list.selected );
 
@@ -976,20 +883,9 @@ describe( "List", () => {
 
         });
 
-        it( "should call the save method", () => {
-
-            const list = new List;
-            const mock = jest.spyOn( list, "save" );
-
-            list.import([]);
-
-            expect( mock ).toHaveBeenCalled();
-
-        });
-
     });
 
-    describe( "import", () => {
+    describe( "copy", () => {
 
         it( "should return a new List object that contains the same items", () => {
 
@@ -1006,6 +902,7 @@ describe( "List", () => {
             expect( list.all ).not.toContain( item2 );
 
         });
+        
     });
 
     describe( "isCurrent", () => {
