@@ -50,7 +50,7 @@ describe( "Lists", () => {
     });
 
 
-    describe( "count", () =>{
+    describe( "count", () => {
 
         it( "should return the current count of lists", () => {
 
@@ -62,6 +62,42 @@ describe( "Lists", () => {
             expect( lists.count ).toEqual( 2 );
 
         } );
+
+    });
+
+    describe( "currentList", () => {
+
+        it( "should return null if no lists exist", () => {
+
+            const lists = new Lists;
+
+            expect( lists.currentList ).toEqual( null );
+
+        });
+
+        it( "should return the first list if one has not been selected", () => {
+
+            const lists = new Lists;
+
+            const listA = lists.createList( "List 1" );
+            lists.createList( "List 2" );
+
+            expect( lists.currentList ).toEqual( listA );
+
+        });
+
+        it( "should return the selected list if one has been selected", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List 1" );
+            const listB = lists.createList( "List 2" );
+
+            lists.selectList( listB.key );
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
 
     });
 
