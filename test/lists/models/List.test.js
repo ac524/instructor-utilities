@@ -581,6 +581,17 @@ describe( "List", () => {
 
         });
 
+        it( "should return false when given an index that does not exist", () => {
+
+            const label = 'Item Label';
+            const list = new List( 'test', name );
+
+            const updated = list.updateItem( 0, { label } );
+
+            expect( updated ).toEqual( false );
+
+        });
+
         it( "should update the target item with given details", () => {
 
             const list = new List;
@@ -843,6 +854,32 @@ describe( "List", () => {
             expect( mock ).toHaveBeenCalledWith( listKey, list.selected );
 
         });
+
+    });
+
+
+    describe( "saveListContent", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const list = new List;
+
+            expect( list.saveListContent() ).toEqual( list );
+
+        });
+
+        it( "should call both 'saveItems' and 'saveSelected'", () => {
+
+            const list = new List;
+            const saveItemsMock = jest.spyOn( list, "saveItems" );
+            const saveSelectedMock = jest.spyOn( list, "saveSelected" );
+
+            list.saveListContent();
+
+            expect( saveItemsMock ).toHaveBeenCalled();
+            expect( saveSelectedMock ).toHaveBeenCalled();
+
+        } );
 
     });
 
