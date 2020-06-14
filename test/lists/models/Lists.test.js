@@ -47,6 +47,22 @@ describe( "Lists", () => {
             expect( selectedList ).toEqual( null );
             
         })
-    })
+    });
+
+
+    describe( "count", () =>{
+
+        it( "should return the current count of lists", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List 1" );
+            lists.createList( "List 2" );
+
+            expect( lists.count ).toEqual( 2 );
+
+        } );
+
+    });
 
 } );

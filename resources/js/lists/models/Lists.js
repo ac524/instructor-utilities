@@ -139,7 +139,7 @@ class Lists {
             
         // Use the current time as a key
         // TODO update to a generated string
-        const key = Date.now().toString();
+        const key = Date.now().toString() + this.all.length;
 
         const newList = new List( key, name );
 
