@@ -101,4 +101,32 @@ describe( "Lists", () => {
 
     });
 
+    describe( "all", () => {
+
+        it( "should return an empty array by default", () => {
+
+            const lists = new Lists;
+
+            expect( lists.all.length ).toEqual( 0 );
+
+        });
+
+        it( "should return an array list of contained list keys and list objects", () => {
+
+            const lists = new Lists;
+
+            const listA = lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            const expectedList = [
+                [ listA.key, listA ],
+                [ listB.key, listB ]
+            ];
+
+            expect( lists.all ).toEqual( expectedList );
+
+        });
+
+    });
+
 } );
