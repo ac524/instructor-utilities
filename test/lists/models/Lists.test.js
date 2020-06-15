@@ -27,9 +27,44 @@ describe( "Lists", () => {
 
     } );
 
+    describe( "addList", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const lists = new Lists;
+            const listA = new List( 'testA', 'List A' );
+
+            expect( lists.addList( listA ) ).toEqual( lists );
+
+        });
+
+        it( "should add the given list to the collection", () => {
+
+            const lists = new Lists;
+            const listA = new List( 'testA', 'List A' );
+
+            lists.addList( listA );
+
+            expect( lists.get( listA.key ) ).toEqual( listA );
+
+        });
+
+        it( "should assign the collect to the given list's belongsTo property", () => {
+
+            const lists = new Lists;
+            const listA = new List( 'testA', 'List A' );
+
+            lists.addList( listA );
+
+            expect( listA.belongsTo ).toEqual( lists );
+
+        });
+
+    });
+
     describe( "getByIndex", () =>{
 
-        it("should return a list object for the matching index", () =>{
+        it( "should return a list object for the matching index", () =>{
             const lists = new Lists;
             const list = new List("test");
             lists.addList(list)
@@ -40,7 +75,7 @@ describe( "Lists", () => {
         });
 
 
-        it("should return null if given an index that does not exist", () =>{
+        it( "should return null if given an index that does not exist", () =>{
             const lists = new Lists;
             const selectedList = lists.getByIndex(0);
 
