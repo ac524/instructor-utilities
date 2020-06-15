@@ -129,4 +129,27 @@ describe( "Lists", () => {
 
     });
 
+    describe( "get", () => {
+
+        it( "should return null if the given key does not exist", () => {
+
+            const lists = new Lists;
+
+            expect( lists.get( 'test' ) ).toEqual( null );
+
+        });
+
+        it( "should return the target list if one exists with the given key", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            expect( lists.get( listB.key ) ).toEqual( listB );
+
+        });
+
+    });
+
 } );

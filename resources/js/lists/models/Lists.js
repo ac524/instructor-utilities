@@ -84,7 +84,7 @@ class Lists {
      */
     get( key ) {
 
-        return this.lists[key] || false;
+        return this.lists[key] || null;
 
     }
 
