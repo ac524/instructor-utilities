@@ -152,4 +152,44 @@ describe( "Lists", () => {
 
     });
 
+    describe( "selectIndex", () => {
+
+        it( "should return the object it was called from", () => {
+            
+            const lists = new Lists;
+
+            expect( lists.selectIndex(0) ).toEqual( lists );
+
+        });
+
+        it( "should set the list for the given index as the current list", () => {
+            
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists.selectIndex(1);
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+        it( "should not modify the set current list if the given index does not exist", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists
+                .selectIndex(1)
+                .selectIndex(2);
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+    });
+
 } );

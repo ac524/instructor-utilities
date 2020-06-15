@@ -95,7 +95,11 @@ class Lists {
      */
     selectIndex( index ) {
 
-        this.currentListKey = this.getByIndex(index).key;
+        const list = this.getByIndex(index);
+
+        if( list )
+
+            this.currentListKey = this.getByIndex(index).key;
 
         return this;
 
