@@ -62,6 +62,52 @@ describe( "Lists", () => {
 
     });
 
+    describe( "createList", () => {
+
+        it( "should return a new List object with the given name", () => {
+
+            const lists = new Lists;
+            const name = "List A";
+
+            const list = lists.createList( name );
+
+            expect( list instanceof List ).toEqual( true );
+            expect( list.name ).toEqual( name );
+
+        });
+
+        it( "should generate a list key", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A" );
+
+            expect( list.key ).not.toEqual( '' );
+
+        });
+
+        it( "should add the created list to the collection by default", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A" );
+
+            expect( lists.get( list.key ) ).toEqual( list );
+
+        });
+
+        it( "should not add the created list to the collection if given false", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A", false );
+
+            expect( lists.get( list.key ) ).toEqual( null );
+
+        });
+
+    });
+
     describe( "getByIndex", () =>{
 
         it( "should return a list object for the matching index", () =>{
