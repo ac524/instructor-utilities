@@ -52,6 +52,8 @@ class ListItemPicker {
 
         this.lists.selectList( listKey );
 
+        if( ! this.lists.currentList.isLoaded ) this.lists.currentList.load();
+
         this.listsControls.renderListName();
         this.view.render();
 

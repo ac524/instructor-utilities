@@ -99,7 +99,7 @@ class Lists {
 
         if( list )
 
-            this.currentListKey = this.getByIndex(index).key;
+            this.currentListKey = list.key;
 
         return this;
 
@@ -112,9 +112,11 @@ class Lists {
      */
     selectList( key ) {
 
-        this.currentListKey = key;
+        const list = this.get( key );
 
-        this.currentList.load();
+        if( list )
+
+            this.currentListKey = list.key;
 
         return this;
 

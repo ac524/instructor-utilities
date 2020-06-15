@@ -192,4 +192,44 @@ describe( "Lists", () => {
 
     });
 
+    describe( "selectList", () => {
+
+        it( "should return the object it was called from", () => {
+            
+            const lists = new Lists;
+
+            expect( lists.selectList('test') ).toEqual( lists );
+
+        });
+
+        it( "should set the list for the given key as the current list", () => {
+            
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists.selectList( listB.key );
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+        it( "should not modify the set current list if the given key does not exist", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists
+                .selectList( listB.key )
+                .selectList( "test" );
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+    });
+
 } );
