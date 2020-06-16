@@ -27,9 +27,156 @@ describe( "Lists", () => {
 
     } );
 
+    describe( "addList", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const lists = new Lists;
+            const listA = new List( 'testA', 'List A' );
+
+            expect( lists.addList( listA ) ).toEqual( lists );
+
+        });
+
+        it( "should add the given list to the collection", () => {
+
+            const lists = new Lists;
+            const listA = new List( 'testA', 'List A' );
+
+            lists.addList( listA );
+
+            expect( lists.get( listA.key ) ).toEqual( listA );
+
+        });
+
+        it( "should assign the collect to the given list's belongsTo property", () => {
+
+            const lists = new Lists;
+            const listA = new List( 'testA', 'List A' );
+
+            lists.addList( listA );
+
+            expect( listA.belongsTo ).toEqual( lists );
+
+        });
+
+    });
+
+    describe( "createList", () => {
+
+        it( "should return a new List object with the given name", () => {
+
+            const lists = new Lists;
+            const name = "List A";
+
+            const list = lists.createList( name );
+
+            expect( list instanceof List ).toEqual( true );
+            expect( list.name ).toEqual( name );
+
+        });
+
+        it( "should generate a list key", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A" );
+
+            expect( list.key ).not.toEqual( '' );
+
+        });
+
+        it( "should add the created list to the collection by default", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A" );
+
+            expect( lists.get( list.key ) ).toEqual( list );
+
+        });
+
+        it( "should not add the created list to the collection if given false", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A", false );
+
+            expect( lists.get( list.key ) ).toEqual( null );
+
+        });
+
+    });
+
+    describe( "deleteList", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const lists = new Lists;
+
+            expect( lists.deleteList() ).toEqual( lists );
+
+        });
+
+        it( "should remove the target list from the collection", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A" );
+
+            lists.deleteList( list.key );
+
+            expect( lists.count ).toEqual( 0 );
+
+        });
+
+        it( "should not modify the list if given key does not exist", () => {
+
+            const lists = new Lists;
+            const list = new List( 'test', 'Test List' );
+            lists.addList( list );
+
+            lists.deleteList( 'unknown-key' );
+
+            expect( lists.count ).toEqual( 1 );
+
+        });
+
+        it( "should default to the 'currentList' back to the first list if the target list is the current list", () => {
+
+            const lists = new Lists;
+            const listA = lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+            lists.createList( "List C" );
+
+            lists.selectList( listB.key );
+
+            lists.deleteList( listB.key );
+
+            expect( lists.currentList.key ).toEqual( listA.key );
+
+        });
+
+        it( "should not modify the current list if the target list is not the current list", () => {
+
+            const lists = new Lists;
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+            const listC = lists.createList( "List C" );
+
+            lists.selectList( listC.key );
+
+            lists.deleteList( listB.key );
+
+            expect( lists.currentList.key ).toEqual( listC.key );
+
+        });
+
+    });
+
     describe( "getByIndex", () =>{
 
-        it("should return a list object for the matching index", () =>{
+        it( "should return a list object for the matching index", () =>{
             const lists = new Lists;
             const list = new List("test");
             lists.addList(list)
@@ -40,13 +187,196 @@ describe( "Lists", () => {
         });
 
 
-        it("should return null if given an index that does not exist", () =>{
+        it( "should return null if given an index that does not exist", () =>{
             const lists = new Lists;
             const selectedList = lists.getByIndex(0);
 
             expect( selectedList ).toEqual( null );
             
         })
-    })
+    });
+
+
+    describe( "count", () => {
+
+        it( "should return the current count of lists", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List 1" );
+            lists.createList( "List 2" );
+
+            expect( lists.count ).toEqual( 2 );
+
+        } );
+
+    });
+
+    describe( "currentList", () => {
+
+        it( "should return null if no lists exist", () => {
+
+            const lists = new Lists;
+
+            expect( lists.currentList ).toEqual( null );
+
+        });
+
+        it( "should return the first list if one has not been selected", () => {
+
+            const lists = new Lists;
+
+            const listA = lists.createList( "List 1" );
+            lists.createList( "List 2" );
+
+            expect( lists.currentList ).toEqual( listA );
+
+        });
+
+        it( "should return the selected list if one has been selected", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List 1" );
+            const listB = lists.createList( "List 2" );
+
+            lists.selectList( listB.key );
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+    });
+
+    describe( "all", () => {
+
+        it( "should return an empty array by default", () => {
+
+            const lists = new Lists;
+
+            expect( lists.all.length ).toEqual( 0 );
+
+        });
+
+        it( "should return an array list of contained list keys and list objects", () => {
+
+            const lists = new Lists;
+
+            const listA = lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            const expectedList = [
+                [ listA.key, listA ],
+                [ listB.key, listB ]
+            ];
+
+            expect( lists.all ).toEqual( expectedList );
+
+        });
+
+    });
+
+    describe( "get", () => {
+
+        it( "should return null if the given key does not exist", () => {
+
+            const lists = new Lists;
+
+            expect( lists.get( 'test' ) ).toEqual( null );
+
+        });
+
+        it( "should return the target list if one exists with the given key", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            expect( lists.get( listB.key ) ).toEqual( listB );
+
+        });
+
+    });
+
+    describe( "selectIndex", () => {
+
+        it( "should return the object it was called from", () => {
+            
+            const lists = new Lists;
+
+            expect( lists.selectIndex(0) ).toEqual( lists );
+
+        });
+
+        it( "should set the list for the given index as the current list", () => {
+            
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists.selectIndex(1);
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+        it( "should not modify the set current list if the given index does not exist", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists
+                .selectIndex(1)
+                .selectIndex(2);
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+    });
+
+    describe( "selectList", () => {
+
+        it( "should return the object it was called from", () => {
+            
+            const lists = new Lists;
+
+            expect( lists.selectList('test') ).toEqual( lists );
+
+        });
+
+        it( "should set the list for the given key as the current list", () => {
+            
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists.selectList( listB.key );
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+        it( "should not modify the set current list if the given key does not exist", () => {
+
+            const lists = new Lists;
+
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+
+            lists
+                .selectList( listB.key )
+                .selectList( "test" );
+
+            expect( lists.currentList ).toEqual( listB );
+
+        });
+
+    });
 
 } );

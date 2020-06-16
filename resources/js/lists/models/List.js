@@ -47,6 +47,12 @@ class List {
             set: ( lists ) => belongsTo = lists
         } );
 
+        let isLoaded = false;
+        Object.defineProperty( this, 'isLoaded', {
+            get: () => isLoaded,
+            set: ( value ) => isLoaded = value
+        });
+
         this.all = items;
         this.selected = selectedItems;
 
@@ -125,6 +131,8 @@ class List {
             if( list ) this.all = list;
 
             if( selectList ) this.selected = selectList;
+
+            this.isLoaded = true;
 
         }
 

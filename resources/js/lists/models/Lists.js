@@ -84,7 +84,7 @@ class Lists {
      */
     get( key ) {
 
-        return this.lists[key] || false;
+        return this.lists[key] || null;
 
     }
 
@@ -95,7 +95,11 @@ class Lists {
      */
     selectIndex( index ) {
 
-        this.currentListKey = this.getByIndex(index).key;
+        const list = this.getByIndex(index);
+
+        if( list )
+
+            this.currentListKey = list.key;
 
         return this;
 
@@ -108,9 +112,11 @@ class Lists {
      */
     selectList( key ) {
 
-        this.currentListKey = key;
+        const list = this.get( key );
 
-        this.currentList.load();
+        if( list )
+
+            this.currentListKey = list.key;
 
         return this;
 
@@ -139,7 +145,7 @@ class Lists {
             
         // Use the current time as a key
         // TODO update to a generated string
-        const key = Date.now().toString();
+        const key = Date.now().toString() + this.all.length;
 
         const newList = new List( key, name );
 
@@ -162,8 +168,6 @@ class Lists {
                 this.currentListKey = null;
     
             delete this.lists[key];
-    
-            this.save();
 
         }
 
