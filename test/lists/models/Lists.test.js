@@ -108,6 +108,72 @@ describe( "Lists", () => {
 
     });
 
+    describe( "deleteList", () => {
+
+        it( "should return the object it was called from", () => {
+
+            const lists = new Lists;
+
+            expect( lists.deleteList() ).toEqual( lists );
+
+        });
+
+        it( "should remove the target list from the collection", () => {
+
+            const lists = new Lists;
+
+            const list = lists.createList( "List A" );
+
+            lists.deleteList( list.key );
+
+            expect( lists.count ).toEqual( 0 );
+
+        });
+
+        it( "should not modify the list if given key does not exist", () => {
+
+            const lists = new Lists;
+            const list = new List( 'test', 'Test List' );
+            lists.addList( list );
+
+            lists.deleteList( 'unknown-key' );
+
+            expect( lists.count ).toEqual( 1 );
+
+        });
+
+        it( "should default to the 'currentList' back to the first list if the target list is the current list", () => {
+
+            const lists = new Lists;
+            const listA = lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+            lists.createList( "List C" );
+
+            lists.selectList( listB.key );
+
+            lists.deleteList( listB.key );
+
+            expect( lists.currentList.key ).toEqual( listA.key );
+
+        });
+
+        it( "should not modify the current list if the target list is not the current list", () => {
+
+            const lists = new Lists;
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
+            const listC = lists.createList( "List C" );
+
+            lists.selectList( listC.key );
+
+            lists.deleteList( listB.key );
+
+            expect( lists.currentList.key ).toEqual( listC.key );
+
+        });
+
+    });
+
     describe( "getByIndex", () =>{
 
         it( "should return a list object for the matching index", () =>{

@@ -168,8 +168,6 @@ class Lists {
                 this.currentListKey = null;
     
             delete this.lists[key];
-    
-            this.save();
 
         }
 
