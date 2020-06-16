@@ -943,7 +943,9 @@ describe( "List", () => {
     });
 
     describe( "isCurrent", () => {
-        it( "should return true if it is the current list in a collection of lists", () =>{
+
+        it( "should return true if it is the current list in a collection of lists", () => {
+
             const list = new List("test");
             const lists = new Lists;
 
@@ -951,34 +953,39 @@ describe( "List", () => {
 
             expect( list.isCurrent ).toEqual(true);
 
-        } );
+        });
 
         it( "should return false if it has not been added to a collection", () =>{
+
             const list = new List;
             
             expect( list.isCurrent ).toEqual(false);
+
         });
 
         it( "should should return false if it is NOT the current list in a collection", () =>{
-            const list = new List("test");
+
             const lists = new Lists;
 
-            lists.addList( list );
+            lists.createList( "List A" );
+            const listB = lists.createList( "List B" );
 
-            expect( list.isCurrent ).toEqual(false);
+            expect( listB.isCurrent ).toEqual( false );
 
         })
 
     });
 
     describe("currentItemIndex", () => {
+
         it("should return the index of the most recently selected item on the list", () => {
+            
             const list = new List;
 
             list
-            .addItem(new ListItem)
-            .addItem(new ListItem)
-            .addItem(new ListItem)
+                .addItem(new ListItem)
+                .addItem(new ListItem)
+                .addItem(new ListItem);
 
             list.selectItem( 2 ).selectItem( 0 );
 
@@ -987,16 +994,18 @@ describe( "List", () => {
         });
 
         it("should return null if no list items are currently selected", () => {
+
             const list = new List;
 
             list
-            .addItem(new ListItem)
-            .addItem(new ListItem)
-            .addItem(new ListItem)
+                .addItem(new ListItem)
+                .addItem(new ListItem)
+                .addItem(new ListItem);
 
             expect( list.currentItemIndex ).toEqual( null );
 
         });
+
     });
 
 } );

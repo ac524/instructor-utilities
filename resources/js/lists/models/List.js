@@ -90,9 +90,9 @@ class List {
      */
     get isCurrent() {
 
-        return this.belongsTo
+        return this.belongsTo && this.belongsTo.count
         
-            ? this.key === this.belongsTo.currentListKey
+            ? this.key === this.belongsTo.currentList.key
             
             : false;
             
