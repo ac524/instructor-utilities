@@ -71,7 +71,7 @@ class ListItemPicker {
 
         const wasCurrent = this.lists.get( listKey ).isCurrent;
 
-        this.lists.deleteList( listKey );
+        this.lists.deleteList( listKey ).save();
         this.store.deleteList( listKey );
 
         if( wasCurrent ) this.selectList( this.lists.currentList.key );
