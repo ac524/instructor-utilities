@@ -1,12 +1,9 @@
 const webpack = require("webpack");
 const path = require("path");
 
-const isProduction = process.env.NODE_ENV === "production";
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// const CopyPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+const config = {
   entry: {
     lists: "./resources/js/lists/index.js",
   },
@@ -66,18 +63,17 @@ module.exports = {
 
   optimization: {
     splitChunks: {
-      chunks: "all",
-    },
-  },
+      chunks: "all"
+    }
+  }
 };
 
-if (isProduction) {
-  module.exports.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      sourcemap: true,
-      compress: {
-        warnings: false,
-      },
-    })
-  );
-}
+module.exports = (env, argv) => {
+
+  const isProduction = argv.mode === 'production';
+
+  config.optimization.minimize = isProduction;
+
+  return config;
+
+};
