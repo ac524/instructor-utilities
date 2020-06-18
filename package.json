@@ -6,11 +6,13 @@
   "scripts": {
     "test": "jest",
     "watch": "webpack --hide-modules --mode=development --watch",
+    "build": "production",
     "production": "webpack --hide-modules --mode=production",
     "start": "node server.js",
     "predeploy": "npm run production",
     "deploy": "gh-pages -d public"
   },
+  "heroku-run-build-script": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ac524/instructor-utilities.git"
