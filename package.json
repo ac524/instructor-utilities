@@ -7,6 +7,7 @@
     "test": "jest",
     "watch": "webpack --hide-modules --mode=development --watch",
     "production": "webpack --hide-modules --mode=production",
+    "start": "node server.js",
     "predeploy": "npm run production",
     "deploy": "gh-pages -d public"
   },
