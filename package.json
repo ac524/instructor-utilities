@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "watch": "webpack --hide-modules --mode=development --watch",
-    "build": "production",
+    "build": "npm run production",
     "production": "webpack --hide-modules --mode=production",
     "start": "node server.js",
     "predeploy": "npm run production",
