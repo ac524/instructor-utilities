@@ -15,7 +15,7 @@ app.use( express.static( 'public' ));
 
 // Dummy route
 app.get("/", (req, res) => {
-    res.end("Successful connection!");
+  res.end("Successful connection!");
 });
 
 
