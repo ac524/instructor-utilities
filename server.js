@@ -9,10 +9,9 @@ const PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// dummy test connection 
-(req, res) => {
-  res.end("success!");
-  // res.sendFile(path.join(__dirname, ""));
+// Dummy route
+app.get("/", (req, res) => {
+  res.end("Successful connection!");
 });
 
 app.listen(PORT, () => {
