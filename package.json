@@ -41,6 +41,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-handlebars": "^4.0.4",
-    "express-handlebars-sections": "^1.0.1"
+    "express-handlebars-sections": "^1.0.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^6.2.4"
   }
 }
