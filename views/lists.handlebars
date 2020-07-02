@@ -1,0 +1,88 @@
+{{#section 'styles'}}
+    <link rel="stylesheet" href="css/lists.css">
+{{/section}}
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="form-row">
+            <div class="col-auto">
+                <select id="list-options" class="form-control form-control-sm"></select>
+            </div>
+            <div class="col-auto">
+                <button id="new-list" class="btn btn-sm btn-success" data-list-action="newList" data-toggle="modal" data-target="#edit-list-modal">Add New</button>
+            </div>
+        </div>
+        <hr>
+        <h1><span id="current-list-title"></span> Collection</h1>
+        <button class="btn btn-sm btn-secondary" id="edit-list" data-list-action="editList" data-toggle="modal" data-target="#edit-list-modal">Edit</button> <button class="btn btn-sm btn-danger"  id="delete-list">Delete</button>
+    </div>
+</div>
+
+<div class="container">
+    
+    <div id="status-message" class="alert"></div>
+    <div class="mb-3 d-flex">
+        <button id="reset-list" class="btn btn-secondary">Reset</button>
+        <button id="disable-current-item" class="btn btn-outline-secondary ml-1">Disable Current</button>
+        <button id="prev-item" class="btn btn-outline-success ml-auto">Prev</button>
+        <button id="next-item" class="btn btn-success ml-1">Next</button>
+    </div>
+    <div class="row d-flex flex-column-reverse flex-md-row">
+        
+        <div class="col-md-9">
+
+            <div id="list-items">
+                <div id="list-enabled-items" class="list-group flex-wrap flex-row"></div>
+
+                <div id="list-disabled-items" class="list-group list-disabled flex-wrap flex-row mt-4"></div>
+            </div>
+
+            <div class="mt-4 d-flex">
+                <button id="add-item" class="btn btn-success">Add Item</button>
+
+                <button id="export-list" class="btn btn-secondary ml-auto">Export</button>
+                <button id="import-list" class="btn btn-secondary ml-1">Import</button>
+            </div>
+
+            <div class="mt-4" id="import-export" style="display: none;">
+                <h2>Import/Export</h2>
+                <textarea class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3 mb-md-0">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <p class="card-title m-0">Current: <span id="current-name" class="badge badge-light">None</span></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-list-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Edit <span id="modal-list-name"></span> List</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="list-name-input">List Name</label>
+                <input type="email" class="form-control" id="list-name-input" name="name">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary"  data-modal-action="saveAndClose">Save changes</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+{{#section 'scripts'}}
+    <script src="js/lists.js"></script>
+{{/section}}
