@@ -78,3 +78,5 @@ router.patch('/lists/:listid/items/:itemid', ( req, res, next ) =>{
     console.log( result ) 
     res.end();
 });
+
+module.exports = router
