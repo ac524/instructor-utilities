@@ -1,86 +1,79 @@
-const webpack = require('webpack');
-const path = require('path');
+const webpack = require("webpack");
+const path = require("path");
 
-const isProduction = process.env.NODE_ENV === 'production';
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+const config = {
+  entry: {
+    lists: "./resources/js/lists/index.js",
+  },
 
-module.exports = {
+  output: {
+    path: path.resolve(__dirname),
+    filename: "public/js/[name].js",
+    chunkFilename: "public/js/[name]-[chunkhash].js",
+    publicPath: "/",
+  },
 
-    entry: {
-        lists: './resources/js/lists/index.js'
-    },
-
-    output: {
-        path: path.resolve( __dirname ),
-        filename: 'public/js/[name].js',
-        chunkFilename: 'public/js/[name]-[chunkhash].js',
-        publicPath: '/'
-    },
-
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                }
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader
-                    },
-                    'css-loader',
-                    'postcss-loader'
-                ]
-            },
-            {
-                test: /\.s[a|c]ss$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader
-                    },
-                    'css-loader',
-                    'sass-loader',
-                    'postcss-loader'
-                ]
-            }
-        ]
-    },
-
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: 'public/css/[name].css',
-            chunkFilename: 'public/css/[name]-[chunkhash].css',
-            ignoreOrder: false, // Enable to remove warnings about conflicting order
-        }),
-        new CopyPlugin({
-            patterns: [
-              { from: './resources/html', to: 'public' }
-            ],
-        }),
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          "css-loader",
+          "postcss-loader",
+        ],
+      },
+      {
+        test: /\.s[a|c]ss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          "css-loader",
+          "sass-loader",
+          "postcss-loader",
+        ],
+      },
     ],
+  },
 
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-        }
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "public/css/[name].css",
+      chunkFilename: "public/css/[name]-[chunkhash].css",
+      ignoreOrder: false, // Enable to remove warnings about conflicting order
+    }),
+    // new CopyPlugin({
+    //     patterns: [
+    //       { from: './resources/html', to: 'public' }
+    //     ],
+    // }),
+  ],
+
+  optimization: {
+    splitChunks: {
+      chunks: "all"
     }
+  }
 };
 
-if( isProduction ) {
+module.exports = (env, argv) => {
 
-    module.exports.plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            sourcemap: true,
-            compress: {
-                warnings: false
-            }
-        })
-    )
+  const isProduction = argv.mode === 'production';
 
-}
+  config.optimization.minimize = isProduction;
+
+  return config;
+
+};
