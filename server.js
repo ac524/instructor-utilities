@@ -1,7 +1,7 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 const exphbsSections = require("express-handlebars-sections");
-//const db = require("./models");
+// const db = require("./models");
 
 const app = express();
 const htmlRoutes = require("./controllers/htmlRoutes");
