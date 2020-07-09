@@ -2,6 +2,22 @@
     <link rel="stylesheet" href="css/lists.css">
 {{/section}}
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Instructor Utilities</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  
+  <span>Log In</span>
+  <form class="form-inline">
+    
+    <input id="log-in-email" class="form-control mr-sm-2" type="email" placeholder="Email" aria-label="log-in-email">
+    <input id="log-in-password" class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="log-in-password">
+    <button id="submit" class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+  </form>
+</nav>
+
+
 <div class="jumbotron">
     <div class="container">
         <div class="form-row">
@@ -83,6 +99,46 @@
     </div>
 </div>
 
+<script>
+
+const email = $("#log-in-email");
+const password =$("#log-in-password");
+//const submit = $("#submit");
+
+$("#submit").on("submit", (event)=>{
+    console.log("Clicked")
+    event.preventDefault();
+    const userData = {
+        email: email.val().trim(),
+        password: passwor.val().trim()
+    };
+
+    if(!userData.email || userData.password){
+        return;
+    };
+
+    signupUser(userData.email, userData.password);
+    emailInput.val("");
+    passwordInput.val("");
+})
+
+function signupUser(email,password){
+    $.post("/api/signup", {
+        email:email,
+        password:password
+    })
+    .then((data)=>{
+        window.location.replace("/members");
+    })
+    .catch(handleLoginErr);
+}
+
+</script>
+
+
 {{#section 'scripts'}}
     <script src="js/lists.js"></script>
 {{/section}}
+
+
+
