@@ -33,7 +33,7 @@ app.use( require("./controllers/authApiRoutes") );
 // Register HTML routes last.
 app.use( require("./controllers/htmlRoutes") );
 
-db.sequelize.sync({force:true}).then( () => {
+db.sequelize.sync().then( () => {
   app.listen(PORT, () => {
     console.log(`App listening on Port: ${PORT}`);
   });

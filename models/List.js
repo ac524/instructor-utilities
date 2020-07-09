@@ -10,9 +10,7 @@ module.exports = function(sequelize, DataTypes) {
         List.hasMany(models.ListItem, {
             onDelete: "cascade"
         });
-    };
 
-    List.associate = (models) => {
         List.belongsTo(models.User, {
             foreignKey: {
                 allowNull: true
