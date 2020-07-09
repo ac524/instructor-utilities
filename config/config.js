@@ -1,5 +1,3 @@
-console.log( process.env.DEV_DB_PASS );
-
 module.exports = {
   development: {
     username: "root",
