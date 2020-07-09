@@ -2,6 +2,8 @@
     <link rel="stylesheet" href="css/lists.css">
 {{/section}}
 
+{{#section 'userAuth'}}
+
 <div class="jumbotron">
     <div class="container">
         <div class="form-row">
@@ -83,6 +85,45 @@
     </div>
 </div>
 
+
+
 {{#section 'scripts'}}
     <script src="js/lists.js"></script>
 {{/section}}
+
+<script>
+
+const email = $("#log-in-email");
+const password =$("log-in-email");
+const submit = $("#submit");
+
+submit.on("submit", (event)=>{
+    event.preventDefault();
+    const userData = {
+        email: email.val().trim(),
+        password: passwor.val().trim()
+    };
+
+    if(!userData.email || userData.password){
+        return;
+    };
+
+    signupUser(userData.email, userData.password);
+    emailInput.val("");
+    passwordInput.val("");
+})
+
+function signupUser(email,password){
+    $.post("/api/signup", {
+        email:email,
+        password:password
+    })
+    .then((data)=>{
+        window.location.replace("/members");
+    })
+    .catch(handleLoginErr);
+}
+
+</script>
+
+
