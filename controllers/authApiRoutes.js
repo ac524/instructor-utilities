@@ -1,28 +1,27 @@
-var isAuthenticated = require("../config/middleware/isAuthenticated");
+const router = require("express").Router();
+const passport = require("../config/passport");
+const db = require("../models");
 
+router.post("/api/login", passport.authenticate("local"), function(req, res) {
+  res.json(req.user);
+});
 
-module.exports = function(app) {
-
-    app.get("/", function(req, res) {
-    
-      if (req.user) {
-        res.redirect("/members");
-      }
-      res.sendFile(path.join(__dirname, "../public/signup.html"));
+router.post("/api/signup", function(req, res) {
+  db.User.create({
+    email: req.body.email,
+    password: req.body.password
+  })
+    .then(function() {
+      res.redirect(307, "/api/login");
+    })
+    .catch(function(err) {
+      res.status(401).json(err);
     });
-  
-    app.get("/login", function(req, res) {
+});
 
-      if (req.user) {
-        res.redirect("/members");
-      }
-      res.sendFile(path.join(__dirname, "../public/login.html"));
-    });
-  
- 
-    app.get("/members", isAuthenticated, function(req, res) {
-      res.sendFile(path.join(__dirname, "../public/members.html"));
-    });
-  
-  };
-  
+router.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/");
+});
+
+module.exports = router;

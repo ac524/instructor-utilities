@@ -11,7 +11,6 @@ const exphbsSections = require("express-handlebars-sections");
 const db = require("./models");
 
 const app = express();
-const htmlRoutes = require("./controllers/htmlRoutes");
 
 const PORT = process.env.PORT ||3000;
 
@@ -29,9 +28,12 @@ app.engine("handlebars", hbs.engine );
 app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
-app.use(htmlRoutes);
+app.use( require("./controllers/authApiRoutes") );
 
-db.sequelize.sync().then( () => {
+// Register HTML routes last.
+app.use( require("./controllers/htmlRoutes") );
+
+db.sequelize.sync({force:true}).then( () => {
   app.listen(PORT, () => {
     console.log(`App listening on Port: ${PORT}`);
   });
