@@ -15,5 +15,14 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: 0
         }
     });
+
+    ListItem.associate = (models) => {
+        ListItem.belongsTo(models.List, {
+            foreignKey: {
+                allowNull: true
+            }
+        });
+    };
+
     return ListItem;
 }
