@@ -99,6 +99,46 @@
     </div>
 </div>
 
+<script>
+
+const email = $("#log-in-email");
+const password =$("#log-in-password");
+//const submit = $("#submit");
+
+$("#submit").on("submit", (event)=>{
+    console.log("Clicked")
+    event.preventDefault();
+    const userData = {
+        email: email.val().trim(),
+        password: passwor.val().trim()
+    };
+
+    if(!userData.email || userData.password){
+        return;
+    };
+
+    signupUser(userData.email, userData.password);
+    emailInput.val("");
+    passwordInput.val("");
+})
+
+function signupUser(email,password){
+    $.post("/api/signup", {
+        email:email,
+        password:password
+    })
+    .then((data)=>{
+        window.location.replace("/members");
+    })
+    .catch(handleLoginErr);
+}
+
+</script>
+
+
 {{#section 'scripts'}}
     <script src="js/lists.js"></script>
 {{/section}}
+
+
+
