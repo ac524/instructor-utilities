@@ -5,5 +5,20 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         }
     });
+
+    List.associate = (models) => {
+        List.hasMany(models.ListItem, {
+            onDelete: "cascade"
+        });
+    };
+
+    List.associate = (models) => {
+        List.belongsTo(models.User, {
+            foreignKey: {
+                allowNull: true
+            }
+        });
+    };
+
     return List;
 }
