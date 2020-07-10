@@ -1,5 +1,5 @@
 import List from "./List";
-import Store from "../store";
+import Store from "../../store";
 
 // export const storageName = 'walker-lists';
 

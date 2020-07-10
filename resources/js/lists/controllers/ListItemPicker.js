@@ -5,7 +5,7 @@ import ListsControls from "../components/ListsControls";
 import ListStatus from "../components/ListStatus";
 import ListView from "../components/ListView";
 import ListImportExport from "../components/ListImportExport";
-import Store from "../store";
+import Store from "../../store";
 
 /**
  * RandomListWalker class constructor

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 router.get("/signup", (req, res) =>{
-  res.render( "userSignup" );
+  res.render( "signup" );
 });
 
 router.get("/", (req, res) => {

@@ -1,5 +1,5 @@
 import ListItem from "./ListItem";
-import Store from "../store";
+import Store from "../../store";
 
 /**
  * Collection class for managing the entries and selection state for a target list.

@@ -1,6 +1,6 @@
-import Lists from "./models/Lists";
-import ListItem from "./models/ListItem";
-import List from "./models/List";
+import Lists from "./lists/models/Lists";
+import ListItem from "./lists/models/ListItem";
+import List from "./lists/models/List";
 
 export class Store {
 
