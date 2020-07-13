@@ -23,11 +23,13 @@ app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
-app.use( require("../controllers/authApiRoutes") );
+// Register API Controllers.
+app.use( "/api", ...require("../controllers") );
 
+// Global middleware for routes registered after this.
 app.use( require("./middleware/provideUserToViews.js") );
 
 // Register HTML routes last.
-app.use( require("../controllers/htmlRoutes") );
+app.use( ...require("../routes") );
 
 module.exports = app;

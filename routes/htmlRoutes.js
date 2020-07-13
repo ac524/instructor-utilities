@@ -15,8 +15,13 @@ router.get("/lists", isAuthenticated, (req, res) => {
   res.render( "lists" );
 });
 
+router.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/");
+});
+
 router.get("*", (req, res) => {
-  res.redirect( "/" );
+  res.status(404).render('404');
 });
 
 

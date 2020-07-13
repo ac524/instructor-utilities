@@ -2,11 +2,11 @@ const router = require("express").Router();
 const passport = require("../config/passport");
 const { User } = require("../models");
 
-router.post("/api/login", passport.authenticate("local"), function(req, res) {
+router.post("/login", passport.authenticate("local"), function(req, res) {
   res.json(req.user);
 });
 
-router.post("/api/signup", function(req, res) {
+router.post("/signup", function(req, res) {
   User
     .create({
       email: req.body.email,
@@ -18,11 +18,6 @@ router.post("/api/signup", function(req, res) {
     .catch(function(err) {
       res.status(401).json(err);
     });
-});
-
-router.get("/logout", function(req, res) {
-  req.logout();
-  res.redirect("/");
 });
 
 module.exports = router;

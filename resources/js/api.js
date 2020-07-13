@@ -32,7 +32,7 @@ class Api {
 
     deleteListItem() {
         
-        // Execute and return an ajax call to delete a new list item
+        // Execute and return an ajax call to delete a list item
         
     }
 
