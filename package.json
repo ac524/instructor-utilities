@@ -8,7 +8,8 @@
     "watch": "webpack --hide-modules --mode=development --watch",
     "production": "webpack --hide-modules --mode=production",
     "build": "npm run production",
-    "start": "node server.js"
+    "start": "node server.js",
+    "watchapp": "nodemon server.js"
   },
   "heroku-run-build-script": true,
   "repository": {
@@ -33,6 +34,7 @@
     "css-loader": "^3.5.3",
     "jest": "^26.0.1",
     "mini-css-extract-plugin": "^0.9.0",
+    "nodemon": "^2.0.4",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^8.0.2",
     "webpack": "^4.43.0",

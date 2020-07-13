@@ -4,8 +4,13 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
+    {{#unless user}}
     <button class="btn btn-outline-success ml-auto" data-toggle="modal" data-target="#login-modal">Login</button>
+    {{else}}
+    <a class="btn btn-outline-success ml-auto" href="/logout">Logout</a>
+    {{/unless}}
 </nav>
+{{#unless user}}
 <div class="modal" tabindex="-1" role="dialog" id="login-modal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -32,3 +37,4 @@
     </div>
   </div>
 </div>
+{{/unless}}
