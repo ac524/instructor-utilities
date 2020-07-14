@@ -16,15 +16,18 @@ This application consists of tools and utilities built to assist teachers instru
 
 ## Installation
 
-Run `npm install` to install the dependencies.
-
-Run `npm run envsetup` to generate a local .env file with the needed configuration.
+* `npm install` - Install dependencies.
+* `npm run envsetup` - Generate a local .env file with the needed configuration.
 
 ### Development Build
-Run `npm run watch` to watch both changes to the resources and server application.
+
+* `npm run watch` - Watch changes to both public resource and server application dependencies.
+* `npm run watch:build` - Watch public resource dependencies.
+* `npm run watch:server` - Watch server application dependencies.
 
 ### Production Build
-Run `npm run build` and then `npm run start`.
+
+* `npm run production` - Build production resources and launch server.
 
 ## Usage
 
