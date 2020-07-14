@@ -21,7 +21,7 @@ const setupQuestions = [
         type: "input",
         name: "PASSPORT_SECRET"
     }
-]
+];
 
 const doSetup = async () => {
 
