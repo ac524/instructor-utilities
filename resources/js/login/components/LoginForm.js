@@ -11,6 +11,7 @@ class LoginForm {
 
         this.isProcessing = false;
 
+        this.messageEl = $('#login-alert');
         this.formEl = $("#login-form");
         this.emailInputEl = $("#login-email");
         this.passwordInputEl = $("#login-password");
@@ -40,6 +41,7 @@ class LoginForm {
         };
     
         if( !userData.email || !userData.password ) {
+            this.displayError("Please provide an email and password")
             return;
         };
         
@@ -53,11 +55,15 @@ class LoginForm {
                 window.location.reload();
             })
             // TODO Add real error handling
-            .catch(() => console.log("Login error"))
+            .catch(() => this.displayError("Unable to log in"))
             .always(() => {
                 this.setProcessing( false );
             });
 
+    }
+
+    displayError( message ) {
+        this.messageEl.text( message ).show();
     }
 
 }
