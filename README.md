@@ -16,7 +16,15 @@ This application consists of tools and utilities built to assist teachers instru
 
 ## Installation
 
-Run "npm install" to install the dependencies in the package.json file. Run "npm watch" or "npm production" before starting the application with "node server.js".
+Run `npm install` to install the dependencies.
+
+Run `npm run envsetup` to generate a local .env file with the needed configuration.
+
+### Development Build
+Run `npm run watch` to watch both changes to the resources and server application.
+
+### Production Build
+Run `npm run build` and then `npm run start`.
 
 ## Usage
 
