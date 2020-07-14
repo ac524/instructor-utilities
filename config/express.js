@@ -1,26 +1,29 @@
 const express = require("express");
 
-const session = require("express-session");
-const passport = require("./passport");
-
-const exphbs = require("express-handlebars");
-const exphbsSections = require("express-handlebars-sections");
-
 const app = express();
 
+// Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Install Passport middleware for user authentication and sessions.
+const session = require("express-session");
+const passport = require("./passport");
 
 app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Configure Handlebars with Express
+// Create and install a Handlebars view engine with Express.
+const exphbs = require("express-handlebars");
+const exphbsSections = require("express-handlebars-sections");
+
 const hbs = exphbs.create({ defaultLayout: "main" });
 exphbsSections(hbs);
 app.engine("handlebars", hbs.engine );
 app.set("view engine", "handlebars");
 
+// Use the /public directory for static file loading.
 app.use(express.static("public"));
 
 // Register API Controllers.
