@@ -1,3 +1,4 @@
+// Import express and create a new server.
 const express = require("express");
 
 const app = express();

@@ -1,6 +1,6 @@
 module.exports = {
   development: {
-    username: "root",
+    username: process.env.DEV_DB_USER,
     password: process.env.DEV_DB_PASS,
     database: "instructor_utilities",
     host: "127.0.0.1",
