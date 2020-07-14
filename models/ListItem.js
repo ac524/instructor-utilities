@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     ListItem.associate = (models) => {
         ListItem.belongsTo(models.List, {
             foreignKey: {
-                allowNull: true
+                allowNull: false
             }
         });
     };

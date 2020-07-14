@@ -11,7 +11,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
+app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -24,7 +24,9 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 // Register API Controllers.
-app.use( "/api", ...require("../controllers") );
+const isAuthenticatedController = require("./middleware/isAuthenticatedController");
+const { controllers, isAuthControllers } = require("../controllers");
+app.use( "/api", controllers, isAuthenticatedController, isAuthControllers );
 
 // Global middleware for routes registered after this.
 app.use( require("./middleware/provideUserToViews.js") );

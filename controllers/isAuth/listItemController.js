@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { ListItem } = require("../models");
+const { ListItem } = require("../../models");
 
 //GET a lists items
 router.get('/lists/:listid/items', ( req, res ) => {

@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
 
         List.belongsTo(models.User, {
             foreignKey: {
-                allowNull: true
+                allowNull: false
             }
         });
     };

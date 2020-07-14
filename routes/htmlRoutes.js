@@ -1,5 +1,5 @@
 const redirectAuthenticated = require("../config/middleware/redirectAuthenticated");
-const isAuthenticated = require("../config/middleware/isAuthenticated");
+const isAuthenticated = require("../config/middleware/isAuthenticatedRoute");
 
 const router = require("express").Router();
 
