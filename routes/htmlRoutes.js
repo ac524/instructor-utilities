@@ -3,16 +3,16 @@ const isAuthenticated = require("../config/middleware/isAuthenticatedRoute");
 
 const router = require("express").Router();
 
-router.get("/signup", redirectAuthenticated, (req, res) =>{
-  res.render( "signup" );
-});
-
 router.get("/", redirectAuthenticated, (req, res) => {
   res.render( "home" );
 });
 
 router.get("/lists", isAuthenticated, (req, res) => {
   res.render( "lists" );
+});
+
+router.get("/signup", redirectAuthenticated, (req, res) =>{
+  res.render( "signup" );
 });
 
 router.get("/logout", function(req, res) {
