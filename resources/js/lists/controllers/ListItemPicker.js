@@ -5,6 +5,7 @@ import ListsControls from "../components/ListsControls";
 import ListStatus from "../components/ListStatus";
 import ListView from "../components/ListView";
 import ListImportExport from "../components/ListImportExport";
+import api from "../../api";
 import Store from "../../store";
 
 /**
@@ -14,9 +15,7 @@ class ListItemPicker {
 
     constructor() {
 
-        this.store = new Store;
-
-        this.store.init();
+        this.list = new Lists;
 
         this.listsControls = new ListsControls( this );
         this.status = new ListStatus( this );
@@ -31,6 +30,12 @@ class ListItemPicker {
      */
     get lists() {
         return this.store.lists;
+    }
+
+    async init() {
+
+        // const lists = await api.
+
     }
 
     /**

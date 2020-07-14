@@ -1,5 +1,11 @@
 class Api {
 
+    getLists() {
+
+        // Execute and return an ajax call to fetch all lists that belong to the current user.
+
+    }
+
     createList( listData ) {
         
         // Execute and return an ajax call to create a new list
@@ -18,19 +24,25 @@ class Api {
 
     }
 
+    getListItems( listId ) {
+
+        // Execute and return an ajax call to fetch all lists that belong to the target list.
+
+    }
+
     createListItem( listItemData ) {
         
         // Execute and return an ajax call to create a new list item
 
     }
 
-    updateListItem() {
+    updateListItem( listItemId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
 
     }
 
-    deleteListItem() {
+    deleteListItem( listItemId ) {
         
         // Execute and return an ajax call to delete a list item
         
