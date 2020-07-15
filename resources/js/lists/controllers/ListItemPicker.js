@@ -34,7 +34,9 @@ class ListItemPicker {
 
     async init() {
 
-        // const lists = await api.
+        const lists = await api.getLists();
+
+        this.lists.addLists( lists.map( listOptions => new List( listOptions ) ) );
 
     }
 
@@ -79,7 +81,7 @@ class ListItemPicker {
         this.lists.deleteList( listKey ).save();
         this.store.deleteList( listKey );
 
-        if( wasCurrent ) this.selectList( this.lists.currentList.key );
+        if( wasCurrent ) this.selectList( this.lists.currentList.id );
 
         this.listsControls.render();
 

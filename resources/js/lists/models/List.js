@@ -13,9 +13,9 @@ class List {
      * @param {array} items 
      * @param {array} selectedItems
      */
-    constructor( key = '', name = '', { items = [], selectedItems = [] } = {} ) {
+    constructor( { id, name } = {} ) {
 
-        this.key = key;
+        this.id = id;
         this.name = name;
 
         // Private properties to control access.
@@ -92,7 +92,7 @@ class List {
 
         return this.belongsTo && this.belongsTo.count
         
-            ? this.key === this.belongsTo.currentList.key
+            ? this.id === this.belongsTo.currentList.key
             
             : false;
             
@@ -126,7 +126,7 @@ class List {
 
         if( this.store ) {
 
-            const { list, selectList } = this.store.loadListItemData( this.key );
+            const { list, selectList } = this.store.loadListItemData( this.id );
 
             if( list ) this.all = list;
 
@@ -343,7 +343,7 @@ class List {
      */
     saveItems() {
 
-        if( this.store ) this.store.saveListItems( this.key, this.all );
+        if( this.store ) this.store.saveListItems( this.id, this.all );
 
         return this;
 
@@ -354,7 +354,7 @@ class List {
      */
     saveSelected() {
 
-        if( this.store ) this.store.saveSelectedListItems( this.key, this.selected );
+        if( this.store ) this.store.saveSelectedListItems( this.id, this.selected );
 
         return this;
 
@@ -370,7 +370,7 @@ class List {
     }
 
     copy() {
-        return new List( this.key, this.name, { items: this.all, selectedItems: this.selected } );
+        return new List( this.id, this.name, { items: this.all, selectedItems: this.selected } );
     }
 
 }

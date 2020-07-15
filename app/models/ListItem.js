@@ -4,11 +4,11 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        selected: {
+        isSelected: {
             type: DataTypes.BOOLEAN,
             defaultValue: 0
         },
-        disabled: {
+        isisabled: {
             type: DataTypes.BOOLEAN,
             defaultValue: 0
         }

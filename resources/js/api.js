@@ -1,8 +1,19 @@
+import List from "./lists/models/List";
+
 class Api {
 
-    getLists() {
+    /**
+     * @returns {Array.List}
+     */
+    async getLists() {
 
         // Execute and return an ajax call to fetch all lists that belong to the current user.
+        // Should return instances of the List model
+
+        // Placeholder
+        return [
+            new List()
+        ]
 
     }
 

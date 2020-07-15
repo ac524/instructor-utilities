@@ -99,7 +99,7 @@ class Lists {
 
         if( list )
 
-            this.currentListKey = list.key;
+            this.currentListKey = list.id;
 
         return this;
 
@@ -116,7 +116,7 @@ class Lists {
 
         if( list )
 
-            this.currentListKey = list.key;
+            this.currentListKey = list.id;
 
         return this;
 
@@ -124,12 +124,26 @@ class Lists {
 
     /**
      * @param {List} list 
+     * @returns {Lists}
      */
     addList( list ) {
 
-        this.lists[list.key] = list;
+        this.lists[list.id] = list;
 
         list.belongsTo = this;
+
+        return this;
+
+    }
+
+    /**
+     * 
+     * @param {Array.<List>} lists
+     * @returns {Lists}
+     */
+    addLists( lists ) {
+
+        lists.forEach( this.addList.bind(this) );
 
         return this;
 

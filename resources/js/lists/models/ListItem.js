@@ -7,10 +7,11 @@ class ListItem {
      * @param {boolean} isDisabled
      * @param {List} list
      */
-    constructor( { label = '', isDisabled = false } = {} ) {
+    constructor( { label = '', isDisabled = false, isSelected = false } = {} ) {
 
         this.label = label;
         this.isDisabled = isDisabled;
+        this.isSelected = isSelected;
 
         let belongsTo;
 
