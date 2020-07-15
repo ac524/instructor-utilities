@@ -18,6 +18,7 @@ This application consists of tools and utilities built to assist teachers instru
 
 * `npm install` - Install dependencies.
 * `npm run envsetup` - Generate a local .env file with the needed configuration.
+* `sequelize db:create` - Create the application database.
 
 ### Development Build
 
