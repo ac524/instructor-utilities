@@ -5,14 +5,6 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        isSelected: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: 0
-        },
-        isisabled: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: 0
-        },
         timestamps: false
     });
 
