@@ -13,10 +13,11 @@ class List {
      * @param {array} items 
      * @param {array} selectedItems
      */
-    constructor( { id, name } = {} ) {
+    constructor( { id, name, ListId } = {} ) {
 
         this.id = id;
         this.name = name;
+        this.ListId = ListId;
 
         // Private properties to control access.
         const currentItems = [];
