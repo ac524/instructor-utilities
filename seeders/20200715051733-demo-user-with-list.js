@@ -41,13 +41,16 @@ module.exports = {
       }
     ]);
 
-    await queryInterface.bulkInsert('ListItem', [
-      {
-        id: 1,
-        name: "Item 1",
+    const items = [];
+    for(let i = 1; i <= 5; i++) {
+      items.push({
+        id: i,
+        name: `Item ${i}`,
         ListId: 1
-      }
-    ]);
+      })
+    }
+    
+    await queryInterface.bulkInsert('ListItems', items);
 
   },
 
@@ -59,7 +62,8 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    await queryInterface.bulkDelete('Users', null, {});
+    await queryInterface.bulkDelete('ListItems', null, {});
     await queryInterface.bulkDelete('Lists', null, {});
+    await queryInterface.bulkDelete('Users', null, {});
   }
 };
