@@ -30,6 +30,11 @@ This application consists of tools and utilities built to assist teachers instru
 
 * `npm run production` - Build production resources and launch server.
 
+### Demo Seed Data
+
+* `sequelize db:seed:all` - Seed the application database with demo data
+* `sequelize db:seed:undo:all` - Remove all application data
+
 ## Usage
 
 The application's primary function is to house lists of students that an instructor can randomly select from. 
