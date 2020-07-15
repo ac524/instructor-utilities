@@ -1,19 +1,20 @@
 module.exports = function(sequelize, DataTypes) {
-    
-    const ListItem = sequelize.define("ListItem", {
+
+    const ListMeta = sequelize.define("ListMeta", {
         name: {
             type: DataTypes.STRING,
             allowNull: false
         }
     });
 
-    ListItem.associate = (models) => {
-        ListItem.belongsTo(models.List, {
+    ListMeta.associate = ({ List }) => {
+        ListMeta.belongsTo(List, {
             foreignKey: {
                 allowNull: false
             }
         });
     };
 
-    return ListItem;
+    return ListMeta;
+
 }
