@@ -3,5 +3,5 @@ const path = require('path');
 require('dotenv').config();
 
 module.exports = {
-    'config': path.resolve('config', 'config.js')
+    'config': path.resolve('app/config', 'config.js')
 }
