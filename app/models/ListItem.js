@@ -4,7 +4,6 @@ module.exports = function(sequelize, DataTypes) {
         name: {
             type: DataTypes.STRING,
             allowNull: false
-<<<<<<< HEAD
         },
         isSelected: {
             type: DataTypes.BOOLEAN,
@@ -13,9 +12,8 @@ module.exports = function(sequelize, DataTypes) {
         isisabled: {
             type: DataTypes.BOOLEAN,
             defaultValue: 0
-=======
->>>>>>> mysql-api-integration
-        }
+        },
+        timestamps: false
     });
 
     ListItem.associate = (models) => {
@@ -27,4 +25,5 @@ module.exports = function(sequelize, DataTypes) {
     };
 
     return ListItem;
+    
 }
