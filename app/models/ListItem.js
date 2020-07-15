@@ -1,8 +1,10 @@
 module.exports = function(sequelize, DataTypes) {
+    
     const ListItem = sequelize.define("ListItem", {
         name: {
             type: DataTypes.STRING,
             allowNull: false
+<<<<<<< HEAD
         },
         isSelected: {
             type: DataTypes.BOOLEAN,
@@ -11,6 +13,8 @@ module.exports = function(sequelize, DataTypes) {
         isisabled: {
             type: DataTypes.BOOLEAN,
             defaultValue: 0
+=======
+>>>>>>> mysql-api-integration
         }
     });
 
