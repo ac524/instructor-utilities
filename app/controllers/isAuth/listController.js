@@ -2,20 +2,23 @@ const router = require("express").Router();
 const { List } = require("../../models");
 
 //GET saved lists
-router.get('/lists', ( req, res ) => {
+router.get('/lists', async ( req, res ) => {
 
-    List
-        .findAll({
+    try {
+
+        const listsResult = await List.findAll({
             where: {
                 UserId: req.user.id
             }
-        })
-        .then( listResults => {
-            res.json( listResults );
-        } )
-        .catch( err => {
-            res.status(401).json(err);
-        } );
+        });
+
+        res.json( listsResult );
+
+    } catch( err ) {
+
+        res.status(401).json(err);
+
+    }
     
 });
 
