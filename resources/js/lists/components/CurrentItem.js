@@ -29,13 +29,13 @@ class CurrentItem {
 
         if( this.currentList.isComplete ) {
 
-            this.currentItemEl.text( this.currentList.currentItem.label );
+            this.currentItemEl.text( this.currentList.currentItem.name );
 
         } else {
 
             this.currentList.selected.length
                 
-                ? this.currentItemEl.text( this.currentList.currentItem.label )
+                ? this.currentItemEl.text( this.currentList.currentItem.name )
 
                 : this.currentItemEl.text( 'No Selection' );
 

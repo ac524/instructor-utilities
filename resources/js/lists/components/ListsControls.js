@@ -21,7 +21,7 @@ class ListsControls {
 
         this.listOptionsEl.on( 'change', ( { currentTarget: { value } } ) => this.app.selectList( value ) );
 
-        this.deleteListButtonEl.on( 'click', () => this.app.deleteList( this.app.lists.currentList.key ) );
+        this.deleteListButtonEl.on( 'click', () => this.app.deleteList( this.app.lists.currentList.id ) );
 
     }
 

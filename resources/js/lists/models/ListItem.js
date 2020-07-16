@@ -1,4 +1,5 @@
-import List from "./List"
+import List from "./List";
+import store from "../../store";
 
 class ListItem {
 
@@ -7,19 +8,15 @@ class ListItem {
      * @param {boolean} isDisabled
      * @param {List} list
      */
-    constructor( { label = '', isDisabled = false, isSelected = false } = {} ) {
+    constructor( { name = '', ListId } = {} ) {
 
-        this.label = label;
-        this.isDisabled = isDisabled;
-        this.isSelected = isSelected;
+        this.name = name;
+        this.ListId = ListId;
 
-        let belongsTo;
+    }
 
-        Object.defineProperty( this, 'belongsTo', {
-            get: () => belongsTo,
-            set: (list) => belongsTo = list
-        } );
-
+    get belongsTo() {
+        store.getList(this.ListId);
     }
 
     /**
@@ -70,8 +67,8 @@ class ListItem {
 
         let updated = false;
 
-        if( label !== this.label ) {
-            this.label = label;
+        if( label !== this.name ) {
+            this.name = label;
             updated = true;
         }
 

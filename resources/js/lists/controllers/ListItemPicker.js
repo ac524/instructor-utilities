@@ -6,7 +6,7 @@ import ListStatus from "../components/ListStatus";
 import ListView from "../components/ListView";
 import ListImportExport from "../components/ListImportExport";
 import api from "../../api";
-import Store from "../../store";
+import store from "../../store";
 
 /**
  * RandomListWalker class constructor
@@ -15,7 +15,7 @@ class ListItemPicker {
 
     constructor() {
 
-        this.list = new Lists;
+        this.lists = new Lists;
 
         this.listsControls = new ListsControls( this );
         this.status = new ListStatus( this );
@@ -25,18 +25,11 @@ class ListItemPicker {
         
     }
 
-    /**
-     * @returns {Lists}
-     */
-    get lists() {
-        return this.store.lists;
-    }
-
     async init() {
 
-        const lists = await api.getLists();
+        await this.lists.load();
 
-        this.lists.addLists( lists.map( listOptions => new List( listOptions ) ) );
+        this.render();
 
     }
 
@@ -92,7 +85,7 @@ class ListItemPicker {
     render() {
 
         this.listsControls.render();
-        this.view.render();
+        // this.view.render();
 
     }
 

@@ -1,5 +1,8 @@
 import List from "./lists/models/List";
 
+const listFactory = listData => new List(listData);
+const listArrayFactory = listsData => listsData.map( listFactory );
+
 class Api {
 
     /**
@@ -7,13 +10,12 @@ class Api {
      */
     async getLists() {
 
-        // Execute and return an ajax call to fetch all lists that belong to the current user.
-        // Should return instances of the List model
+        const lists = await $.ajax( {
+            url: "/api/lists",
+            method: "GET"
+        } );
 
-        // Placeholder
-        return [
-            new List()
-        ]
+        return listArrayFactory( lists );
 
     }
 

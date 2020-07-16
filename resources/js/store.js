@@ -6,12 +6,54 @@ export class Store {
 
     constructor() {
 
-        this.key = 'walker-lists';
-
-        this.lists;
+        this.lists = {};
 
     }
 
+    getList( listId ) {
+        return this.lists[listId] || null;
+    }
+
+    /**
+     * @param {List} list 
+     * @returns {Store}
+     */
+    addList( list ) {
+
+        this.lists[list.id] = list;
+
+        return this;
+
+    }
+
+    /**
+     * 
+     * @param {Array.<List>} lists
+     * @returns {Store}
+     */
+    addLists( lists ) {
+
+        lists.forEach( this.addList.bind(this) );
+
+        return this;
+
+    }
+
+    /**
+     * @param {string} id
+     * @returns {Store}
+     */
+    deleteList( id ) {
+
+        if( this.lists[id] )
+    
+            delete this.lists[id];
+
+        return this;
+
+    }
+
+    /** OLD CODE TO BE REMOVED */
     saveLists() {
 
         if( this.lists ) {

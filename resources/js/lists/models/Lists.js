@@ -1,5 +1,6 @@
 import List from "./List";
-import Store from "../../store";
+import api from "../../api";
+import store from "../../store";
 
 // export const storageName = 'walker-lists';
 
@@ -11,30 +12,9 @@ class Lists {
     /**
      * Lists class constructor.
      */
-    constructor( lists = [] ) {
-
-        // const deserialize = ( lists ) => Object.fromEntries( Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => [ key, new List( key, name, this ) ] ) );
-        // const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
-    
-        // const lists = deserialize( localStorage.getItem( storageName ) || '{}' );
+    constructor() {
 
         this.currentListKey;
-
-        // TODO convert plain object into a Map.
-        this.lists = {};
-
-        if( lists.length )
-
-            lists.forEach( (item) => this.addList( item ) );
-
-        let store = null;
-        Object.defineProperty( this, 'store', {
-            /**
-             * @returns {Store}
-             */
-            get: () => store,
-            set: (newStore) => store = newStore
-        } );
 
     }
 
@@ -49,7 +29,7 @@ class Lists {
     }
 
     get all() {
-        return Object.entries( this.lists );
+        return Object.entries( store.lists );
     }
 
     get count() {
@@ -58,6 +38,29 @@ class Lists {
 
     get hasMultipleLists() {
         return this.count > 1;
+    }
+
+    async load() {
+
+        try {
+
+            const lists = await api.getLists();
+
+            console.log( lists );
+
+            if( lists.length )
+
+                store.addLists( lists );
+
+        } catch( err ) {
+
+            console.log(err);
+
+            // TODO Add error display.
+            console.log('Error fetching lists');
+
+        }
+
     }
 
     save() {
@@ -79,12 +82,12 @@ class Lists {
     }
 
     /**
-     * @param {string} key
+     * @param {string} id
      * @returns {List}
      */
-    get( key ) {
+    get( id ) {
 
-        return this.lists[key] || null;
+        return store.getList( id );
 
     }
 
@@ -107,12 +110,12 @@ class Lists {
 
 
     /**
-     * @param {string} key
+     * @param {string} id
      * @returns {Lists}
      */
-    selectList( key ) {
+    selectList( id ) {
 
-        const list = this.get( key );
+        const list = store.getList( id );
 
         if( list )
 
@@ -159,31 +162,27 @@ class Lists {
             
         // Use the current time as a key
         // TODO update to a generated string
-        const key = Date.now().toString() + this.all.length;
+        const id = Date.now().toString() + this.all.length;
 
-        const newList = new List( key, name );
+        const newList = new List( { id, name } );
 
-        if( addList ) this.addList( newList );
+        if( addList ) store.addList( newList );
 
         return newList;
 
     }
 
     /**
-     * @param {string} key
+     * @param {string} id
      * @returns {Lists}
      */
-    deleteList( key ) {
+    deleteList( id ) {
 
-        if( this.lists[key] ) {
+        if( store.getList(id).isCurrent )
 
-            if( this.lists[key].isCurrent )
-    
-                this.currentListKey = null;
-    
-            delete this.lists[key];
+            this.currentListKey = null;
 
-        }
+        store.deleteList(id);
 
         return this;
 
