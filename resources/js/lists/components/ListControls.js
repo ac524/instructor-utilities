@@ -105,12 +105,12 @@ class ListControls {
 
 
     /**
-     * @param {string} label 
+     * @param {string} name 
      * @returns {ListControls}
      */
-    addListItem( label ) {
+    addListItem( name ) {
 
-        this.currentList.createItem( label );
+        this.currentList.createItem( name );
 
         this.currentList
             .emptySelected()

@@ -29,6 +29,14 @@ class ListItemPicker {
 
         await this.lists.load();
 
+        // if( !this.lists.count ) {
+        //     this.lists.createList();
+        //     this.lists.save();
+        // }
+
+        const firstList = this.lists.getByIndex(0);
+        this.selectList( firstList.id );
+
         this.render();
 
     }
@@ -46,13 +54,15 @@ class ListItemPicker {
     }
 
     /**
-     * @param {string} listKey 
+     * @param {string} listId 
      */
-    selectList( listKey ) {
+    async selectList( listId ) {
 
-        this.lists.selectList( listKey );
+        this.lists.selectList( listId );
 
-        if( ! this.lists.currentList.isLoaded ) this.lists.currentList.load();
+        if( ! this.lists.currentList.isLoaded )
+        
+            await this.lists.currentList.loadItems();
 
         this.listsControls.renderListName();
         this.view.render();

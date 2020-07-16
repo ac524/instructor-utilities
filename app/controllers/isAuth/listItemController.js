@@ -2,9 +2,23 @@ const router = require("express").Router();
 const { ListItem } = require("../../models");
 
 //GET a lists items
-router.get('/lists/:listid/items', ( req, res ) => {
+router.get('/lists/:listId/items', async ( req, res ) => {
     
-    res.end();
+    try {
+
+        const listItemsResult = await ListItem.findAll({
+            where: {
+                ListId: req.params.listId
+            }
+        });
+
+        res.json( listItemsResult );
+
+    } catch( err ) {
+
+        res.status(401).json(err);
+
+    }
 
 });
 

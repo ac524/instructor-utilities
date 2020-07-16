@@ -1,7 +1,11 @@
 import List from "./lists/models/List";
+import ListItem from "./lists/models/ListItem";
 
 const listFactory = listData => new List(listData);
 const listArrayFactory = listsData => listsData.map( listFactory );
+
+const listItemFactory = listItemData => new ListItem(listItemData);
+const listItemArrayFactory = listItemsData => listItemsData.map( listItemFactory );
 
 class Api {
 
@@ -10,10 +14,10 @@ class Api {
      */
     async getLists() {
 
-        const lists = await $.ajax( {
+        const lists = await $.ajax({
             url: "/api/lists",
             method: "GET"
-        } );
+        });
 
         return listArrayFactory( lists );
 
@@ -37,9 +41,15 @@ class Api {
 
     }
 
-    getListItems( listId ) {
+    async getListItems( listId ) {
 
         // Execute and return an ajax call to fetch all lists that belong to the target list.
+        const listItemsData = await $.ajax({
+            url: `/api/lists/${listId}/items`,
+            method: "GET"
+        });
+
+        return listItemArrayFactory( listItemsData );
 
     }
 

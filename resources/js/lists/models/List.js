@@ -1,5 +1,5 @@
 import ListItem from "./ListItem";
-import Store from "../../store";
+import api from "../../api";
 
 /**
  * Collection class for managing the entries and selection state for a target list.
@@ -122,6 +122,21 @@ class List {
 
     }
 
+    async loadItems() {
+
+        try {
+
+            this.all = await api.getListItems( this.id );
+
+        } catch( err ) {
+
+            console.log( err );
+            console.log( "Error fetching list items" );
+            
+        }
+
+    }
+
     load() {
 
         if( this.store ) {
@@ -206,9 +221,9 @@ class List {
      * @param {string} item
      * @returns {ListItem}
      */
-    createItem( label ) {
+    createItem( name ) {
 
-        const newItem = new ListItem( { label } );
+        const newItem = new ListItem( { name } );
 
         this.addItem( newItem );
 
@@ -222,7 +237,7 @@ class List {
      */
     addItem( listItem ) {
 
-        listItem.belongsTo = this;
+        listItem.ListId = this.id;
 
         this.all.push( listItem );
 

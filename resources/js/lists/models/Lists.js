@@ -46,15 +46,11 @@ class Lists {
 
             const lists = await api.getLists();
 
-            console.log( lists );
-
             if( lists.length )
 
                 store.addLists( lists );
 
         } catch( err ) {
-
-            console.log(err);
 
             // TODO Add error display.
             console.log('Error fetching lists');
