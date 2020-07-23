@@ -70,13 +70,27 @@ class Api {
     async createListItem( listId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
+        const newListItem = await $.ajax({
+            url: `/api/lists/${listId}/items`,
+            method: "POST",
+            data: listItemData
+        });
+
+        return listItemFactory( newListItem );
 
     }
 
-    updateListItem( listItemId, listItemData ) {
+    updateListItem( listId, listItemId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
+        const updatedListItem = await $.ajax({
+            url: `/api/lists/${listId}/items/${listItemId}`,
+            method: "PATCH",
+            data: listItemData
+        });
 
+        return listItemFactory( updatedListItem );
+        
     }
 
     deleteListItem( listItemId ) {
