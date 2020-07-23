@@ -46,9 +46,8 @@ router.post('/lists', (req, res) => {
 
     List
         .create({
-            id: req.body.listId,
             name: req.body.name,
-            UserId : req.body.user
+            UserId : req.user.id
         })
         .then(list => {
             res.json(list);

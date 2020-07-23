@@ -80,7 +80,7 @@ class Api {
 
     }
 
-    updateListItem( listId, listItemId, listItemData ) {
+    async updateListItem( listId, listItemId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
         const updatedListItem = await $.ajax({
