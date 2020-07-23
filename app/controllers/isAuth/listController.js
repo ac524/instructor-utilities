@@ -23,21 +23,21 @@ router.get('/lists', async (req, res) => {
 });
 
 //GET a single list by ID
-router.get('/lists/:listId', (req, res) => {
-
-    List
-        .findOne({
-            where: {
-                id: req.params.listId,
-                UserId: req.user.id
-            }
-        })
-        .then(listResults => {
-            res.json(listResults);
-        })
-        .catch(err => {
-            res.status(401).json(err);
-        });
+router.get('/lists/:listId', async ( req, res ) => {
+    try{
+        const listResults = await 
+        List
+            .findOne({
+                where: {
+                    id: req.params.listId,
+                    UserId: req.user.id
+                }
+            })
+        
+        res.json( listResults )
+    } catch ( err ) {
+        res.status(401).json(err);
+    };
 
 });
 
