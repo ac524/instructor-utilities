@@ -7,9 +7,9 @@ router.get('/lists/:listId/items', async ( req, res ) => {
     try {
 
         const listItemsResult = await ListItem.findAll({
-            where: 
-            {
+            where: {
                 ListId: req.params.listId
+
             }
         });
 
@@ -42,14 +42,29 @@ router.post('/lists/:listId/items', async (req, res) => {
 });
 
 //GET a single list's item by ID
-router.get('/lists/:listid/items/:itemid', ( req, res ) => {
+router.get('/lists/:listId/items/:itemId', async ( req, res ) => {
 
-    res.end();
+    try {
+        const singleListItem = await ListItem.findOne({
+            where: {
+                id: req.params.itemId,
+                ListId: req.params.listId
+
+            }
+        });
+
+        res.json( singleListItem );
+
+    } catch(err){
+
+        res.status(401).json(err);
+
+    }
 
 });
 
 //UPDATE a single list item by id
-router.patch('/lists/:listid/items/:itemid', ( req, res, next ) => {
+router.patch('/lists/:listId/items/:itemId', ( req, res, next ) => {
 
     res.end();
 
