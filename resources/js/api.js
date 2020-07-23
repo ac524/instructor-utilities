@@ -23,19 +23,33 @@ class Api {
 
     }
 
-    createList( listData ) {
+    async createList( listData ) {
         
         // Execute and return an ajax call to create a new list
+        const newList = await $.ajax({
+            url: "/api/lists",
+            method: "POST",
+            data: listData
+        });
+
+        return listFactory( newList );
 
     }
 
-    updateList( listId, listData ) {
+    async updateList( listId, listData ) {
 
-        // Execute and return an ajax call to upate a list
+        // Execute and return an ajax call to update a list
+        const updatedList = await $.ajax({
+            url: `/api/lists/${listId}`,
+            method: "PUT",
+            data: listData
+        });
+
+        return listFactory( updatedList );
 
     }
 
-    deleteList( listId ) {
+    async deleteList( listId ) {
 
         // Execute and return an ajax call to delete a list
 
@@ -43,7 +57,7 @@ class Api {
 
     async getListItems( listId ) {
 
-        // Execute and return an ajax call to fetch all lists that belong to the target list.
+        // Execute and return an ajax call to fetch all list items that belong to the target list.
         const listItemsData = await $.ajax({
             url: `/api/lists/${listId}/items`,
             method: "GET"
@@ -53,7 +67,7 @@ class Api {
 
     }
 
-    createListItem( listItemData ) {
+    async createListItem( listId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
 
