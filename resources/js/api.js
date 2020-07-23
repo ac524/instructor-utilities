@@ -10,11 +10,34 @@ const listItemArrayFactory = listItemsData => listItemsData.map( listItemFactory
 class Api {
 
     /**
+     * Ajax wrapper to centralize base error handling.
+     * @param {object} options
+     * @param {string} options.url
+     * @param {string} options.method
+     * @param {object} options.data
+     */
+    async request( { url, method = "GET", data } ) {
+
+        try {
+
+            return await $.ajax({ url, method, data });
+
+        } catch(err) {
+
+            // TODO Build in display error functionality to help the user understand what went wrong.
+            // TODO Deside on the return type for requests that fail and how failed requests should be handled in usage.
+            console.log( err );
+
+        }
+
+    }
+
+    /**
      * @returns {Array.List}
      */
     async getLists() {
 
-        const lists = await $.ajax({
+        const lists = await this.request({
             url: "/api/lists",
             method: "GET"
         });
@@ -26,7 +49,7 @@ class Api {
     async createList( listData ) {
         
         // Execute and return an ajax call to create a new list
-        const newList = await $.ajax({
+        const newList = await this.request({
             url: "/api/lists",
             method: "POST",
             data: listData
@@ -39,7 +62,7 @@ class Api {
     async updateList( listId, listData ) {
 
         // Execute and return an ajax call to update a list
-        const updatedList = await $.ajax({
+        const updatedList = await this.request({
             url: `/api/lists/${listId}`,
             method: "PATCH",
             data: listData
@@ -58,7 +81,7 @@ class Api {
     async getListItems( listId ) {
 
         // Execute and return an ajax call to fetch all list items that belong to the target list.
-        const listItemsData = await $.ajax({
+        const listItemsData = await this.request({
             url: `/api/lists/${listId}/items`,
             method: "GET"
         });
@@ -70,7 +93,7 @@ class Api {
     async createListItem( listId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
-        const newListItem = await $.ajax({
+        const newListItem = await this.request({
             url: `/api/lists/${listId}/items`,
             method: "POST",
             data: listItemData
@@ -83,7 +106,7 @@ class Api {
     async updateListItem( listId, listItemId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
-        const updatedListItem = await $.ajax({
+        const updatedListItem = await this.request({
             url: `/api/lists/${listId}/items/${listItemId}`,
             method: "PATCH",
             data: listItemData

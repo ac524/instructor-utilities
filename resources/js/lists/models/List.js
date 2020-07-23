@@ -158,18 +158,23 @@ class List {
     /**
      * @param {Object} props
      * @param {string} props.name
-     * @returns {boolean}
+     * @returns {(false|object)} An object with the updated properties and values, or false if no properties were updated.
      */
     update( { name } ) {
 
         let updated = false;
+        const maybeUpdateValue = ( property, newValue ) => {
+            if( this.hasOwnProperty( property ) && this[property] !== newValue ) {
 
-        if( this.name !== name ) {
+                this[property] = newValue;
 
-            this.name = name;
-            if(!updated) updated = true;
-
+                if( !updated ) updated = {};
+                updated[property] = newValue;
+    
+            }
         }
+
+        maybeUpdateValue( 'name', name );
 
         return updated;
 
