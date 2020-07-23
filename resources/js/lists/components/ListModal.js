@@ -34,8 +34,9 @@ class ListModal {
                 if( !action ) return;
 
                 const actions = {
-                    saveAndClose:  () => {
-                        this.save().close();
+                    saveAndClose:  async () => {
+                        await this.save();
+                        this.close();
                     }
                 };
 
@@ -50,7 +51,7 @@ class ListModal {
 
                 const actions = {
                     editList:  () => this.setList( this.app.lists.currentList ),
-                    newList: () => this.setList( this.app.lists.createList( 'List '+ ( this.app.lists.count + 1 ), false ) )
+                    newList: () => this.setData( { name: 'List '+ ( this.app.lists.count + 1 ) } )
                 };
 
                 if( actions[action] ) actions[action]();
@@ -72,7 +73,7 @@ class ListModal {
 
             refreshView = true;
 
-            await api.createList( this.list );
+            this.list = await api.createList( this.data );
 
             store.addList( this.list );
             // this.app.lists.addList( this.list );
@@ -80,7 +81,7 @@ class ListModal {
 
         } else {
 
-            updated = this.list.update( this.id );
+            const updated = this.list.update( this.data );
 
             if( updated ) {
                 refreshView = true;
@@ -115,7 +116,12 @@ class ListModal {
      */
     setList( list ) {
         this.list = list;
-        this.data = { ...list };
+        this.setData( list );
+        return this;
+    }
+
+    setData(data) {
+        this.data = { ...data };
         return this;
     }
 
