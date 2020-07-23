@@ -41,7 +41,7 @@ class Api {
         // Execute and return an ajax call to update a list
         const updatedList = await $.ajax({
             url: `/api/lists/${listId}`,
-            method: "PUT",
+            method: "PATCH",
             data: listData
         });
 
