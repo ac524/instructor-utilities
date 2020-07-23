@@ -1,7 +1,12 @@
 import ListItemPicker from "../controllers/ListItemPicker";
+import List from "../models/List";
 import store from "../../store"
 import api from "../../api";
 
+/**
+ * @property {List} list
+ * @property {object} data
+ */
 class ListModal {
 
     /**
@@ -82,6 +87,8 @@ class ListModal {
         } else {
 
             const updated = this.list.update( this.data );
+
+            console.log( updated );
 
             if( updated ) {
                 refreshView = true;
