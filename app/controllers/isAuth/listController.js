@@ -7,7 +7,8 @@ router.get('/lists', async (req, res) => {
     try {
 
         const listsResult = await List.findAll({
-            where: {
+            where: 
+            {
                 UserId: req.user.id
             }
         });
@@ -24,52 +25,64 @@ router.get('/lists', async (req, res) => {
 
 //GET a single list by ID
 router.get('/lists/:listId', async ( req, res ) => {
-    try{
-        const listResults = await 
-        List
-            .findOne({
-                where: {
-                    id: req.params.listId,
-                    UserId: req.user.id
-                }
-            })
+    
+    try {
+
+        const listResults = await List.findOne({
+            where: 
+            {
+                id: req.params.listId,
+                UserId: req.user.id
+            }
+
+        });
         
         res.json( listResults )
+    
     } catch ( err ) {
+    
         res.status(401).json(err);
+    
     };
 
 });
 
 //CREATE a new lists
-router.post('/lists', (req, res) => {
+router.post('/lists', async (req, res) => {
+    
+    try {
 
-    List
-        .create({
+        const newList = await List.create({
             name: req.body.name,
             UserId : req.user.id
         })
-        .then(list => {
-            res.json(list);
-        })
-        .catch(err => {
-            res.status(401).json(err);
-        });
 
+        res.json(newList);
+        
+    } catch ( err ) {
+        
+        res.status(401).json(err);
+    }
+    
 });
 
 //UPDATE a target list by ID
-router.patch('/lists/:listId', (req, res) => {
+router.patch('/lists/:listId', async (req, res) => {
 
-    List.update(req.body, {
-        where:{
-            id : req.params.listId
-        }
-    }).then(list => {
-        res.json(list);
-    }).catch(err => {
+    try {
+        const targetList = await List.update(req.body, {
+            where:
+            {
+                id : req.params.listId
+            }
+        });
+
+        res.json(targetList);
+
+    }catch(err) {
+
         res.status(401).json(err);
-    })
+    }
 
 });
 

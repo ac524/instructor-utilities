@@ -7,7 +7,8 @@ router.get('/lists/:listId/items', async ( req, res ) => {
     try {
 
         const listItemsResult = await ListItem.findAll({
-            where: {
+            where: 
+            {
                 ListId: req.params.listId
             }
         });
