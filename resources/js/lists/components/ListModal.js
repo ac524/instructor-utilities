@@ -1,4 +1,6 @@
-import ListItemPicker from '../controllers/ListItemPicker';
+import ListItemPicker from "../controllers/ListItemPicker";
+import store from "../../store"
+import api from "../../api";
 
 class ListModal {
 
@@ -15,7 +17,6 @@ class ListModal {
         // Inputs
         this.listNameInputEl = $('#list-name-input');
 
-        /** @type {List} */
         this.list;
 
         this.data;
@@ -62,24 +63,40 @@ class ListModal {
 
     }
 
-    save() {
-        const isNewList = !this.app.lists.get( this.data.key );
-        const updated = this.list.update( this.data ) || isNewList;
+    async save() {
+
+        const isNewList = !this.data.id;
+        let refreshView = false;
 
         if( isNewList ) {
-            this.app.lists.addList( this.list );
-            this.app.lists.selectList( this.list.key );
+
+            refreshView = true;
+
+            await api.createList( this.list );
+
+            store.addList( this.list );
+            // this.app.lists.addList( this.list );
+            // this.app.lists.selectList( this.list.key );
+
+        } else {
+
+            updated = this.list.update( this.id );
+
+            if( updated ) {
+                refreshView = true;
+                await api.updateList( this.list.id, updated );
+            }
+
         }
 
-        if( updated ) {
-            this.app.lists.save();
+        if( refreshView ) {
             
             isNewList
                 ? this.app.render()
                 : this.app.listsControls.render();
+
         }
-        
-        return this;
+
     }
 
     close() {
