@@ -24,19 +24,22 @@ router.get('/lists', async (req, res) => {
 
 //GET a single list by ID
 router.get('/lists/:listId', async ( req, res ) => {
-    try{
-        const listResults = await 
-        List
-            .findOne({
-                where: {
-                    id: req.params.listId,
-                    UserId: req.user.id
-                }
-            })
+
+    try {
+
+        const listResults = await List.findOne({
+            where: {
+                id: req.params.listId,
+                UserId: req.user.id
+            }
+        });
         
-        res.json( listResults )
+        res.json( listResults );
+
     } catch ( err ) {
+        
         res.status(401).json(err);
+
     };
 
 });
