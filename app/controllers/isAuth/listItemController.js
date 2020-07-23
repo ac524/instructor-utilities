@@ -23,7 +23,17 @@ router.get('/lists/:listId/items', async ( req, res ) => {
 });
 
 //CREATE new list item
-router.post('/lists/:listid/items', ( req, res ) => {
+router.post('/lists/:listId/items', async ( req, res ) => {
+    try {
+        const newItem = await ListItem.create({
+            name: req.body.name,
+            ListId: req.params.listId
+        });
+        res.json( newItem );
+    } catch( err) {
+        res.status(401).json(err);
+
+    }
 
    res.end();
 

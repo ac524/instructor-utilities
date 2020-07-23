@@ -23,34 +23,54 @@ router.get('/lists', async ( req, res ) => {
 });
 
 //GET a single list by ID
-router.get('/lists/:listId', ( req, res ) => {
-
-    List
-        .findOne({
-            where: {
-                id: req.params.listId,
-                UserId: req.user.id
-            }
-        })
-        .then( listResults => {
-            res.json( listResults );
-        } )
-        .catch( err => {
+router.get('/lists/:listId', async ( req, res ) => {
+    try{
+        const listResults = await 
+        List
+            .findOne({
+                where: {
+                    id: req.params.listId,
+                    UserId: req.user.id
+                }
+            })
+        
+            res.json( listResults )
+        } catch ( err ) {
             res.status(401).json(err);
-        } );
+        };
 
 });
 
 //CREATE a new lists
 router.post('/lists', ( req, res ) => {
+    List
+        .create({
+            name : req.body.name,
+            UserId : req.body.id
 
+        } ).then( list =>{
+            res.json( list );
+        } )
+        .catch( err => {
+            res.status(401).json(err);
+        } );
     res.end();
 
 });
 
 //UPDATE a target list by ID
 router.patch('/lists/:listId', ( req, res ) => {
-
+    List
+        .update(req.body,{
+            where:{
+                id: req.params.listId
+            }
+        } ).then(list =>{
+            res.json( list );
+        })
+        .catch( err => {
+            res.status(401).json(err);
+        } );
     res.end();
     
 });
