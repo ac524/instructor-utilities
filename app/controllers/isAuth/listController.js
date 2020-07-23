@@ -48,7 +48,7 @@ router.post('/lists', (req, res) => {
         .create({
             id: req.body.listId,
             name: req.body.name,
-            UserId : req.body.UserId
+            UserId : req.body.user
         })
         .then(list => {
             res.json(list);
@@ -62,7 +62,15 @@ router.post('/lists', (req, res) => {
 //UPDATE a target list by ID
 router.patch('/lists/:listId', (req, res) => {
 
-    res.end();
+    List.update(req.body, {
+        where:{
+            id : req.params.listId
+        }
+    }).then(list => {
+        res.json(list);
+    }).catch(err => {
+        res.status(401).json(err);
+    })
 
 });
 
