@@ -59,6 +59,7 @@ router.post('/lists', async (req, res) => {
     } catch ( err ) {
         
         res.status(401).json(err);
+
     }
     
 });
@@ -67,18 +68,19 @@ router.post('/lists', async (req, res) => {
 router.patch('/lists/:listId', async (req, res) => {
 
     try {
+
         const targetList = await List.update(req.body, {
-            where:
-            {
+            where: {
                 id : req.params.listId
             }
         });
 
         res.json(targetList);
 
-    }catch(err) {
+    } catch(err) {
 
         res.status(401).json(err);
+
     }
 
 });
