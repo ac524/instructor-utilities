@@ -1,5 +1,6 @@
 import List from "../models/List";
 import ListItemPicker from "../controllers/ListItemPicker";
+import store from "../../store";
 
 class ListImportExport {
 
@@ -23,7 +24,7 @@ class ListImportExport {
      * @returns {List}
      */
     get currentList() {
-        return this.app.lists.currentList;
+        return store.lists.currentList;
     }
 
     exportList() {

@@ -15,8 +15,6 @@ class ListItemPicker {
 
     constructor() {
 
-        this.lists = new Lists;
-
         this.listsControls = new ListsControls( this );
         this.status = new ListStatus( this );
         this.modal = new ListModal( this );
@@ -27,14 +25,14 @@ class ListItemPicker {
 
     async init() {
 
-        await this.lists.load();
+        await store.lists.load();
 
         // if( !this.lists.count ) {
         //     this.lists.createList();
         //     this.lists.save();
         // }
 
-        const firstList = this.lists.getByIndex(0);
+        const firstList = store.lists.getByIndex(0);
         this.selectList( firstList.id );
 
         this.render();
@@ -58,11 +56,11 @@ class ListItemPicker {
      */
     async selectList( listId ) {
 
-        this.lists.selectList( listId );
+        store.lists.selectList( listId );
 
-        if( ! this.lists.currentList.isLoaded )
+        if( ! store.lists.currentList.isLoaded )
         
-            await this.lists.currentList.loadItems();
+            await store.lists.currentList.loadItems();
 
         this.listsControls.renderListName();
         this.view.render();
@@ -74,15 +72,14 @@ class ListItemPicker {
      */
     deleteList( listKey ) {
 
-        if( !this.lists.hasMultipleLists )
+        if( !store.lists.hasMultipleLists )
 
             // Exit early and prevent the delete action if we don't have more than one list.
             return this;
 
-        const wasCurrent = this.lists.get( listKey ).isCurrent;
+        const wasCurrent = store.lists.get( listKey ).isCurrent;
 
-        this.lists.deleteList( listKey ).save();
-        this.store.deleteList( listKey );
+        store.deleteList( listKey );
 
         if( wasCurrent ) this.selectList( this.lists.currentList.id );
 

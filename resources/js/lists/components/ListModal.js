@@ -55,8 +55,8 @@ class ListModal {
                 if( !action ) return
 
                 const actions = {
-                    editList:  () => this.setList( this.app.lists.currentList ),
-                    newList: () => this.setData( { name: 'List '+ ( this.app.lists.count + 1 ) } )
+                    editList:  () => this.setList( store.lists.currentList ),
+                    newList: () => this.setData( { name: 'List '+ ( store.lists.count + 1 ) } )
                 };
 
                 if( actions[action] ) actions[action]();
@@ -101,7 +101,7 @@ class ListModal {
             
             isNewList
                 ? this.app.render()
-                : this.app.listsControls.render();
+                : store.listsControls.render();
 
         }
 

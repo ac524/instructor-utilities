@@ -1,5 +1,6 @@
 import ListItemPicker from "../controllers/ListItemPicker";
 import List from "../models/List";
+import store from "../../store";
 
 class CurrentItem {
 
@@ -19,7 +20,7 @@ class CurrentItem {
      * @returns {List}
      */
     get currentList() {
-        return this.app.lists.currentList;
+        return store.lists.currentList;
     }
 
     /**

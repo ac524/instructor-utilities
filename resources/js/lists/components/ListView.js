@@ -2,6 +2,7 @@ import ListItemPicker from "../controllers/ListItemPicker";
 import CurrentItem from "./CurrentItem";
 import ListControls from "./ListControls";
 import List from "../models/List";
+import store from "../../store";
 
 /**
  * @param {ListItem} item 
@@ -68,7 +69,7 @@ class ListView {
      * @returns {List}
      */
     get currentList() {
-        return this.app.lists.currentList;
+        return store.lists.currentList;
     }
 
     render() {

@@ -6,7 +6,7 @@ export class Store {
 
     constructor() {
 
-        this.lists = {};
+        this.lists = new Lists;
 
     }
 
