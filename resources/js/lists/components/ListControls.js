@@ -1,6 +1,7 @@
 import List from "../models/List";
 import ListItemPicker from "../controllers/ListItemPicker";
 import store from "../../store";
+import api from "../../api";
 
 class ListControls {
 
@@ -109,13 +110,17 @@ class ListControls {
      * @param {string} name 
      * @returns {ListControls}
      */
-    addListItem( name ) {
+    async addListItem( name ) {
 
-        this.currentList.createItem( name );
+        const item = await api.createListItem( this.currentList.id, { name } );
 
-        this.currentList
-            .emptySelected()
-            .saveListContent();
+        store.addListItem( this.currentList.id, item );
+
+        // this.currentList.createItem( name );
+
+        // this.currentList
+        //     .emptySelected()
+        //     .saveListContent();
 
         this.app.view.render();
 

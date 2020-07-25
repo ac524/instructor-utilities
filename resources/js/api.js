@@ -91,6 +91,8 @@ class Api {
     }
 
     async createListItem( listId, listItemData ) {
+
+        console.log( listId );
         
         // Execute and return an ajax call to create a new list item
         const newListItem = await this.request({

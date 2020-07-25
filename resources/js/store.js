@@ -10,6 +10,10 @@ export class Store {
 
     }
 
+    /**
+     * @param {number} listId 
+     * @returns {List}
+     */
     getList( listId ) {
         return this.lists[listId] || null;
     }
@@ -48,6 +52,27 @@ export class Store {
         if( this.lists[id] )
     
             delete this.lists[id];
+
+        return this;
+
+    }
+
+    /**
+     * @param {number} listId 
+     * @param {ListItem} listItem 
+     * @returns {Store}
+     */
+    addListItem( listId, listItem ) {
+
+        this.getList( listId ).addItem( listItem );
+
+        return this;
+
+    }
+
+    removeListItem( listId, listItemId ) {
+
+        this.getList( listId ).removeItem( listItem );
 
         return this;
 
