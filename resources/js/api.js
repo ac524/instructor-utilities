@@ -105,11 +105,11 @@ class Api {
 
     }
 
-    async updateListItem( listId, listItemId, listItemData ) {
+    async updateListItem( listItemId, listItemData ) {
         
         // Execute and return an ajax call to create a new list item
         const updatedListItem = await this.request({
-            url: `/api/lists/${listId}/items/${listItemId}`,
+            url: `/api/listitems/${listItemId}`,
             method: "PATCH",
             data: listItemData
         });

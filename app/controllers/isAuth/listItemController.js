@@ -27,6 +27,7 @@ router.get('/lists/:listId/items', async ( req, res ) => {
 router.post('/lists/:listId/items', async (req, res) => {
 
     try {
+
         const newItem = await ListItem.create({
             
             name: req.body.name,
@@ -42,9 +43,10 @@ router.post('/lists/:listId/items', async (req, res) => {
 });
 
 //GET a single list's item by ID
-router.get('/lists/:listId/items/:itemId', async ( req, res ) => {
+router.get('/listitems/:itemId', async ( req, res ) => {
 
     try {
+
         const singleListItem = await ListItem.findOne({
             where: {
                 id: req.params.itemId,
@@ -64,9 +66,23 @@ router.get('/lists/:listId/items/:itemId', async ( req, res ) => {
 });
 
 //UPDATE a single list item by id
-router.patch('/lists/:listId/items/:itemId', ( req, res, next ) => {
+router.patch('/listitems/:itemId', async ( req, res, next ) => {
 
-    res.end();
+    try {
+        
+        const update = await ListItem.update(
+            req.body,
+            {
+                where: { id: req.params.itemId }
+            }
+        );
+
+        res.json( { updated: update[0] } );
+
+    } catch (err) {
+
+        res.status(401).json(err);
+    }
 
 });
 

@@ -59,9 +59,7 @@ class ListControls {
 
         const updated = item.update( { name: inputEl.val() } );
 
-        console.log(item);
-
-        if( updated ) await api.updateListItem( item.ListId, item.id, updated );
+        if( updated ) await api.updateListItem( item.id, updated );
 
     }
 
