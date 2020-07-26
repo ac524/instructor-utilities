@@ -15,7 +15,9 @@ export class Store {
      * @returns {List}
      */
     getList( listId ) {
+
         return this.lists[listId] || null;
+
     }
 
     /**
@@ -153,29 +155,37 @@ export class Store {
      * @param {string} listKey 
      */
     deleteList( listKey ) {
+
         localStorage.removeItem( this.getListStorageKey( listKey ) );
         localStorage.removeItem( this.getListSelectedStorageKey( listKey ) );
+        
     }
 
     /**
      * @param {string} listKey 
      */
     getListStorageKey( listKey ) {
+
         return listKey +'-'+ this.key;
+
     }
 
     /**
      * @param {string} listKey 
      */
     getListSelectedStorageKey( listKey ) {
+
         return listKey +'-selected-'+ this.key;
+
     }
 
     /**
      * @returns {Lists}
      */
     init() {
+
         return this.setLists( new Lists( this.loadListsData() ) );
+
     }
 
 }

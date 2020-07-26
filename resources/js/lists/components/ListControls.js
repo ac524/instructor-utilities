@@ -51,14 +51,17 @@ class ListControls {
      * Event handler for saving list items after the input for the label has been updated
      * @param {*} param0 
      */
-    onInputChange( { target } ) {
+    async onInputChange( { target } ) {
 
         const inputEl = $(target);
         const itemIndex = inputEl.closest('.input-group').data( 'index' );
+        const item = this.currentList.all[itemIndex];
 
-        const updated = this.currentList.updateItem( itemIndex, { label: inputEl.val() } );
+        const updated = item.update( { name: inputEl.val() } );
 
-        if( updated ) this.currentList.saveItems();
+        console.log(item);
+
+        if( updated ) await api.updateListItem( item.ListId, item.id, updated );
 
     }
 

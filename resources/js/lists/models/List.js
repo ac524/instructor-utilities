@@ -3,6 +3,8 @@ import api from "../../api";
 
 /**
  * Collection class for managing the entries and selection state for a target list.
+ * 
+ * @property {Array.<ListItem>} all
  */
 class List {
 

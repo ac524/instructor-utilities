@@ -8,15 +8,16 @@ class ListItem {
      * @param {boolean} isDisabled
      * @param {List} list
      */
-    constructor( { name = '', ListId } = {} ) {
-
+    constructor( { id, name = '', ListId } = {} ) {
+        
+        this.id = id;
         this.name = name;
         this.ListId = ListId;
 
     }
 
     get belongsTo() {
-        store.getList(this.ListId);
+        return store.getList(this.ListId);
     }
 
     /**
@@ -63,14 +64,21 @@ class ListItem {
      * @param {string} label
      * @returns {boolean}
      */
-    update( { label } ) {
+    update( { name } ) {
 
         let updated = false;
+        const maybeUpdateValue = ( property, newValue ) => {
+            if( this.hasOwnProperty( property ) && this[property] !== newValue ) {
 
-        if( label !== this.name ) {
-            this.name = label;
-            updated = true;
+                this[property] = newValue;
+
+                if( !updated ) updated = {};
+                updated[property] = newValue;
+    
+            }
         }
+
+        maybeUpdateValue( 'name', name );
 
         return updated;
 
