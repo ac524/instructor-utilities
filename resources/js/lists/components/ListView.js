@@ -1,6 +1,7 @@
 import ListItemPicker from "../controllers/ListItemPicker";
 import CurrentItem from "./CurrentItem";
 import ListControls from "./ListControls";
+import ListItem from "../models/ListItem"
 import List from "../models/List";
 import store from "../../store";
 

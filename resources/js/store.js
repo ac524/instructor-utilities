@@ -16,7 +16,7 @@ export class Store {
      */
     getList( listId ) {
 
-        return this.lists[listId] || null;
+        return this.lists.get(listId);
 
     }
 
@@ -26,7 +26,7 @@ export class Store {
      */
     addList( list ) {
 
-        this.lists[list.id] = list;
+        this.lists.addList( list );
 
         return this;
 

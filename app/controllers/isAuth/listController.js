@@ -85,4 +85,24 @@ router.patch('/lists/:listId', async (req, res) => {
 
 });
 
+router.delete('/lists/:listId', async ( req, res ) => {
+
+    try {
+        
+        const deletedRows = await List.destroy(
+            {
+                where: { id: req.params.listId }
+            }
+        );
+
+        res.json( { deleted: deletedRows } );
+
+    } catch (err) {
+
+        res.status(401).json(err);
+
+    }
+
+});
+
 module.exports = router;

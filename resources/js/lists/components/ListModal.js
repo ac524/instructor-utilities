@@ -81,14 +81,10 @@ class ListModal {
             this.list = await api.createList( this.data );
 
             store.addList( this.list );
-            // this.app.lists.addList( this.list );
-            // this.app.lists.selectList( this.list.key );
 
         } else {
 
             const updated = this.list.update( this.data );
-
-            console.log( updated );
 
             if( updated ) {
                 refreshView = true;
@@ -101,7 +97,7 @@ class ListModal {
             
             isNewList
                 ? this.app.render()
-                : store.listsControls.render();
+                : this.app.listsControls.render();
 
         }
 

@@ -70,14 +70,17 @@ class ListItemPicker {
     /**
      * @param {string} listKey 
      */
-    deleteList( listKey ) {
+    async deleteList( listKey ) {
 
         if( !store.lists.hasMultipleLists )
 
             // Exit early and prevent the delete action if we don't have more than one list.
             return this;
 
-        const wasCurrent = store.lists.get( listKey ).isCurrent;
+        const list = store.lists.get( listKey );
+        const wasCurrent = list.isCurrent;
+
+        await api.deleteList( list.id );
 
         store.deleteList( listKey );
 

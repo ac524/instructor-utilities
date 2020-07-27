@@ -13,7 +13,8 @@ class Lists {
      * Lists class constructor.
      */
     constructor() {
-
+        
+        this.lists = {}
         this.currentListKey;
 
     }
@@ -29,7 +30,7 @@ class Lists {
     }
 
     get all() {
-        return Object.entries( store.lists );
+        return Object.entries( this.lists );
     }
 
     get count() {
@@ -83,7 +84,7 @@ class Lists {
      */
     get( id ) {
 
-        return store.getList( id );
+        return this.lists[id] || null;
 
     }
 
