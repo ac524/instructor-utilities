@@ -75,6 +75,12 @@ class Api {
     async deleteList( listId ) {
 
         // Execute and return an ajax call to delete a list
+        const deletedList = await this.request({
+            url: `/api/lists/${listId}`,
+            method: "DELETE",
+        });
+
+        return listFactory( deletedList );
 
     }
 
@@ -118,10 +124,16 @@ class Api {
         
     }
 
-    deleteListItem( listItemId ) {
+    async deleteListItem( listItemId ) {
         
         // Execute and return an ajax call to delete a list item
-        
+        const deletedListItem = await this.request({
+            url: `/api/listitems/${listItemId}`,
+            method: "DELETE"
+        });
+
+        return listItemFactory( deletedListItem );
+
     }
 
 }
