@@ -97,8 +97,6 @@ class Api {
     }
 
     async createListItem( listId, listItemData ) {
-
-        console.log( listId );
         
         // Execute and return an ajax call to create a new list item
         const newListItem = await this.request({
@@ -113,7 +111,7 @@ class Api {
 
     async updateListItem( listItemId, listItemData ) {
         
-        // Execute and return an ajax call to create a new list item
+        // Execute and return an ajax call to Update a new list item
         const updatedListItem = await this.request({
             url: `/api/listitems/${listItemId}`,
             method: "PATCH",
@@ -127,12 +125,14 @@ class Api {
     async deleteListItem( listItemId ) {
         
         // Execute and return an ajax call to delete a list item
-        const deletedListItem = await this.request({
+        const response = await this.request({
             url: `/api/listitems/${listItemId}`,
             method: "DELETE"
         });
 
-        return listItemFactory( deletedListItem );
+        console.log( response );
+
+        // return listItemFactory( deletedListItem );
 
     }
 

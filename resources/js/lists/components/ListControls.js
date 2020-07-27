@@ -131,15 +131,16 @@ class ListControls {
 
     /**
      * @param {index} itemIndex
-     * @returns {ListControls}
      */
-    deleteListItem( itemIndex ) {
+    async deleteListItem( itemIndex ) {
+
+        const item = this.currentList.all[itemIndex];
 
         this.currentList.removeItem( itemIndex ).emptySelected();
 
-        this.app.view.render();
+        await api.deleteListItem( item.id );
 
-        return this;
+        this.app.view.render();
 
     }
 

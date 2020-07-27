@@ -341,8 +341,7 @@ class List {
     removeItem( index ) {
 
         if( this.all[index] ) {
-
-            this.all[index].belongsTo = null;
+            
             this.all.splice( index, 1 );
             this.emptySelected();
 

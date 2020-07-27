@@ -66,7 +66,7 @@ router.get('/listitems/:itemId', async ( req, res ) => {
 });
 
 //UPDATE a single list item by id
-router.patch('/listitems/:itemId', async ( req, res, next ) => {
+router.patch('/listitems/:itemId', async ( req, res ) => {
 
     try {
         
@@ -82,6 +82,26 @@ router.patch('/listitems/:itemId', async ( req, res, next ) => {
     } catch (err) {
 
         res.status(401).json(err);
+    }
+
+});
+
+router.delete('/listitems/:itemId', async ( req, res ) => {
+
+    try {
+        
+        const deletedRows = await ListItem.destroy(
+            {
+                where: { id: req.params.itemId }
+            }
+        );
+
+        res.json( { deleted: deletedRows } );
+
+    } catch (err) {
+
+        res.status(401).json(err);
+
     }
 
 });
