@@ -17,6 +17,11 @@ module.exports = function(sequelize, DataTypes) {
         }
     );
 
+    ListMeta.associate = ({ List }) => {
+        ListMeta.belongsTo(List);
+    };
+    
+
     return ListMeta;
 
 }

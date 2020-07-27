@@ -1,5 +1,11 @@
 const router = require("express").Router();
-const { List } = require("../../models");
+const { List, ListMeta } = require("../../models");
+
+const getMetaInclude = () => ({
+    model: ListMeta,
+    as: "Meta",
+    attributes: [ 'key', 'value' ]
+})
 
 //GET saved lists
 router.get('/lists', async (req, res) => {
@@ -9,7 +15,8 @@ router.get('/lists', async (req, res) => {
         const listsResult = await List.findAll({
             where: {
                 UserId: req.user.id
-            }
+            },
+            include: getMetaInclude()
         });
 
         res.json(listsResult);
@@ -31,7 +38,8 @@ router.get('/lists/:listId', async ( req, res ) => {
             where: {
                 id: req.params.listId,
                 UserId: req.user.id
-            }
+            },
+            include: getMetaInclude()
         });
         
         res.json( listResults );
