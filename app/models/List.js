@@ -7,11 +7,8 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     List.associate = ({ ListItem, ListMeta, User }) => {
-        List.hasMany(ListItem, {
-            onDelete: "cascade"
-        });
 
-        List.hasMany(ListMeta, {
+        List.hasMany(ListItem, {
             onDelete: "cascade"
         });
 
@@ -20,6 +17,9 @@ module.exports = function(sequelize, DataTypes) {
                 allowNull: false
             }
         });
+
+        List.belongsToMany(User, { through: ListMeta });
+        
     };
 
     return List;

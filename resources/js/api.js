@@ -130,6 +130,15 @@ class Api {
 
     }
 
+    async selectListItem( listId, listItemId ) {
+
+        await this.request({
+            url: `/api/lists/${listId}/select/${listItemId}`,
+            method: "POST"
+        });
+
+    }
+
 }
 
 const api = new Api();

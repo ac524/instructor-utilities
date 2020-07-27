@@ -67,18 +67,25 @@ class ListControls {
      * Event handler for toggling the item's selection checkbox
      * @param {*} param0 
      */
-    onToggleSelect( { target } ) {
+    async onToggleSelect( { target } ) {
 
         const checkboxEl = $(target);
         const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
+        const listItem = this.currentList.all[itemIndex];
 
-        this.currentList.isItemSelected( itemIndex )
+        
+        if( this.currentList.isItemSelected( itemIndex ) ) {
 
-            ? this.currentList.unselectItem( itemIndex )
+            this.currentList.unselectItem( itemIndex );
 
-            : this.currentList.selectItem( itemIndex );
+        } else {
 
-        this.currentList.saveSelected();
+            this.currentList.selectItem( itemIndex );
+            await api.selectListItem( listItem.ListId, listItem.id );
+
+        }
+
+        // this.currentList.saveSelected();
             
         this.app.view.render();
 
