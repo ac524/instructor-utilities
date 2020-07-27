@@ -51,9 +51,9 @@ export class Store {
      */
     deleteList( id ) {
 
-        if( this.lists[id] )
+        if( this.lists.get(id) )
     
-            delete this.lists[id];
+            this.lists.deleteList(id);
 
         return this;
 
@@ -81,112 +81,112 @@ export class Store {
     }
 
     /** OLD CODE TO BE REMOVED */
-    saveLists() {
+    // saveLists() {
 
-        if( this.lists ) {
+    //     if( this.lists ) {
 
-            const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
+    //         const serialize = ( lists ) => JSON.stringify( Object.fromEntries(Object.entries( lists ).map( ([ key, value ]) => [ key, value.name ] )) );
 
-            localStorage.setItem( this.key, serialize( this.lists.lists ) );
+    //         localStorage.setItem( this.key, serialize( this.lists.lists ) );
 
-        }
+    //     }
 
-        return this;
+    //     return this;
 
-    }
+    // }
 
-    loadListsData() {
+    // loadListsData() {
 
-        const deserialize = ( lists ) => Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => new List( key, name ) );
+    //     const deserialize = ( lists ) => Object.entries( JSON.parse( lists ) ).map( ([ key, name ]) => new List( key, name ) );
 
-        return deserialize( localStorage.getItem( this.key ) || '{}' );
+    //     return deserialize( localStorage.getItem( this.key ) || '{}' );
 
-    }
+    // }
 
-    loadListItemData( listKey ) {
+    // loadListItemData( listKey ) {
 
-        // Load or create the target list
-        let list = JSON.parse( localStorage.getItem( this.getListStorageKey( listKey ) ) ) || [];
-        let selectList = JSON.parse( localStorage.getItem( this.getListSelectedStorageKey( listKey ) ) ) || [];
+    //     // Load or create the target list
+    //     let list = JSON.parse( localStorage.getItem( this.getListStorageKey( listKey ) ) ) || [];
+    //     let selectList = JSON.parse( localStorage.getItem( this.getListSelectedStorageKey( listKey ) ) ) || [];
 
-        // Migrate old data format if needed
-        if( list[0] && typeof list[0] === 'string' )
+    //     // Migrate old data format if needed
+    //     if( list[0] && typeof list[0] === 'string' )
 
-            list = list.map( label => ({ label }) );
+    //         list = list.map( label => ({ label }) );
 
-        return {
-            list: list.map( item => new ListItem( item ) ),
-            selectList
-        };
+    //     return {
+    //         list: list.map( item => new ListItem( item ) ),
+    //         selectList
+    //     };
 
-    }
+    // }
 
-    saveListItems( listKey, items ) {
+    // saveListItems( listKey, items ) {
 
-        localStorage.setItem( this.getListStorageKey( listKey ), JSON.stringify( items ) );
+    //     localStorage.setItem( this.getListStorageKey( listKey ), JSON.stringify( items ) );
 
-        return this;
+    //     return this;
 
-    }
+    // }
 
-    saveSelectedListItems( listKey, selected ) {
+    // saveSelectedListItems( listKey, selected ) {
 
-        localStorage.setItem( this.getListSelectedStorageKey( listKey ), JSON.stringify( selected ) );
+    //     localStorage.setItem( this.getListSelectedStorageKey( listKey ), JSON.stringify( selected ) );
 
-        return this;
+    //     return this;
 
-    }
+    // }
 
-    /**
-     * @param {Lists} lists
-     * @returns {Lists}
-     */
-    setLists( lists ) {
+    // /**
+    //  * @param {Lists} lists
+    //  * @returns {Lists}
+    //  */
+    // setLists( lists ) {
 
-        this.lists = lists;
+    //     this.lists = lists;
 
-        this.lists.store = this;
+    //     this.lists.store = this;
 
-        return this;
+    //     return this;
 
-    }
+    // }
 
-    /**
-     * @param {string} listKey 
-     */
-    deleteList( listKey ) {
+    // /**
+    //  * @param {string} listKey 
+    //  */
+    // deleteList( listKey ) {
 
-        localStorage.removeItem( this.getListStorageKey( listKey ) );
-        localStorage.removeItem( this.getListSelectedStorageKey( listKey ) );
+    //     localStorage.removeItem( this.getListStorageKey( listKey ) );
+    //     localStorage.removeItem( this.getListSelectedStorageKey( listKey ) );
         
-    }
+    // }
 
-    /**
-     * @param {string} listKey 
-     */
-    getListStorageKey( listKey ) {
+    // /**
+    //  * @param {string} listKey 
+    //  */
+    // getListStorageKey( listKey ) {
 
-        return listKey +'-'+ this.key;
+    //     return listKey +'-'+ this.key;
 
-    }
+    // }
 
-    /**
-     * @param {string} listKey 
-     */
-    getListSelectedStorageKey( listKey ) {
+    // /**
+    //  * @param {string} listKey 
+    //  */
+    // getListSelectedStorageKey( listKey ) {
 
-        return listKey +'-selected-'+ this.key;
+    //     return listKey +'-selected-'+ this.key;
 
-    }
+    // }
 
-    /**
-     * @returns {Lists}
-     */
-    init() {
+    // /**
+    //  * @returns {Lists}
+    //  */
+    // init() {
 
-        return this.setLists( new Lists( this.loadListsData() ) );
+    //     return this.setLists( new Lists( this.loadListsData() ) );
 
-    }
+    // }
 
 }
 

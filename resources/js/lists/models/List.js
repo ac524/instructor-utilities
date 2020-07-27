@@ -94,7 +94,7 @@ class List {
 
         return this.belongsTo && this.belongsTo.count
         
-            ? this.id === this.belongsTo.currentList.key
+            ? this.id === this.belongsTo.currentList.id
             
             : false;
             

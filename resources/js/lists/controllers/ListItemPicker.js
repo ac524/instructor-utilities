@@ -68,27 +68,24 @@ class ListItemPicker {
     }
 
     /**
-     * @param {string} listKey 
+     * @param {string} listId 
      */
-    async deleteList( listKey ) {
+    async deleteList( listId ) {
 
         if( !store.lists.hasMultipleLists )
 
             // Exit early and prevent the delete action if we don't have more than one list.
             return this;
 
-        const list = store.lists.get( listKey );
-        const wasCurrent = list.isCurrent;
+        const wasCurrent = store.getList( listId ).isCurrent;
 
-        await api.deleteList( list.id );
+        await api.deleteList( listId );
 
-        store.deleteList( listKey );
+        store.deleteList( listId );
 
-        if( wasCurrent ) this.selectList( this.lists.currentList.id );
+        if( wasCurrent ) this.selectList( store.lists.currentList.id );
 
         this.listsControls.render();
-
-        return this;
 
     }
 

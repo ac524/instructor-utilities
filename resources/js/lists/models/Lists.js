@@ -175,11 +175,11 @@ class Lists {
      */
     deleteList( id ) {
 
-        if( store.getList(id).isCurrent )
+        if( this.get(id).isCurrent )
 
             this.currentListKey = null;
 
-        store.deleteList(id);
+        delete this.lists[id];
 
         return this;
 
