@@ -33,7 +33,7 @@ const { controllers, isAuthControllers } = require("../controllers");
 app.use( "/api", controllers, isAuthenticatedController, isAuthControllers );
 
 // Global middleware for routes registered after this.
-app.use( require("./middleware/provideUserToViews.js") );
+app.use( require("./middleware/provideUserToViews.js"), require("./middleware/provideEnvToViews.js") );
 
 // Register HTML routes last.
 app.use( ...require("../routes") );
