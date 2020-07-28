@@ -13,12 +13,20 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         {
-            timestamps: false
+            timestamps: false,
+            indexes: [
+                {
+                    name: 'UserListMeta',
+                    unique: true,
+                    fields: ['UserId', 'ListId', 'key']
+                }
+            ]
         }
     );
 
-    ListMeta.associate = ({ List }) => {
+    ListMeta.associate = ({ List, User }) => {
         ListMeta.belongsTo(List);
+        ListMeta.belongsTo(User);
     };
     
 

@@ -33,7 +33,7 @@ class ListItem {
      * @returns {boolean}
      */
     get isSelected() {
-        return this.belongsTo ? this.belongsTo.isItemSelected( this.index ) : false;
+        return this.belongsTo ? this.belongsTo.isItemSelected( this.id ) : false;
     }
 
     /**
@@ -41,7 +41,7 @@ class ListItem {
      * @returns {boolean}
      */
     get isCurrent() {
-        return this.belongsTo ? this.index === this.belongsTo.currentItemIndex : false;
+        return this.belongsTo ? this.id === this.belongsTo.currentItemId : false;
     }
 
     save() {

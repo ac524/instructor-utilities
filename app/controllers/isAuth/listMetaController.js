@@ -2,14 +2,15 @@ const router = require("express").Router();
 const { ListMeta } = require("../../models");
 
 // console.log( "load meta routes" );
+const getIndexOptions = ( { params: { listId: ListId }, user: { id: UserId } }, key ) => ({
+    UserId,
+    ListId,
+    key
+});
 
 router.post( "/lists/:listId/select/:itemId", async ( req, res ) => {
 
-    const metaProperties = {
-        ListId: req.params.listId,
-        UserId: req.user.id,
-        key: 'selected'
-    };
+    const metaProperties = getIndexOptions( req, 'selected' );
 
     try {
 
@@ -18,11 +19,11 @@ router.post( "/lists/:listId/select/:itemId", async ( req, res ) => {
             attributes: ['value']
         } );
 
-        console.log( selectedMeta );
-
         const exists = Boolean( selectedMeta );
 
         if( !exists ) selectedMeta = { dataValues: { value: [] } };
+
+        if( selectedMeta.dataValues.value.includes( req.params.itemId ) ) throw new Error("Cannot select duplicate IDs");
 
         selectedMeta.dataValues.value.push( parseInt(req.params.itemId) );
 

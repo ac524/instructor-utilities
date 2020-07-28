@@ -33,7 +33,8 @@ module.exports = function(sequelize, DataTypes) {
       onDelete: "cascade"
     });
 
-    User.belongsToMany(List, { through: ListMeta });
+    // User.belongsToMany(List, { through: ListMeta });
+    User.hasMany( ListMeta );
   };
 
   return User;

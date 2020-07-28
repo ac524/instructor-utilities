@@ -74,13 +74,13 @@ class ListControls {
         const listItem = this.currentList.all[itemIndex];
 
         
-        if( this.currentList.isItemSelected( itemIndex ) ) {
+        if( this.currentList.isItemSelected( listItem.id ) ) {
 
-            this.currentList.unselectItem( itemIndex );
+            this.currentList.unselectItem( listItem.id );
 
         } else {
 
-            this.currentList.selectItem( itemIndex );
+            this.currentList.selectItem( listItem.id );
             await api.selectListItem( listItem.ListId, listItem.id );
 
         }
@@ -177,7 +177,7 @@ class ListControls {
          
         if ( this.currentList.selected.length )
         
-            this.disableListItem( this.currentList.currentItemIndex );
+            this.disableListItem( this.currentList.currentItemId );
 
         return this;
 
@@ -193,7 +193,7 @@ class ListControls {
             // Exit early if there are no selected items to undo.
             return this;
 
-        this.currentList.unselectItem( this.currentList.currentItemIndex ).saveSelected();
+        this.currentList.unselectItem( this.currentList.currentItemId ).saveSelected();
 
         this.app.view.render();
 
@@ -204,13 +204,15 @@ class ListControls {
     /**
      * @returns {ListControls}
      */
-    nextListItem() {
+    async nextListItem() {
 
         if( this.currentList.isComplete )
 
             this.currentList.emptySelected();
 
-        this.currentList.selectRandomItem().saveSelected();
+        this.currentList.selectRandomItem();
+
+        await api.selectListItem( this.currentList.id, this.currentList.currentItem.id );
 
         this.app.view.render();
 

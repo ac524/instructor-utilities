@@ -15,10 +15,12 @@ class List {
      * @param {array} items 
      * @param {array} selectedItems
      */
-    constructor( { id, name } = {} ) {
+    constructor( { id, name, Meta } = {} ) {
 
         this.id = id;
         this.name = name;
+        this.Meta = Meta;
+        this.isLoaded = false;
 
         // Private properties to control access.
         const currentItems = [];
@@ -30,15 +32,6 @@ class List {
         Object.defineProperty( this, 'all', {
             get: () => currentItems,
             set: this.replaceItems.bind(this)
-        } );
-        
-        // Control the access of the array to ensure we are always working with the same array instance.
-        Object.defineProperty( this, 'selected', {
-            get: () => currentSelectedItems,
-            set: function( itemIndexes ) {
-                currentSelectedItems.length = 0;
-                currentSelectedItems.push( ...itemIndexes );
-            }
         } );
 
         // Object.defineProperty( this, 'storageKey', { get: () => storageKey } );
@@ -58,6 +51,15 @@ class List {
         // this.all = items;
         // this.selected = selectedItems;
 
+    }
+
+    get selected() {
+        return this.getMeta( "selected" );
+    }
+
+    set selected( itemIndexes ) {
+        this.selected.length = 0;
+        this.selected.push( ...itemIndexes );
     }
 
     /**
@@ -100,7 +102,7 @@ class List {
             
     }
 
-    get currentItemIndex() {
+    get currentItemId() {
 
         return this.selected[ this.selected.length - 1 ] >= 0 ? this.selected[ this.selected.length - 1 ] : null;
 
@@ -111,7 +113,7 @@ class List {
      */
     get currentItem() {
 
-        return this.all[this.currentItemIndex] || null;
+        return this.getItem(this.currentItemId) || null;
 
     }
 
@@ -128,7 +130,7 @@ class List {
 
         try {
 
-            this.all = await api.getListItems( this.id );
+            this.addItems( await api.getListItems( this.id ) );
 
         } catch( err ) {
 
@@ -155,6 +157,10 @@ class List {
 
         return this;
 
+    }
+
+    getMeta( key ) {
+        return this.Meta.find( meta => meta.key === key ).value;
     }
 
     /**
@@ -198,6 +204,8 @@ class List {
      */
     emptySelected() {
 
+        const err = new Error();
+
         this.selected.length = 0;
 
         return this;
@@ -209,13 +217,13 @@ class List {
      */
     selectRandomItem() {
 
-        let unusedIndexes = this.enabledItems.map( ( { index } ) => index ).filter( ( i ) => !this.selected.includes( i ) );
+        let unusedIds = this.enabledItems.map( ( { id } ) => id ).filter( ( id ) => !this.selected.includes( id ) );
 
-        if( unusedIndexes.length ) {
+        if( unusedIds.length ) {
 
-            let nextItemIndex = unusedIndexes[ Math.floor(Math.random() * unusedIndexes.length) ];
+            let nextItemId = unusedIds[ Math.floor(Math.random() * unusedIds.length) ];
     
-            this.selectItem( nextItemIndex );
+            this.selectItem( nextItemId );
 
         }
 
@@ -265,6 +273,16 @@ class List {
     }
 
     /**
+     * @param {number} itemId 
+     * @returns {ListItem}
+     */
+    getItem( itemId ) {
+
+        return this.all.find (({id}) => id === itemId);
+
+    }
+
+    /**
      * @param {Array.<ListItem>} myObjects
      * @returns {List}
      */
@@ -288,26 +306,26 @@ class List {
     }
 
     /**
-     * @param {number} targetIndex
+     * @param {number} itemId
      * @returns {List}
      */
-    selectItem( targetIndex ) {
+    selectItem( itemId ) {
 
-        if( this.all[targetIndex] && !this.isItemSelected( targetIndex ) )
+        if( !this.isItemSelected( itemId ) )
             
-            this.selected.push( targetIndex );
+            this.selected.push( itemId );
 
         return this;
 
     }
 
     /**
-     * @param {number} targetIndex
+     * @param {number} itemId
      * @returns {List}
      */
-    unselectItem( targetIndex ) {
+    unselectItem( itemId ) {
 
-        const position = this.selected.indexOf( targetIndex );
+        const position = this.selected.indexOf( itemId );
 
         if( position > -1 ) this.selected.splice( position, 1 );
 
@@ -316,12 +334,12 @@ class List {
     }
 
     /**
-     * @param {number} index
+     * @param {number} itemId
      * @returns {boolean}
      */
-    isItemSelected( index ) {
+    isItemSelected( itemId ) {
 
-        return this.selected.includes( index );
+        return this.selected.includes( itemId );
 
     }
 
