@@ -11,6 +11,13 @@ app.use(express.json());
 const session = require("express-session");
 const passport = require("./passport");
 const compression = require("compression");
+// TODO Research usage of this compression. Does it work for client side requests?
+// const msgpack = require("express-msgpack");
+
+// gzip compression.
+app.use(compression());
+// msgpack compression for json.
+// app.use(msgpack());
 
 app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
@@ -25,8 +32,6 @@ const hbs = exphbs.create({ defaultLayout: "main" });
 exphbsSections(hbs);
 app.engine("handlebars", hbs.engine );
 app.set("view engine", "handlebars");
-
-app.use(compression());
 
 // Use the /public directory for static file loading.
 app.use(express.static("public"));
