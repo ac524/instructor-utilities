@@ -10,10 +10,12 @@ app.use(express.json());
 // Install Passport middleware for user authentication and sessions.
 const session = require("express-session");
 const passport = require("./passport");
+const compression = require("compression");
 
 app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // Create and install a Handlebars view engine with Express.
 const exphbs = require("express-handlebars");
@@ -23,6 +25,8 @@ const hbs = exphbs.create({ defaultLayout: "main" });
 exphbsSections(hbs);
 app.engine("handlebars", hbs.engine );
 app.set("view engine", "handlebars");
+
+app.use(compression());
 
 // Use the /public directory for static file loading.
 app.use(express.static("public"));
