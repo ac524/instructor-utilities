@@ -15,16 +15,18 @@ class List {
      * @param {array} items 
      * @param {array} selectedItems
      */
-    constructor( { id, name, Meta } = {} ) {
+    constructor( { id, name, Meta = [] } = {} ) {
 
         this.id = id;
         this.name = name;
         this.Meta = Meta;
         this.isLoaded = false;
 
+        const expectedMetaArrays = ["selected", "disabled"];
+        expectedMetaArrays.forEach( key => !this.getMeta(key) && this.Meta.push( { key, value: []  } ) );
+
         // Private properties to control access.
         const currentItems = [];
-        const currentSelectedItems = [];
 
         let belongsTo = null;
 
@@ -33,9 +35,6 @@ class List {
             get: () => currentItems,
             set: this.replaceItems.bind(this)
         } );
-
-        // Object.defineProperty( this, 'storageKey', { get: () => storageKey } );
-        // Object.defineProperty( this, 'selectStorageKey', { get: () => selectStorageKey } );
 
         Object.defineProperty( this, 'belongsTo', {
             get: () => belongsTo,
@@ -47,9 +46,6 @@ class List {
             get: () => isLoaded,
             set: ( value ) => isLoaded = value
         });
-
-        // this.all = items;
-        // this.selected = selectedItems;
 
     }
 
@@ -164,7 +160,8 @@ class List {
     }
 
     getMeta( key ) {
-        return this.Meta.find( meta => meta.key === key ).value;
+        const meta = this.Meta.find( meta => meta.key === key );
+        return meta ? meta.value : null;
     }
 
     /**

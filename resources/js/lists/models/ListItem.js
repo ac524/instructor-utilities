@@ -61,7 +61,7 @@ class ListItem {
 
     unselect() {
 
-        if( this.belongsTo ) this.belongsTo.unselectItem( this.index );
+        if( this.belongsTo ) this.belongsTo.unselectItem( this.id );
 
         return this;
 
@@ -99,9 +99,9 @@ class ListItem {
 
         if( this.isDisabled ) {
             this.belongsTo.enableItem( this.id );
-            this.unselect();
         } else {
             this.belongsTo.disableItem( this.id );
+            this.unselect();
         }
 
         return this.isDisabled;

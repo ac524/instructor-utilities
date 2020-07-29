@@ -166,7 +166,9 @@ class ListControls {
             ? await api.disableListItem( item.ListId, item.id )
             : await api.enableListItem( item.ListId, item.id );
 
-        if( wasSelected ) await api.unselectListItem( item.ListId, item.id );
+        if( wasSelected ) {
+            await api.unselectListItem( item.ListId, item.id );
+        }
 
         this.app.view.render();
 
