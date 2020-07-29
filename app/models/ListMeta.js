@@ -3,8 +3,17 @@ module.exports = function(sequelize, DataTypes) {
     const ListMeta = sequelize.define(
         "ListMeta",
         {
+            ListId: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+            },
+            UserId: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+            },
             key: {
                 type: DataTypes.STRING,
+                primaryKey: true,
                 allowNull: false
             },
             value: {
@@ -13,14 +22,7 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         {
-            timestamps: false,
-            indexes: [
-                {
-                    name: 'UserListMeta',
-                    unique: true,
-                    fields: ['UserId', 'ListId', 'key']
-                }
-            ]
+            timestamps: false
         }
     );
 
