@@ -190,14 +190,17 @@ class ListControls {
     /**
      * @returns {ListControls}
      */
-    previousListItem() {
+    async previousListItem() {
 
         if( !this.currentList.selected.length )
 
             // Exit early if there are no selected items to undo.
             return this;
 
-        this.currentList.unselectItem( this.currentList.currentItemId ).saveSelected();
+        const currentItemId = this.currentList.currentItemId;
+
+        this.currentList.unselectItem( currentItemId );
+        await api.unselectListItem( this.currentList.id, currentItemId );
 
         this.app.view.render();
 
@@ -231,9 +234,10 @@ class ListControls {
     /**
      * @returns {ListControls}
      */
-    restartList() {
+    async restartList() {
 
-        this.currentList.emptySelected().saveSelected();
+        this.currentList.emptySelected();
+        await api.clearSelectedListItems( this.currentList.id );
         
         this.app.view.render();
 
