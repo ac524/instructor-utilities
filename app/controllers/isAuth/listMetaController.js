@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const listMetaActionMiddlewareFactory = require("../../config/middleware/listMetaActionFactory");
 
-const metaIdArrays = [ "selected", "disabled" ];
+const itemIdArrayMetaKeys = [ "selected", "disabled" ];
 
 // Build the required routes for each meta property that uses an array based value
-metaIdArrays.forEach( metaKey => {
+itemIdArrayMetaKeys.forEach( metaKey => {
 
     router.post( `/lists/:listId/meta/${metaKey}`, listMetaActionMiddlewareFactory( 'pushItemIdToArray', metaKey ) );
 
