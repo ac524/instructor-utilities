@@ -19,7 +19,7 @@ class ListItemPicker {
         this.status = new ListStatus( this );
         this.modal = new ListModal( this );
         this.view = new ListView( this );
-        this.importExport = new ListImportExport( this );
+        // this.importExport = new ListImportExport( this );
         
     }
 
