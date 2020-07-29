@@ -412,36 +412,6 @@ class List {
     }
 
     /**
-     * Helper function to save both the items and the currently selected indexes.
-     * @returns {List}
-     */
-    saveListContent() {
-        return this.saveItems().saveSelected();
-    }
-
-    /**
-     * @returns {List}
-     */
-    saveItems() {
-
-        if( this.store ) this.store.saveListItems( this.id, this.all );
-
-        return this;
-
-    }
-
-    /**
-     * @returns {List}
-     */
-    saveSelected() {
-
-        if( this.store ) this.store.saveSelectedListItems( this.id, this.selected );
-
-        return this;
-
-    }
-
-    /**
      * @returns {List}
      */
     import( items ) {

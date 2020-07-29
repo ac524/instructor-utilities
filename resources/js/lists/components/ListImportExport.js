@@ -49,8 +49,7 @@ class ListImportExport {
 
                 this.currentList
                     .emptySelected()
-                    .import(newList)
-                    .saveListContent();
+                    .import(newList);
                     
                 this.app.view.render();
 

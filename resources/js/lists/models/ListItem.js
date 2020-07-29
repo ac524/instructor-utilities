@@ -51,14 +51,6 @@ class ListItem {
         return this.belongsTo ? this.id === this.belongsTo.currentItemId : false;
     }
 
-    save() {
-
-        if( this.belongsTo ) this.belongsTo.saveItems();
-
-        return this;
-
-    }
-
     unselect() {
 
         if( this.belongsTo ) this.belongsTo.unselectItem( this.id );
