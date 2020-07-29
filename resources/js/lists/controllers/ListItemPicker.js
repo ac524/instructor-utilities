@@ -86,6 +86,7 @@ class ListItemPicker {
         if( wasCurrent ) this.selectList( store.lists.currentList.id );
 
         this.listsControls.render();
+        this.view.render();
 
     }
 

@@ -20,7 +20,6 @@ class List {
         this.id = id;
         this.name = name;
         this.Meta = Meta;
-        this.isLoaded = false;
 
         const expectedMetaArrays = ["selected", "disabled"];
         expectedMetaArrays.forEach( key => !this.getMeta(key) && this.Meta.push( { key, value: []  } ) );
@@ -128,12 +127,16 @@ class List {
 
     async loadItems() {
 
-        try {
+        if( this.isLoaded ) return;
 
+        try {
+            
+            this.isLoaded = true;
             this.addItems( await api.getListItems( this.id ) );
 
         } catch( err ) {
 
+            this.isLoaded = false;
             console.log( err );
             console.log( "Error fetching list items" );
             
