@@ -34,7 +34,9 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     // User.belongsToMany(List, { through: ListMeta });
-    User.hasMany( ListMeta );
+    User.hasMany( ListMeta, {
+      onDelete: "cascade"
+    } );
   };
 
   return User;

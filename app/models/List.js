@@ -19,7 +19,10 @@ module.exports = function(sequelize, DataTypes) {
         });
 
         // List.belongsToMany(User, { through: ListMeta });
-        List.hasMany( ListMeta, { as: "Meta" } );
+        List.hasMany( ListMeta, {
+            as: "Meta",
+            onDelete: "cascade"
+        } );
 
     };
 
