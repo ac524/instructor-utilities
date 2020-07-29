@@ -133,8 +133,57 @@ class Api {
     async selectListItem( listId, listItemId ) {
 
         await this.request({
-            url: `/api/lists/${listId}/select/${listItemId}`,
+            url: `/api/lists/${listId}/meta/selected`,
+            data: { itemId: listItemId },
             method: "POST"
+        });
+
+    }
+
+    async unselectListItem( listId, listItemId ) {
+
+        await this.request({
+            url: `/api/lists/${listId}/meta/selected/${listItemId}`,
+            data: { itemId: listItemId },
+            method: "DELETE"
+        });
+
+    }
+
+    async clearSelectedListItems( listId ) {
+
+        await this.request({
+            url: `/api/lists/${listId}/meta/selected`,
+            method: "DELETE"
+        });
+
+    }
+
+    async disableListItem( listId, listItemId ) {
+
+        await this.request({
+            url: `/api/lists/${listId}/meta/disabled`,
+            data: { itemId: listItemId },
+            method: "POST"
+        });
+
+    }
+
+    async enableListItem( listId, listItemId ) {
+
+        await this.request({
+            url: `/api/lists/${listId}/meta/disabled/${listItemId}`,
+            data: { itemId: listItemId },
+            method: "DELETE"
+        });
+
+    }
+
+    async clearDisabledListItems( listId ) {
+
+        await this.request({
+            url: `/api/lists/${listId}/meta/disabled`,
+            method: "DELETE"
         });
 
     }

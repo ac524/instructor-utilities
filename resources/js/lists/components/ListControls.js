@@ -77,6 +77,7 @@ class ListControls {
         if( this.currentList.isItemSelected( listItem.id ) ) {
 
             this.currentList.unselectItem( listItem.id );
+            await api.unselectListItem( listItem.ListId, listItem.id );
 
         } else {
 
@@ -103,10 +104,11 @@ class ListControls {
         if( !action ) return;
 
         const itemIndex = buttonEl.closest('.input-group').data( 'index' );
+        const listItem = this.currentList.all[itemIndex];
 
         const actions = {
-            remove: () => this.deleteListItem( itemIndex ),
-            disable: () => this.disableListItem( itemIndex )
+            remove: () => this.deleteListItem( listItem.id ),
+            disable: () => this.disableListItem( listItem.id )
         }
 
         if( actions[action] ) actions[action]();
@@ -137,32 +139,34 @@ class ListControls {
     }
 
     /**
-     * @param {index} itemIndex
+     * @param {index} itemId
      */
-    async deleteListItem( itemIndex ) {
+    async deleteListItem( itemId ) {
 
-        const item = this.currentList.all[itemIndex];
+        this.currentList.removeItem( itemId ).emptySelected();
 
-        this.currentList.removeItem( itemIndex ).emptySelected();
-
-        await api.deleteListItem( item.id );
+        await api.deleteListItem( itemId );
 
         this.app.view.render();
 
     }
 
     /**
-     * @param {index} itemIndex 
+     * @param {index} itemId 
      * @returns {ListControls}
      */
-    disableListItem( itemIndex ) {
+    async disableListItem( itemId ) {
 
-        const wasSelected = this.currentList.all[itemIndex].isSelected;
+        const item = this.currentList.getItem(itemId);
+        const wasSelected = item.isSelected;
 
-        this.currentList.all[itemIndex].toggleDisable();
-        this.currentList.saveItems();
+        const isDisabled = item.toggleDisable();
 
-        if( wasSelected ) this.currentList.saveSelected();
+        isDisabled
+            ? await api.disableListItem( item.ListId, item.id )
+            : await api.enableListItem( item.ListId, item.id );
+
+        if( wasSelected ) await api.unselectListItem( item.ListId, item.id );
 
         this.app.view.render();
 
@@ -175,7 +179,7 @@ class ListControls {
      */
     disableCurrentListItem() {
          
-        if ( this.currentList.selected.length )
+        if ( this.currentList.selected.length ) 
         
             this.disableListItem( this.currentList.currentItemId );
 
@@ -206,9 +210,13 @@ class ListControls {
      */
     async nextListItem() {
 
-        if( this.currentList.isComplete )
-
+        if( this.currentList.isComplete ) {
+            
             this.currentList.emptySelected();
+            await api.clearSelectedListItems( this.currentList.id );
+
+        }
+
 
         this.currentList.selectRandomItem();
 

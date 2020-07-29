@@ -37,6 +37,13 @@ class ListItem {
     }
 
     /**
+     * @returns {boolean}
+     */
+    get isDisabled() {
+        return this.belongsTo ? this.belongsTo.isItemDisabled( this.id ) : false;
+    }
+
+    /**
      * Flag for if this item's index is the last item selected.
      * @returns {boolean}
      */
@@ -86,17 +93,18 @@ class ListItem {
 
     /**
      * Modifies the item's disabled state and updates it's state in the list it belongs to.
-     * @returns {ListItem}
+     * @returns {boolean}
      */
     toggleDisable() {
 
-        this.isDisabled = !this.isDisabled;
-
-        if( this.isDisabled && this.isSelected )
-
+        if( this.isDisabled ) {
+            this.belongsTo.enableItem( this.id );
             this.unselect();
+        } else {
+            this.belongsTo.disableItem( this.id );
+        }
 
-        return this;
+        return this.isDisabled;
 
     }
 

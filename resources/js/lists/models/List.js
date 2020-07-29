@@ -62,12 +62,16 @@ class List {
         this.selected.push( ...itemIndexes );
     }
 
+    get disabled() {
+        return this.getMeta( "disabled" );
+    }
+
     /**
      * List of enabled items.
      */
     get enabledItems() {
 
-        return this.all.filter( item => !item.isDisabled );
+        return this.all.filter( item => !this.disabled.includes( item.id ) );
 
     }
 
@@ -76,7 +80,7 @@ class List {
      */
     get disabledItems() {
 
-        return this.all.filter( item => item.isDisabled );
+        return this.all.filter( item => this.disabled.includes( item.id ) );
 
     }
 
@@ -340,6 +344,44 @@ class List {
     isItemSelected( itemId ) {
 
         return this.selected.includes( itemId );
+
+    }
+
+    /**
+     * @param {number} itemId
+     * @returns {List}
+     */
+    disableItem( itemId ) {
+
+        if( !this.isItemDisabled( itemId ) )
+            
+            this.disabled.push( itemId );
+
+        return this;
+
+    }
+
+    /**
+     * @param {number} itemId
+     * @returns {List}
+     */
+    enableItem( itemId ) {
+
+        const position = this.disabled.indexOf( itemId );
+
+        if( position > -1 ) this.disabled.splice( position, 1 );
+
+        return this;
+
+    }
+
+    /**
+     * @param {number} itemId
+     * @returns {boolean}
+     */
+    isItemDisabled( itemId ) {
+
+        return this.disabled.includes( itemId );
 
     }
 

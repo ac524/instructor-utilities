@@ -1,63 +1,34 @@
 const router = require("express").Router();
-const { ListMeta } = require("../../models");
+const listMetaActionMiddlewareFactory = require("../../config/middleware/listMetaActionFactory");
 
-// console.log( "load meta routes" );
-const getIndexOptions = ( { params: { listId: ListId }, user: { id: UserId } }, key ) => ({
-    UserId,
-    ListId,
-    key
-});
+const metaIdArrays = [ "selected", "disabled" ];
 
-router.post( "/lists/:listId/select/:itemId", async ( req, res ) => {
+// Build the required routes for each meta property that uses an array based value
+metaIdArrays.forEach( metaKey => {
 
-    const metaProperties = getIndexOptions( req, 'selected' );
+    router.post( `/lists/:listId/meta/${metaKey}`, listMetaActionMiddlewareFactory( 'pushItemIdToArray', metaKey ) );
 
-    try {
-
-        let selectedMeta = await ListMeta.findOne( {
-            where: metaProperties,
-            attributes: ['value']
-        } );
-
-        const exists = Boolean( selectedMeta );
-
-        if( !exists ) selectedMeta = { dataValues: { value: [] } };
-
-        if( selectedMeta.dataValues.value.includes( req.params.itemId ) ) throw new Error("Cannot select duplicate IDs");
-
-        selectedMeta.dataValues.value.push( parseInt(req.params.itemId) );
-
-        exists
-
-            ? await ListMeta.update( selectedMeta.dataValues, { where: metaProperties } )
-
-            : await ListMeta.create( {
-                ...metaProperties,
-                ...selectedMeta.dataValues
-            } );
-
-        res.json( { selected: true } );
-
-    } catch( err ) {
-
-        res.status(401).json(err);
-
-    }
-
-} );
-
-router.post( "/lists/:listId/unselect/:itemId", async ( req, res ) => {
-
-} );
-
-router.post( "/lists/:listId/unselect/:itemId", async ( req, res ) => {
+    router.delete( `/lists/:listId/meta/${metaKey}/:itemId`, listMetaActionMiddlewareFactory( 'removeItemIdFromArray', metaKey ) );
     
+    router.delete( `/lists/:listId/meta/${metaKey}`, listMetaActionMiddlewareFactory( 'clearArray', metaKey ) );
 
 } );
 
-router.post( "/lists/:listId/unselect/:itemId", async ( req, res ) => {
 
 
-} );
+// router.post( "/lists/:listId/select", async ( req, res ) => await pushToValueArray( req, res, 'selected' ) );
+
+// router.patch( "/lists/:listId/unselect", async ( req, res ) => await removeFromValueArray( req, res, 'selected' ));
+
+// router.patch( "/lists/:listId/select/clear", async ( req, res ) => await clearValueArray( req, res, 'selected' ));
+
+// router.post( "/lists/:listId/disable", async ( req, res ) => await pushToValueArray( req, res, 'disabled' ) );
+
+// router.patch( "/lists/:listId/enable", async ( req, res ) => await removeFromValueArray( req, res, 'disabled' ));
+
+// router.patch( "/lists/:listId/disable/clear", async ( req, res ) => await clearValueArray( req, res, 'disabled' ));
+
+
+// router.post( "/lists/:listId/disabled", async ( req, res ) => await pushToValueArray( req, res, 'disabled' ) );
 
 module.exports = router;
