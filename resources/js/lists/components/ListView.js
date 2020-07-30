@@ -1,7 +1,9 @@
 import ListItemPicker from "../controllers/ListItemPicker";
 import CurrentItem from "./CurrentItem";
 import ListControls from "./ListControls";
+import ListItem from "../models/ListItem"
 import List from "../models/List";
+import store from "../../store";
 
 /**
  * @param {ListItem} item 
@@ -21,7 +23,7 @@ const createItem = ( item ) => {
                     <input class="toggle-select" type="checkbox" aria-label="Checkbox for toggling an item's selection">
                 </div>
             </div>
-            <input type="text" value="${item.label}" class="form-control item-label">
+            <input type="text" value="${item.name}" class="form-control item-label">
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" data-action="disable">
                     <i class="fas ${disableIcon}"></i>
@@ -68,7 +70,7 @@ class ListView {
      * @returns {List}
      */
     get currentList() {
-        return this.app.lists.currentList;
+        return store.lists.currentList;
     }
 
     render() {

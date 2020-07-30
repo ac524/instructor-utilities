@@ -1,4 +1,5 @@
 import ListItemPicker from "../controllers/ListItemPicker";
+import store from "../../store";
 
 class ListsControls {
 
@@ -21,7 +22,7 @@ class ListsControls {
 
         this.listOptionsEl.on( 'change', ( { currentTarget: { value } } ) => this.app.selectList( value ) );
 
-        this.deleteListButtonEl.on( 'click', () => this.app.deleteList( this.app.lists.currentList.key ) );
+        this.deleteListButtonEl.on( 'click', () => this.app.deleteList( store.lists.currentList.id ) );
 
     }
 
@@ -30,7 +31,7 @@ class ListsControls {
      */
     renderListName() {
 
-        this.currentTitleEl.text( this.app.lists.currentList.name );
+        this.currentTitleEl.text( store.lists.currentList.name );
 
         return this;
 
@@ -44,7 +45,7 @@ class ListsControls {
 
         this.listOptionsEl.empty();
 
-        this.app.lists.all.forEach( ([key, list]) => {
+        store.lists.all.forEach( ([key, list]) => {
             this.listOptionsEl.append(
                 $(`<option value="${key}">${list.name}</option>`).prop('selected', list.isCurrent )
             );
@@ -59,7 +60,7 @@ class ListsControls {
      */
     render() {
 
-        this.deleteListButtonEl.prop( "disabled", !this.app.lists.hasMultipleLists );
+        this.deleteListButtonEl.prop( "disabled", !store.lists.hasMultipleLists );
 
         return this
             .renderListName()

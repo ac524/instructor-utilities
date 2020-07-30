@@ -1,5 +1,6 @@
 import ListItemPicker from "../controllers/ListItemPicker";
 import List from "../models/List";
+import store from "../../store";
 
 class CurrentItem {
 
@@ -19,7 +20,7 @@ class CurrentItem {
      * @returns {List}
      */
     get currentList() {
-        return this.app.lists.currentList;
+        return store.lists.currentList;
     }
 
     /**
@@ -29,13 +30,13 @@ class CurrentItem {
 
         if( this.currentList.isComplete ) {
 
-            this.currentItemEl.text( this.currentList.currentItem.label );
+            this.currentItemEl.text( this.currentList.currentItem.name );
 
         } else {
 
             this.currentList.selected.length
                 
-                ? this.currentItemEl.text( this.currentList.currentItem.label )
+                ? this.currentItemEl.text( this.currentList.currentItem.name )
 
                 : this.currentItemEl.text( 'No Selection' );
 

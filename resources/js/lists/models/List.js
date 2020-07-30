@@ -1,8 +1,10 @@
 import ListItem from "./ListItem";
-import Store from "../store";
+import api from "../../api";
 
 /**
  * Collection class for managing the entries and selection state for a target list.
+ * 
+ * @property {Array.<ListItem>} all
  */
 class List {
 
@@ -13,14 +15,17 @@ class List {
      * @param {array} items 
      * @param {array} selectedItems
      */
-    constructor( key = '', name = '', { items = [], selectedItems = [] } = {} ) {
+    constructor( { id, name, Meta = [] } = {} ) {
 
-        this.key = key;
+        this.id = id;
         this.name = name;
+        this.Meta = Meta;
+
+        const expectedMetaArrays = ["selected", "disabled"];
+        expectedMetaArrays.forEach( key => !this.getMeta(key) && this.Meta.push( { key, value: []  } ) );
 
         // Private properties to control access.
         const currentItems = [];
-        const currentSelectedItems = [];
 
         let belongsTo = null;
 
@@ -29,18 +34,6 @@ class List {
             get: () => currentItems,
             set: this.replaceItems.bind(this)
         } );
-        
-        // Control the access of the array to ensure we are always working with the same array instance.
-        Object.defineProperty( this, 'selected', {
-            get: () => currentSelectedItems,
-            set: function( itemIndexes ) {
-                currentSelectedItems.length = 0;
-                currentSelectedItems.push( ...itemIndexes );
-            }
-        } );
-
-        // Object.defineProperty( this, 'storageKey', { get: () => storageKey } );
-        // Object.defineProperty( this, 'selectStorageKey', { get: () => selectStorageKey } );
 
         Object.defineProperty( this, 'belongsTo', {
             get: () => belongsTo,
@@ -53,9 +46,19 @@ class List {
             set: ( value ) => isLoaded = value
         });
 
-        this.all = items;
-        this.selected = selectedItems;
+    }
 
+    get selected() {
+        return this.getMeta( "selected" );
+    }
+
+    set selected( itemIndexes ) {
+        this.selected.length = 0;
+        this.selected.push( ...itemIndexes );
+    }
+
+    get disabled() {
+        return this.getMeta( "disabled" );
     }
 
     /**
@@ -63,7 +66,7 @@ class List {
      */
     get enabledItems() {
 
-        return this.all.filter( item => !item.isDisabled );
+        return this.all.filter( item => !this.disabled.includes( item.id ) );
 
     }
 
@@ -72,7 +75,7 @@ class List {
      */
     get disabledItems() {
 
-        return this.all.filter( item => item.isDisabled );
+        return this.all.filter( item => this.disabled.includes( item.id ) );
 
     }
 
@@ -92,13 +95,13 @@ class List {
 
         return this.belongsTo && this.belongsTo.count
         
-            ? this.key === this.belongsTo.currentList.key
+            ? this.id === this.belongsTo.currentList.id
             
             : false;
             
     }
 
-    get currentItemIndex() {
+    get currentItemId() {
 
         return this.selected[ this.selected.length - 1 ] >= 0 ? this.selected[ this.selected.length - 1 ] : null;
 
@@ -109,7 +112,7 @@ class List {
      */
     get currentItem() {
 
-        return this.all[this.currentItemIndex] || null;
+        return this.getItem(this.currentItemId) || null;
 
     }
 
@@ -122,11 +125,30 @@ class List {
 
     }
 
+    async loadItems() {
+
+        if( this.isLoaded ) return;
+
+        try {
+            
+            this.isLoaded = true;
+            this.addItems( await api.getListItems( this.id ) );
+
+        } catch( err ) {
+
+            this.isLoaded = false;
+            console.log( err );
+            console.log( "Error fetching list items" );
+            
+        }
+
+    }
+
     load() {
 
         if( this.store ) {
 
-            const { list, selectList } = this.store.loadListItemData( this.key );
+            const { list, selectList } = this.store.loadListItemData( this.id );
 
             if( list ) this.all = list;
 
@@ -140,21 +162,31 @@ class List {
 
     }
 
+    getMeta( key ) {
+        const meta = this.Meta.find( meta => meta.key === key );
+        return meta ? meta.value : null;
+    }
+
     /**
      * @param {Object} props
      * @param {string} props.name
-     * @returns {boolean}
+     * @returns {(false|object)} An object with the updated properties and values, or false if no properties were updated.
      */
     update( { name } ) {
 
         let updated = false;
+        const maybeUpdateValue = ( property, newValue ) => {
+            if( this.hasOwnProperty( property ) && this[property] !== newValue ) {
 
-        if( this.name !== name ) {
+                this[property] = newValue;
 
-            this.name = name;
-            if(!updated) updated = true;
-
+                if( !updated ) updated = {};
+                updated[property] = newValue;
+    
+            }
         }
+
+        maybeUpdateValue( 'name', name );
 
         return updated;
 
@@ -176,6 +208,8 @@ class List {
      */
     emptySelected() {
 
+        const err = new Error();
+
         this.selected.length = 0;
 
         return this;
@@ -187,13 +221,13 @@ class List {
      */
     selectRandomItem() {
 
-        let unusedIndexes = this.enabledItems.map( ( { index } ) => index ).filter( ( i ) => !this.selected.includes( i ) );
+        let unusedIds = this.enabledItems.map( ( { id } ) => id ).filter( ( id ) => !this.selected.includes( id ) );
 
-        if( unusedIndexes.length ) {
+        if( unusedIds.length ) {
 
-            let nextItemIndex = unusedIndexes[ Math.floor(Math.random() * unusedIndexes.length) ];
+            let nextItemId = unusedIds[ Math.floor(Math.random() * unusedIds.length) ];
     
-            this.selectItem( nextItemIndex );
+            this.selectItem( nextItemId );
 
         }
 
@@ -206,9 +240,9 @@ class List {
      * @param {string} item
      * @returns {ListItem}
      */
-    createItem( label ) {
+    createItem( name ) {
 
-        const newItem = new ListItem( { label } );
+        const newItem = new ListItem( { name } );
 
         this.addItem( newItem );
 
@@ -222,7 +256,7 @@ class List {
      */
     addItem( listItem ) {
 
-        listItem.belongsTo = this;
+        listItem.ListId = this.id;
 
         this.all.push( listItem );
 
@@ -239,6 +273,16 @@ class List {
         items.forEach( this.addItem.bind(this) );
 
         return this;
+
+    }
+
+    /**
+     * @param {number} itemId 
+     * @returns {ListItem}
+     */
+    getItem( itemId ) {
+
+        return this.all.find (({id}) => id === itemId);
 
     }
 
@@ -266,26 +310,26 @@ class List {
     }
 
     /**
-     * @param {number} targetIndex
+     * @param {number} itemId
      * @returns {List}
      */
-    selectItem( targetIndex ) {
+    selectItem( itemId ) {
 
-        if( this.all[targetIndex] && !this.isItemSelected( targetIndex ) )
+        if( !this.isItemSelected( itemId ) )
             
-            this.selected.push( targetIndex );
+            this.selected.push( itemId );
 
         return this;
 
     }
 
     /**
-     * @param {number} targetIndex
+     * @param {number} itemId
      * @returns {List}
      */
-    unselectItem( targetIndex ) {
+    unselectItem( itemId ) {
 
-        const position = this.selected.indexOf( targetIndex );
+        const position = this.selected.indexOf( itemId );
 
         if( position > -1 ) this.selected.splice( position, 1 );
 
@@ -294,12 +338,50 @@ class List {
     }
 
     /**
-     * @param {number} index
+     * @param {number} itemId
      * @returns {boolean}
      */
-    isItemSelected( index ) {
+    isItemSelected( itemId ) {
 
-        return this.selected.includes( index );
+        return this.selected.includes( itemId );
+
+    }
+
+    /**
+     * @param {number} itemId
+     * @returns {List}
+     */
+    disableItem( itemId ) {
+
+        if( !this.isItemDisabled( itemId ) )
+            
+            this.disabled.push( itemId );
+
+        return this;
+
+    }
+
+    /**
+     * @param {number} itemId
+     * @returns {List}
+     */
+    enableItem( itemId ) {
+
+        const position = this.disabled.indexOf( itemId );
+
+        if( position > -1 ) this.disabled.splice( position, 1 );
+
+        return this;
+
+    }
+
+    /**
+     * @param {number} itemId
+     * @returns {boolean}
+     */
+    isItemDisabled( itemId ) {
+
+        return this.disabled.includes( itemId );
 
     }
 
@@ -320,41 +402,10 @@ class List {
 
         if( this.all[index] ) {
 
-            this.all[index].belongsTo = null;
             this.all.splice( index, 1 );
             this.emptySelected();
 
         }
-
-        return this;
-
-    }
-
-    /**
-     * Helper function to save both the items and the currently selected indexes.
-     * @returns {List}
-     */
-    saveListContent() {
-        return this.saveItems().saveSelected();
-    }
-
-    /**
-     * @returns {List}
-     */
-    saveItems() {
-
-        if( this.store ) this.store.saveListItems( this.key, this.all );
-
-        return this;
-
-    }
-
-    /**
-     * @returns {List}
-     */
-    saveSelected() {
-
-        if( this.store ) this.store.saveSelectedListItems( this.key, this.selected );
 
         return this;
 
@@ -370,7 +421,7 @@ class List {
     }
 
     copy() {
-        return new List( this.key, this.name, { items: this.all, selectedItems: this.selected } );
+        return new List( this.id, this.name, { items: this.all, selectedItems: this.selected } );
     }
 
 }

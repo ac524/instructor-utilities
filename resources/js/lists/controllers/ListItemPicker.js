@@ -5,7 +5,8 @@ import ListsControls from "../components/ListsControls";
 import ListStatus from "../components/ListStatus";
 import ListView from "../components/ListView";
 import ListImportExport from "../components/ListImportExport";
-import Store from "../store";
+import api from "../../api";
+import store from "../../store";
 
 /**
  * RandomListWalker class constructor
@@ -14,23 +15,28 @@ class ListItemPicker {
 
     constructor() {
 
-        this.store = new Store;
-
-        this.store.init();
-
         this.listsControls = new ListsControls( this );
         this.status = new ListStatus( this );
         this.modal = new ListModal( this );
         this.view = new ListView( this );
-        this.importExport = new ListImportExport( this );
+        // this.importExport = new ListImportExport( this );
         
     }
 
-    /**
-     * @returns {Lists}
-     */
-    get lists() {
-        return this.store.lists;
+    async init() {
+
+        await store.lists.load();
+
+        // if( !this.lists.count ) {
+        //     this.lists.createList();
+        //     this.lists.save();
+        // }
+
+        const firstList = store.lists.getByIndex(0);
+        this.selectList( firstList.id );
+
+        this.render();
+
     }
 
     /**
@@ -46,13 +52,15 @@ class ListItemPicker {
     }
 
     /**
-     * @param {string} listKey 
+     * @param {string} listId 
      */
-    selectList( listKey ) {
+    async selectList( listId ) {
 
-        this.lists.selectList( listKey );
+        store.lists.selectList( listId );
 
-        if( ! this.lists.currentList.isLoaded ) this.lists.currentList.load();
+        if( ! store.lists.currentList.isLoaded )
+        
+            await store.lists.currentList.loadItems();
 
         this.listsControls.renderListName();
         this.view.render();
@@ -60,32 +68,32 @@ class ListItemPicker {
     }
 
     /**
-     * @param {string} listKey 
+     * @param {string} listId 
      */
-    deleteList( listKey ) {
+    async deleteList( listId ) {
 
-        if( !this.lists.hasMultipleLists )
+        if( !store.lists.hasMultipleLists )
 
             // Exit early and prevent the delete action if we don't have more than one list.
             return this;
 
-        const wasCurrent = this.lists.get( listKey ).isCurrent;
+        const wasCurrent = store.getList( listId ).isCurrent;
 
-        this.lists.deleteList( listKey ).save();
-        this.store.deleteList( listKey );
+        await api.deleteList( listId );
 
-        if( wasCurrent ) this.selectList( this.lists.currentList.key );
+        store.deleteList( listId );
+
+        if( wasCurrent ) this.selectList( store.lists.currentList.id );
 
         this.listsControls.render();
-
-        return this;
+        this.view.render();
 
     }
 
     render() {
 
         this.listsControls.render();
-        this.view.render();
+        // this.view.render();
 
     }
 
