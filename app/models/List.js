@@ -26,5 +26,24 @@ module.exports = function(sequelize, DataTypes) {
 
     };
 
+    List.addHook("afterCreate", (list) =>{
+        const { ListMeta } = require("./index")
+        const listMetaKeyArray = ["selected", "disabled"];
+
+        listMetaKeyArray.forEach( key =>{
+
+            ListMeta.create({
+                ListId: list.id,
+                UserId: list.UserId,
+                key,
+                value: []
+            
+            });
+    
+        })
+        
+    });
+
+
     return List;
 }
