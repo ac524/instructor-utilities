@@ -143,7 +143,7 @@ class ListControls {
      */
     async deleteListItem( itemId ) {
 
-        this.currentList.removeItem( itemId ).emptySelected();
+        this.currentList.removeItem( itemId );
 
         await api.deleteListItem( itemId );
 
