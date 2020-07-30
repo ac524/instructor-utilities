@@ -1,6 +1,28 @@
 import ListItem from "./ListItem";
 import api from "../../api";
 
+/** 
+ * @param {List} list
+ **/
+const filterMeta = ( list ) => {
+
+    const usableFilterFactory = ( usable ) => ( rawList ) => rawList.filter( value => usable.includes( value ) );
+
+    const filterMap = {
+        selected: usableFilterFactory(list.itemIds),
+        disabled: usableFilterFactory(list.itemIds)
+    };
+
+    list.Meta.forEach( metaEntry => {
+        
+        if( filterMap.hasOwnProperty( metaEntry.key ) )
+
+            metaEntry.value = filterMap[ metaEntry.key ]( metaEntry.value );
+
+    });
+
+}
+
 /**
  * Collection class for managing the entries and selection state for a target list.
  * 
@@ -46,6 +68,10 @@ class List {
             set: ( value ) => isLoaded = value
         });
 
+    }
+
+    get itemIds() {
+        return this.all.map( item => item.id );
     }
 
     get selected() {
@@ -133,6 +159,7 @@ class List {
             
             this.isLoaded = true;
             this.addItems( await api.getListItems( this.id ) );
+            filterMeta( this );
 
         } catch( err ) {
 
@@ -395,15 +422,19 @@ class List {
     }
 
     /**
-     * @param {number} index
+     * @param {number} id
      * @returns {List}
      */
-    removeItem( index ) {
+    removeItem( id ) {
 
-        if( this.all[index] ) {
+        const item = this.getItem(id);
 
-            this.all.splice( index, 1 );
-            this.emptySelected();
+        if( item ) {
+
+            this.unselectItem( item.id );
+            this.enableItem( item.id );
+
+            this.all.splice( item.index, 1 );
 
         }
 
