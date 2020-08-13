@@ -16,6 +16,10 @@ const config = {
     publicPath: "/",
   },
 
+  resolve: {
+    modules: ["node_modules", "resources"]
+  },
+
   module: {
     rules: [
       {
