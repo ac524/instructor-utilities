@@ -1,4 +1,5 @@
-import List from "./List"
+import List from "./List";
+import store from "../../store";
 
 class ListItem {
 
@@ -7,18 +8,16 @@ class ListItem {
      * @param {boolean} isDisabled
      * @param {List} list
      */
-    constructor( { label = '', isDisabled = false } = {} ) {
+    constructor( { id, name = '', ListId } = {} ) {
+        
+        this.id = id;
+        this.name = name;
+        this.ListId = ListId;
 
-        this.label = label;
-        this.isDisabled = isDisabled;
+    }
 
-        let belongsTo;
-
-        Object.defineProperty( this, 'belongsTo', {
-            get: () => belongsTo,
-            set: (list) => belongsTo = list
-        } );
-
+    get belongsTo() {
+        return store.getList(this.ListId);
     }
 
     /**
@@ -34,7 +33,14 @@ class ListItem {
      * @returns {boolean}
      */
     get isSelected() {
-        return this.belongsTo ? this.belongsTo.isItemSelected( this.index ) : false;
+        return this.belongsTo ? this.belongsTo.isItemSelected( this.id ) : false;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    get isDisabled() {
+        return this.belongsTo ? this.belongsTo.isItemDisabled( this.id ) : false;
     }
 
     /**
@@ -42,20 +48,12 @@ class ListItem {
      * @returns {boolean}
      */
     get isCurrent() {
-        return this.belongsTo ? this.index === this.belongsTo.currentItemIndex : false;
-    }
-
-    save() {
-
-        if( this.belongsTo ) this.belongsTo.saveItems();
-
-        return this;
-
+        return this.belongsTo ? this.id === this.belongsTo.currentItemId : false;
     }
 
     unselect() {
 
-        if( this.belongsTo ) this.belongsTo.unselectItem( this.index );
+        if( this.belongsTo ) this.belongsTo.unselectItem( this.id );
 
         return this;
 
@@ -65,14 +63,21 @@ class ListItem {
      * @param {string} label
      * @returns {boolean}
      */
-    update( { label } ) {
+    update( { name } ) {
 
         let updated = false;
+        const maybeUpdateValue = ( property, newValue ) => {
+            if( this.hasOwnProperty( property ) && this[property] !== newValue ) {
 
-        if( label !== this.label ) {
-            this.label = label;
-            updated = true;
+                this[property] = newValue;
+
+                if( !updated ) updated = {};
+                updated[property] = newValue;
+    
+            }
         }
+
+        maybeUpdateValue( 'name', name );
 
         return updated;
 
@@ -80,17 +85,18 @@ class ListItem {
 
     /**
      * Modifies the item's disabled state and updates it's state in the list it belongs to.
-     * @returns {ListItem}
+     * @returns {boolean}
      */
     toggleDisable() {
 
-        this.isDisabled = !this.isDisabled;
-
-        if( this.isDisabled && this.isSelected )
-
+        if( this.isDisabled ) {
+            this.belongsTo.enableItem( this.id );
+        } else {
+            this.belongsTo.disableItem( this.id );
             this.unselect();
+        }
 
-        return this;
+        return this.isDisabled;
 
     }
 

@@ -1,5 +1,12 @@
-import ListItemPicker from '../controllers/ListItemPicker';
+import ListItemPicker from "../controllers/ListItemPicker";
+import List from "../models/List";
+import store from "../../store"
+import api from "../../api";
 
+/**
+ * @property {List} list
+ * @property {object} data
+ */
 class ListModal {
 
     /**
@@ -15,7 +22,6 @@ class ListModal {
         // Inputs
         this.listNameInputEl = $('#list-name-input');
 
-        /** @type {List} */
         this.list;
 
         this.data;
@@ -33,8 +39,9 @@ class ListModal {
                 if( !action ) return;
 
                 const actions = {
-                    saveAndClose:  () => {
-                        this.save().close();
+                    saveAndClose:  async () => {
+                        await this.save();
+                        this.close();
                     }
                 };
 
@@ -48,8 +55,8 @@ class ListModal {
                 if( !action ) return
 
                 const actions = {
-                    editList:  () => this.setList( this.app.lists.currentList ),
-                    newList: () => this.setList( this.app.lists.createList( 'List '+ ( this.app.lists.count + 1 ), false ) )
+                    editList:  () => this.setList( store.lists.currentList ),
+                    newList: () => this.setData( { name: 'List '+ ( store.lists.count + 1 ) } )
                 };
 
                 if( actions[action] ) actions[action]();
@@ -62,24 +69,38 @@ class ListModal {
 
     }
 
-    save() {
-        const isNewList = !this.app.lists.get( this.data.key );
-        const updated = this.list.update( this.data ) || isNewList;
+    async save() {
+
+        const isNewList = !this.data.id;
+        let refreshView = false;
 
         if( isNewList ) {
-            this.app.lists.addList( this.list );
-            this.app.lists.selectList( this.list.key );
+
+            refreshView = true;
+
+            this.list = await api.createList( this.data );
+
+            store.addList( this.list );
+
+        } else {
+
+            const updated = this.list.update( this.data );
+
+            if( updated ) {
+                refreshView = true;
+                await api.updateList( this.list.id, updated );
+            }
+
         }
 
-        if( updated ) {
-            this.app.lists.save();
+        if( refreshView ) {
             
             isNewList
                 ? this.app.render()
                 : this.app.listsControls.render();
+
         }
-        
-        return this;
+
     }
 
     close() {
@@ -98,7 +119,12 @@ class ListModal {
      */
     setList( list ) {
         this.list = list;
-        this.data = { ...list };
+        this.setData( list );
+        return this;
+    }
+
+    setData(data) {
+        this.data = { ...data };
         return this;
     }
 

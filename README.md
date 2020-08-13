@@ -16,7 +16,24 @@ This application consists of tools and utilities built to assist teachers instru
 
 ## Installation
 
-Run "npm install" to install the dependencies in the package.json file. Run "npm watch" or "npm production" before starting the application with "node server.js".
+* `npm install` - Install dependencies.
+* `npm run envsetup` - Generate a local .env file with the needed configuration.
+* `sequelize db:create` - Create the application database.
+
+### Development Build
+
+* `npm run watch` - Watch changes to both public resource and server application dependencies.
+* `npm run watch:build` - Watch public resource dependencies.
+* `npm run watch:server` - Watch server application dependencies.
+
+### Production Build
+
+* `npm run production` - Build production resources and launch server.
+
+### Demo Seed Data
+
+* `sequelize db:seed:all` - Seed the application database with demo data
+* `sequelize db:seed:undo:all` - Remove all application data
 
 ## Usage
 

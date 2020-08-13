@@ -1,5 +1,7 @@
 import List from "../models/List";
 import ListItemPicker from "../controllers/ListItemPicker";
+import store from "../../store";
+import api from "../../api";
 
 class ListControls {
 
@@ -42,21 +44,22 @@ class ListControls {
      * @returns {List}
      */
     get currentList() {
-        return this.app.lists.currentList;
+        return store.lists.currentList;
     }
 
     /**
      * Event handler for saving list items after the input for the label has been updated
      * @param {*} param0 
      */
-    onInputChange( { target } ) {
+    async onInputChange( { target } ) {
 
         const inputEl = $(target);
         const itemIndex = inputEl.closest('.input-group').data( 'index' );
+        const item = this.currentList.all[itemIndex];
 
-        const updated = this.currentList.updateItem( itemIndex, { label: inputEl.val() } );
+        const updated = item.update( { name: inputEl.val() } );
 
-        if( updated ) this.currentList.saveItems();
+        if( updated ) await api.updateListItem( item.id, updated );
 
     }
 
@@ -64,18 +67,26 @@ class ListControls {
      * Event handler for toggling the item's selection checkbox
      * @param {*} param0 
      */
-    onToggleSelect( { target } ) {
+    async onToggleSelect( { target } ) {
 
         const checkboxEl = $(target);
         const itemIndex = checkboxEl.closest('.input-group').data( 'index' );
+        const listItem = this.currentList.all[itemIndex];
 
-        this.currentList.isItemSelected( itemIndex )
+        
+        if( this.currentList.isItemSelected( listItem.id ) ) {
 
-            ? this.currentList.unselectItem( itemIndex )
+            this.currentList.unselectItem( listItem.id );
+            await api.unselectListItem( listItem.ListId, listItem.id );
 
-            : this.currentList.selectItem( itemIndex );
+        } else {
 
-        this.currentList.saveSelected();
+            this.currentList.selectItem( listItem.id );
+            await api.selectListItem( listItem.ListId, listItem.id );
+
+        }
+
+        // this.currentList.saveSelected();
             
         this.app.view.render();
 
@@ -93,10 +104,11 @@ class ListControls {
         if( !action ) return;
 
         const itemIndex = buttonEl.closest('.input-group').data( 'index' );
+        const listItem = this.currentList.all[itemIndex];
 
         const actions = {
-            remove: () => this.deleteListItem( itemIndex ),
-            disable: () => this.disableListItem( itemIndex )
+            remove: () => this.deleteListItem( listItem.id ),
+            disable: () => this.disableListItem( listItem.id )
         }
 
         if( actions[action] ) actions[action]();
@@ -105,16 +117,20 @@ class ListControls {
 
 
     /**
-     * @param {string} label 
+     * @param {string} name 
      * @returns {ListControls}
      */
-    addListItem( label ) {
+    async addListItem( name ) {
 
-        this.currentList.createItem( label );
+        const item = await api.createListItem( this.currentList.id, { name } );
 
-        this.currentList
-            .emptySelected()
-            .saveListContent();
+        store.addListItem( this.currentList.id, item );
+
+        // this.currentList.createItem( name );
+
+        // this.currentList
+        //     .emptySelected()
+        //     .saveListContent();
 
         this.app.view.render();
 
@@ -123,31 +139,36 @@ class ListControls {
     }
 
     /**
-     * @param {index} itemIndex
-     * @returns {ListControls}
+     * @param {index} itemId
      */
-    deleteListItem( itemIndex ) {
+    async deleteListItem( itemId ) {
 
-        this.currentList.removeItem( itemIndex ).emptySelected();
+        this.currentList.removeItem( itemId );
+
+        await api.deleteListItem( itemId );
 
         this.app.view.render();
-
-        return this;
 
     }
 
     /**
-     * @param {index} itemIndex 
+     * @param {index} itemId 
      * @returns {ListControls}
      */
-    disableListItem( itemIndex ) {
+    async disableListItem( itemId ) {
 
-        const wasSelected = this.currentList.all[itemIndex].isSelected;
+        const item = this.currentList.getItem(itemId);
+        const wasSelected = item.isSelected;
 
-        this.currentList.all[itemIndex].toggleDisable();
-        this.currentList.saveItems();
+        const isDisabled = item.toggleDisable();
 
-        if( wasSelected ) this.currentList.saveSelected();
+        isDisabled
+            ? await api.disableListItem( item.ListId, item.id )
+            : await api.enableListItem( item.ListId, item.id );
+
+        if( wasSelected ) {
+            await api.unselectListItem( item.ListId, item.id );
+        }
 
         this.app.view.render();
 
@@ -160,9 +181,9 @@ class ListControls {
      */
     disableCurrentListItem() {
          
-        if ( this.currentList.selected.length )
+        if ( this.currentList.selected.length ) 
         
-            this.disableListItem( this.currentList.currentItemIndex );
+            this.disableListItem( this.currentList.currentItemId );
 
         return this;
 
@@ -171,14 +192,17 @@ class ListControls {
     /**
      * @returns {ListControls}
      */
-    previousListItem() {
+    async previousListItem() {
 
         if( !this.currentList.selected.length )
 
             // Exit early if there are no selected items to undo.
             return this;
 
-        this.currentList.unselectItem( this.currentList.currentItemIndex ).saveSelected();
+        const currentItemId = this.currentList.currentItemId;
+
+        this.currentList.unselectItem( currentItemId );
+        await api.unselectListItem( this.currentList.id, currentItemId );
 
         this.app.view.render();
 
@@ -189,13 +213,19 @@ class ListControls {
     /**
      * @returns {ListControls}
      */
-    nextListItem() {
+    async nextListItem() {
 
-        if( this.currentList.isComplete )
-
+        if( this.currentList.isComplete ) {
+            
             this.currentList.emptySelected();
+            await api.clearSelectedListItems( this.currentList.id );
 
-        this.currentList.selectRandomItem().saveSelected();
+        }
+
+
+        this.currentList.selectRandomItem();
+
+        await api.selectListItem( this.currentList.id, this.currentList.currentItem.id );
 
         this.app.view.render();
 
@@ -206,9 +236,10 @@ class ListControls {
     /**
      * @returns {ListControls}
      */
-    restartList() {
+    async restartList() {
 
-        this.currentList.emptySelected().saveSelected();
+        this.currentList.emptySelected();
+        await api.clearSelectedListItems( this.currentList.id );
         
         this.app.view.render();
 

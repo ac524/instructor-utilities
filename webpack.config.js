@@ -4,10 +4,18 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const config = {
+<<<<<<< HEAD
   entry: "./resources/index.js",
   // {
   //   lists: "./resources/js/lists/index.js",
   // },
+=======
+  entry: {
+    lists: "./resources/js/lists/index.js",
+    signup: "./resources/js/signup/index.js",
+    login: "./resources/js/login/index.js"
+  },
+>>>>>>> dcb9bdc61f372f49adc7c949f6a10a495509a388
 
   output: {
     path: path.resolve(__dirname),
@@ -55,11 +63,6 @@ const config = {
       chunkFilename: "public/css/[name]-[chunkhash].css",
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
-    // new CopyPlugin({
-    //     patterns: [
-    //       { from: './resources/html', to: 'public' }
-    //     ],
-    // }),
   ],
 
   optimization: {

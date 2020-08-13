@@ -4,11 +4,14 @@
   "description": "Tools and utilities built for helping assist instructing bootcamp classes",
   "private": true,
   "scripts": {
-    "test": "jest",
-    "watch": "webpack --hide-modules --mode=development --watch",
-    "production": "webpack --hide-modules --mode=production",
-    "build": "npm run production",
-    "start": "node server.js"
+    "test": "exit 0",
+    "envsetup": "node setup",
+    "watch": "npm-run-all --parallel watch:server watch:build",
+    "watch:build": "webpack --hide-modules --mode=development --watch",
+    "watch:server": "nodemon app/server.js --watch app/",
+    "build": "webpack --hide-modules --mode=production",
+    "start": "node app/server.js",
+    "production": "npm-run-all build start"
   },
   "heroku-run-build-script": true,
   "repository": {
@@ -32,18 +35,30 @@
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^6.0.1",
     "css-loader": "^3.5.3",
+    "inquirer": "^7.3.2",
     "jest": "^26.0.1",
     "mini-css-extract-plugin": "^0.9.0",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
     "postcss-loader": "^3.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "sass-loader": "^8.0.2",
+    "sequelize-cli": "^6.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.4",
-    "express-handlebars-sections": "^1.0.1"
+    "express-handlebars-sections": "^1.0.1",
+    "express-session": "^1.17.1",
+    "mysql2": "^2.1.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "sequelize": "^6.2.4"
   }
 }
