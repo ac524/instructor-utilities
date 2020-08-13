@@ -12,7 +12,7 @@ const config = {
   output: {
     path: path.resolve(__dirname),
     filename: "public/js/app.js",
-    chunkFilename: "public/js/app-[chunkhash].js",
+    // chunkFilename: "public/js/app-[chunkhash].js",
     publicPath: "/",
   },
 
