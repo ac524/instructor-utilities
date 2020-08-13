@@ -51,8 +51,8 @@ const config = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "public/css/[name].css",
-      chunkFilename: "public/css/[name]-[chunkhash].css",
+      filename: "public/css/app.css",
+      // chunkFilename: "public/css/app-[chunkhash].css",
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
   ],
