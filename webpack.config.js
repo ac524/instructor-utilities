@@ -4,14 +4,15 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const config = {
-  entry: {
-    lists: "./resources/js/lists/index.js",
-  },
+  entry: "./resources/index.js",
+  // {
+  //   lists: "./resources/js/lists/index.js",
+  // },
 
   output: {
     path: path.resolve(__dirname),
-    filename: "public/js/[name].js",
-    chunkFilename: "public/js/[name]-[chunkhash].js",
+    filename: "public/js/app.js",
+    chunkFilename: "public/js/app-[chunkhash].js",
     publicPath: "/",
   },
 
