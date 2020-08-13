@@ -1,41 +1,32 @@
 import React from "react";
 
-import Hero from 'react-bulma-components/lib/components/hero';
-import Heading from 'react-bulma-components/lib/components/heading';
-import Section from 'react-bulma-components/lib/components/section';
-import Container from 'react-bulma-components/lib/components/container';
-
-const center = { textAlign: 'center' };
+import Hero from "react-bulma-components/lib/components/hero";
+import Heading from "react-bulma-components/lib/components/heading";
+import Container from "react-bulma-components/lib/components/container";
+import Button from "react-bulma-components/lib/components/button";
 
 function MainHero() {
     return (
-        <Section>
-        <Hero color="light" >
-          <Hero.Body>
-            <Container>
-              <Heading style={center}>
+      <Hero color="light" className="is-fullheight-with-navbar">
+        <Hero.Body>
+          <Container className="has-text-centered">
+
+            <Heading>
               Bootcamp Instructor Utilities
-              </Heading>
+            </Heading>
 
-              {/* Line */}
-
-              <Heading subtitle size={5} style={center}>
+            <Heading subtitle size={5}>
               Login or sign up to get started
-              </Heading>
+            </Heading>
 
-                <div className="buttons is-centered">
-                    <a className="button is-outlined">
-                        Sign Up
-                    </a>
-                    <a className="button is-link is-outlined">
-                        Login
-                    </a>
-                </div>
+            <Button.Group className="is-centered">
+              <Button outlined>Sign Up</Button>
+              <Button outlined color="link">Sign Up</Button>
+            </Button.Group>
 
-            </Container>
-          </Hero.Body>
-        </Hero>
-      </Section>
+          </Container>
+        </Hero.Body>
+      </Hero>
     )
 }
 
