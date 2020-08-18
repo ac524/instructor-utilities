@@ -25,13 +25,13 @@ app.use(passport.session());
 
 
 // Create and install a Handlebars view engine with Express.
-const exphbs = require("express-handlebars");
-const exphbsSections = require("express-handlebars-sections");
+// const exphbs = require("express-handlebars");
+// const exphbsSections = require("express-handlebars-sections");
 
-const hbs = exphbs.create({ defaultLayout: "main" });
-exphbsSections(hbs);
-app.engine("handlebars", hbs.engine );
-app.set("view engine", "handlebars");
+// const hbs = exphbs.create({ defaultLayout: "main" });
+// exphbsSections(hbs);
+// app.engine("handlebars", hbs.engine );
+// app.set("view engine", "handlebars");
 
 // Use the /public directory for static file loading.
 app.use(express.static("public"));
@@ -45,6 +45,6 @@ app.use( "/api", controllers, isAuthenticatedController, isAuthControllers );
 app.use( require("./middleware/provideUserToViews.js"), require("./middleware/provideEnvToViews.js") );
 
 // Register HTML routes last.
-app.use( ...require("../routes") );
+app.use( require("../routes") );
 
 module.exports = app;
