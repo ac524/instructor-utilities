@@ -15,7 +15,7 @@ function Classroom() {
 
             setStudents( res.data.results );
             
-        })
+        });
 
     }, [] );
 
