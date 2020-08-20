@@ -1,5 +1,6 @@
 // Import express and create a new server.
 const express = require("express");
+const passport = require("passport");
 
 const app = express();
 
@@ -9,7 +10,6 @@ app.use(express.json());
 
 // Install Passport middleware for user authentication and sessions.
 const session = require("express-session");
-const passport = require("./passport");
 const compression = require("compression");
 // TODO Research usage of this compression. Does it work for client side requests?
 // const msgpack = require("express-msgpack");
@@ -19,9 +19,11 @@ app.use(compression());
 // msgpack compression for json.
 // app.use(msgpack());
 
-app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized: true }));
+// app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
-app.use(passport.session());
+
+// Passport config
+require("./passport")(passport);
 
 
 // Create and install a Handlebars view engine with Express.
@@ -42,7 +44,7 @@ const { controllers, isAuthControllers } = require("../controllers");
 app.use( "/api", controllers, isAuthenticatedController, isAuthControllers );
 
 // Global middleware for routes registered after this.
-app.use( require("./middleware/provideUserToViews.js"), require("./middleware/provideEnvToViews.js") );
+// app.use( require("./middleware/provideUserToViews.js"), require("./middleware/provideEnvToViews.js") );
 
 // Register HTML routes last.
 app.use( require("../routes") );
