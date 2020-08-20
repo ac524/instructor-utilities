@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bulma": "^0.9.0",
+    "cross-env": "^7.0.2",
     "node-sass": "^4.14.1",
     "react": "^16.6.3",
     "react-bulma-components": "^3.4.0",
@@ -14,10 +15,10 @@
     "react-scripts": "^2.1.1"
   },
   "scripts": {
-    "start": "NODE_PATH=./src react-scripts start",
-    "build": "rNODE_PATH=./src eact-scripts build",
-    "test": "NODE_PATH=./src react-scripts test --env=jsdom",
-    "eject": "NODE_PATH=./src react-scripts eject"
+    "start": "cross-env NODE_PATH=./src react-scripts start",
+    "build": "cross-env NODE_PATH=./src react-scripts build",
+    "test": "cross-env NODE_PATH=./src react-scripts test --env=jsdom",
+    "eject": "cross-env NODE_PATH=./src react-scripts eject"
   },
   "browserslist": [
     ">0.2%",
