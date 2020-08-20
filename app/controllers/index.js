@@ -16,12 +16,12 @@ fs
   });
 
 // Read the /isAuth sub directory and load found modules into the authRoutesDir.
-const authRoutesDir = __dirname +  "/isAuth"
-fs
-  .readdirSync(authRoutesDir)
-  .filter(filterFiles)
-  .forEach(file => {
-    isAuthControllers.push( require(path.join(authRoutesDir, file)) );
-  });
+// const authRoutesDir = __dirname +  "/isAuth"
+// fs
+//   .readdirSync(authRoutesDir)
+//   .filter(filterFiles)
+//   .forEach(file => {
+//     isAuthControllers.push( require(path.join(authRoutesDir, file)) );
+//   });
 
 module.exports = { controllers, isAuthControllers };
