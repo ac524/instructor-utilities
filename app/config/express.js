@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Install Passport middleware for user authentication and sessions.
-const session = require("express-session");
+// const session = require("express-session");
 const compression = require("compression");
 // TODO Research usage of this compression. Does it work for client side requests?
 // const msgpack = require("express-msgpack");
