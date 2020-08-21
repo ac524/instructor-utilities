@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 // Load input validation
 const validateRegisterInput = require("../config/validation/register");
@@ -10,9 +11,12 @@ const validateLoginInput = require("../config/validation/login");
 // Load User model
 const {User} = require("../models");
 
-// @route POST api/users/register
-// @desc Register user
-// @access Public
+router.post("/authenticated", passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  res.json( req.user );
+
+});
+
 router.post("/register", (req, res) => {
 
   // Form validation
@@ -55,9 +59,6 @@ router.post("/register", (req, res) => {
 
 });
 
-// @route POST api/users/login
-// @desc Login user and return JWT token
-// @access Public
 router.post("/login", (req, res) => {
 
   // Form validation

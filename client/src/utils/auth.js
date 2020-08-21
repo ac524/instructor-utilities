@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
+import api from "./api";
 import { useStoreContext } from "../store";
 import { LOGIN_USER, LOGOUT_USER } from "../store/actions";
 
@@ -52,8 +53,8 @@ export const useAuthTokenStore = () => {
             
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
-            
-            if (decoded.exp < currentTime) {
+
+            const invalidate = () => {
 
                 // Logout user
                 pushAuthToken( false );
@@ -62,15 +63,24 @@ export const useAuthTokenStore = () => {
                 // Redirect to login
                 window.location.href = "./";
 
+            }
+            
+            if (decoded.exp < currentTime) {
+                
+                invalidate();
+
             } else {
 
                 applyAuthToken(token);
 
-                // Set user and isAuthenticated
-                storeDispatch({
-                    type: LOGIN_USER,
-                    payload: decoded
-                });
+                // Validate the token with the server
+                api
+                    .authenticated()
+                    .then( () => storeDispatch({
+                        type: LOGIN_USER,
+                        payload: decoded
+                    }) )
+                    .catch( invalidate );
 
             }
 

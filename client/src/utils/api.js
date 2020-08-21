@@ -14,6 +14,15 @@ class API {
 
     }
 
+    async authenticated() {
+
+        return await axios.post("/api/authenticated").then( res => {
+            console.log( res );
+            return res;
+        });
+
+    }
+
 }
 
 export default new API();
