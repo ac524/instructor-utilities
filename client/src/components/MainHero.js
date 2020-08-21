@@ -5,6 +5,8 @@ import Heading from "react-bulma-components/lib/components/heading";
 import Container from "react-bulma-components/lib/components/container";
 import Button from "react-bulma-components/lib/components/button";
 
+import { LoginButton } from "./Login";
+
 function MainHero() {
     return (
       <Hero color="light" className="is-fullheight-with-navbar">
@@ -20,7 +22,7 @@ function MainHero() {
             </Heading>
 
             <Button.Group className="is-centered">
-              <Button color="primary">Login</Button>
+              <LoginButton color="primary" />
               <Button outlined color="link">Sign Up</Button>
             </Button.Group>
 
