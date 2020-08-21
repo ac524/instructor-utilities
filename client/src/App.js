@@ -4,17 +4,36 @@ import "./App.sass";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Pages from "./pages";
 import { LoginModalProvider, LoginModal } from "./components/Login"
+import { useAuthTokenStore, useIsAuthenticated } from "./utils/auth";
 
 function App() {
+
+    useAuthTokenStore();
+
+    const isAuth = useIsAuthenticated();
+    
     return (
         <div>
             <LoginModalProvider>
                 <TopNavbar />
                 <Router>
-                    <div>
-                        <Route exact path="/" component={Pages.Home} />
-                        <Route exact path="/classroom" component={Pages.Classroom} />
-                    </div>
+                    {
+                        isAuth
+
+                            // Authenticated Routes
+                            ? (
+                                <div>
+                                    <Route exact path="/" component={Pages.Classroom} />
+                                </div>
+                            )
+                            
+                            // Unauthenticated Routes
+                            : (
+                                <div>
+                                    <Route exact path="/" component={Pages.Home} />
+                                </div>
+                            )
+                    }
                 </Router>
                 <LoginModal />
             </LoginModalProvider>

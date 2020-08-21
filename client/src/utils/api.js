@@ -8,6 +8,12 @@ class API {
 
     }
 
+    async login( userData ) {
+
+        return await axios.post("/api/login", userData);
+
+    }
+
 }
 
 export default new API();

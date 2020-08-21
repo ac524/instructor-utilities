@@ -29,6 +29,7 @@
     "if-env": "^1.0.4",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
     "mongoose": "^5.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

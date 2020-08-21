@@ -1,8 +1,14 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
 
 import Modal from 'react-bulma-components/lib/components/modal';
 import Button from 'react-bulma-components/lib/components/button';
-import Section from 'react-bulma-components/lib/components/section';
+import Box from 'react-bulma-components/lib/components/box';
+import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
+import { useLogout, pushAuthToken } from "../utils/auth";
+
+import api from "../utils/api";
+import { useStoreContext } from "../store";
+import { LOGIN_USER } from "../store/actions";
 
 // Define a new context
 const LoginModalContext = createContext(false);
@@ -59,19 +65,67 @@ export const LoginButton = ({ children, ...props }) => {
 }
 
 /**
+ * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
+ * @param {object} props
+ */
+export const LogoutButton = ({ children, ...props }) => {
+
+    // Consume the login context to fetch the live state.
+    const logout = useLogout();
+
+    return <Button onClick={logout} {...props}>{children || "Logout"}</Button>
+
+}
+
+/**
  * Login modal component. Requires <LoginModalProvider> as an ancenstor.
  */
 export const LoginModal = () => {
 
     // Consume the login context to fetch the live state.
     const { loginState, loginDispatch } = useContext( LoginModalContext );
+    const { storeDispatch } = useStoreContext();
+
+    const [ email, setEmail ] = useState( "" );
+    const [ password, setPassword ] = useState( "" );
+
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+        
+        const { data: { token } } = await api.login( { email, password } );
+
+        const user = pushAuthToken( token );
+
+        storeDispatch({
+            type: LOGIN_USER,
+            payload: user
+        });
+
+        loginDispatch("close");
+        
+    };
 
     return (
         <Modal show={loginState} onClose={() => loginDispatch("close")}>
             <Modal.Content>
-            <Section style={{ backgroundColor: 'white' }}>
-                Click on the {'"X"'} button on the top-right button to close the Modal (pass closeOnEsc=false to the modal to avoid closing it with the keyboard)
-            </Section>
+                <Box className="py-3">
+                    <form onSubmit={handleSubmit}>
+                        <Field>
+                            <Label>Email</Label>
+                            <Control>
+                                <Input value={email} onChange={(e) => setEmail(e.target.value) } />
+                            </Control>
+                        </Field>
+                        <Field>
+                            <Label>Password</Label>
+                            <Control>
+                                <Input type="password" value={password} onChange={(e) => setPassword(e.target.value) } />
+                            </Control>
+                        </Field>
+                        <Button color="primary">Login</Button>
+                    </form>
+                </Box>
             </Modal.Content>
         </Modal>
     )
