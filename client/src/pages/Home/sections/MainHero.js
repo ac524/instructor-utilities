@@ -5,7 +5,7 @@ import Heading from "react-bulma-components/lib/components/heading";
 import Container from "react-bulma-components/lib/components/container";
 import Button from "react-bulma-components/lib/components/button";
 
-import { LoginButton } from "./Login";
+import { LoginButton } from "../../../components/Login";
 
 function MainHero() {
     return (
