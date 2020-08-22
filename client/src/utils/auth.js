@@ -3,7 +3,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 import api from "./api";
-import { useStoreContext } from "../store";
+import { useStoreContext, getStoreAction } from "../store";
 import { LOGIN_USER, LOGOUT_USER } from "../store/actions";
 
 export const setAuthToken = token => {
@@ -49,7 +49,7 @@ export const useAuthTokenStore = () => {
             const token = localStorage.jwtToken;
             
             // Decode token and get user info and exp
-            const decoded = jwt_decode(token);
+            const userAuth = jwt_decode(token);
             
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
@@ -58,14 +58,14 @@ export const useAuthTokenStore = () => {
 
                 // Logout user
                 setAuthToken( false );
-                storeDispatch({ type: LOGOUT_USER });
+                storeDispatch(getStoreAction( LOGOUT_USER ));
                 
                 // Redirect to login
                 window.location.href = "./";
 
             }
             
-            if (decoded.exp < currentTime) {
+            if (userAuth.exp < currentTime) {
                 
                 invalidate();
 
@@ -76,10 +76,7 @@ export const useAuthTokenStore = () => {
                 // Validate the token with the server
                 api
                     .authenticated()
-                    .then( () => storeDispatch({
-                        type: LOGIN_USER,
-                        payload: decoded
-                    }) )
+                    .then( () => storeDispatch(getStoreAction( LOGIN_USER, userAuth )) )
                     .catch( invalidate );
 
             }
@@ -91,9 +88,9 @@ export const useAuthTokenStore = () => {
 
 export const useIsAuthenticated = () => {
 
-    const { store: { user } } = useStoreContext();
+    const { store: { userAuth } } = useStoreContext();
 
-    return Boolean( user.id );
+    return userAuth && userAuth.exp > Date.now() / 1000;
 
 }
 
@@ -105,14 +102,11 @@ export const useLogin = () => {
     
         const { data: { token } } = await api.login( credential );
 
-        const user = setAuthToken( token );
+        const userAuth = setAuthToken( token );
 
-        storeDispatch({
-            type: LOGIN_USER,
-            payload: user
-        });
+        storeDispatch(getStoreAction( LOGIN_USER, userAuth ));
 
-        return user;
+        return userAuth;
         
     }
     
@@ -125,7 +119,7 @@ export const useLogout = () => {
     return () => {
 
         setAuthToken( false );
-        storeDispatch( { type: LOGOUT_USER } );
+        storeDispatch(getStoreAction(LOGOUT_USER));
 
         window.location.href = "./";
 

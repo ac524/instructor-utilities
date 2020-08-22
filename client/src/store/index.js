@@ -6,7 +6,7 @@ import {
 } from "./actions";
 
 const StoreContext = createContext({
-    user: {}
+    userAuth: {}
 });
 
 const { Provider } = StoreContext;
@@ -14,8 +14,8 @@ const { Provider } = StoreContext;
 const reducer = ( state, { type, payload } ) => {
 
     const actions = {
-        [LOGIN_USER]: () => ({ ...state, user: payload }),
-        [LOGOUT_USER]: () => ({ ...state, user: {} })
+        [LOGIN_USER]: () => ({ ...state, userAuth: payload }),
+        [LOGOUT_USER]: () => ({ ...state, userAuth: undefined })
     };
 
     return actions.hasOwnProperty( type )
@@ -26,10 +26,16 @@ const reducer = ( state, { type, payload } ) => {
 
 }
 
+export const getStoreAction = ( type, payload ) => {
+
+    return { type, payload };
+
+}
+
 export const StoreProvider = ( { children } ) => {
 
     const [ store, storeDispatch ] = useReducer( reducer, {
-        user: {}
+        userAuth: undefined
     } );
 
     return <Provider value={{ store, storeDispatch }}>{ children }</Provider>
