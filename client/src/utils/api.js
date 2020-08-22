@@ -10,19 +10,19 @@ class API {
 
     async login( userData ) {
 
-        return await axios.post("/api/login", userData);
+        return axios.post("/api/login", userData);
 
     }
 
     async authenticated() {
 
-        return await axios.post("/api/authenticated");
+        return axios.post("/api/authenticated");
 
     }
 
     async register( userData ) {
 
-        return await axios.post("/api/register", userData);
+        return axios.post("/api/register", userData);
 
     }
 

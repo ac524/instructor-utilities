@@ -3,10 +3,10 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 import api from "./api";
-import { useStoreContext, getStoreAction } from "../store";
+import { useStoreContext, getStoreAction as gsa } from "../store";
 import { LOGIN_USER, LOGOUT_USER } from "../store/actions";
 
-export const setAuthToken = token => {
+const setAuthToken = token => {
 
     storeAuthToken( token );
     applyAuthToken( token );
@@ -15,7 +15,7 @@ export const setAuthToken = token => {
 
 }
 
-export const storeAuthToken = token => {
+const storeAuthToken = token => {
 
     token
 
@@ -25,7 +25,7 @@ export const storeAuthToken = token => {
 
 }
 
-export const applyAuthToken = token => {
+const applyAuthToken = token => {
 
     token
 
@@ -58,7 +58,7 @@ export const useAuthTokenStore = () => {
 
                 // Logout user
                 setAuthToken( false );
-                storeDispatch(getStoreAction( LOGOUT_USER ));
+                storeDispatch(gsa( LOGOUT_USER ));
                 
                 // Redirect to login
                 window.location.href = "./";
@@ -76,7 +76,7 @@ export const useAuthTokenStore = () => {
                 // Validate the token with the server
                 api
                     .authenticated()
-                    .then( () => storeDispatch(getStoreAction( LOGIN_USER, userAuth )) )
+                    .then( () => storeDispatch(gsa( LOGIN_USER, userAuth )) )
                     .catch( invalidate );
 
             }
@@ -104,7 +104,7 @@ export const useLogin = () => {
 
         const userAuth = setAuthToken( token );
 
-        storeDispatch(getStoreAction( LOGIN_USER, userAuth ));
+        storeDispatch(gsa( LOGIN_USER, userAuth ));
 
         return userAuth;
         
@@ -119,7 +119,7 @@ export const useLogout = () => {
     return () => {
 
         setAuthToken( false );
-        storeDispatch(getStoreAction(LOGOUT_USER));
+        storeDispatch(gsa(LOGOUT_USER));
 
         window.location.href = "./";
 
