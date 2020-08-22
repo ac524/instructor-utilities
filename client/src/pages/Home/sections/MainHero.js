@@ -23,7 +23,7 @@ function MainHero() {
 
             <Button.Group className="is-centered">
               <LoginButton color="primary" />
-              <Button outlined color="link">Sign Up</Button>
+              <Button renderAs="a" href="/register" outlined color="link">Sign Up</Button>
             </Button.Group>
 
           </Container>

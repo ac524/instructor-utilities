@@ -31,6 +31,7 @@ function App() {
                             : (
                                 <div>
                                     <Route exact path="/" component={Pages.Home} />
+                                    <Route exact path="/register" component={Pages.Register} />
                                 </div>
                             )
                     }

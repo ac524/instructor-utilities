@@ -16,9 +16,13 @@ class API {
 
     async authenticated() {
 
-        return await axios.post("/api/authenticated").then( res => {
-            return res;
-        });
+        return await axios.post("/api/authenticated");
+
+    }
+
+    async register( userData ) {
+
+        return await axios.post("/api/register", userData);
 
     }
 
