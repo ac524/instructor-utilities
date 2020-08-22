@@ -6,6 +6,9 @@ import { Field, Control, Label, Input } from 'react-bulma-components/lib/compone
 import Columns from "react-bulma-components/lib/components/columns";
 import Box from "react-bulma-components/lib/components/box";
 import Button from "react-bulma-components/lib/components/button";
+import Heading from 'react-bulma-components/lib/components/heading';
+
+import { LoginLink } from "../components/Login";
 
 import api from "../utils/api";
 import { useLogin } from "../utils/auth";
@@ -41,6 +44,8 @@ function Register() {
                     <Columns>
                         <Column size="one-third">
                             <Box>
+                            <Heading renderAs="h2" className="has-text-dark">Register</Heading>
+                            <hr />
                             <form onSubmit={handleSubmit}>
                                 <Field>
                                     <Label>Username</Label>
@@ -66,7 +71,8 @@ function Register() {
                                         <Input onChange={(e) => setPassword2(e.target.value)} value={password2} />
                                     </Control>
                                 </Field>
-                                <Button color="primary mt-3" fullwidth>Signup</Button>
+                                <Button color="primary mt-4" fullwidth>Signup</Button>
+                                <p className="mt-3 has-text-grey is-size-7">Already have an account? <LoginLink /></p>
                             </form>
                             </Box>
                         </Column>

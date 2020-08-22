@@ -65,6 +65,19 @@ export const LoginButton = ({ children, ...props }) => {
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
  * @param {object} props
  */
+export const LoginLink = ({ children, ...props }) => {
+
+    // Consume the login context to fetch the live state.
+    const { loginDispatch } = useContext( LoginModalContext );
+
+    return <a onClick={() => loginDispatch("open")} {...props}>{children || "Login"}</a>
+
+}
+
+/**
+ * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
+ * @param {object} props
+ */
 export const LogoutButton = ({ children, ...props }) => {
 
     // Consume the login context to fetch the live state.
@@ -73,6 +86,7 @@ export const LogoutButton = ({ children, ...props }) => {
     return <Button onClick={logout} {...props}>{children || "Logout"}</Button>
 
 }
+
 
 /**
  * Login modal component. Requires <LoginModalProvider> as an ancenstor.
@@ -85,14 +99,25 @@ export const LoginModal = () => {
 
     const [ email, setEmail ] = useState( "" );
     const [ password, setPassword ] = useState( "" );
+    const [ errors, setErrors ] = useState({});
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        await login( { email, password } );
+        setErrors({});
 
-        loginDispatch("close");
+        try {
+
+            await login( { email, password } );
+
+            loginDispatch("close");
+
+        } catch( err ) {
+
+            if( err.response.data ) setErrors(errors);
+
+        }
         
     };
 
@@ -101,6 +126,7 @@ export const LoginModal = () => {
             <Modal.Content>
                 <Box className="py-5">
                     <Heading renderAs="h2">Login</Heading>
+                    <hr />
                     <form onSubmit={handleSubmit}>
                         <Field>
                             <Label>Email</Label>
