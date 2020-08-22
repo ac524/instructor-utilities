@@ -6,6 +6,7 @@ import Box from 'react-bulma-components/lib/components/box';
 import Heading from 'react-bulma-components/lib/components/heading';
 import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
 import { useLogout, useLogin } from "../utils/auth";
+import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
 
 // Define a new context
 const LoginModalContext = createContext(false);
@@ -101,6 +102,8 @@ export const LoginModal = () => {
     const [ password, setPassword ] = useState( "" );
     const [ errors, setErrors ] = useState({});
 
+    const inputErrorColor = useInputErrorColor( errors );
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -115,7 +118,7 @@ export const LoginModal = () => {
 
         } catch( err ) {
 
-            if( err.response.data ) setErrors(errors);
+            if( err.response.data ) setErrors(err.response.data);
 
         }
         
@@ -128,18 +131,22 @@ export const LoginModal = () => {
                     <Heading renderAs="h2">Login</Heading>
                     <hr />
                     <form onSubmit={handleSubmit}>
-                        <Field>
-                            <Label>Email</Label>
-                            <Control>
-                                <Input value={email} onChange={(e) => setEmail(e.target.value) } />
-                            </Control>
-                        </Field>
-                        <Field>
-                            <Label>Password</Label>
-                            <Control>
-                                <Input type="password" value={password} onChange={(e) => setPassword(e.target.value) } />
-                            </Control>
-                        </Field>
+                        <ErrorProvider value={errors}>
+                            <Field>
+                                <Label>Email</Label>
+                                <Control>
+                                    <Input value={email} color={ inputErrorColor("email") } onChange={(e) => setEmail(e.target.value) } />
+                                    <Error name="email" />
+                                </Control>
+                            </Field>
+                            <Field>
+                                <Label>Password</Label>
+                                <Control>
+                                    <Input type="password" color={ inputErrorColor("password") } value={password} onChange={(e) => setPassword(e.target.value) } />
+                                    <Error name="password" />
+                                </Control>
+                            </Field>
+                        </ErrorProvider>
                         <Button color="primary">Login</Button>
                         <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
                     </form>
