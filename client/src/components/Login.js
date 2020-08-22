@@ -4,11 +4,7 @@ import Modal from 'react-bulma-components/lib/components/modal';
 import Button from 'react-bulma-components/lib/components/button';
 import Box from 'react-bulma-components/lib/components/box';
 import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
-import { useLogout, pushAuthToken } from "../utils/auth";
-
-import api from "../utils/api";
-import { useStoreContext } from "../store";
-import { LOGIN_USER } from "../store/actions";
+import { useLogout, useLogin } from "../utils/auth";
 
 // Define a new context
 const LoginModalContext = createContext(false);
@@ -84,7 +80,7 @@ export const LoginModal = () => {
 
     // Consume the login context to fetch the live state.
     const { loginState, loginDispatch } = useContext( LoginModalContext );
-    const { storeDispatch } = useStoreContext();
+    const login = useLogin();
 
     const [ email, setEmail ] = useState( "" );
     const [ password, setPassword ] = useState( "" );
@@ -92,15 +88,8 @@ export const LoginModal = () => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();
-        
-        const { data: { token } } = await api.login( { email, password } );
 
-        const user = pushAuthToken( token );
-
-        storeDispatch({
-            type: LOGIN_USER,
-            payload: user
-        });
+        await login( { email, password } );
 
         loginDispatch("close");
         

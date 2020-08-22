@@ -6,7 +6,7 @@ import api from "./api";
 import { useStoreContext } from "../store";
 import { LOGIN_USER, LOGOUT_USER } from "../store/actions";
 
-export const pushAuthToken = token => {
+export const setAuthToken = token => {
 
     storeAuthToken( token );
     applyAuthToken( token );
@@ -57,7 +57,7 @@ export const useAuthTokenStore = () => {
             const invalidate = () => {
 
                 // Logout user
-                pushAuthToken( false );
+                setAuthToken( false );
                 storeDispatch({ type: LOGOUT_USER });
                 
                 // Redirect to login
@@ -97,14 +97,35 @@ export const useIsAuthenticated = () => {
 
 }
 
+export const useLogin = () => {
+
+    const { storeDispatch } = useStoreContext();
+
+    return async ( credential ) => {
+    
+        const { data: { token } } = await api.login( credential );
+
+        const user = setAuthToken( token );
+
+        storeDispatch({
+            type: LOGIN_USER,
+            payload: user
+        });
+
+        return user;
+        
+    }
+    
+}
+
 export const useLogout = () => {
 
     const { storeDispatch } = useStoreContext();
 
     return () => {
 
-        pushAuthToken( false );
-        storeDispatch( LOGOUT_USER );
+        setAuthToken( false );
+        storeDispatch( { type: LOGOUT_USER } );
 
         window.location.href = "./";
 
