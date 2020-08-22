@@ -3,6 +3,7 @@ import React, { createContext, useContext, useReducer, useState } from "react";
 import Modal from 'react-bulma-components/lib/components/modal';
 import Button from 'react-bulma-components/lib/components/button';
 import Box from 'react-bulma-components/lib/components/box';
+import Heading from 'react-bulma-components/lib/components/heading';
 import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
 import { useLogout, useLogin } from "../utils/auth";
 
@@ -98,7 +99,8 @@ export const LoginModal = () => {
     return (
         <Modal show={loginState} onClose={() => loginDispatch("close")}>
             <Modal.Content>
-                <Box className="py-3">
+                <Box className="py-5">
+                    <Heading renderAs="h2">Login</Heading>
                     <form onSubmit={handleSubmit}>
                         <Field>
                             <Label>Email</Label>
@@ -113,6 +115,7 @@ export const LoginModal = () => {
                             </Control>
                         </Field>
                         <Button color="primary">Login</Button>
+                        <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
                     </form>
                 </Box>
             </Modal.Content>
