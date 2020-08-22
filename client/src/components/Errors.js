@@ -14,7 +14,7 @@ export const Error = ( { name } ) => {
 
     return error
 
-        ? <p class="help is-danger">{error}</p>
+        ? <p className="help is-danger">{error}</p>
 
         : null;
 

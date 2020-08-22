@@ -4,9 +4,8 @@ import Modal from 'react-bulma-components/lib/components/modal';
 import Button from 'react-bulma-components/lib/components/button';
 import Box from 'react-bulma-components/lib/components/box';
 import Heading from 'react-bulma-components/lib/components/heading';
-import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
 import { useLogout, useLogin } from "../utils/auth";
-import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
+import Form from "./Form";
 
 // Define a new context
 const LoginModalContext = createContext(false);
@@ -102,7 +101,23 @@ export const LoginModal = () => {
     const [ password, setPassword ] = useState( "" );
     const [ errors, setErrors ] = useState({});
 
-    const inputErrorColor = useInputErrorColor( errors );
+    const fields = [
+        {
+            label: "Email",
+            placeholder: "Login Email",
+            name: "email",
+            value: email,
+            onChange: (e) => setEmail(e.target.value)
+        },
+        {
+            label: "Password",
+            placeholder: "Password",
+            name: "password",
+            type: "password",
+            value: password,
+            onChange: (e) => setPassword(e.target.value)
+        }
+    ]
 
     const handleSubmit = async (e) => {
 
@@ -115,6 +130,8 @@ export const LoginModal = () => {
             await login( { email, password } );
 
             loginDispatch("close");
+
+            window.location.href = "./";
 
         } catch( err ) {
 
@@ -130,26 +147,8 @@ export const LoginModal = () => {
                 <Box className="py-5">
                     <Heading renderAs="h2">Login</Heading>
                     <hr />
-                    <form onSubmit={handleSubmit}>
-                        <ErrorProvider value={errors}>
-                            <Field>
-                                <Label>Email</Label>
-                                <Control>
-                                    <Input value={email} color={ inputErrorColor("email") } onChange={(e) => setEmail(e.target.value) } />
-                                    <Error name="email" />
-                                </Control>
-                            </Field>
-                            <Field>
-                                <Label>Password</Label>
-                                <Control>
-                                    <Input type="password" color={ inputErrorColor("password") } value={password} onChange={(e) => setPassword(e.target.value) } />
-                                    <Error name="password" />
-                                </Control>
-                            </Field>
-                        </ErrorProvider>
-                        <Button color="primary">Login</Button>
-                        <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
-                    </form>
+                    <Form fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Login" />
+                    <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
                 </Box>
             </Modal.Content>
         </Modal>
