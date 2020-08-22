@@ -16,7 +16,7 @@ function TopNavbar() {
   return(
     <Navbar active={isNavActive}>
       <Brand>
-        <Item href="#">Instructor Utilities</Item>
+        <Item href="/">Instructor Utilities</Item>
         <Burger onClick={() => setIsNavActive( !isNavActive )} />
       </Brand>
       <Menu>
