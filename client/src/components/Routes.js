@@ -1,37 +1,30 @@
 import React from "react";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Pages from "../pages";
 
 import { useIsAuthenticated } from "../utils/auth";
-
-// Unauthenticated Routes
-const GuestRoutes = () => {
-    return (
-        <div>
-            <Route exact path="/" component={Pages.Home} />
-            <Route exact path="/register" component={Pages.Register} />
-        </div>
-    )
-}
-
-// Authenticated Routes
-const AuthRoutes = () => {
-    return (
-        <div>
-            <Route exact path="/" component={Pages.Classroom} />
-        </div>
-    )
-
-}
 
 function Routes() {
 
     const isAuth = useIsAuthenticated();
 
+    const routes = [
+        { exact: true, path: "/devs", component: Pages.Developers },
+    ]
+
+    if( isAuth ) {
+        routes.push({ exact: true, path: "/", component: Pages.Classroom });
+    } else {
+        routes.push({ exact: true, path: "/", component: Pages.Home });
+        routes.push({ exact: true, path: "/register", component: Pages.Register });
+    }
+
     return (
         <Router>
-            { isAuth ? <AuthRoutes /> : <GuestRoutes /> }
+            <Switch>
+                { routes.map(route => <Route key={route.path} {...route} />) }
+            </Switch>
         </Router>
     )
 }

@@ -20,7 +20,12 @@ function App() {
 
     }, [isAuthCheckDone]);
     
-    return isReady ? <Routes /> : <LoadingOverlay />;
+    return (
+        <div>
+            {isAuthCheckDone ? <Routes /> : null}
+            {isReady ? null : <LoadingOverlay />}
+        </div>
+    )
 
 }
 
