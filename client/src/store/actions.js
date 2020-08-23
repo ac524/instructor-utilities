@@ -1,8 +1,6 @@
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
-export const IS_READY = "IS_READY";
-
 export const ADD_READY_STEP = "ADD_READY_STEP";
 export const REMOVE_READY_STEP = "REMOVE_READY_STEP";
 export const COMPLETE_READY_STEP = "COMPLETE_READY_STEP";

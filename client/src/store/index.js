@@ -3,7 +3,6 @@ import React,{ createContext, useContext, useReducer } from "react";
 import {
     LOGIN_USER,
     LOGOUT_USER,
-    IS_READY,
     ADD_READY_STEP,
     REMOVE_READY_STEP,
     COMPLETE_READY_STEP,
@@ -12,7 +11,6 @@ import {
 
 const StoreContext = createContext({
     ready: {},
-    isReady: false,
     userAuth: {}
 });
 
@@ -23,7 +21,6 @@ const reducer = ( state, { type, payload } ) => {
     const actions = {
         [LOGIN_USER]: () => ({ ...state, userAuth: payload }),
         [LOGOUT_USER]: () => ({ ...state, userAuth: undefined }),
-        [IS_READY]: () => ({ ...state, isReady: true }),
         [ADD_READY_STEP]: () => {
             return {
                 ...state,
@@ -89,7 +86,6 @@ export const StoreProvider = ( { children } ) => {
             complete: [],
             when: []
         },
-        isReady: false,
         userAuth: undefined
     } );
 
