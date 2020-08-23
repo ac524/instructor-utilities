@@ -35,6 +35,7 @@ function Form( { fields, errors, buttonText, ...props } ) {
     return (
         <form {...props}>
             <ErrorProvider value={errors}>
+                <Error name="default" type="message" />
                 { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
             </ErrorProvider>
             <Button color="primary">{ buttonText || "Submit" }</Button>

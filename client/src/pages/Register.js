@@ -69,7 +69,7 @@ function Register() {
 
         } catch( err ) {
 
-            if( err.response.data ) setErrors( err.response.data );
+            if( err.response.data ) setErrors( { ...err.response.data, default: "An error occured, please review." } );
 
         }
 

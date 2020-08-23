@@ -117,7 +117,7 @@ export const LoginModal = () => {
             value: password,
             onChange: (e) => setPassword(e.target.value)
         }
-    ]
+    ];
 
     const handleSubmit = async (e) => {
 
@@ -135,7 +135,7 @@ export const LoginModal = () => {
 
         } catch( err ) {
 
-            if( err.response.data ) setErrors(err.response.data);
+            if( err.response.data ) setErrors( { ...err.response.data, default: "An error occured, please review." });
 
         }
         
