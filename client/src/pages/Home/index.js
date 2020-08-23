@@ -1,11 +1,12 @@
 import React from "react";
-import MainHero from "./sections/MainHero";
+import MainHero from "./parts/MainHero";
+import MainWithLogin from "../../layouts/MainWithLogin";
 
 function Home() {
     return (
-        <div>
+        <MainWithLogin>
             <MainHero />
-        </div>
+        </MainWithLogin>
     )
 }
 

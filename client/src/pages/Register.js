@@ -7,6 +7,7 @@ import Box from "react-bulma-components/lib/components/box";
 import Heading from 'react-bulma-components/lib/components/heading';
 
 import { LoginLink } from "../components/Login";
+import MainWithLogin from "../layouts/MainWithLogin";
 
 import api from "../utils/api";
 import { useLogin } from "../utils/auth";
@@ -76,22 +77,24 @@ function Register() {
     }
 
     return (
-        <Hero color="primary">
-            <Hero.Body>
-                <Container>
-                    <Columns>
-                        <Column size="one-third">
-                            <Box>
-                            <Heading renderAs="h2" className="has-text-dark">Register</Heading>
-                            <hr />
-                            <Form fields={fields} errors={errors} buttonText="Sign Up" onSubmit={handleSubmit} />
-                            <p className="mt-3 has-text-grey is-size-7">Already have an account? <LoginLink /></p>
-                            </Box>
-                        </Column>
-                    </Columns>
-                </Container>
-            </Hero.Body>
-        </Hero>
+        <MainWithLogin>
+            <Hero color="primary">
+                <Hero.Body>
+                    <Container>
+                        <Columns>
+                            <Column size="one-third">
+                                <Box>
+                                <Heading renderAs="h2" className="has-text-dark">Register</Heading>
+                                <hr />
+                                <Form fields={fields} errors={errors} buttonText="Sign Up" onSubmit={handleSubmit} />
+                                <p className="mt-3 has-text-grey is-size-7">Already have an account? <LoginLink /></p>
+                                </Box>
+                            </Column>
+                        </Columns>
+                    </Container>
+                </Hero.Body>
+            </Hero>
+        </MainWithLogin>
     )
 
 }

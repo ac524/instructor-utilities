@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useState, useEffect } from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
 
 import Modal from 'react-bulma-components/lib/components/modal';
 import Button from 'react-bulma-components/lib/components/button';
@@ -95,23 +95,30 @@ export const LoginModal = () => {
 
     // Consume the login context to fetch the live state.
     const { loginState, loginDispatch } = useContext( LoginModalContext );
+
+    return (
+        <Modal show={loginState} onClose={() => loginDispatch("close")} closeOnBlur={true}>
+            <Modal.Content>
+                <Box className="py-5">
+                    <Heading renderAs="h2">Login</Heading>
+                    <hr />
+                    <LoginForm afterLogin={() => loginDispatch("close")} />
+                    <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
+                </Box>
+            </Modal.Content>
+        </Modal>
+    )
+
+}
+
+export const LoginForm = ( { afterLogin } ) => {
+
     const login = useLogin();
 
     // Form state.
     const [ email, setEmail ] = useState( "" );
     const [ password, setPassword ] = useState( "" );
     const [ errors, setErrors ] = useState({});
-
-    // Reset inputs and error when the modal closes.
-    useEffect(() => {
-
-        if( !loginState ) {
-            setEmail("");
-            setPassword("");
-            setErrors({});
-        }
-
-    }, [loginState]);
 
     // Login form fields configuration.
     const fields = [
@@ -138,12 +145,21 @@ export const LoginModal = () => {
 
         e.preventDefault();
 
-        if( !email && !password ) {
-            setErrors({
-                default: "You're not even trying!",
-                email: "Email is required",
-                password: "Password is required"
-            });
+        const formErrors = [];
+
+        if( !email ) formErrors.push(["email", "Email is required"]);
+
+        if( !password ) formErrors.push(["password", "Password is required"]);
+
+        if( formErrors.length ) {
+
+            formErrors.length > 1
+            
+                ? formErrors.push(["default", "You're not even trying!"])
+
+                : formErrors.push(["default", "Almost there!"]);
+
+            setErrors( Object.fromEntries(formErrors) );
             return;
         }
 
@@ -153,7 +169,7 @@ export const LoginModal = () => {
 
             await login( { email, password } );
 
-            loginDispatch("close");
+            if( afterLogin ) afterLogin();
 
             window.location.href = "./";
 
@@ -165,17 +181,6 @@ export const LoginModal = () => {
         
     };
 
-    return (
-        <Modal show={loginState} onClose={() => loginDispatch("close")} closeOnBlur={true}>
-            <Modal.Content>
-                <Box className="py-5">
-                    <Heading renderAs="h2">Login</Heading>
-                    <hr />
-                    <Form fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Login" />
-                    <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
-                </Box>
-            </Modal.Content>
-        </Modal>
-    )
+    return <Form fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Login" />;
 
 }
