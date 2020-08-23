@@ -102,6 +102,17 @@ export const LoginModal = () => {
     const [ password, setPassword ] = useState( "" );
     const [ errors, setErrors ] = useState({});
 
+    // Reset inputs and error when the modal closes.
+    useEffect(() => {
+
+        if( !loginState ) {
+            setEmail("");
+            setPassword("");
+            setErrors({});
+        }
+
+    }, [loginState]);
+
     // Login form fields configuration.
     const fields = [
         {
@@ -121,17 +132,6 @@ export const LoginModal = () => {
             onChange: (e) => setPassword(e.target.value)
         }
     ];
-
-    // Reset inputs and error when the modal closes.
-    useEffect(() => {
-
-        if( !loginState ) {
-            setEmail("");
-            setPassword("");
-            setErrors({});
-        }
-
-    }, [loginState]);
 
     // Handle login submission.
     const handleSubmit = async (e) => {
