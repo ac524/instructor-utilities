@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import api from "../../../utils/api";
 import { useLogin } from "../../../utils/auth";
 import Form from "../../../components/Form";
+import { withRouter } from "react-router-dom";
 
-function RegisterForm() {
+function RegisterForm({ history }) {
 
     const login = useLogin();
 
@@ -54,8 +55,8 @@ function RegisterForm() {
 
             // Auto Login after registration
             await login( { email, password } );
-    
-            window.location.href = "./";
+            
+            history.push("/");
 
         } catch( err ) {
 
@@ -69,4 +70,4 @@ function RegisterForm() {
 
 }
 
-export default RegisterForm;
+export default withRouter( RegisterForm );
