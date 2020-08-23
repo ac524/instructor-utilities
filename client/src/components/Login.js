@@ -108,6 +108,7 @@ export const LoginModal = () => {
             label: "Email",
             placeholder: "Login Email",
             name: "email",
+            type: "email",
             value: email,
             onChange: (e) => setEmail(e.target.value)
         },
@@ -137,6 +138,11 @@ export const LoginModal = () => {
 
         e.preventDefault();
 
+        if( !email && !password ) {
+            setErrors({ default: "You're not even trying!" });
+            return;
+        }
+
         setErrors({});
 
         try {
@@ -149,7 +155,7 @@ export const LoginModal = () => {
 
         } catch( err ) {
 
-            if( err.response.data ) setErrors({ default: "An error occured, please review.", ...err.response.data });
+            if( err.response.data ) setErrors({ default: "Nope! Try again.", ...err.response.data });
 
         }
         
