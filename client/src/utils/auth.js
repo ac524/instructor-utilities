@@ -39,7 +39,7 @@ const applyAuthToken = token => {
 
 export const useAuthTokenStore = () => {
 
-    const { storeDispatch } = useStoreContext();
+    const [ ,dispatch ] = useStoreContext();
     const [ isDone, setIsDone ] = useState(false);
 
     useEffect(() => {
@@ -63,7 +63,7 @@ export const useAuthTokenStore = () => {
 
             // Logout user
             setAuthToken( false );
-            storeDispatch(gsa( LOGOUT_USER ));
+            dispatch(gsa( LOGOUT_USER ));
             
             // Redirect to login
             window.location.href = "./";
@@ -82,7 +82,7 @@ export const useAuthTokenStore = () => {
             api
                 .authenticated()
                 .then( () => {
-                    storeDispatch(gsa( LOGIN_USER, userAuth ));
+                    dispatch(gsa( LOGIN_USER, userAuth ));
                     setIsDone( true );
                 })
                 .catch( invalidate );
@@ -96,7 +96,7 @@ export const useAuthTokenStore = () => {
 
 export const useIsAuthenticated = () => {
 
-    const { store: { userAuth } } = useStoreContext();
+    const [ { userAuth } ] = useStoreContext();
 
     return userAuth && userAuth.exp > Date.now() / 1000;
 
@@ -104,7 +104,7 @@ export const useIsAuthenticated = () => {
 
 export const useLogin = () => {
 
-    const { storeDispatch } = useStoreContext();
+    const [ ,dispatch ] = useStoreContext();
 
     return async ( credential ) => {
     
@@ -112,7 +112,7 @@ export const useLogin = () => {
 
         const userAuth = setAuthToken( token );
 
-        storeDispatch(gsa( LOGIN_USER, userAuth ));
+        dispatch(gsa( LOGIN_USER, userAuth ));
 
         return userAuth;
         
@@ -122,12 +122,12 @@ export const useLogin = () => {
 
 export const useLogout = () => {
 
-    const { storeDispatch } = useStoreContext();
+    const [ ,dispatch ] = useStoreContext();
 
     return () => {
 
         setAuthToken( false );
-        storeDispatch(gsa(LOGOUT_USER));
+        dispatch(gsa(LOGOUT_USER));
 
         window.location.href = "./";
 

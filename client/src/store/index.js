@@ -3,10 +3,15 @@ import React,{ createContext, useContext, useReducer } from "react";
 import {
     LOGIN_USER,
     LOGOUT_USER,
-    IS_READY
+    IS_READY,
+    ADD_READY_STEP,
+    REMOVE_READY_STEP,
+    COMPLETE_READY_STEP,
+    UNCOMPLETE_READY_STEP
 } from "./actions";
 
 const StoreContext = createContext({
+    ready: {},
     isReady: false,
     userAuth: {}
 });
@@ -18,7 +23,49 @@ const reducer = ( state, { type, payload } ) => {
     const actions = {
         [LOGIN_USER]: () => ({ ...state, userAuth: payload }),
         [LOGOUT_USER]: () => ({ ...state, userAuth: undefined }),
-        [IS_READY]: () => ({ ...state, isReady: true })
+        [IS_READY]: () => ({ ...state, isReady: true }),
+        [ADD_READY_STEP]: () => {
+            return {
+                ...state,
+                ready: {
+                    ...state.ready,
+                    when: [
+                        ...state.ready.when,
+                        payload
+                    ]
+                }
+            }
+        },
+        [REMOVE_READY_STEP]: () => {
+            return {
+                ...state,
+                ready: {
+                    ...state.ready,
+                    when: state.ready.when.filter( step => step !== payload )
+                }
+            }
+        },
+        [COMPLETE_READY_STEP]: () => {
+            return {
+                ...state,
+                ready: {
+                    ...state.ready,
+                    complete: [
+                        ...state.ready.complete,
+                        payload
+                    ]
+                }
+            }
+        },
+        [UNCOMPLETE_READY_STEP]: () => {
+            return {
+                ...state,
+                ready: {
+                    ...state.ready,
+                    complete: state.ready.complete.filter( step => step !== payload )
+                }
+            }
+        },
     };
 
     return actions.hasOwnProperty( type )
@@ -37,12 +84,16 @@ export const getStoreAction = ( type, payload ) => {
 
 export const StoreProvider = ( { children } ) => {
 
-    const [ store, storeDispatch ] = useReducer( reducer, {
+    const reducerState = useReducer( reducer, {
+        ready: {
+            complete: [],
+            when: []
+        },
         isReady: false,
         userAuth: undefined
     } );
 
-    return <Provider value={{ store, storeDispatch }}>{ children }</Provider>
+    return <Provider value={reducerState}>{ children }</Provider>
 
 }
 

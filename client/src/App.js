@@ -10,13 +10,13 @@ import LoadingOverlay from "./components/LoadingOverlay";
 
 function App() {
 
-    const { store: { isReady }, storeDispatch } = useStoreContext();
+    const [ { isReady }, dispatch ] = useStoreContext();
 
     const isAuthCheckDone = useAuthTokenStore();
 
     useEffect(() => {
 
-        if( isAuthCheckDone ) storeDispatch(gsa(IS_READY));
+        if( isAuthCheckDone ) dispatch(gsa(IS_READY));
 
     }, [isAuthCheckDone]);
     
