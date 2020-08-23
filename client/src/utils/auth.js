@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 import api from "./api";
@@ -30,10 +29,16 @@ const applyAuthToken = token => {
     token
 
         // Apply authorization token to every request if logged in
-        ? axios.defaults.headers.common["Authorization"] = token
+        ? api.setConfiguration({
+            headers: {
+                common: {
+                Authorization: token
+                }
+            }
+        })
 
         // Delete auth header
-        : delete axios.defaults.headers.common["Authorization"];
+        : api.setConfiguration( false );
 
 };
 
