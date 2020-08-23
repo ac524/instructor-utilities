@@ -18,24 +18,11 @@ function TopNavbar() {
         <Burger onClick={() => setIsNavActive( !isNavActive )} />
       </Brand>
       <Menu>
-          {
-            isAuth
-              ? (
-              <Container position="end">
-                <Item renderAs="div">
-                  <LogoutButton color="primary" outlined />
-                </Item>
-              </Container>
-              )
-
-              : (
-              <Container position="end">
-                <Item renderAs="div">
-                  <LoginButton color="primary" />
-                </Item>
-              </Container>
-              )
-          }
+        <Container position="end">
+          <Item renderAs="div">
+              { isAuth ? <LogoutButton color="primary" outlined /> : <LoginButton color="primary" /> }
+          </Item>
+        </Container>
       </Menu>
     </Navbar>
   )
