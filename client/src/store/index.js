@@ -2,10 +2,12 @@ import React,{ createContext, useContext, useReducer } from "react";
 
 import {
     LOGIN_USER,
-    LOGOUT_USER
+    LOGOUT_USER,
+    IS_READY
 } from "./actions";
 
 const StoreContext = createContext({
+    isReady: false,
     userAuth: {}
 });
 
@@ -15,7 +17,8 @@ const reducer = ( state, { type, payload } ) => {
 
     const actions = {
         [LOGIN_USER]: () => ({ ...state, userAuth: payload }),
-        [LOGOUT_USER]: () => ({ ...state, userAuth: undefined })
+        [LOGOUT_USER]: () => ({ ...state, userAuth: undefined }),
+        [IS_READY]: () => ({ ...state, isReady: true })
     };
 
     return actions.hasOwnProperty( type )
@@ -35,6 +38,7 @@ export const getStoreAction = ( type, payload ) => {
 export const StoreProvider = ( { children } ) => {
 
     const [ store, storeDispatch ] = useReducer( reducer, {
+        isReady: false,
         userAuth: undefined
     } );
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useState } from "react";
+import React, { createContext, useContext, useReducer, useState, useEffect } from "react";
 
 import Modal from 'react-bulma-components/lib/components/modal';
 import Button from 'react-bulma-components/lib/components/button';
@@ -97,10 +97,12 @@ export const LoginModal = () => {
     const { loginState, loginDispatch } = useContext( LoginModalContext );
     const login = useLogin();
 
+    // Form state.
     const [ email, setEmail ] = useState( "" );
     const [ password, setPassword ] = useState( "" );
     const [ errors, setErrors ] = useState({});
 
+    // Login form fields configuration.
     const fields = [
         {
             label: "Email",
@@ -119,6 +121,18 @@ export const LoginModal = () => {
         }
     ];
 
+    // Reset inputs and error when the modal closes.
+    useEffect(() => {
+
+        if( !loginState ) {
+            setEmail("");
+            setPassword("");
+            setErrors({});
+        }
+
+    }, [loginState]);
+
+    // Handle login submission.
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -142,7 +156,7 @@ export const LoginModal = () => {
     };
 
     return (
-        <Modal show={loginState} onClose={() => loginDispatch("close")}>
+        <Modal show={loginState} onClose={() => loginDispatch("close")} closeOnBlur={true}>
             <Modal.Content>
                 <Box className="py-5">
                     <Heading renderAs="h2">Login</Heading>

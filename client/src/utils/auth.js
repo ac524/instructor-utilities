@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
@@ -40,49 +40,57 @@ const applyAuthToken = token => {
 export const useAuthTokenStore = () => {
 
     const { storeDispatch } = useStoreContext();
+    const [ isDone, setIsDone ] = useState(false);
 
     useEffect(() => {
+
         // Check for token to keep user logged in
-        if (localStorage.jwtToken) {
+        if ( !localStorage.jwtToken ) {
+            setIsDone( true );
+            return;
+        }
             
-            // Set auth token header auth
-            const token = localStorage.jwtToken;
+        // Set auth token header auth
+        const token = localStorage.jwtToken;
+        
+        // Decode token and get user info and exp
+        const userAuth = jwt_decode(token);
+        
+        // Check for expired token
+        const currentTime = Date.now() / 1000; // to get in milliseconds
+
+        const invalidate = () => {
+
+            // Logout user
+            setAuthToken( false );
+            storeDispatch(gsa( LOGOUT_USER ));
             
-            // Decode token and get user info and exp
-            const userAuth = jwt_decode(token);
+            // Redirect to login
+            window.location.href = "./";
+
+        }
+        
+        if (userAuth.exp < currentTime) {
             
-            // Check for expired token
-            const currentTime = Date.now() / 1000; // to get in milliseconds
+            invalidate();
 
-            const invalidate = () => {
+        } else {
 
-                // Logout user
-                setAuthToken( false );
-                storeDispatch(gsa( LOGOUT_USER ));
-                
-                // Redirect to login
-                window.location.href = "./";
+            applyAuthToken(token);
 
-            }
-            
-            if (userAuth.exp < currentTime) {
-                
-                invalidate();
-
-            } else {
-
-                applyAuthToken(token);
-
-                // Validate the token with the server
-                api
-                    .authenticated()
-                    .then( () => storeDispatch(gsa( LOGIN_USER, userAuth )) )
-                    .catch( invalidate );
-
-            }
+            // Validate the token with the server
+            api
+                .authenticated()
+                .then( () => {
+                    storeDispatch(gsa( LOGIN_USER, userAuth ));
+                    setIsDone( true );
+                })
+                .catch( invalidate );
 
         }
     }, [])
+
+    return isDone;
 
 }
 
