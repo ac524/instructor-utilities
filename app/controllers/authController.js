@@ -83,6 +83,7 @@ router.post("/login", (req, res) => {
     // Check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
+        
         // User matched
         // Create JWT Payload
         const payload = {
@@ -104,10 +105,13 @@ router.post("/login", (req, res) => {
             });
           }
         );
+
       } else {
+
         return res
           .status(400)
-          .json({ passwordincorrect: "Password incorrect" });
+          .json({ default: "Email or password is invalid" });
+
       }
     });
 

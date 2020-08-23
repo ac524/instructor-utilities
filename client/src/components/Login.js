@@ -135,7 +135,7 @@ export const LoginModal = () => {
 
         } catch( err ) {
 
-            if( err.response.data ) setErrors( { ...err.response.data, default: "An error occured, please review." });
+            if( err.response.data ) setErrors({ default: "An error occured, please review.", ...err.response.data });
 
         }
         
