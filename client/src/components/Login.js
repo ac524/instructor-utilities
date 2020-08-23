@@ -139,7 +139,11 @@ export const LoginModal = () => {
         e.preventDefault();
 
         if( !email && !password ) {
-            setErrors({ default: "You're not even trying!" });
+            setErrors({
+                default: "You're not even trying!",
+                email: "Email is required",
+                password: "Password is required"
+            });
             return;
         }
 
