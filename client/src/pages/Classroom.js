@@ -9,7 +9,7 @@ import { useReadyStep } from "../utils/ready";
 
 function Classroom() {
 
-    const [ addStep, completeStep ] = useReadyStep();
+    const [ addStep, completeStep, removeStep ] = useReadyStep();
 
     const [ students, setStudents ] = useState( [] );
 
@@ -23,6 +23,10 @@ function Classroom() {
             completeStep();
             
         });
+
+        return () => {
+            removeStep();
+        }
 
     }, [] );
 

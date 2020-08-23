@@ -26,8 +26,8 @@ const reducer = ( state, { type, payload } ) => {
                 ...state,
                 ready: {
                     ...state.ready,
-                    when: [
-                        ...state.ready.when,
+                    steps: [
+                        ...state.ready.steps,
                         payload
                     ]
                 }
@@ -38,7 +38,8 @@ const reducer = ( state, { type, payload } ) => {
                 ...state,
                 ready: {
                     ...state.ready,
-                    when: state.ready.when.filter( step => step !== payload )
+                    steps: state.ready.steps.filter( step => step !== payload ),
+                    complete: state.ready.complete.filter( step => step !== payload )
                 }
             }
         },
@@ -84,7 +85,7 @@ export const StoreProvider = ( { children } ) => {
     const reducerState = useReducer( reducer, {
         ready: {
             complete: [],
-            when: []
+            steps: []
         },
         userAuth: undefined
     } );

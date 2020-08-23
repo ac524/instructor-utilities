@@ -3,9 +3,9 @@ import { ADD_READY_STEP, COMPLETE_READY_STEP, REMOVE_READY_STEP, UNCOMPLETE_READ
 
 export const useIsReady = () => {
 
-    const [ { ready: { complete, when } } ] = useStoreContext();
+    const [ { ready: { complete, steps } } ] = useStoreContext();
 
-    return !when.length || when.every( step => complete.includes( step ) );
+    return !steps.length || steps.every( step => complete.includes( step ) );
 
 }
 
