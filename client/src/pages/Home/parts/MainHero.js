@@ -6,6 +6,7 @@ import Container from "react-bulma-components/lib/components/container";
 import Button from "react-bulma-components/lib/components/button";
 
 import { LoginButton } from "../../../components/Login";
+import { Link } from "react-router-dom";
 
 function MainHero() {
     return (
@@ -23,7 +24,7 @@ function MainHero() {
 
             <Button.Group className="is-centered">
               <LoginButton color="primary" />
-              <Button renderAs="a" href="/register" outlined color="primary">Sign Up</Button>
+              <Button renderAs={Link} to="/register" outlined color="primary">Sign Up</Button>
             </Button.Group>
 
           </Container>

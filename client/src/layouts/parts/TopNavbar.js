@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from 'react-bulma-components/lib/components/navbar';
 import { LoginButton, LogoutButton } from "../../components/Login";
 import { useIsAuthenticated } from "../../utils/auth";
+import { Link } from "react-router-dom";
 
 const { Brand, Item, Burger, Menu, Container } = Navbar;
 
@@ -14,7 +15,7 @@ function TopNavbar() {
   return(
     <Navbar active={isNavActive}>
       <Brand>
-        <Item href="/">Instructor Utilities</Item>
+        <Item renderAs={Link} to="/">Instructor Utilities</Item>
         <Burger onClick={() => setIsNavActive( !isNavActive )} />
       </Brand>
       <Menu>
