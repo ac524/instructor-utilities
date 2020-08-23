@@ -16,7 +16,7 @@ export const Error = ( { name, type = "help" } ) => {
 
     const types = {
         help: () => <p className="help is-danger">{error}</p>,
-        message: () => <Message color="danger"><Message.Body>{error}</Message.Body></Message>
+        message: () => <Message color="danger"><Message.Body className="py-3">{error}</Message.Body></Message>
     }
 
     return error
