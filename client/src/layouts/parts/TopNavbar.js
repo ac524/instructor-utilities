@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from 'react-bulma-components/lib/components/navbar';
-import { LoginButton, LogoutButton } from "./Login";
-import { useIsAuthenticated } from "../utils/auth";
+import { LoginButton, LogoutButton } from "../../components/Login";
+import { useIsAuthenticated } from "../../utils/auth";
 
 const { Brand, Item, Burger, Menu, Container } = Navbar;
 

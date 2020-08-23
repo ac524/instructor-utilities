@@ -1,5 +1,5 @@
 import React from "react";
-import TopNavbar from "../components/TopNavbar"
+import TopNavbar from "./parts/TopNavbar"
 
 function Main({ children }) {
     return (

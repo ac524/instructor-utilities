@@ -19,14 +19,9 @@ function App() {
         if( isAuthCheckDone ) storeDispatch(gsa(IS_READY));
 
     }, [isAuthCheckDone]);
-
-    console.log(isReady);
     
-    return (
-        <div>
-            { isReady ? <Routes /> : <LoadingOverlay /> }
-        </div>
-    )
+    return isReady ? <Routes /> : <LoadingOverlay />;
+
 }
 
 export default App;
