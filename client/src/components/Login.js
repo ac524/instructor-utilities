@@ -88,6 +88,19 @@ export const LogoutButton = ({ children, ...props }) => {
 
 }
 
+/**
+ * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
+ * @param {object} props
+ */
+export const LogoutLink = ({ children, ...props }) => {
+
+    // Consume the login context to fetch the live state.
+    const logout = useLogout();
+
+    return <a onClick={logout} {...props}>{children || "Login"}</a>
+
+}
+
 
 /**
  * Login modal component. Requires <LoginModalProvider> as an ancenstor.

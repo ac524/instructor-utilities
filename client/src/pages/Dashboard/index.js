@@ -1,9 +1,15 @@
 import React from "react";
 import Toolbar from "./parts/Toolbar";
 import Views from "./parts/Views";
-import { Route } from "react-router-dom";
 
-function Dashboard(props) {
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHome, faUsers, faUserGraduate } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
+
+library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate );
+
+
+function Dashboard() {
     return (
         <div>
             <Toolbar />
