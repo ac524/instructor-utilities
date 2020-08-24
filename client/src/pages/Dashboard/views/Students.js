@@ -8,7 +8,7 @@ function Students() {
         <Section>
             <Heading>Students</Heading>
         </Section>
-    )
+    );
 }
 
 export default Students;

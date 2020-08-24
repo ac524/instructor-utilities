@@ -15,7 +15,7 @@ const { Column } = Columns;
 
 export const Contributor = ({ login, contributions }) => {
 
-    const [ addStep, completeStep, removeStep ] = useReadyStep(`Contributor-${login}`);
+    const [ completeStep ] = useReadyStep(`Contributor-${login}`);
     const [ profile, setProfile ] = useState({});
 
     useEffect(() => {
@@ -30,13 +30,9 @@ export const Contributor = ({ login, contributions }) => {
     
         }
 
-        addStep();
-
         loadUser();
 
-        return () => removeStep();
-
-    }, [login, addStep, setProfile, completeStep, removeStep]);
+    }, [ login, setProfile, completeStep ]);
 
     return (
         <Column size="one-quarter" className="has-filled-content">

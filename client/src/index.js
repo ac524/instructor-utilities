@@ -4,8 +4,10 @@ import { StoreProvider } from "./store";
 import App from "./App";
 
 ReactDOM.render(
-    <StoreProvider>
-        <App />
-    </StoreProvider>,
+    <React.StrictMode>x
+        <StoreProvider>
+            <App />
+        </StoreProvider>
+    </React.StrictMode>,
     document.getElementById('root')
 );
