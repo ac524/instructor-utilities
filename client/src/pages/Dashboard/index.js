@@ -1,9 +1,14 @@
 import React from "react";
 import Toolbar from "./parts/Toolbar";
+import Views from "./parts/Views";
+import { Route } from "react-router-dom";
 
-function Dashboard() {
+function Dashboard(props) {
     return (
-        <Toolbar />
+        <div>
+            <Toolbar />
+            <Views />
+        </div>
     );
 }
 

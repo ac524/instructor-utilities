@@ -15,7 +15,7 @@ function Routes() {
     ]
 
     if( isAuth ) {
-        routes.push({ exact: true, path: "/", component: Pages.Dashboard });
+        routes.push({ path: "/", component: Pages.Dashboard });
     } else {
         routes.push({ exact: true, path: "/", component: Pages.Home });
         routes.push({ exact: true, path: "/register", component: Pages.Register });
