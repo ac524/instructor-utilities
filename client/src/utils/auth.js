@@ -93,7 +93,7 @@ export const useAuthTokenStore = () => {
                 .catch( invalidate );
 
         }
-    }, [])
+    }, [ dispatch ])
 
     return isDone;
 

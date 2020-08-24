@@ -28,7 +28,7 @@ function Classroom() {
             removeStep();
         }
 
-    }, [] );
+    }, [addStep, completeStep, removeStep] );
 
     return (
         <Section>

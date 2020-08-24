@@ -20,23 +20,23 @@ export const Contributor = ({ login, contributions }) => {
 
     useEffect(() => {
 
+        const loadUser = async () => {
+
+            const { data } = await githubApi.getUser(login);
+    
+            setProfile( data );
+    
+            completeStep();
+    
+        }
+
         addStep();
 
         loadUser();
 
         return () => removeStep();
 
-    }, []);
-
-    const loadUser = async () => {
-
-        const { data } = await githubApi.getUser(login);
-
-        setProfile( data );
-
-        completeStep();
-
-    }
+    }, [login, addStep, setProfile, completeStep, removeStep]);
 
     return (
         <Column size="one-quarter" className="has-filled-content">

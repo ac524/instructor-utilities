@@ -19,23 +19,23 @@ function LeadDev({ login, contributions }) {
 
     useEffect(() => {
 
+        const loadUser = async () => {
+
+            const { data } = await githubApi.getUser(login);
+
+            setProfile( data );
+
+            completeStep();
+
+        }
+
         addStep();
 
         loadUser();
 
         return () => removeStep();
 
-    }, []);
-
-    const loadUser = async () => {
-
-        const { data } = await githubApi.getUser(login);
-
-        setProfile( data );
-
-        completeStep();
-
-    }
+    }, [login, addStep, completeStep, removeStep]);
 
     return (
         <Box>
@@ -43,15 +43,15 @@ function LeadDev({ login, contributions }) {
                 profile
 
                     ? (
-                        <Columns>
+                        <Columns className="is-vcentered">
                             <Column size="one-quarter" className="has-text-centered">
                                 <WebLink href={profile.html_url}>
                                     <Image src={ profile.avatar_url } rounded size="square" className="mx-auto mb-3" />
-                                    @{profile.login}
                                 </WebLink>
                             </Column>
                             <Column>
-                                <Heading renderAs="h3">{profile.name}</Heading>
+                                <Heading renderAs="h3" className="mb-0">{profile.name}</Heading>
+                                <WebLink href={profile.html_url}>@{profile.login}</WebLink>
                                 <p>{profile.bio}</p>
                             </Column>
                             <Column className="has-text-centered">

@@ -16,13 +16,13 @@ function App() {
 
     useEffect(() => {
         addStep();
-    }, []);
+    }, [addStep]);
 
     useEffect(() => {
 
         if( isAuthCheckDone ) completeStep();
 
-    }, [isAuthCheckDone]);
+    }, [isAuthCheckDone,completeStep]);
     
     return (
         <div>

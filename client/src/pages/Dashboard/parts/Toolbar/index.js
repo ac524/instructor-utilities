@@ -13,7 +13,7 @@ export const useToolbarOffset = ( offset ) => {
 
         return () => document.documentElement.style.marginLeft = null;
 
-    }, [])
+    }, [offset])
 
 }
 

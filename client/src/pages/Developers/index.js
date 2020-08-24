@@ -16,37 +16,38 @@ function Developers() {
 
     const [ addStep, completeStep, removeStep ] = useReadyStep("setupDevs");
 
-    const owner = "ac524";
-    const project = "instructor-utilities";
-
     const [ lead, setLead ] = useState();
     const [ contributors, setContributors ] = useState([]);
 
     useEffect(() => {
 
+        const owner = "ac524";
+        const project = "instructor-utilities";
+
+        const fetchData = async () => {
+
+            const { data } = await githubApi.getRepoContributors( owner, project );
+    
+            setLead( data.find( contributor => contributor.login === owner ) );
+            setContributors( data.filter( contributor => contributor.login !== owner ).map( ({ login, contributions }) => ({ login, contributions }) ) );
+    
+            completeStep();
+    
+        };
+
         addStep();
+
         fetchData();
 
         return () => {
             return removeStep();
         }
 
-    }, []);
-
-    const fetchData = async () => {
-
-        const { data } = await githubApi.getRepoContributors( owner, project );
-
-        setLead( data.find( contributor => contributor.login === owner ) );
-        setContributors( data.filter( contributor => contributor.login !== owner ).map( ({ login, contributions }) => ({ login, contributions }) ) );
-
-        completeStep();
-
-    };
+    }, [ addStep, completeStep, removeStep ]);
 
     return (
         <MainWithLogin>
-            <Section>
+            <Section className="has-background-white-bis">
                 <Container>
                     <Heading>Meet The Developers</Heading>
                     <p className="my-3">The Instructor Utilities project is built and managed by participating instructors and the students they teach.</p>

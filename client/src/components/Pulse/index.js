@@ -1,6 +1,10 @@
 import React from "react";
 import "./style.sass";
 
+/**
+ * @param {*} param0 
+ * @see https://tobiasahlin.com/spinkit/
+ */
 function Pulse( { color, size } ) {
 
     const style = {};
