@@ -21,7 +21,7 @@ function TopNavbar() {
           { 
             isAuth
               ? ( <span><FontAwesomeIcon icon={['far','arrow-alt-circle-left']} /> Back to Class</span> )
-              : "Instructor Utilities"
+              : "Classroom"
           }
         </Item>
         <Burger onClick={() => setIsNavActive( !isNavActive )} />

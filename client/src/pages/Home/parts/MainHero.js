@@ -15,12 +15,17 @@ function MainHero() {
           <Container className="has-text-centered">
 
             <Heading>
-              Bootcamp Instructor Utilities
+              Classroom
             </Heading>
 
             <Heading subtitle size={5}>
-              Login or sign up to get started
+              Live classroom and student management tools for instructors and TAs
             </Heading>
+
+            <p className="my-5">
+              Classroom is a management utility for instructional staff to help them
+              <br />better support students in an online learning evironment.
+            </p>
 
             <Button.Group className="is-centered">
               <LoginButton color="primary" />
