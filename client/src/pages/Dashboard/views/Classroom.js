@@ -34,7 +34,7 @@ function Classroom() {
             <Columns className={"is-multiline"}>
                 {students.map(student => {
                     return (
-                        <Columns.Column key={student.id} size="one-fifth">
+                        <Columns.Column key={student.id.value} size="one-fifth">
                             <Card>
                                 <Card.Content>
                                     {student.name.first} {student.name.last}
