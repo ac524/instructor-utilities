@@ -10,19 +10,22 @@ import { useIsReady } from "./utils/ready";
 function App() {
 
     const [ addStep, completeStep ] = useReadyStep("authcheck");
+
     const isReady = useIsReady();
 
     const isAuthCheckDone = useAuthTokenStore();
 
     useEffect(() => {
+
         addStep();
+
     }, [addStep]);
 
     useEffect(() => {
 
         if( isAuthCheckDone ) completeStep();
 
-    }, [isAuthCheckDone,completeStep]);
+    }, [isAuthCheckDone, completeStep]);
     
     return (
         <div>
