@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import api from "../../../utils/api";
 import { useLogin } from "../../../utils/auth";
 import Form from "../../../components/Form";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-function RegisterForm({ history }) {
+function RegisterForm() {
 
     const login = useLogin();
+    const history = useHistory();
 
     const [ name, setName ] = useState("");
     const [ email, setEmail ] = useState("");
@@ -70,4 +71,4 @@ function RegisterForm({ history }) {
 
 }
 
-export default withRouter( RegisterForm );
+export default RegisterForm;

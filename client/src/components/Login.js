@@ -6,7 +6,7 @@ import Box from 'react-bulma-components/lib/components/box';
 import Heading from 'react-bulma-components/lib/components/heading';
 import { useLogout, useLogin } from "../utils/auth";
 import Form from "./Form";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // Define a new context
 const LoginModalContext = createContext(false);
@@ -125,9 +125,10 @@ export const LoginModal = () => {
 
 }
 
-export const LoginForm = withRouter( ( { afterLogin, history } ) => {
+export const LoginForm = ( { afterLogin } ) => {
 
     const login = useLogin();
+    const history = useHistory();
 
     // Form state.
     const [ email, setEmail ] = useState( "" );
@@ -197,4 +198,4 @@ export const LoginForm = withRouter( ( { afterLogin, history } ) => {
 
     return <Form fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Login" />;
 
-});
+};
