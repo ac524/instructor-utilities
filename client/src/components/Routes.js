@@ -21,7 +21,7 @@ function Routes() {
         routes.push({ exact: true, path: "/register", component: Pages.Register });
     }
 
-    routes.push({ component: Pages.NotFound });
+    routes.push({ path: "*", component: Pages.NotFound });
 
     return (
         <Router>
