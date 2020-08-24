@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Navbar from 'react-bulma-components/lib/components/navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { LoginButton, LogoutButton } from "../../components/Login";
 import { useIsAuthenticated } from "../../utils/auth";
 import { Link } from "react-router-dom";
@@ -15,7 +17,13 @@ function TopNavbar() {
   return(
     <Navbar active={isNavActive}>
       <Brand>
-        <Item renderAs={Link} to="/">Instructor Utilities</Item>
+        <Item renderAs={Link} to="/">
+          { 
+            isAuth
+              ? ( <span><FontAwesomeIcon icon={['far','arrow-alt-circle-left']} /> Back to Class</span> )
+              : "Instructor Utilities"
+          }
+        </Item>
         <Burger onClick={() => setIsNavActive( !isNavActive )} />
       </Brand>
       <Menu>

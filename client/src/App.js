@@ -7,6 +7,11 @@ import Routes from "./components/Routes";
 import LoadingOverlay from "./components/LoadingOverlay";
 import { useIsReady } from "./utils/ready";
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
+
+library.add( faArrowAltCircleLeft );
+
 function App() {
 
     const [ completeStep ] = useReadyStep("authcheck");
