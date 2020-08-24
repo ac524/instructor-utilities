@@ -13,6 +13,18 @@ import WebLink from "../../../components/WebLink";
 
 const { Column } = Columns;
 
+export const ContributorLinks = ( { profile } ) => {
+
+    const links = [];
+
+    return links.length
+
+        ? <p></p>
+
+        : null;
+
+}
+
 export const Contributor = ({ login, contributions }) => {
 
     const [ completeStep ] = useReadyStep(`Contributor-${login}`);
@@ -36,22 +48,25 @@ export const Contributor = ({ login, contributions }) => {
 
     return (
         <Column size="one-quarter" className="has-filled-content">
-            <Box className="has-text-centered">
+            <Box className="has-text-centered has-filled-content">
                 {
                     profile
 
                         ? (
-                            <div>
-                                <WebLink href={profile.html_url}>
-                                    <Image src={ profile.avatar_url } rounded size="128x128" className="mx-auto mb-3" />
+                            <div className="is-flex" style={{ flexDirection: "column" }}>
+                                <WebLink href={profile.html_url} className="is-block mb-3">
+                                    <Image src={ profile.avatar_url } rounded size={128} className="mx-auto mb-1 has-img-shadow" />
                                     @{profile.login}
                                 </WebLink>
-                                <Heading renderAs="h3" size="5" className="my-0">{profile.name}</Heading>
-                                <p>
-                                    <span className="is-size-3">{contributions}</span>
-                                    <br />
-                                    Commits
-                                </p>
+                                {profile.name ? <Heading renderAs="h3" size={5} className="my-0">{profile.name}</Heading> : null }
+                                {profile.bio ? <p>{profile.bio}</p> : null}
+                                <div className="mt-auto">
+                                    <p>
+                                        <span className="is-size-3">{contributions}</span>
+                                        <br />
+                                        Commits
+                                    </p>
+                                </div>
                             </div>
                         )
 

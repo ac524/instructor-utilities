@@ -11,6 +11,10 @@ import { useReadyStep } from "../../utils/ready";
 import LeadDev from "./parts/LeadDev";
 import Contributors from "./parts/Contributors";
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+
+library.add( faGlobe );
 
 function Developers() {
 

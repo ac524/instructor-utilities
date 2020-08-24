@@ -5,6 +5,8 @@ import Box from "react-bulma-components/lib/components/box";
 import Image from "react-bulma-components/lib/components/image";
 import Heading from "react-bulma-components/lib/components/heading";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { useReadyStep } from "../../../utils/ready";
 import githubApi from "../../../utils/githubApi";
 import Pulse from "../../../components/Pulse";
@@ -22,6 +24,8 @@ function LeadDev({ login, contributions }) {
         const loadUser = async () => {
 
             const { data } = await githubApi.getUser(login);
+
+            console.log( data );
 
             setProfile( data );
 
@@ -41,14 +45,17 @@ function LeadDev({ login, contributions }) {
                     ? (
                         <Columns className="is-vcentered">
                             <Column size="one-quarter" className="has-text-centered">
-                                <WebLink href={profile.html_url}>
-                                    <Image src={ profile.avatar_url } rounded size="square" className="mx-auto mb-3" />
+                                <WebLink href={profile.html_url} className="is-block mw-80 mx-auto">
+                                    <Image src={ profile.avatar_url } rounded size="square" className="mx-auto mb-3 has-img-shadow" />
                                 </WebLink>
                             </Column>
                             <Column>
-                                <Heading renderAs="h3" className="mb-0">{profile.name}</Heading>
-                                <WebLink href={profile.html_url}>@{profile.login}</WebLink>
-                                <p>{profile.bio}</p>
+                                <div className="mb-3">
+                                    {profile.name ? <Heading renderAs="h3" className="mb-0">{profile.name}</Heading> : null }
+                                    <WebLink href={profile.html_url}>@{profile.login}</WebLink>
+                                </div>
+                                {profile.bio ? <p className="mb-3">{profile.bio}</p> : null}
+                                {profile.blog ? <p><WebLink href={profile.blog}><FontAwesomeIcon icon="globe" /> Website</WebLink></p> : null}
                             </Column>
                             <Column className="has-text-centered">
                                 <p>
