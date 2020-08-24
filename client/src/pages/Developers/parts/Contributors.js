@@ -39,7 +39,7 @@ export const Contributor = ({ login, contributions }) => {
     }
 
     return (
-        <Column size="one-quarter">
+        <Column size="one-quarter" className="has-filled-content">
             <Box className="has-text-centered">
                 {
                     profile
