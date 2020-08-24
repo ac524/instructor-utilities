@@ -32,8 +32,6 @@ export const Contributor = ({ login, contributions }) => {
 
         const { data } = await githubApi.getUser(login);
 
-        console.log( data );
-
         setProfile( data );
 
         completeStep();
@@ -71,7 +69,7 @@ export const Contributor = ({ login, contributions }) => {
 function Contributors({ list }) {
     return (
         <Columns>
-            {list.map( contributor => <Contributor {...contributor} /> )}
+            {list.map( contributor => <Contributor key={contributor.login} {...contributor} /> )}
         </Columns>
     );
 }

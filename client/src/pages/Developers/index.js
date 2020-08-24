@@ -37,8 +37,6 @@ function Developers() {
 
         const { data } = await githubApi.getRepoContributors( owner, project );
 
-        console.log( data );
-
         setLead( data.find( contributor => contributor.login === owner ) );
         setContributors( data.filter( contributor => contributor.login !== owner ).map( ({ login, contributions }) => ({ login, contributions }) ) );
 
@@ -52,9 +50,9 @@ function Developers() {
                 <Container>
                     <Heading>Meet The Developers</Heading>
                     <p className="my-3">The Instructor Utilities project is built and managed by participating instructors and the students they teach.</p>
-                    <Heading subtitle>Project Lead</Heading>
+                    <Heading subtitle renderAs="h2">Project Lead</Heading>
                     {lead ? <LeadDev login={lead.login} contributions={lead.contributions} /> : null }
-                    <Heading subtitle>Contributors</Heading>
+                    <Heading subtitle renderAs="h2">Contributors</Heading>
                     <Contributors list={contributors} />
                 </Container>
             </Section>
