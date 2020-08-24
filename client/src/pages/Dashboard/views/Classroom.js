@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../../../utils/api";
 import Section from "react-bulma-components/lib/components/section";
+import Heading from "react-bulma-components/lib/components/heading";
 import Columns from "react-bulma-components/lib/components/columns";
 import Card from "react-bulma-components/lib/components/card";
 
@@ -31,6 +32,7 @@ function Classroom() {
 
     return (
         <Section>
+            <Heading>Classroom</Heading>
             <Columns className={"is-multiline"}>
                 {students.map(student => {
                     return (

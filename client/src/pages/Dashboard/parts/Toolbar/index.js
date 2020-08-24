@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 import "./style.sass";
 import { Link } from "react-router-dom";
@@ -23,16 +23,16 @@ function Toolbar() {
 
     return (
         <div className="toolbar">
-            <Link to="/" className="item">
+            <Link to="/" className="item" aria-label="Dashboard home">
                 <FontAwesomeIcon icon="home" />
             </Link>
-            <Link to="/team" className="item">
+            <Link to="/team" className="item" aria-label="Manage team">
                 <FontAwesomeIcon icon="users" />
             </Link>
-            <Link to="/students" className="item">
+            <Link to="/students" className="item" aria-label="Manage students">
                 <FontAwesomeIcon icon="user-graduate" />
             </Link>
-            <LogoutLink className="item end">
+            <LogoutLink className="item end" aria-label="Logout">
                 <FontAwesomeIcon icon={['far','arrow-alt-circle-left']} />
             </LogoutLink>
         </div>

@@ -21,6 +21,8 @@ function Routes() {
         routes.push({ exact: true, path: "/register", component: Pages.Register });
     }
 
+    routes.push({ component: Pages.NotFound });
+
     return (
         <Router>
             <Switch>
