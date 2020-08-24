@@ -1,12 +1,19 @@
+import { useState, useEffect } from "react";
 import { useStoreContext, getStoreAction as gsa } from "../store";
 import { ADD_READY_STEP, COMPLETE_READY_STEP, REMOVE_READY_STEP, UNCOMPLETE_READY_STEP } from "../store/actions"
-import { useState, useEffect } from "react";
 
 export const useIsReady = () => {
 
     const [ { ready: { complete, steps } } ] = useStoreContext();
+    const [ isReady, setIsReady ] = useState( false );
 
-    return !steps.length || steps.every( step => complete.includes( step ) );
+    useEffect(() => {
+
+        setIsReady( !steps.length || steps.every( step => complete.includes( step ) ) );
+
+    }, [ steps, complete, setIsReady ] )
+
+    return isReady;
 
 }
 
