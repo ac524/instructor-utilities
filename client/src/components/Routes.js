@@ -11,6 +11,7 @@ function Routes() {
 
     const routes = [
         { exact: true, path: "/devs", component: Pages.Developers },
+        { exact: true, path: "/privacy", component: Pages.Privacy },
     ]
 
     if( isAuth ) {

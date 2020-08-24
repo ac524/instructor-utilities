@@ -9,17 +9,21 @@ import Heading from 'react-bulma-components/lib/components/heading';
 
 import "./style.sass";
 import WebLink from "../../../components/WebLink";
+import { useIsAuthenticated } from "../../../utils/auth";
 
 const { Column } = Columns;
 
 function Footer() {
+
+    const isAuth = useIsAuthenticated();
+
     return (
         <Section renderAs="footer" className="layout-footer has-background-dark has-text-light">
             <Container>
                 <Columns>
                     <Column>
                         <Heading renderAs="h3">Links</Heading>
-                        <p><Link to="/register">Register</Link></p>
+                        { isAuth ? null : <p><Link to="/register">Register</Link></p> }
                         <p><Link to="/devs">Meet the devs</Link></p>
                         <p><Link to="/privacy">Privacy</Link></p>
                     </Column>
@@ -34,6 +38,7 @@ function Footer() {
             </Container>
         </Section>
     );
+
 }
 
 export default Footer;
