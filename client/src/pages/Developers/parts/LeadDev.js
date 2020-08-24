@@ -14,7 +14,7 @@ const { Column } = Columns;
 
 function LeadDev({ login, contributions }) {
 
-    const [ addStep, completeStep, removeStep ] = useReadyStep(`LeadDev-${login}`);
+    const [ completeStep ] = useReadyStep(`LeadDev-${login}`);
     const [ profile, setProfile ] = useState();
 
     useEffect(() => {
@@ -29,13 +29,9 @@ function LeadDev({ login, contributions }) {
 
         }
 
-        addStep();
-
         loadUser();
 
-        return () => removeStep();
-
-    }, [login, addStep, completeStep, removeStep]);
+    }, [login, completeStep]);
 
     return (
         <Box>

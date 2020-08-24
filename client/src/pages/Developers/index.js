@@ -14,7 +14,7 @@ import Contributors from "./parts/Contributors";
 
 function Developers() {
 
-    const [ addStep, completeStep, removeStep ] = useReadyStep("setupDevs");
+    const [ completeStep ] = useReadyStep("setupDevs");
 
     const [ lead, setLead ] = useState();
     const [ contributors, setContributors ] = useState([]);
@@ -35,15 +35,9 @@ function Developers() {
     
         };
 
-        addStep();
-
         fetchData();
 
-        return () => {
-            return removeStep();
-        }
-
-    }, [ addStep, completeStep, removeStep ]);
+    }, [ completeStep ]);
 
     return (
         <MainWithLogin>

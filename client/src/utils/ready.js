@@ -1,6 +1,6 @@
 import { useStoreContext, getStoreAction as gsa } from "../store";
 import { ADD_READY_STEP, COMPLETE_READY_STEP, REMOVE_READY_STEP, UNCOMPLETE_READY_STEP } from "../store/actions"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const useIsReady = () => {
 
@@ -14,7 +14,7 @@ export const useReadyStep = ( step ) => {
 
     const [ ,dispatch ] = useStoreContext();
 
-    const [ stepActions ] = useState([
+    const [ [ add, complete, remove, uncomplete ] ] = useState([
         // add
         () => dispatch(gsa( ADD_READY_STEP, step )),
         // complete
@@ -25,6 +25,14 @@ export const useReadyStep = ( step ) => {
         () => dispatch(gsa( UNCOMPLETE_READY_STEP, step ))
     ]);
 
-    return stepActions;
+    useEffect(() => {
+
+        add();
+
+        return () => remove();
+
+    }, [add, remove]);
+
+    return [ complete, uncomplete ];
 
 }

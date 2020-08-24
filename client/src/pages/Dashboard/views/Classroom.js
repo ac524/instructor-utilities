@@ -9,13 +9,11 @@ import { useReadyStep } from "../../../utils/ready";
 
 function Classroom() {
 
-    const [ addStep, completeStep, removeStep ] = useReadyStep();
+    const [ completeStep ] = useReadyStep();
 
     const [ students, setStudents ] = useState( [] );
 
     useEffect( () => {
-
-        addStep();
 
         api.getStudents().then((res) => {
 
@@ -24,11 +22,7 @@ function Classroom() {
             
         });
 
-        return () => {
-            removeStep();
-        }
-
-    }, [addStep, completeStep, removeStep] );
+    }, [ completeStep ] );
 
     return (
         <Section>
