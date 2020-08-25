@@ -29,8 +29,6 @@ function Topbar() {
 
     const [ { topbar } ] = useDashboardContext();
 
-    console.log( 'topbar', topbar );
-
     return topbar
         ? (
             <div className="topbar">

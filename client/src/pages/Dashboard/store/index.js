@@ -40,7 +40,7 @@ const reducer = ( state, { type, payload } ) => {
         [ADD_STUDENT]: () => ({ ...state, students: [ ...state.students, payload ] }),
         [UPDATE_STUDENT]: () => ({
             ...state,
-            students: state.students.map( student => student._id === student ? payload : student )
+            students: state.students.map( student => student._id === payload._id ? payload : student )
         }),
         [REMOVE_STUDENT]: () => ({
             ...state,
