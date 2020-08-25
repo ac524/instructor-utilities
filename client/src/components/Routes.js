@@ -1,29 +1,35 @@
 import React from "react";
 
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Pages from "../pages";
 
 import { useIsAuthenticated } from "../utils/auth";
+
+export const GuestRoute = ({ children, ...props }) => {
+
+    const isAuth = useIsAuthenticated();
+
+    return (
+        <Route
+          {...props}
+          render={({ location }) => isAuth ? <Redirect to={{ pathname: "/", state: { from: location } }} /> : children}
+        />
+    );
+
+}
 
 function Routes() {
 
     const isAuth = useIsAuthenticated();
 
-    const routes = [
-        { exact: true, path: "/devs", component: Pages.Developers },
-        { exact: true, path: "/privacy", component: Pages.Privacy },
-    ]
-
-    routes.push({ exact: true, path: "/register", component: Pages.Register });
-    
-    routes.push({ path: "/", component: (isAuth ? Pages.Dashboard : Pages.Home) });
-    
-    routes.push({ path: "*", component: Pages.NotFound });
-
     return (
         <Router>
             <Switch>
-                { routes.map(route => <Route key={route.path} {...route} />) }
+                <Route path="/devs" exact component={Pages.Developers} />
+                <Route path="/privacy" exact component={Pages.Privacy} />
+                <GuestRoute path="/register" exact><Pages.Register /></GuestRoute>
+                <Route path="/" exact={!isAuth} component={isAuth ? Pages.Dashboard : Pages.Home} />
+                <Route path="*" component={Pages.Developers} />
             </Switch>
         </Router>
     )
