@@ -15,6 +15,12 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  classrooms: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Classroom"
+    }
+  ],
   date: {
     type: Date,
     default: Date.now

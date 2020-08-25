@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const ClassroomMemberSchema = new Schema({
+const StaffSchema = new Schema({
   role: {
     type: String,
     required: true
@@ -23,4 +23,4 @@ const ClassroomMemberSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("ClassroomMember", ClassroomMemberSchema);
+module.exports = mongoose.model("Staff", StaffSchema);

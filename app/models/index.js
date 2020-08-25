@@ -1,6 +1,6 @@
 module.exports = {
   User: require("./User"),
   Classroom: require("./Classroom"),
-  ClassroomMember: require("./ClassroomMember"),
+  Staff: require("./Staff"),
   Student: require("./Student")
 }
