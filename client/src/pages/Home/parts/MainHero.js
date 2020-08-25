@@ -5,31 +5,33 @@ import Heading from "react-bulma-components/lib/components/heading";
 import Container from "react-bulma-components/lib/components/container";
 import Button from "react-bulma-components/lib/components/button";
 
-import { LoginButton } from "../../../components/Login";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from "react-router-dom";
 
 function MainHero() {
     return (
-      <Hero color="light" className="is-fullheight-with-navbar is-relative">
+      <Hero color="dark" className="is-fullheight-with-navbar is-relative">
         <div className="is-overlay" style={{ backgroundImage: "url(/images/pexels-matilda-wormwood-4099325-edit.jpg)", opacity: .35 }}></div>
         <Hero.Body>
-          <Container className="has-text-centered">
+          <Container>
               <Heading size={1}>
                 Classroom
               </Heading>
 
-              <Heading subtitle size={4}>
-                Live classroom and student management tools for instructors and TAs
+              <Heading subtitle size={3}>
+                Student management tools for instructional staff
               </Heading>
 
               <p className="my-5">
-                Classroom is a management utility for instructional staff to help them
+                Classroom is a management utility helping instructional staff
                 <br />better support students in an online learning evironment.
               </p>
 
-              <Button.Group className="is-centered">
-                <LoginButton color="primary" />
-                <Button renderAs={Link} to="/register" color="light">Sign Up</Button>
+              <Button.Group>
+                <Button renderAs={Link} to="/register" color="primary" className="has-shadow">
+                  Get started as an instructor
+                  <FontAwesomeIcon className="ml-2" icon={["far", "arrow-alt-circle-right"]} />
+                </Button>
               </Button.Group>
           </Container>
         </Hero.Body>

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Navbar from 'react-bulma-components/lib/components/navbar';
 import { ModalLink } from "components/Modal";
 
-const { Item, Menu, Container } = Navbar;
+const { Item, Menu } = Navbar;
 
 function StudentListControls() {
 

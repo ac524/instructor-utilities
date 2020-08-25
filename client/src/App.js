@@ -8,9 +8,9 @@ import LoadingOverlay from "./components/LoadingOverlay";
 import { useIsReady } from "./utils/ready";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
+import { faArrowAltCircleLeft, faArrowAltCircleRight } from '@fortawesome/free-regular-svg-icons';
 
-library.add( faArrowAltCircleLeft );
+library.add( faArrowAltCircleLeft, faArrowAltCircleRight );
 
 function App() {
 
