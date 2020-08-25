@@ -50,21 +50,39 @@ export const ModalButton = ({ children, ...props }) => {
  * Open modal link component. Requires <ModalProvider> as an ancenstor.
  * @param {object} props
  */
-export const ModalLink = ({ children, ...props }) => {
+export const ModalLink = ({ children, onClick, ...props }) => {
 
     // Consume the login context to fetch the live state.
     const [ ,setIsActive ] = useContext( ModalContext );
 
-    return <a role="button" onClick={() => setIsActive(true)} {...props}>{children || "Launch Modal"}</a>
+    const open = () => setIsActive(true);
+
+    const onLinkClick = () => {
+        onClick
+
+            ? onClick( open )
+
+            : open();
+    }
+
+    return <a role="button" onClick={onLinkClick} {...props}>{children || "Launch Modal"}</a>
 
 }
 
-function Modal( { children, ...props } ) {
+function Modal( { children, onClose, ...props } ) {
 
     const [ isActive, setIsActive ] = useContext( ModalContext );
 
+    const close = () => {
+        setIsActive(false);
+    }
+
+    const onModalClose = () => {
+        onClose ? onClose( close ) : close();
+    }
+
     return (
-        <BulmaModal show={isActive} onClose={() => setIsActive(false)} closeOnBlur={true} {...props}>
+        <BulmaModal show={isActive} onClose={onModalClose} closeOnBlur={true} {...props}>
             <BulmaModal.Content>
                 {children}
             </BulmaModal.Content>

@@ -12,12 +12,14 @@ import {
     SET_STUDENTS,
     ADD_STUDENT,
     UPDATE_STUDENT,
-    REMOVE_STUDENT
+    REMOVE_STUDENT,
+    EDIT_STUDENT
 } from "./actions";
 
 const DashboardContext = createContext([
     {
         students: [],
+        editStudent: "",
         topbar: {}
     },
     () => undefined
@@ -45,6 +47,10 @@ const reducer = ( state, { type, payload } ) => {
         [REMOVE_STUDENT]: () => ({
             ...state,
             students: state.students.filter( student => student._id !== payload )
+        }),
+        [EDIT_STUDENT]: () => ({
+            ...state,
+            editStudent: payload
         })
     };
 
@@ -66,6 +72,7 @@ export const DashboardProvider = ( { children } ) => {
 
     const reducerState = useReducer( reducer, {
         students: [],
+        editStudent: undefined,
         topbar: undefined
     } );
 
@@ -78,3 +85,6 @@ export const useDashboardContext = () => {
     return useContext( DashboardContext );
 
 }
+
+export * from "./getters";
+export * from "./setters";

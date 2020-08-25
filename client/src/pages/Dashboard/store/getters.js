@@ -1,14 +1,29 @@
 import { useDashboardContext } from ".";
+import { useEffect, useState } from "react";
 
 /**
  * STUDENT GETTERS
  */
-export const useGetStudent = () => {
+export const useGetStudent = ( targetId ) => {
 
     const [ { students } ] = useDashboardContext();
 
-    return ( targetId ) => {
-        return students.find( ({ _id }) => _id = targetId );
-    };
+    const [ student, setStudent ] = useState({});
+
+    useEffect(() => {
+
+        setStudent( students.find( ({ _id }) => _id === targetId ) || {} );
+
+    }, [students, targetId]);
+
+    return student;
+
+}
+
+export const useEditStudent = () => {
+
+    const [ { editStudent } ] = useDashboardContext();
+
+    return useGetStudent( editStudent );
 
 }

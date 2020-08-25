@@ -5,12 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Columns from "react-bulma-components/lib/components/columns";
 import Card from "react-bulma-components/lib/components/card";
 
-import { useDashboardContext } from "pages/Dashboard/store";
-import { ModalLink } from "components/Modal";
+import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 
 function StudentList() {
 
-    const [ { students } ] = useDashboardContext();
+    const [ { students }, dispatch ] = useDashboardContext();
+
+    const openEdit = (_id) => {
+        dispatch(gda(EDIT_STUDENT, _id));
+    }
 
     return (
         <Columns className={"is-multiline"}>
@@ -20,9 +24,9 @@ function StudentList() {
                         <Card>
                             <Card.Content className="is-flex">
                                 {student.name}
-                                <ModalLink className="ml-auto">
+                                <a href="#editStudent" role="button" className="ml-auto" onClick={(e) => { e.preventDefault(); openEdit(student._id); }}>
                                     <FontAwesomeIcon icon="pen-square" />
-                                </ModalLink>
+                                </a>
                             </Card.Content>
                         </Card>
                     </Columns.Column>
