@@ -6,7 +6,7 @@ import Heading from 'react-bulma-components/lib/components/heading';
 import { useLogout, useLogin } from "../utils/auth";
 import Form from "./Form";
 import { useHistory } from "react-router-dom";
-import Modal, { ModalButton, ModalLink, useModalContext } from "./Modal";
+import Modal, { ModalButton, ModalLink } from "./Modal";
 
 /**
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
@@ -60,15 +60,12 @@ export const LogoutLink = ({ children, ...props }) => {
  */
 export const LoginModal = () => {
 
-    // Consume the login context to fetch the live state.
-    const [ ,setIsModalActive ] = useModalContext();
-
     return (
         <Modal>
             <Box className="py-5">
                 <Heading renderAs="h2">Login</Heading>
                 <hr />
-                <LoginForm afterLogin={() => setIsModalActive(false)} />
+                <LoginForm />
                 <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
             </Box>
         </Modal>

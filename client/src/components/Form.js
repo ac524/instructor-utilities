@@ -28,7 +28,7 @@ export const FormField = ( { label, type = "text", name, value, placeholder, onC
 
 }
 
-function Form( { fields, errors = {}, buttonText = "Submit", ...props } ) {
+function Form( { fields, errors = {}, buttonText = "Submit", moreButtons = [], ...props } ) {
 
     const inputErrorColor = useInputErrorColor( errors );
 
@@ -39,6 +39,7 @@ function Form( { fields, errors = {}, buttonText = "Submit", ...props } ) {
                 { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
             </ErrorProvider>
             <Button color="primary">{ buttonText }</Button>
+            { moreButtons }
         </form>
     )
 

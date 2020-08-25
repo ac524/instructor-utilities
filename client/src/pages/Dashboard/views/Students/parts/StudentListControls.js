@@ -15,7 +15,7 @@ function StudentListControls() {
                 <Container>
                     <Item renderAs="div">
                         <ModalLink>
-                            <FontAwesomeIcon icon="plus-circle" />
+                            <FontAwesomeIcon icon="plus-circle" /> Add Student
                         </ModalLink>
                     </Item>
                 </Container>

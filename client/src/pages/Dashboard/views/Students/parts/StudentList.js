@@ -6,7 +6,7 @@ import Columns from "react-bulma-components/lib/components/columns";
 import Card from "react-bulma-components/lib/components/card";
 
 import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 
 function StudentList() {
 
@@ -16,6 +16,10 @@ function StudentList() {
         dispatch(gda(EDIT_STUDENT, _id));
     }
 
+    const removeStudent = (_id) => {
+        dispatch(gda(REMOVE_STUDENT, _id));
+    }
+
     return (
         <Columns className={"is-multiline"}>
             {students.map(student => {
@@ -23,9 +27,12 @@ function StudentList() {
                     <Columns.Column key={student._id} size="one-fifth">
                         <Card>
                             <Card.Content className="is-flex">
-                                {student.name}
-                                <a href="#editStudent" role="button" className="ml-auto" onClick={(e) => { e.preventDefault(); openEdit(student._id); }}>
+                                <a href="#editStudent" role="button" className="mr-2" onClick={(e) => { e.preventDefault(); openEdit(student._id); }}>
                                     <FontAwesomeIcon icon="pen-square" />
+                                </a>
+                                {student.name}
+                                <a href="#removeStudent" role="button" className="has-text-danger ml-auto" onClick={(e) => { e.preventDefault(); removeStudent(student._id); }}>
+                                    <FontAwesomeIcon icon="minus-square" />
                                 </a>
                             </Card.Content>
                         </Card>

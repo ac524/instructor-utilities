@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 
 import Box from "react-bulma-components/lib/components/box";
 import Heading from "react-bulma-components/lib/components/heading";
+import Button from "react-bulma-components/lib/components/button";
 
 import Modal, { useModalContext } from "components/Modal";
 import Form from "components/Form";
 
 import { useDashboardContext, getDashboardAction as gda, useEditStudent } from "pages/Dashboard/store";
-import { UPDATE_STUDENT, ADD_STUDENT, EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import { UPDATE_STUDENT, ADD_STUDENT, EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 
 function EditStudentModal() {
 
@@ -75,10 +76,25 @@ function EditStudentModal() {
             }));
         }
 
-        setIsModalActive( false );
-        clearEditStudent();
+        clearEditStudent(() => setIsModalActive( false ));
 
     }
+
+
+    const handleRemoveSubmit = (e) => {
+
+        e.preventDefault();
+        
+        clearEditStudent(() => setIsModalActive( false ));
+        dispatch(gda(REMOVE_STUDENT, _id));
+
+    }
+
+    const moreButtons = [
+        _id
+            ? <Button key="remove" color="danger" className="ml-2" onClick={handleRemoveSubmit}>Remove</Button>
+            : <Button key="cancel" color="danger" className="ml-2" onClick={() => clearEditStudent(() => setIsModalActive( false ))}>Cancel</Button>
+    ];
 
     return (
         // <span>test</span>
@@ -86,7 +102,7 @@ function EditStudentModal() {
             <Box className="py-5">
                 <Heading renderAs="h2">{_id ? "Edit" : "New"} User</Heading>
                 <hr />
-                <Form fields={fields} onSubmit={handleSubmit} buttonText={(_id ? "Save" : "Create") + " Student"}/>
+                <Form fields={fields} onSubmit={handleSubmit} buttonText={(_id ? "Save" : "Create") + " Student"} moreButtons={moreButtons} />
             </Box>
         </Modal>
     )

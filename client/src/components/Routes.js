@@ -14,13 +14,10 @@ function Routes() {
         { exact: true, path: "/privacy", component: Pages.Privacy },
     ]
 
-    if( isAuth ) {
-        routes.push({ path: "/", component: Pages.Dashboard });
-    } else {
-        routes.push({ exact: true, path: "/", component: Pages.Home });
-        routes.push({ exact: true, path: "/register", component: Pages.Register });
-    }
-
+    routes.push({ exact: true, path: "/register", component: Pages.Register });
+    
+    routes.push({ path: "/", component: (isAuth ? Pages.Dashboard : Pages.Home) });
+    
     routes.push({ path: "*", component: Pages.NotFound });
 
     return (

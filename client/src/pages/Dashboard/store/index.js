@@ -87,4 +87,3 @@ export const useDashboardContext = () => {
 }
 
 export * from "./getters";
-export * from "./setters";
