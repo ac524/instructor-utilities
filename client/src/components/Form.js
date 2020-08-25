@@ -38,8 +38,10 @@ function Form( { fields, errors = {}, buttonText = "Submit", moreButtons = [], .
                 <Error name="default" type="message" />
                 { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
             </ErrorProvider>
-            <Button color="primary">{ buttonText }</Button>
-            { moreButtons }
+            <div className="is-flex">
+                <Button color="primary">{ buttonText }</Button>
+                { moreButtons }
+            </div>
         </form>
     )
 

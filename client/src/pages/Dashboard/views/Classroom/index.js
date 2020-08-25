@@ -10,7 +10,7 @@ function Classroom() {
 
     return (
         <Section>
-            Content coming...
+            Content to be built...
         </Section>
     )
 }

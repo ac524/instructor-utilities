@@ -9,6 +9,7 @@ function Team() {
 
     return (
         <Section>
+            Content to be built...
         </Section>
     );
 }

@@ -31,7 +31,7 @@ function Topbar() {
 
     return topbar
         ? (
-            <div className="topbar">
+            <div className="topbar has-background-white">
                 <Heading className="item title">{topbar.name}</Heading>
             </div>
         )

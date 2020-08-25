@@ -22,7 +22,7 @@ function Toolbar() {
     useToolbarOffset(55);
 
     return (
-        <div className="toolbar">
+        <div className="toolbar has-background-white">
             <Link to="/" className="item" aria-label="Dashboard home">
                 <FontAwesomeIcon icon="home" />
             </Link>

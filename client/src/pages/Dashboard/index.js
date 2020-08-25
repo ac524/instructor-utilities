@@ -8,14 +8,18 @@ import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
 import Topbar from "./parts/Topbar";
 import { DashboardProvider } from "./store";
 
+import "./style.sass";
+
 library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare );
 
 function Dashboard() {
     return (
         <DashboardProvider>
             <Toolbar />
-            <Topbar/>
-            <Views />
+            <div className="dashboard-panel has-background-white-bis">
+                <Topbar/>
+                <Views />
+            </div>
         </DashboardProvider>
     );
 }

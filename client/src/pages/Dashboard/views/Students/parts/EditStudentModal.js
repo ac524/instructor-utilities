@@ -92,8 +92,8 @@ function EditStudentModal() {
 
     const moreButtons = [
         _id
-            ? <Button key="remove" color="danger" className="ml-2" onClick={handleRemoveSubmit}>Remove</Button>
-            : <Button key="cancel" color="danger" className="ml-2" onClick={() => clearEditStudent(() => setIsModalActive( false ))}>Cancel</Button>
+            ? <Button key="remove" color="danger" className="ml-auto" onClick={handleRemoveSubmit}>Remove</Button>
+            : <Button key="cancel" color="danger" className="ml-auto" onClick={() => clearEditStudent(() => setIsModalActive( false ))}>Cancel</Button>
     ];
 
     return (

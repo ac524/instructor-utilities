@@ -10,15 +10,13 @@ const { Item, Menu, Container } = Navbar;
 function StudentListControls() {
 
     return (
-        <Navbar active={true}>
+        <Navbar active={true} className="has-background-clear">
             <Menu>
-                <Container>
-                    <Item renderAs="div">
-                        <ModalLink>
-                            <FontAwesomeIcon icon="plus-circle" /> Add Student
-                        </ModalLink>
-                    </Item>
-                </Container>
+                <Item renderAs="div">
+                    <ModalLink>
+                        <FontAwesomeIcon icon="plus-circle" /> Add Student
+                    </ModalLink>
+                </Item>
             </Menu>
         </Navbar>
     );
