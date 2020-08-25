@@ -1,14 +1,18 @@
 import React from "react";
 
 import Section from "react-bulma-components/lib/components/section";
-import Heading from "react-bulma-components/lib/components/heading";
+import { useTopbarConfig } from "../parts/Topbar";
 
 function Students() {
+
+    useTopbarConfig({ name: "Students" });
+
     return (
         <Section>
-            <Heading>Students</Heading>
+            Content coming...
         </Section>
     );
+
 }
 
 export default Students;

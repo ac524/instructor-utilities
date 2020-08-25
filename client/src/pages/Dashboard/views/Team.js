@@ -1,12 +1,14 @@
 import React from "react";
 
 import Section from "react-bulma-components/lib/components/section";
-import Heading from "react-bulma-components/lib/components/heading";
+import { useTopbarConfig } from "../parts/Topbar";
 
 function Team() {
+
+    useTopbarConfig({ name: "Team" });
+
     return (
         <Section>
-            <Heading>Team</Heading>
         </Section>
     );
 }

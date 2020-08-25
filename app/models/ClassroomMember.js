@@ -9,11 +9,13 @@ const ClassroomMemberSchema = new Schema({
   },
   user: {
       type: Schema.Types.ObjectId,
-      ref:'User'
+      ref:'User',
+      required: true
   },
   classroom: {
       type: Schema.Types.ObjectId,
-      ref:'Classroom'
+      ref:'Classroom',
+      required: true
   },
   date: {
     type: Date,
