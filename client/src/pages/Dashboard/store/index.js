@@ -7,6 +7,11 @@ import {
     SET_TOPBAR,
 
     /**
+     * CLASSROOM ACTIONS
+     */
+    SET_CLASSROOM,
+
+    /**
      * STUDENT VIEW ACTIONS
      */
     SET_STUDENTS,
@@ -18,7 +23,12 @@ import {
 
 const DashboardContext = createContext([
     {
-        students: [],
+        classroom: {
+            _id: "",
+            name: "",
+            staff: [],
+            students: []
+        },
         editStudent: "",
         topbar: {}
     },
@@ -36,17 +46,40 @@ const reducer = ( state, { type, payload } ) => {
         [SET_TOPBAR]: () => ({ ...state, topbar: payload }),
 
         /**
+         * CLASSROOM ACTIONS
+         */
+        [SET_CLASSROOM]: () => ({ ...state, classroom: payload }),
+
+        /**
          * STUDENT VIEW ACTIONS
          */
-        [SET_STUDENTS]: () => ({ ...state, students: [ ...payload ] }),
-        [ADD_STUDENT]: () => ({ ...state, students: [ ...state.students, payload ] }),
+        [SET_STUDENTS]: () => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                students: payload
+            }
+        }),
+        [ADD_STUDENT]: () => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                students: [ ...state.classroom.students, payload ]
+            }
+        }),
         [UPDATE_STUDENT]: () => ({
             ...state,
-            students: state.students.map( student => student._id === payload._id ? payload : student )
+            classroom: {
+                ...state.classroom,
+                students: state.classroom.students.map( student => student._id === payload._id ? payload : student )
+            }
         }),
         [REMOVE_STUDENT]: () => ({
             ...state,
-            students: state.students.filter( student => student._id !== payload )
+            classroom: {
+                ...state.classroom,
+                students: state.classroom.students.filter( student => student._id !== payload )
+            }
         }),
         [EDIT_STUDENT]: () => ({
             ...state,
@@ -71,7 +104,12 @@ export const getDashboardAction = ( type, payload ) => {
 export const DashboardProvider = ( { children } ) => {
 
     const reducerState = useReducer( reducer, {
-        students: [],
+        classroom: {
+            _id: "",
+            name: "",
+            staff: [],
+            students: []
+        },
         editStudent: undefined,
         topbar: undefined
     } );

@@ -5,12 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Columns from "react-bulma-components/lib/components/columns";
 import Card from "react-bulma-components/lib/components/card";
 
-import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useStudents, useDashboardDispatch } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 
 function StudentList() {
 
-    const [ { students }, dispatch ] = useDashboardContext();
+    const dispatch = useDashboardDispatch();
+    const students = useStudents();
 
     const openEdit = (_id) => {
         dispatch(gda(EDIT_STUDENT, _id));

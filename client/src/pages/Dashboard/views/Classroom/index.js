@@ -40,7 +40,7 @@ function Classroom() {
                         </div>
                         <p><Button size="small">
                             <span>View Student List</span>
-                            <span class="icon">
+                            <span className="icon">
                                 <FontAwesomeIcon icon="angle-down" />
                             </span>
                         </Button></p>

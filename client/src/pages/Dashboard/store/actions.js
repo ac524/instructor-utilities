@@ -4,6 +4,11 @@
 export const SET_TOPBAR = "SET_TOPBAR";
 
 /**
+ * CLASSROOM ACTIONS
+ */
+export const SET_CLASSROOM = "SET_CLASSROOM";
+
+/**
  * STUDENT VIEW ACTIONS
  */
 export const SET_STUDENTS = "SET_STUDENTS";
