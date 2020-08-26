@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 function MainHero() {
     return (
       <Hero color="dark" className="is-fullheight-with-navbar is-relative">
-        <div className="is-overlay" style={{ backgroundImage: "url(/images/pexels-matilda-wormwood-4099325-edit.jpg)", opacity: .35 }}></div>
+        <div className="is-overlay" style={{ backgroundImage: "url(/images/pexels-matilda-wormwood-4099325-edit.jpg)", opacity: .35, backgroundSize: "cover" }}></div>
         <Hero.Body>
           <Container>
               <Heading size={1}>

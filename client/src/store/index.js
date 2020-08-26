@@ -10,7 +10,10 @@ import {
 } from "./actions";
 
 const StoreContext = createContext({
-    ready: {},
+    ready: {
+        complete: [],
+        steps: []
+    },
     userAuth: {}
 });
 
