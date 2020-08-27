@@ -85,11 +85,11 @@ export const useAssignedStudents = ( staffId ) => {
 
     const students = useStudents();
 
-    const [ assignedStudents, setAssignedStudents ] = useState({});
+    const [ assignedStudents, setAssignedStudents ] = useState([]);
 
     useEffect(() => {
 
-        setAssignedStudents( students.find( ({ assignedTo }) => assignedTo === staffId ) || {} );
+        setAssignedStudents( students.filter( ({ assignedTo }) => assignedTo === staffId ) );
 
     }, [students, staffId]);
 

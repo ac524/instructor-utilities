@@ -4,48 +4,72 @@ import Columns from "react-bulma-components/lib/components/columns";
 import Box from "react-bulma-components/lib/components/box";
 import Heading from "react-bulma-components/lib/components/heading";
 import Button from "react-bulma-components/lib/components/button";
+import Panel from "react-bulma-components/lib/components/panel";
+import Tag from "react-bulma-components/lib/components/tag";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { useStaff } from "pages/Dashboard/store";
+import { useStaff, useAssignedStudents } from "pages/Dashboard/store";
 import WebLink from "components/WebLink";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 const { Column } = Columns;
 
-export const Member = ( { member: { role, user: { name, github } } } ) => {
+export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
+
+    const assignedStudents = useAssignedStudents( _id );
 
     return (
-        
-        <Column size="one-quarter" className="has-filled-content">
-            <Box className="has-text-centered has-filled-content">
-                {
-                    <div className="is-flex" style={{ flexDirection: "column" }}>
-                        <div className="is-circle has-background-light mb-4 mx-auto" style={{width:"128px",height:"128px"}}></div>
-                        {name ? <Heading renderAs="h2" size={4} className="my-0">{name}</Heading> : null }
-                        {<Heading renderAs="p" size={5} subtitle className="my-0">{role}</Heading> }
-                        <div className="mt-4">
-                            <Button renderAs={Link} to="/team">View</Button>
-                        </div>
-                        <div className="mt-4">
-                            {
-                                github
+        <Columns>
+            <Column size="one-quarter" className="has-filled-content">
+                <Box className="has-text-centered has-filled-content">
+                    {
+                        <div className="is-flex" style={{ flexDirection: "column" }}>
+                            <div className="is-circle has-background-light mb-4 mx-auto" style={{width:"128px",height:"128px"}}></div>
+                            {name ? <Heading renderAs="h2" size={4} className="my-0">{name}</Heading> : null }
+                            {<Heading renderAs="p" size={5} subtitle className="my-0">{role}</Heading> }
+                            {/* <div className="mt-4">
+                                <Button renderAs={Link} to="/team">View</Button>
+                            </div> */}
+                            <div className="mt-4">
+                                {
+                                    github
 
-                                    ? (
-                                    <p>
-                                        <WebLink href={`https://github.com/${github}`}>
-                                            <FontAwesomeIcon icon={["fab","github"]}/> {github}
-                                        </WebLink>
-                                    </p>
-                                    )
-                                    
-                                    : null
-                            }
+                                        ? (
+                                        <p>
+                                            <WebLink href={`https://github.com/${github}`}>
+                                                <FontAwesomeIcon icon={["fab","github"]}/> {github}
+                                            </WebLink>
+                                        </p>
+                                        )
+                                        
+                                        : null
+                                }
+                            </div>
                         </div>
-                    </div>
-                }
-            </Box>
-        </Column>
+                    }
+                </Box>
+            </Column>
+            <Column className="has-filled-content">
+                <Panel className="has-background-white">
+                    <Panel.Header className="is-flex" style={{alignItems:"center"}}>
+                        Students
+                        <Button className="ml-auto" size="small">
+                            <FontAwesomeIcon icon="ellipsis-h" />
+                        </Button>
+                    </Panel.Header>
+                    {assignedStudents.map( student => (
+                        <Panel.Block>
+                            {student.name}
+                            <Tag.Group gapless className="ml-auto">
+                                <Tag>Priority</Tag>
+                                <Tag>High</Tag>
+                            </Tag.Group>
+                        </Panel.Block>
+                    ))}
+                </Panel>
+            </Column>
+        </Columns>
     )
 
 }
@@ -55,9 +79,9 @@ function Staff() {
     const staff = useStaff();
 
     return (
-        <Columns>
+        <div class="staff">
             {staff.map(member => <Member key={member._id} member={member} />)}
-        </Columns>
+        </div>
     )
 
 }
