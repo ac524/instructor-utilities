@@ -14,8 +14,9 @@ function MainHero() {
         <div className="is-overlay" style={{ backgroundImage: "url(/images/pexels-matilda-wormwood-4099325-edit.jpg)", opacity: .35, backgroundSize: "cover" }}></div>
         <Hero.Body>
           <Container>
-              <Heading size={1}>
-                Classroom
+              <Heading size={1} className="is-flex" style={{alignItems:"center"}}>
+                <img src="/images/logo-white.png" style={{width: "60px", height: "auto"}} alt="Classroom Logo" />
+                <span>Classroom</span>
               </Heading>
 
               <Heading subtitle size={3}>

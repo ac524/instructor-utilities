@@ -23,18 +23,26 @@ function Toolbar() {
 
     return (
         <div className="toolbar has-background-white">
-            <Link to="/" className="item" aria-label="Dashboard home">
-                <FontAwesomeIcon icon="home" />
-            </Link>
-            <Link to="/team" className="item" aria-label="Manage team">
-                <FontAwesomeIcon icon="users" />
-            </Link>
-            <Link to="/students" className="item" aria-label="Manage students">
-                <FontAwesomeIcon icon="user-graduate" />
-            </Link>
-            <LogoutLink className="item end" aria-label="Logout">
-                <FontAwesomeIcon icon={['far','arrow-alt-circle-left']} />
-            </LogoutLink>
+            <div className="item">
+                <Link to="/" aria-label="Dashboard home">
+                    <FontAwesomeIcon icon="home" />
+                </Link>
+            </div>
+            <div className="item">
+                <Link to="/team" aria-label="Manage team">
+                    <FontAwesomeIcon icon="users" />
+                </Link>
+            </div>
+            <div className="item">
+                <Link to="/students" aria-label="Manage students">
+                    <FontAwesomeIcon icon="user-graduate" />
+                </Link>
+            </div>
+            <div className="item end">
+                <LogoutLink aria-label="Logout">
+                    <FontAwesomeIcon icon={['far','arrow-alt-circle-left']} />
+                </LogoutLink>
+            </div>
         </div>
     )
 

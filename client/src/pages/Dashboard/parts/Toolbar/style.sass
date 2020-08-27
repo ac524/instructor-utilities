@@ -1,3 +1,7 @@
+@import "../../../../_bulma_vars";
+
+$width: 55px
+    
 .toolbar
     display: flex
     flex-direction: column
@@ -5,14 +9,27 @@
     top: 0
     left: 0
     height: 100vh
-    width: 55px
+    width: $width
     border-right: 1px solid #e9ebf0
 
     .end
         margin-top: auto
 
     .item
-        display: block
         font-size: 1.5em
         text-align: center
-        padding: 5px 0
+        padding: 8px 0
+    
+        a
+            color: #7a7a7a
+            display: block
+            margin: 0 auto
+            padding: 10px 8px
+            line-height: 1em
+            font-size: 1.1rem
+            width: $width - 16px
+            border-radius: 3px
+
+            &:hover
+                background: #f5f5f5
+    

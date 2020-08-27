@@ -18,10 +18,11 @@ function TopNavbar() {
     <Navbar active={isNavActive}>
       <Brand>
         <Item renderAs={Link} to="/">
+          <img src="/images/logo-color.png" alt="Classroom Logo" />
           { 
             isAuth
               ? ( <span><FontAwesomeIcon icon={['far','arrow-alt-circle-left']} /> Back to Class</span> )
-              : "Classroom"
+              : <span className="has-text-weight-bold">Classroom</span>
           }
         </Item>
         <Burger onClick={() => setIsNavActive( !isNavActive )} />
