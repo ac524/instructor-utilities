@@ -80,3 +80,19 @@ export const useEditStudent = () => {
     return useStudent( editStudent );
 
 }
+
+export const useAssignedStudents = ( staffId ) => {
+
+    const students = useStudents();
+
+    const [ assignedStudents, setAssignedStudents ] = useState({});
+
+    useEffect(() => {
+
+        setAssignedStudents( students.find( ({ assignedTo }) => assignedTo === staffId ) || {} );
+
+    }, [students, staffId]);
+
+    return assignedStudents;
+
+}
