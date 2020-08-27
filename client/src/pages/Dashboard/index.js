@@ -3,8 +3,8 @@ import Toolbar from "./parts/Toolbar";
 import Views from "./parts/Views";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare } from '@fortawesome/free-solid-svg-icons';
-import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
+import { faHome, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import Topbar from "./parts/Topbar";
 import { DashboardProvider, useDashboardContext, getDashboardAction as gda } from "./store";
 
@@ -13,7 +13,7 @@ import api from "utils/api";
 import { SET_CLASSROOM } from "./store/actions";
 import { useReadyStep } from "utils/ready";
 
-library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare );
+library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH, faTrashAlt );
 
 export const DashboardContainer = () => {
 
