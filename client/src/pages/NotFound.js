@@ -7,6 +7,7 @@ import Heading from "react-bulma-components/lib/components/heading";
 import Content from "react-bulma-components/lib/components/content";
 import { Link } from "react-router-dom";
 import MainWithLogin from "../layouts/MainWithLogin";
+import { LoginLink } from "components/Login";
 
 function NotFound() {
     return (
@@ -16,7 +17,7 @@ function NotFound() {
                     <Container>
                         <Content>
                             <Heading>Hmmm, this doesn't seem quite right</Heading>
-                            <p>Sorry, but the thing you were looking for couldn't be found. <Link to="/">Return Home &raquo;</Link></p>
+                            <p>Sorry, but the thing you were looking for couldn't be found. Try <LoginLink>Logging in</LoginLink> or <Link to="/">Return Home &raquo;</Link></p>
                         </Content>
                     </Container>
                 </Hero.Body>

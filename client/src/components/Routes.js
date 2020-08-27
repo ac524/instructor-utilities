@@ -28,7 +28,7 @@ function Routes() {
             <Route path="/privacy" exact component={Pages.Privacy} />
             <GuestRoute path="/register" exact><Pages.Register /></GuestRoute>
             <Route path="/" exact={!isAuth} component={isAuth ? Pages.Dashboard : Pages.Home} />
-            <Route path="*" component={Pages.Developers} />
+            <Route path="*" component={Pages.NotFound} />
         </Switch>
     )
 }
