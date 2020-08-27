@@ -7,7 +7,7 @@ import Card from "react-bulma-components/lib/components/card";
 import Button from "react-bulma-components/lib/components/button";
 import Tag from "react-bulma-components/lib/components/tag";
 
-import { getDashboardAction as gda, useStudents, useDashboardDispatch } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useStudents, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 import Dropdown from "components/Dropdown";
 
@@ -41,16 +41,23 @@ export const StudentMenu = ({ _id }) => {
     );
 }
 
-export const StudentCard = ({ student: { _id, name, priorityLevel } }) => {
+export const StudentCard = ({ student: { _id, name, priorityLevel, assignedTo } }) => {
+
+    const assignedStaff = useStaffMember( assignedTo );
 
     let priorityTag;
+
     if( priorityLevel < 4 ) {
-        priorityTag = <Tag>Low Priority</Tag>;
+        priorityTag = <Tag className="is-primary is-light">Low Priority</Tag>;
     } else if(priorityLevel > 7) {
-        priorityTag = <Tag color="danger">High Priority</Tag>;
+        priorityTag = <Tag color="danger" className="is-light">High Priority</Tag>;
     } else {
-        priorityTag = <Tag color="warning">Medium Priority</Tag>;
+        priorityTag = <Tag color="warning" className="is-light">Medium Priority</Tag>;
     }
+
+    const assignedToTag = assignedStaff._id
+        ? <Tag style={{flexGrow:1}}  className="is-primary is-light">{ `Assigned to ${assignedStaff.user.name}`}</Tag>
+        : <Tag style={{flexGrow:1}}>Not Assigned</Tag>
 
     return (
         <Card>
@@ -60,7 +67,7 @@ export const StudentCard = ({ student: { _id, name, priorityLevel } }) => {
             </Card.Content>
             <Tag.Group gapless>
                 {priorityTag}
-                <Tag style={{flexGrow:1}}>Not Assigned</Tag>
+                {assignedToTag}
             </Tag.Group>
         </Card>
     );

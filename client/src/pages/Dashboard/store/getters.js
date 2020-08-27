@@ -23,6 +23,25 @@ export const useStaff = () => {
 
 }
 
+/**
+ * TEAM GETTERS
+ */
+export const useStaffMember = ( staffId ) => {
+
+    const staff = useStaff();
+
+    const [ staffMember, setStaffMember ] = useState({});
+
+    useEffect(() => {
+
+        setStaffMember( staff.find( ({ _id }) => _id === staffId ) || {} );
+
+    }, [staff, staffId]);
+
+    return staffMember;
+
+}
+
 
 /**
  * TEAM GETTERS
