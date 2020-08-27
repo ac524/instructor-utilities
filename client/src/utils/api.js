@@ -28,8 +28,7 @@ class API {
                                 name: "Anthony Brown",
                                 email: "anthony@myclassroom.com",
                                 github: "ac524"
-                            },
-                            priorityLevel: 0
+                            }
                         },
                         {
                             _id: 2,
@@ -38,8 +37,7 @@ class API {
                                 _id: 2,
                                 name: "Tom Lam",
                                 email: "tom@myclassroom.com"
-                            },
-                            priorityLevel: 0
+                            }
                         },
                         {
                             _id: 3,
@@ -48,39 +46,38 @@ class API {
                                 _id: 3,
                                 name: "Spencer Hirata",
                                 email: "staff@myclassroom.com"
-                            },
-                            priorityLevel: 0
+                            }
                         },
                     ],
                     students: [
                         {
                             _id: 1,
                             name: "Sue Watts",
-                            priorityLevel: 0,
+                            priorityLevel: 2,
                             assignedTo: 2
                         },
                         {
                             _id: 2,
                             name: "Anita Hudson",
-                            priorityLevel: 0,
+                            priorityLevel: 5,
                             assignedTo: 2
                         },
                         {
                             _id: 3,
                             name: "Terra Bennett",
-                            priorityLevel: 0,
+                            priorityLevel: 9,
                             assignedTo: 3
                         },
                         {
                             _id: 4,
                             name: "Alan Ramirez",
-                            priorityLevel: 0,
+                            priorityLevel: 6,
                             assignedTo: 2
                         },
                         {
                             _id: 5,
                             name: "Doris Lee",
-                            priorityLevel: 0,
+                            priorityLevel: 8,
                             assignedTo: 3
                         }
                     ]
