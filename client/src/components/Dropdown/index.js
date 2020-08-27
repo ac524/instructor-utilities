@@ -4,7 +4,7 @@ import { useOutsideClickDispatch } from "utils/detection";
 
 import "./style.sass";
 
-function Dropdown( { label, children, className, ...props } ) {
+function Dropdown( { label, labelSize, children, className, ...props } ) {
 
     const [ isActive, dispatch ] = useReducer( ( state, action ) => action === "open" );
     const dropdownRef = useOutsideClickDispatch( { isActive, dispatch, action: "close" } );
@@ -12,7 +12,7 @@ function Dropdown( { label, children, className, ...props } ) {
     return (
         <div ref={dropdownRef} className={className + " dropdown" + (isActive ? " is-active" : "")} {...props}>
             <div className="dropdown-trigger">
-                <button className="button" aria-haspopup="true" aria-controls="dropdown-menu" onClick={() => dispatch("open")}>
+                <button className={"button" + (labelSize ? ` is-${labelSize}` : "")} aria-haspopup="true" aria-controls="dropdown-menu" onClick={() => dispatch("open")}>
                     {label}
                 </button>
             </div>

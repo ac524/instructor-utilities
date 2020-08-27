@@ -28,12 +28,12 @@ export const StudentMenu = ({ _id }) => {
     const dropdownLabel = <FontAwesomeIcon icon="ellipsis-h" />;
 
     return (
-        <Dropdown label={dropdownLabel} className="ml-auto is-right">
-            <Button className="dropdown-item" onClick={() => openEdit(_id) }>
+        <Dropdown label={dropdownLabel} labelSize="small" className="ml-auto is-right">
+            <Button className="dropdown-item" size="small" onClick={() => openEdit(_id) }>
                 <span className="icon"><FontAwesomeIcon icon="pen-square" /></span>
                 <span>Edit Student</span>
             </Button>
-            <Button className="dropdown-item" onClick={() => removeStudent(_id) }>
+            <Button className="dropdown-item" size="small" onClick={() => removeStudent(_id) }>
                 <span className="icon"><FontAwesomeIcon icon={["far","trash-alt"]} /></span>
                 <span>Remove Student</span>
             </Button>
