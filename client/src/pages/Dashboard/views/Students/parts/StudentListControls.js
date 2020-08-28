@@ -11,7 +11,7 @@ function StudentListControls() {
 
     return (
         <Navbar active={true} className="has-background-clear">
-            <Menu>
+            <Menu className="has-background-clear is-shadowless">
                 <Item renderAs="div">
                     <ModalLink>
                         <FontAwesomeIcon icon="plus-circle" /> Add Student
