@@ -9,11 +9,17 @@ function StudentList() {
 
     const students = useStudents();
 
+    const sizes = {
+        tablet: {size: 'one-third'},
+        desktop: {size: 'one-quarter'},
+        widescreen: {size: 'one-fifth'}
+    }
+
     return (
         <Columns className="is-multiline student-list">
             {students.map(student => {
                 return (
-                    <Columns.Column key={student._id} size="one-fifth" className="has-filled-content">
+                    <Columns.Column key={student._id} {...sizes} className="has-filled-content">
                         <StudentCard student={student} />
                     </Columns.Column>
                 )
