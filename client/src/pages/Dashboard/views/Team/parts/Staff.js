@@ -1,6 +1,9 @@
 import React from "react";
 
 import Columns from "react-bulma-components/lib/components/columns";
+import Card from "react-bulma-components/lib/components/card";
+import Media from "react-bulma-components/lib/components/media";
+import Image from "react-bulma-components/lib/components/image";
 import Box from "react-bulma-components/lib/components/box";
 import Heading from "react-bulma-components/lib/components/heading";
 import Button from "react-bulma-components/lib/components/button";
@@ -15,6 +18,30 @@ import { StudentPriorityTag } from "pages/Dashboard/parts/StudentCard";
 // import { Link } from "react-router-dom";
 
 const { Column } = Columns;
+
+export const MemberCard = ( { member: { _id, role, user: { name, github } } } ) => {
+
+    return (
+        <Card>
+            <Card.Content>
+                <Media>
+                    <Media.Item renderAs="figure" position="left">
+                        <Image size={64} alt="64x64" rounded src="http://bulma.io/images/placeholders/128x128.png" />
+                    </Media.Item>
+                    <Media.Item>
+                        <Heading size={4}>{name}</Heading>
+                        {
+                            github
+                                ? <Heading renderAs={WebLink} className="is-block" subtitle size={6} href={`https://github.com/${github}`}><FontAwesomeIcon icon={["fab","github"]}/> {github}</Heading>
+                                : null
+                        }
+                    </Media.Item>
+                </Media>
+            </Card.Content>
+        </Card>
+    );
+
+}
 
 export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
 
@@ -59,8 +86,8 @@ export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
                             <FontAwesomeIcon icon="ellipsis-h" />
                         </Button>
                     </Panel.Header>
-                    {assignedStudents.map( ({name, priorityLevel}) => (
-                        <Panel.Block>
+                    {assignedStudents.map( ({_id, name, priorityLevel}) => (
+                        <Panel.Block key={_id}>
                             {name}
                             <Tag.Group gapless className="ml-auto">
                                 <StudentPriorityTag level={priorityLevel} />
@@ -79,8 +106,14 @@ function Staff() {
     const staff = useStaff();
 
     return (
-        <div class="staff">
-            {staff.map(member => <Member key={member._id} member={member} />)}
+        <div className="staff">
+            <Columns>
+                {staff.map(member => (
+                    <Column key={member._id}>
+                        <MemberCard member={member} /> 
+                    </Column>
+                ))}
+            </Columns>
         </div>
     )
 
