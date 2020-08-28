@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useStaff, useAssignedStudents } from "pages/Dashboard/store";
 import WebLink from "components/WebLink";
+import { StudentPriorityTag } from "pages/Dashboard/parts/StudentCard";
 // import { Link } from "react-router-dom";
 
 const { Column } = Columns;
@@ -58,12 +59,11 @@ export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
                             <FontAwesomeIcon icon="ellipsis-h" />
                         </Button>
                     </Panel.Header>
-                    {assignedStudents.map( student => (
+                    {assignedStudents.map( ({name, priorityLevel}) => (
                         <Panel.Block>
-                            {student.name}
+                            {name}
                             <Tag.Group gapless className="ml-auto">
-                                <Tag>Priority</Tag>
-                                <Tag>High</Tag>
+                                <StudentPriorityTag level={priorityLevel} />
                             </Tag.Group>
                         </Panel.Block>
                     ))}
