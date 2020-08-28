@@ -1,26 +1,41 @@
 import React from "react";
 
-import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
+import { Field, Control, Label, Input, Select } from 'react-bulma-components/lib/components/form';
 import Button from 'react-bulma-components/lib/components/button';
 import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
 
-export const FormField = ( { label, type = "text", name, value, placeholder, onChange, inputColor, ...props } ) => {
+export const FormInput = ( { type = "text", options = [], ...props } ) => {
+
+    if( type === "select" )
+
+        return (
+            <Select className="is-fullwidth" {...props}>
+                {options.map( ({ value, label }) => <option key={value} value={value}>{label}</option> )}
+            </Select>
+        );
+
+    return <Input type={type} {...props} />
+
+}
+
+export const FormField = ( { label, type = "text", name, value, placeholder, onChange, options, inputColor, ...props } ) => {
 
     const inputProps = {
         name,
         type,
         value,
-        placeholder,
         onChange
     };
 
+    if( options ) inputProps.options = options;
+    if( placeholder ) inputProps.placeholder = placeholder;
     if( inputColor ) inputProps.color = inputColor(name);
 
     return (
         <Field {...props}>
             { !label || <Label>{label}</Label>}
             <Control>
-                <Input {...inputProps} />
+                <FormInput {...inputProps} />
                 <Error name={name} />
             </Control>
         </Field>

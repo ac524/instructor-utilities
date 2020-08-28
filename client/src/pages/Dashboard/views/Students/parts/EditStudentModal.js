@@ -7,7 +7,7 @@ import Button from "react-bulma-components/lib/components/button";
 import Modal, { useModalContext } from "components/Modal";
 import Form from "components/Form";
 
-import { useDashboardContext, getDashboardAction as gda, useEditStudent } from "pages/Dashboard/store";
+import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
 import { UPDATE_STUDENT, ADD_STUDENT, EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 
 function EditStudentModal() {
@@ -15,6 +15,7 @@ function EditStudentModal() {
     const [ , dispatch ] = useDashboardContext();
     const [ ,setIsModalActive ] = useModalContext();
 
+    const staff = useStaff();
     const editStudent = useEditStudent();
 
     const { _id } = editStudent;
@@ -30,7 +31,11 @@ function EditStudentModal() {
     }, [editStudent, setStudent, setIsModalActive]);
 
     const handleInputUpdate = ( { target: { name, value } } ) => {
+
+        if( name === 'assignedTo' ) value = parseInt(value);
+
         setStudent( { ...studentState, [name]: value } );
+
     }
 
     // Student form fields configuration.
@@ -49,6 +54,14 @@ function EditStudentModal() {
             name: "priorityLevel",
             type: "number",
             value: studentState.priorityLevel,
+            onChange: handleInputUpdate
+        },
+        {
+            label: "Staff Assignment",
+            name: "assignedTo",
+            type: "select",
+            options: staff.map(({ _id, user: { name } }) => ({ value: _id, label: name })),
+            value: studentState.assignedTo,
             onChange: handleInputUpdate
         }
     ];
