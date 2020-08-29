@@ -5,7 +5,27 @@ module.exports = async ( classroom ) => {
     "Anita Hudson",
     "Terra Bennett",
     "Alan Ramirez",
-    "Doris Lee"
+    "Doris Lee",
+    "Ayrton Bass",
+    "Carter Kane",
+    "Alys Joyce",
+    "Anjali Goddard",
+    "Harris Trejo",
+    "Mylie Pruitt",
+    "Darryl Kenny",
+    "Beau Garrett",
+    "Tobey Chester",
+    "Doris Harrington",
+    "Kayla Lang",
+    "Glyn Mayo",
+    "Cormac Mustafa",
+    "Tiarna Francis",
+    "Malaika Broughton",
+    "Cassia Brandt",
+    "Jaime Reilly",
+    "Murphy Emery",
+    "Barney Duke",
+    "Nafeesa Gilliam"
   ];
 
   const randomPriority = ( max = 10, min = 1  ) => {
