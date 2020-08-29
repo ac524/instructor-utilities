@@ -10,13 +10,21 @@ module.exports = async ( classroom ) => {
     "Terra Bennett",
     "Alan Ramirez",
     "Doris Lee"
-  ]
+  ];
+
+  const randomPriority = ( max = 10, min = 1  ) => {
+    return Math.floor( (Math.random() * max)+min )
+  }
+
+  const randomStaffId = () => {
+    return staff[ Math.floor( (Math.random() * staff.length) ) ]._id;
+  }
 
   return names.map( name => ({
     name,
-    priorityLevel: Math.floor( (Math.random() * 10)+1 ),
+    priorityLevel: randomPriority(),
     classroom: classroom._id,
-    assignedTo: staff[ Math.floor( (Math.random() * staff.length) ) ]._id
+    assignedTo: randomStaffId()
   }) );
 
 };
