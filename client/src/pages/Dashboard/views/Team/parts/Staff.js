@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Columns from "react-bulma-components/lib/components/columns";
 import Card from "react-bulma-components/lib/components/card";
@@ -19,22 +19,23 @@ import { StudentPriorityTag } from "pages/Dashboard/parts/StudentCard";
 
 const { Column } = Columns;
 
-export const MemberCard = ( { member: { _id, role, user: { name, github } } } ) => {
+export const MemberCardButton = ( { isActive, onClick = () => undefined, member: { _id, role, user: { name, github } } } ) => {
+
+    const color = isActive ? "primary" : "white";
+    const classes = ["is-small"];
+
+    if( isActive ) classes.push("is-light", "is-focused");
 
     return (
-        <Card>
-            <Card.Content>
-                <Media>
+        <Card renderAs={Button} color={color} className={classes.join(" ")} onClick={onClick}>
+            <Card.Content renderAs="span" className="is-block">
+                <Media style={{alignItems:"center"}} renderAs="span">
                     <Media.Item renderAs="figure" position="left">
-                        <Image size={64} alt="64x64" rounded src="http://bulma.io/images/placeholders/128x128.png" />
+                        <Image size={48} alt="" rounded src="http://bulma.io/images/placeholders/128x128.png" />
                     </Media.Item>
-                    <Media.Item>
-                        <Heading size={4}>{name}</Heading>
-                        {
-                            github
-                                ? <Heading renderAs={WebLink} className="is-block" subtitle size={6} href={`https://github.com/${github}`}><FontAwesomeIcon icon={["fab","github"]}/> {github}</Heading>
-                                : null
-                        }
+                    <Media.Item className="has-text-nowrap" renderAs="span">
+                        <Heading size={6} renderAs="span" className="is-block">{name}</Heading>
+                        <Heading size={7} subtitle renderAs="span" className="is-block">{role}</Heading>
                     </Media.Item>
                 </Media>
             </Card.Content>
@@ -105,15 +106,22 @@ function Staff() {
 
     const staff = useStaff();
 
+    const [ selected, setSelected ] = useState({});
+
+    useEffect(() => {
+        if( staff.length && !selected._id ) setSelected( staff[0] );
+    }, [staff, selected])
+
     return (
         <div className="staff">
             <Columns>
                 {staff.map(member => (
-                    <Column key={member._id}>
-                        <MemberCard member={member} /> 
+                    <Column key={member._id} style={{flexGrow:0}}>
+                        <MemberCardButton member={member} isActive={member._id === selected._id} onClick={()=>setSelected(member)} /> 
                     </Column>
                 ))}
             </Columns>
+            { selected._id ? <Member member={selected} /> : null }
         </div>
     )
 
