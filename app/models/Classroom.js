@@ -7,6 +7,10 @@ const ClassroomSchema = new Schema({
     type: String,
     required: true
   },
+  staff: [{
+    type: Schema.Types.ObjectId,
+    ref:'Classroom',
+  }],
   date: {
     type: Date,
     default: Date.now

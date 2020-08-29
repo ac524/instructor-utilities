@@ -10,7 +10,7 @@ module.exports = async () => {
       user: users[0]._id
     },
     ...users.slice(1).map( ({_id}) => ({
-      role: "instructor",
+      role: "ta",
       user: _id
     }) )
   ];
