@@ -5,7 +5,9 @@ module.exports = async () => {
 
     await Classroom.deleteMany({});
 
-    const seedData = await require("../data/classrooms")();
+    const staff = await Staff.find({});
+
+    const seedData = await require("../data/classrooms")( staff );
 
     const results = await Classroom.collection.insertMany(seedData);
 

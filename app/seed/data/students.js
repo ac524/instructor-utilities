@@ -1,8 +1,4 @@
-const { Staff, Classroom } = require("../../models");
-
-module.exports = async ( classroom ) => {
-
-  const staff = await Staff.find({});
+module.exports = async ( classroom ) => {  
 
   const names = [
     "Sue Watts",
@@ -17,7 +13,7 @@ module.exports = async ( classroom ) => {
   }
 
   const randomStaffId = () => {
-    return staff[ Math.floor( (Math.random() * staff.length) ) ]._id;
+    return classroom.staff[ Math.floor( (Math.random() * classroom.staff.length) ) ];
   }
 
   return names.map( name => ({

@@ -1,8 +1,4 @@
-const { Staff } = require("../../models");
-
-module.exports = async () => {
-
-  const staff = await Staff.find({});
+module.exports = async ( staff ) => {
 
   return [
     {
