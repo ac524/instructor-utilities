@@ -11,17 +11,17 @@ module.exports = async () => {
 
     const results = await Classroom.collection.insertMany(seedData);
 
-    const classroom = await Classroom.findOne({});
+    const classroomId = results.insertedIds['0'];
 
-    for( let i = 0; i < classroom.staff.length; i++ ) {
+    for( let i = 0; i < staff.length; i++ ) {
 
-        let _id = classroom.staff[i];
+        let { _id, user } = staff[i];
 
         // Add the classroom id to each staff
-        const staff = await Staff.findByIdAndUpdate( _id, { classroom: classroom._id} );
+        await Staff.findByIdAndUpdate( _id, { classroom: classroomId } );
 
         // Push the classroom id to the user
-        await User.findByIdAndUpdate( staff.user, { $push: { classrooms: classroom._id } } );
+        await User.findByIdAndUpdate( user, { $push: { classrooms: classroomId } } );
 
     }
 
