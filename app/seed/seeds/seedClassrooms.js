@@ -15,8 +15,10 @@ module.exports = async () => {
 
         let _id = classroom.staff[i];
 
+        // Add the classroom id to each staff
         const staff = await Staff.findByIdAndUpdate( _id, { classroom: classroom._id} );
 
+        // Push the classroom id to the user
         await User.findByIdAndUpdate( staff.user, { $push: { classrooms: classroom._id } } );
 
     }

@@ -9,7 +9,11 @@ const ClassroomSchema = new Schema({
   },
   staff: [{
     type: Schema.Types.ObjectId,
-    ref:'Classroom',
+    ref:'Staff',
+  }],
+  students: [{
+    type: Schema.Types.ObjectId,
+    ref:'Student',
   }],
   date: {
     type: Date,
