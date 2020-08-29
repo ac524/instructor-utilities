@@ -34,8 +34,8 @@ export const MemberCardButton = ( { isActive, onClick = () => undefined, member:
                         <Image size={48} alt="" rounded src="http://bulma.io/images/placeholders/128x128.png" />
                     </Media.Item>
                     <Media.Item className="has-text-nowrap" renderAs="span">
-                        <Heading size={6} renderAs="span" className="is-block">{name}</Heading>
-                        <Heading size={7} subtitle renderAs="span" className="is-block">{role}</Heading>
+                        <Heading size={5} renderAs="span" className="is-block">{name}</Heading>
+                        <Heading size={6} subtitle renderAs="span" className="is-block">{role}</Heading>
                     </Media.Item>
                 </Media>
             </Card.Content>

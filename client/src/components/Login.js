@@ -138,7 +138,7 @@ export const LoginForm = ( { afterLogin } ) => {
 
         } catch( err ) {
 
-            if( err.response.data ) setErrors({ default: "Nope! Try again.", ...err.response.data });
+            if( err.response && err.response.data ) setErrors({ default: "Nope! Try again.", ...err.response.data });
 
         }
         

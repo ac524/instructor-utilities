@@ -16,8 +16,7 @@ const UserSchema = new Schema({
     required: true
   },
   github: {
-    type: String,
-    required: true
+    type: String
   },
   classrooms: [
     {
