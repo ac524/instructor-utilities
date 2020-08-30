@@ -11,6 +11,8 @@ const jwtSign = util.promisify( jwt.sign );
 
 // Load User model
 const { User } = require("../models");
+const Classroom = require("../models/Classroom");
+const Staff = require("../models/Staff");
 
 module.exports = {
   authenticated(req, res) {
@@ -42,7 +44,27 @@ module.exports = {
         password: await passwordHash( req.body.password )
       });
 
-      res.json( await newUser.save() );
+      await newUser.save();
+
+      const classroom = new Classroom({
+        name: req.body.roomname
+      });
+
+      await classroom.save();
+
+      await newUser.update({ $push: { classrooms: classroom._id } })
+
+      const staff = new Staff({
+        role: "instructor",
+        user: newUser._id,
+        classroom: classroom._id
+      });
+
+      await staff.save();
+
+      await classroom.update({ $push: { staff: staff._id } })
+
+      res.json( { success: true } );
 
     } catch( err ) {
 

@@ -14,6 +14,7 @@ function RegisterForm() {
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
     const [ password2, setPassword2 ] = useState("");
+    const [ roomname, setRoomName ] = useState("");
     const [ errors, setErrors ] = useState({});
 
     const fields = [
@@ -43,6 +44,13 @@ function RegisterForm() {
             value: password2,
             type:"password",
             name: "password2"
+        },
+        {
+            label: "Classroom Name",
+            onChange: (e) => setRoomName(e.target.value),
+            value: roomname,
+            type:"text",
+            name: "roomname"
         }
     ];
 
@@ -52,7 +60,7 @@ function RegisterForm() {
 
         try {
 
-            await api.register({ name, email, password, password2 });
+            await api.register({ name, email, password, password2, roomname });
 
             // Auto Login after registration
             await login( { email, password } );
