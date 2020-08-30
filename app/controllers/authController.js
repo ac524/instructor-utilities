@@ -38,6 +38,7 @@ module.exports = {
 
         return res.status(400).json({ email: "Email already exists" });
 
+      // Create the User
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
@@ -46,14 +47,17 @@ module.exports = {
 
       await newUser.save();
 
+      // Create the User's classroom
       const classroom = new Classroom({
         name: req.body.roomname
       });
 
       await classroom.save();
 
+      // Add the classroom id to the user
       await newUser.update({ $push: { classrooms: classroom._id } })
 
+      // Create the user's staff entry for the classroom
       const staff = new Staff({
         role: "instructor",
         user: newUser._id,
@@ -62,6 +66,7 @@ module.exports = {
 
       await staff.save();
 
+      // Add the staff member to the classroom
       await classroom.update({ $push: { staff: staff._id } })
 
       res.json( { success: true } );
