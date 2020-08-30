@@ -24,12 +24,12 @@ passport.use( require("./jwtstrategy") );
 // Use the /public directory for static file loading.
 app.use(express.static("public"));
 
-// Register API Controllers.
-// const isAuthenticatedController = require("./middleware/isAuthenticatedController");
-const { controllers/*, isAuthControllers*/ } = require("../controllers");
-app.use( "/api", controllers/*, isAuthenticatedController, isAuthControllers */ );
+// Register routes
+// const { controllers } = require("../controllers");
 
-// Register HTML routes last.
+// app.use( "/api", controllers );
+
+// Register routes
 app.use( require("../routes") );
 
 module.exports = app;
