@@ -25,9 +25,9 @@ passport.use( require("./jwtstrategy") );
 app.use(express.static("public"));
 
 // Register API Controllers.
-const isAuthenticatedController = require("./middleware/isAuthenticatedController");
-const { controllers, isAuthControllers } = require("../controllers");
-app.use( "/api", controllers, isAuthenticatedController, isAuthControllers );
+// const isAuthenticatedController = require("./middleware/isAuthenticatedController");
+const { controllers/*, isAuthControllers*/ } = require("../controllers");
+app.use( "/api", controllers/*, isAuthenticatedController, isAuthControllers */ );
 
 // Register HTML routes last.
 app.use( require("../routes") );

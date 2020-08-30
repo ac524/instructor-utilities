@@ -9,6 +9,9 @@ const {
 
 const seedDb = async () => {
 
+    /**
+     * Define seeds in the order they should run.
+     */
     const seeds = [
         [ "User", seedUser ],
         [ "Staff", seedStaff ],
