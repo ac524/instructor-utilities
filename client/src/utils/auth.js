@@ -52,6 +52,8 @@ export const useAuthTokenStore = () => {
 
     useEffect(() => {
 
+        if( isDone ) return;
+
         // Check for token to keep user logged in
         if ( !localStorage.jwtToken ) {
             setIsDone( true );
@@ -59,10 +61,10 @@ export const useAuthTokenStore = () => {
         }
             
         // Set auth token header auth
-        const token = localStorage.jwtToken;
+        const tokenString = localStorage.jwtToken;
         
         // Decode token and get user info and exp
-        const userAuth = jwt_decode(token);
+        const token = jwt_decode(tokenString);
         
         // Check for expired token
         const currentTime = Date.now() / 1000; // to get in milliseconds
@@ -78,25 +80,26 @@ export const useAuthTokenStore = () => {
 
         }
         
-        if (userAuth.exp < currentTime) {
+        if (token.exp < currentTime) {
             
             invalidate();
 
         } else {
 
-            applyAuthToken(token);
+            applyAuthToken(tokenString);
 
             // Validate the token with the server
             api
                 .authenticated()
-                .then( () => {
-                    dispatch(gsa( LOGIN_USER, userAuth ));
+                .then( ({ data: user }) => {
+                    dispatch(gsa( LOGIN_USER, { token, user } ));
                     setIsDone( true );
                 })
                 .catch( invalidate );
 
         }
-    }, [ dispatch, history ])
+
+    }, [ dispatch, history, isDone ])
 
     return isDone;
 
@@ -104,9 +107,17 @@ export const useAuthTokenStore = () => {
 
 export const useIsAuthenticated = () => {
 
+    const [ { userAuth: { token } } ] = useStoreContext();
+
+    return token && token.exp > Date.now() / 1000;
+
+}
+
+export const useAuthorizedUser = () => {
+
     const [ { userAuth } ] = useStoreContext();
 
-    return userAuth && userAuth.exp > Date.now() / 1000;
+    return userAuth.user;
 
 }
 
@@ -116,13 +127,13 @@ export const useLogin = () => {
 
     return async ( credential ) => {
     
-        const { data: { token } } = await api.login( credential );
+        const { data: { token: tokenString, user } } = await api.login( credential );
 
-        const userAuth = setAuthToken( token );
+        const token = setAuthToken( tokenString );
 
-        dispatch(gsa( LOGIN_USER, userAuth ));
+        dispatch(gsa( LOGIN_USER, { token, user } ));
 
-        return userAuth;
+        return token;
         
     }
     

@@ -4,6 +4,7 @@ import "./style.sass";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LogoutLink } from "../../../../components/Login";
+import { useDashboardContext } from "pages/Dashboard/store";
 
 export const useToolbarOffset = ( offset ) => {
 
@@ -36,13 +37,17 @@ const ToolbarItem = ({ icon, ...props }) => {
 function Toolbar() {
 
     useToolbarOffset(55);
-    const {roomId} = useParams();
 
-    const links = [
-        { to: `/${roomId}`, "aria-label": "Dashboard home", icon: "home" },
-        { to: `/${roomId}/team`, "aria-label": "Manage team", icon: "users" },
-        { to: `/${roomId}/students`, "aria-label": "Manage students", icon: "user-graduate" }
-    ];
+    const [ { classroom } ] = useDashboardContext();
+
+    const links = classroom
+        ? [
+            { to: `/${classroom._id}`, "aria-label": "Dashboard home", icon: "home" },
+            { to: `/${classroom._id}/team`, "aria-label": "Manage team", icon: "users" },
+            { to: `/${classroom._id}/students`, "aria-label": "Manage students", icon: "user-graduate" }
+        ]
+        
+        : [ { to: "/", "aria-label": "Dashboard home", icon: "home" } ];
 
     return (
         <div className="toolbar has-background-white">

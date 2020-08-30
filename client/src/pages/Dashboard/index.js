@@ -12,39 +12,82 @@ import "./style.sass";
 import api from "utils/api";
 import { SET_CLASSROOM } from "./store/actions";
 import { useReadyStep } from "utils/ready";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH, faTrashAlt );
 
 export const DashboardContainer = () => {
 
-    const [ ,dispatch ] = useDashboardContext();
-    const [ completeStep ] = useReadyStep("getclassroom");
+    const [ { classroom }, dispatch ] = useDashboardContext();
+    const [ completeStep, uncompleteStep, isStepComplete ] = useReadyStep("getclassroom");
     const { roomId } = useParams();
 
     useEffect(() => {
 
+        if( !roomId ) return;
+        
         const loadClassroom = async () => {
 
-            const { data } = await api.getClassroom( roomId );
+            try {
 
-            dispatch(gda(SET_CLASSROOM, data));
+                const { data } = await api.getClassroom( roomId );
+
+                dispatch(gda(SET_CLASSROOM, data));
+
+            } catch( err ) {
+
+                dispatch(gda(SET_CLASSROOM, null));
+
+            }
 
             completeStep();
 
         }
 
-        loadClassroom();
+        /**
+         * HACK FIX FOR DASHBOARD UNMOUNTING DURING LOGIN PROCESS AND CAUSE DISPATCH ON AN UNMOUNTED COMPONENT.
+         * NEED TO FIND REAL ISSUE
+         */
+        // loadClassroom();
+        const timeout = setTimeout( loadClassroom, 500 );
+
+        return () => {
+            uncompleteStep();
+            clearTimeout(timeout)
+        };
         
-    }, [ roomId, dispatch, completeStep ]);
+    }, [ roomId, dispatch, completeStep, uncompleteStep ]);
+
+    const content = isStepComplete
+
+        ? (
+            classroom
+
+                ? (
+                    <div className="dashboard-panel has-background-white-bis">
+                        <Topbar/>
+                        <Views />
+                    </div>
+                )
+
+                : (
+                    <div className="dashboard-panel has-background-white-bis is-flex" style={{alignItems:"center",justifyContent:"center", flexDirection:"column"}}>
+                        <span className="is-size-3">Classroom Not Found</span>
+                        <Link to="/">
+                            <FontAwesomeIcon className="mr-1" icon={['far','arrow-alt-circle-left']} />
+                            Back to class
+                        </Link>
+                    </div>
+                )
+        )
+
+        : null;
 
     return (
         <div className="dashboard-container">
             <Toolbar />
-            <div className="dashboard-panel has-background-white-bis">
-                <Topbar/>
-                <Views />
-            </div>
+            {content}
         </div>
     )
 }

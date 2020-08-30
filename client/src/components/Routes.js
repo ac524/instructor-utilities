@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Route, Switch, Redirect } from "react-router-dom";
 import Pages from "../pages";
 
-import { useIsAuthenticated } from "../utils/auth";
+import { useIsAuthenticated, useAuthorizedUser } from "../utils/auth";
 
 export const GuestRoute = ({ children, redirectTo = "/", ...props }) => {
 
@@ -26,19 +26,38 @@ export const GuestRoute = ({ children, redirectTo = "/", ...props }) => {
 
 }
 
-function Routes() {
+export const PrivateRoute = ({ children, redirectTo = "/", ...props }) => {
 
     const isAuth = useIsAuthenticated();
 
-    const homeAuthRedirect = isAuth ? "/5f4ac8bc492845084bdd36a5" : "/";
+    const render = () => {
+
+        return isAuth ? children : <Pages.NotFound />;
+
+    }
+
+    return (
+        <Route
+          {...props}
+          render={render}
+        />
+    );
+
+}
+
+function Routes() {
+
+    const authUser = useAuthorizedUser();
+
+    const homeRedirect = authUser ? `/${authUser.classrooms[0]}` : "/";
 
     return (
         <Switch>
             <Route path="/devs" exact component={Pages.Developers} />
             <Route path="/privacy" exact component={Pages.Privacy} />
             <GuestRoute path="/register" exact><Pages.Register /></GuestRoute>
-            <GuestRoute path="/" exact redirectTo={homeAuthRedirect}><Pages.Home /></GuestRoute>
-            { isAuth ? <Route path="/:roomId" component={Pages.Dashboard} /> : null }
+            <GuestRoute path="/" exact redirectTo={homeRedirect}><Pages.Home /></GuestRoute>
+            <PrivateRoute path="/:roomId"><Pages.Dashboard /></PrivateRoute>
             <Route path="*" component={Pages.NotFound} />
         </Switch>
     )

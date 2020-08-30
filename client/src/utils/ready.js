@@ -19,9 +19,9 @@ export const useIsReady = () => {
 
 export const useReadyStep = ( step ) => {
 
-    const [ ,dispatch ] = useStoreContext();
+    const [ { ready: { complete } } ,dispatch ] = useStoreContext();
 
-    const [ [ add, complete, remove, uncomplete ] ] = useState([
+    const [ [ addStep, completeStep, removeStep, uncompleteStep ] ] = useState([
         // add
         () => dispatch(gsa( ADD_READY_STEP, step )),
         // complete
@@ -32,14 +32,22 @@ export const useReadyStep = ( step ) => {
         () => dispatch(gsa( UNCOMPLETE_READY_STEP, step ))
     ]);
 
+    const [ isComplete, setIsComplete ] = useState(false);
+
     useEffect(() => {
 
-        add();
+        addStep();
 
-        return () => remove();
+        return () => removeStep();
 
-    }, [add, remove]);
+    }, [step, addStep, removeStep]);
 
-    return [ complete, uncomplete ];
+    useEffect(() => {
+
+        setIsComplete( complete.includes(step) );
+
+    }, [step, complete, setIsComplete]);
+
+    return [ completeStep, uncompleteStep, isComplete ];
 
 }

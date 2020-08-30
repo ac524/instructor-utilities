@@ -23,12 +23,7 @@ import {
 
 const DashboardContext = createContext([
     {
-        classroom: {
-            _id: "",
-            name: "",
-            staff: [],
-            students: []
-        },
+        classroom: null,
         editStudent: "",
         topbar: {}
     },
@@ -104,12 +99,7 @@ export const getDashboardAction = ( type, payload ) => {
 export const DashboardProvider = ( { children } ) => {
 
     const reducerState = useReducer( reducer, {
-        classroom: {
-            _id: "",
-            name: "",
-            staff: [],
-            students: []
-        },
+        classroom: null,
         editStudent: undefined,
         topbar: undefined
     } );

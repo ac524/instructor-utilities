@@ -93,7 +93,7 @@ module.exports = {
         }
       );
 
-      res.json({ success: true, token: "Bearer " + token });
+      res.json({ success: true, token: "Bearer " + token, user: user });
 
         
     } catch( err ) {

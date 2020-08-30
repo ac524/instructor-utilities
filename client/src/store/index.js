@@ -14,7 +14,10 @@ const StoreContext = createContext({
         complete: [],
         steps: []
     },
-    userAuth: {}
+    userAuth: {
+        token: null,
+        user: null
+    }
 });
 
 const { Provider } = StoreContext;
@@ -23,7 +26,7 @@ const reducer = ( state, { type, payload } ) => {
 
     const actions = {
         [LOGIN_USER]: () => ({ ...state, userAuth: payload }),
-        [LOGOUT_USER]: () => ({ ...state, userAuth: undefined }),
+        [LOGOUT_USER]: () => ({ ...state, userAuth: { token: null, user: null } }),
         [ADD_READY_STEP]: () => {
             return {
                 ...state,
@@ -90,7 +93,10 @@ export const StoreProvider = ( { children } ) => {
             complete: [],
             steps: []
         },
-        userAuth: undefined
+        userAuth: {
+            token: null,
+            user: null
+        }
     } );
 
     return <Provider value={reducerState}>{ children }</Provider>
