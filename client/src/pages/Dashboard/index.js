@@ -12,6 +12,7 @@ import "./style.sass";
 import api from "utils/api";
 import { SET_CLASSROOM } from "./store/actions";
 import { useReadyStep } from "utils/ready";
+import { useParams } from "react-router-dom";
 
 library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH, faTrashAlt );
 
@@ -19,12 +20,13 @@ export const DashboardContainer = () => {
 
     const [ ,dispatch ] = useDashboardContext();
     const [ completeStep ] = useReadyStep("getclassroom");
+    const { roomId } = useParams();
 
     useEffect(() => {
 
         const loadClassroom = async () => {
 
-            const { data } = await api.getClassroom();
+            const { data } = await api.getClassroom( roomId );
 
             dispatch(gda(SET_CLASSROOM, data));
 
@@ -34,7 +36,7 @@ export const DashboardContainer = () => {
 
         loadClassroom();
         
-    }, [ dispatch, completeStep ]);
+    }, [ roomId, dispatch, completeStep ]);
 
     return (
         <div className="dashboard-container">

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import "./style.sass";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LogoutLink } from "../../../../components/Login";
 
@@ -36,11 +36,12 @@ const ToolbarItem = ({ icon, ...props }) => {
 function Toolbar() {
 
     useToolbarOffset(55);
+    const {roomId} = useParams();
 
     const links = [
-        { to: "/", "aria-label": "Dashboard home", icon: "home" },
-        { to: "/team", "aria-label": "Manage team", icon: "users" },
-        { to: "/students", "aria-label": "Manage students", icon: "user-graduate" }
+        { to: `/${roomId}`, "aria-label": "Dashboard home", icon: "home" },
+        { to: `/${roomId}/team`, "aria-label": "Manage team", icon: "users" },
+        { to: `/${roomId}/students`, "aria-label": "Manage students", icon: "user-graduate" }
     ];
 
     return (

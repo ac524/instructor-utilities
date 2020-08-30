@@ -12,9 +12,9 @@ class API {
         return this.configured || axios;
     }
 
-    async getClassroom() {
+    async getClassroom( roomId ) {
 
-        return this.axios.get( "/api/rooms/5f4ac8bc492845084bdd36a5" );
+        return this.axios.get( `/api/rooms/${roomId}` );
 
     }
 
