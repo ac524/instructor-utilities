@@ -9,30 +9,32 @@ const isAuthControllers = [];
 
 // Filter function for filtering out unwanted files from fs.readdirSync.
 const filterFiles = file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+const getPrefix = file => file[0] === "_" ? "" : file.substr( 1, file.length-3 );
 
 // Read the current director and load found modules into the controllers list.
 fs
   .readdirSync(__dirname)
   .filter(filterFiles)
   .forEach(file => {
-    controllers.push( require(path.join(__dirname, file)) );
+
+    router.use( `/api${getPrefix(file)}`, require(path.join(__dirname, file)) );
+
   });
 
 
 
 // Read the /isAuth sub directory and load found modules into the authRoutesDir.
 const authRoutesDir = __dirname +  "/isAuth"
+const isAuthenticated = require("../config/middleware/isAuthenticated");
 
 fs
   .readdirSync(authRoutesDir)
   .filter(filterFiles)
   .forEach(file => {
-    isAuthControllers.push( require(path.join(authRoutesDir, file)) );
+
+    router.use( `/api${getPrefix(file)}`, isAuthenticated, require(path.join(authRoutesDir, file)) );
+
   });
-
-const isAuthenticated = require("../config/middleware/isAuthenticated");
-
-router.use( "/api", controllers, isAuthenticated, isAuthControllers );
 
 router.use(( req, res ) => {
 
