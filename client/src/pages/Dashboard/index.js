@@ -1,19 +1,25 @@
 import React, { useEffect } from "react";
-import Toolbar from "./parts/Toolbar";
-import Views from "./parts/Views";
+
+import { useParams, Link } from "react-router-dom";
+import socketIOClient from "socket.io-client";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHome, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { faArrowAltCircleLeft, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import api from "utils/api";
+import { useReadyStep } from "utils/ready";
+
+import Toolbar from "./parts/Toolbar";
 import Topbar from "./parts/Topbar";
+import Views from "./parts/Views";
+
 import { DashboardProvider, useDashboardContext, getDashboardAction as gda } from "./store";
+import { SET_CLASSROOM } from "./store/actions";
 
 import "./style.sass";
-import api from "utils/api";
-import { SET_CLASSROOM } from "./store/actions";
-import { useReadyStep } from "utils/ready";
-import { useParams, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH, faTrashAlt );
 
@@ -93,6 +99,23 @@ export const DashboardContainer = () => {
 }
 
 function Dashboard() {
+
+    useEffect(() => {
+
+        const socket = socketIOClient("http://localhost:3000");
+
+        console.log( socket );
+
+        socket.on("FromAPI", data => {
+
+            console.log(data);
+
+        });
+
+        return () => socket.disconnect();
+
+    });
+
     return (
         <DashboardProvider>
             <DashboardContainer />

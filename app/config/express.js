@@ -1,8 +1,14 @@
 // Import express and create a new server.
+const http = require('http');
 const express = require("express");
 const passport = require("passport");
 
+const PORT = process.env.PORT || 3001;
+
 const app = express();
+const server = http.createServer(app);
+
+app.set('io', require("./io")(server)); 
 
 // Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));
@@ -25,11 +31,10 @@ passport.use( require("./jwtstrategy") );
 app.use(express.static("public"));
 
 // Register routes
-// const { controllers } = require("../controllers");
-
-// app.use( "/api", controllers );
-
-// Register routes
 app.use( require("../routes") );
+
+server.listen(PORT, () => {
+    console.log(`App listening on Port: ${PORT}`);
+});
 
 module.exports = app;

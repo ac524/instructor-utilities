@@ -1,4 +1,5 @@
 const { Classroom } = require("../models");
+// const io = require("../config/io");
 
 module.exports = {
     async getRoom( req, res ) {
@@ -13,6 +14,8 @@ module.exports = {
                         populate: { path: 'user' }
                     })
                     .populate('students');
+
+            // io.to( req.params.roomId ).emit("Welcome to class!");
 
             res.json( room );
 
