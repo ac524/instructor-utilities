@@ -3,11 +3,13 @@ const router = require("express").Router();
 const isRoomMember = require("../middleware/isRoomMember");
 
 const {
-    getRoom
+    getSingle,
+    update
 } = require("../../controllers/roomController");
 
 router
     .route( "/:roomId" )
-    .get( isRoomMember, getRoom );
+    .get( isRoomMember, getSingle )
+    .patch( isRoomMember, update );
 
 module.exports = router;

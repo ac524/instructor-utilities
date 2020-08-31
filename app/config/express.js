@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const server = http.createServer(app);
 
-app.set('io', require("./io")(server)); 
+require("./io")(server, app); 
 
 // Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));

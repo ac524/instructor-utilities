@@ -1,8 +1,7 @@
 const { Classroom } = require("../models");
-// const io = require("../config/io");
 
 module.exports = {
-    async getRoom( req, res ) {
+    async getSingle( req, res ) {
 
         try {
 
@@ -15,7 +14,11 @@ module.exports = {
                     })
                     .populate('students');
 
-            // io.to( req.params.roomId ).emit("Welcome to class!");
+            const classroomIo = req.app.get("classroomIo");
+
+            classroomIo.to(req.params.roomId).emit("FromAPI", "Welcome to class!");
+
+            console.log( 'GET', req.params.roomId );
 
             res.json( room );
 
@@ -24,6 +27,15 @@ module.exports = {
             res.status(500).json({default:"Something went wrong"});
 
         }
+
+    },
+    async update( req, res ) {
+
+        const classroomIo = req.app.get("classroomIo");
+
+        classroomIo.to(req.params.roomId).emit("FromAPI", "Welcome to class!");
+
+        res.json({success: true});
 
     }
 }

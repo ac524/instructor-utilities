@@ -1,16 +1,16 @@
 const socketIo = require('socket.io');
 
-module.exports = (server) => {
+module.exports = (server, app) => {
 
     const io = socketIo.listen(server);
 
-    // const classrooms = io.of(/^\/\w+$/);
+    const classrooms = io.of(/^\/\w+$/);
 
-    io.on('connection', socket => {
+    classrooms.on('connection', socket => {
     
-        console.log( socket.nsp.name );
+        // console.log( socket.nsp.name );
     
-        // socket.join( socket.nsp.name.substr(1) )
+        socket.join( socket.nsp.name.substr(1) );
     
         socket.emit("FromAPI", "Test");
     
@@ -19,6 +19,7 @@ module.exports = (server) => {
     
     });
 
-    return io;
+    app.set('io', io);
+    app.set('classroomIo', classrooms);
 
 };

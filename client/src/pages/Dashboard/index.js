@@ -9,6 +9,8 @@ import { faArrowAltCircleLeft, faTrashAlt } from '@fortawesome/free-regular-svg-
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import Button from "react-bulma-components/lib/components/button";
+
 import api from "utils/api";
 import { useReadyStep } from "utils/ready";
 
@@ -73,6 +75,7 @@ export const DashboardContainer = () => {
                 ? (
                     <div className="dashboard-panel has-background-white-bis">
                         <Topbar/>
+                        <Button onClick={() => api.updateClassroom(roomId, { test: true })}>Test</Button>
                         <Views />
                     </div>
                 )
@@ -100,11 +103,13 @@ export const DashboardContainer = () => {
 
 function Dashboard() {
 
+    const { roomId } = useParams();
+
     useEffect(() => {
 
-        const socket = socketIOClient("http://localhost:3000");
+        if( !roomId ) return;
 
-        console.log( socket );
+        const socket = socketIOClient(`http://localhost:3000/${roomId}`);
 
         socket.on("FromAPI", data => {
 
@@ -114,7 +119,7 @@ function Dashboard() {
 
         return () => socket.disconnect();
 
-    });
+    }, [ roomId ]);
 
     return (
         <DashboardProvider>

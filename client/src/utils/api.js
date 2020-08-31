@@ -18,6 +18,12 @@ class API {
 
     }
 
+    async updateClassroom( roomId, update ) {
+
+        return this.axios.patch( `/api/rooms/${roomId}`, update );
+
+    }
+
     /**
      * Authentication Routes
      */
