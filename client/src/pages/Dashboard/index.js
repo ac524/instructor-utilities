@@ -74,16 +74,19 @@ export const DashboardContainer = () => {
         // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
         const socket = socketIOClient(`http://localhost:3000/${roomId}`);
 
+        // console.log( localStorage.jwtToken.substr(7) );
         // console.log( localStorage.jwtToken );
 
         // socket.on('connect', () => {
         //     socket
         //         //send the jwt
-        //         .emit('authenticate', { token: localStorage.jwtToken })
+        //         .emit('authenticate', { token: localStorage.jwtToken.substr(7) })
         //         .on('authenticated', () => {
 
         //             //do other things
         //             console.log('authenticated');
+
+        //             socket.emit('authenticated');
 
         //         })
         //         .on('unauthorized', (msg) => {
@@ -94,15 +97,14 @@ export const DashboardContainer = () => {
         //         })
         // });
 
-        socket.on("FromAPI", data => {
+        // socket.on("FromAPI", data => {
 
-            console.log('fromapi',data);
+        //     console.log('fromapi',data);
 
-        });
+        // });
 
         socket.on("dispatch", data => {
 
-            console.log('dispatch',data);
             dispatch(data);
 
         });

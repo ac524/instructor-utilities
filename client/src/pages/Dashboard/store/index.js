@@ -34,8 +34,6 @@ const { Provider } = DashboardContext;
 
 const reducer = ( state, { type, payload } ) => {
 
-    console.log( type, payload );
-
     const actions = {
         /**
          * TOPBAR VIEW ACTIONS

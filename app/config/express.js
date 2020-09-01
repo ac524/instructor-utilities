@@ -8,11 +8,11 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const server = http.createServer(app);
 
-require("./io")(server, app);
-
 // Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+require("./io")(server, app);
 
 const compression = require("compression");
 // TODO Research usage of this compression. Does it work for client side requests?
