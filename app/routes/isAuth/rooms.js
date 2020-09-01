@@ -5,7 +5,7 @@ const isRoomMember = require("../middleware/isRoomMember");
 const {
     getSingle,
     update
-} = require("../../controllers/roomController");
+} = require("../../controllers/room");
 
 router
     .route( "/:roomId" )

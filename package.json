@@ -32,6 +32,7 @@
     "mongoose": "^5.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "passport-jwt.socketio": "^0.1.1",
     "socket.io": "^2.3.0",
     "validator": "^13.1.1"
   }

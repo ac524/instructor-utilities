@@ -18,8 +18,6 @@ module.exports = {
 
             classroomIo.to(req.params.roomId).emit("FromAPI", "Welcome to class!");
 
-            console.log( 'GET', req.params.roomId );
-
             res.json( room );
 
         } catch( err ) {

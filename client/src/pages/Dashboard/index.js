@@ -75,7 +75,6 @@ export const DashboardContainer = () => {
                 ? (
                     <div className="dashboard-panel has-background-white-bis">
                         <Topbar/>
-                        <Button onClick={() => api.updateClassroom(roomId, { test: true })}>Test</Button>
                         <Views />
                     </div>
                 )
@@ -109,6 +108,7 @@ function Dashboard() {
 
         if( !roomId ) return;
 
+        // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
         const socket = socketIOClient(`http://localhost:3000/${roomId}`);
 
         socket.on("FromAPI", data => {
