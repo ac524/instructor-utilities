@@ -1,6 +1,13 @@
 const { Student } = require("../../models");
 
 module.exports = {
+    fromBody(req, res, next) {
+
+        req.roomId = req.body.roomId;
+
+        next();
+
+    },
     fromParam(req, res, next) {
 
         req.roomId = req.params.roomId;

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const setReqRoomId = require("../middleware/setReqRoomId");
+const setRoom = require("../middleware/setRoom");
 const isRoomMember = require("../middleware/isRoomMember");
 
 const {
@@ -10,7 +10,7 @@ const {
 
 router
     .route( "/:roomId" )
-    .get( setReqRoomId.fromParam, isRoomMember, getSingle )
-    .patch( setReqRoomId.fromParam, isRoomMember, update );
+    .get( setRoom.fromParam, isRoomMember, getSingle )
+    .patch( setRoom.fromParam, isRoomMember, update );
 
 module.exports = router;

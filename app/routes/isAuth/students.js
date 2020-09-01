@@ -1,15 +1,26 @@
 const router = require("express").Router();
 
-const setReqRoomId = require("../middleware/setReqRoomId");
+const setRoom = require("../middleware/setRoom");
 const isRoomMember = require("../middleware/isRoomMember");
 
 const {
-    update
+    create,
+    getSingle,
+    update,
+    deleteSingle
 } = require("../../controllers/student");
+
+const newAuthMiddleware = [ setRoom.fromBody, isRoomMember ];
+const existingAuthMiddleware = [ setRoom.fromStudent, isRoomMember ];
+
+router
+    .route( "/" )
+    .post( newAuthMiddleware, create );
 
 router
     .route( "/:studentId" )
-    // .get( setReqRoomId.fromParam, isRoomMember, getSingle )
-    .patch( setReqRoomId.fromStudent, isRoomMember, update );
+    .get( existingAuthMiddleware, getSingle )
+    .patch( existingAuthMiddleware, update )
+    .delete( existingAuthMiddleware, deleteSingle );
 
 module.exports = router;

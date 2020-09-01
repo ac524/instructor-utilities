@@ -8,12 +8,12 @@ import Modal, { useModalContext } from "components/Modal";
 import Form from "components/Form";
 
 import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
-import { UPDATE_STUDENT, ADD_STUDENT, EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 import api from "utils/api";
 
 function EditStudentModal() {
 
-    const [ , dispatch ] = useDashboardContext();
+    const [ { classroom }, dispatch ] = useDashboardContext();
     const [ ,setIsModalActive ] = useModalContext();
 
     const staff = useStaff();
@@ -78,31 +78,25 @@ function EditStudentModal() {
 
         e.preventDefault();
 
+
         if( _id ) {
-            dispatch(gda( UPDATE_STUDENT, {
-                _id,
-                ...studentState
-            } ));
+            await api.updateStudent( _id, studentState );
         } else {
-            dispatch(gda( ADD_STUDENT, {
-                _id: Math.floor(Math.random()*10000),
-                ...studentState
-            }));
+            await api.createStudent( { ...studentState, roomId: classroom._id } );
         }
 
         clearEditStudent(() => setIsModalActive( false ));
 
-        await api.updateStudent( _id, studentState );
-
     }
 
 
-    const handleRemoveSubmit = (e) => {
+    const handleRemoveSubmit = async (e) => {
 
         e.preventDefault();
         
+        await api.removeStudent( _id );
+
         clearEditStudent(() => setIsModalActive( false ));
-        dispatch(gda(REMOVE_STUDENT, _id));
 
     }
 

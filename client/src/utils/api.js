@@ -24,9 +24,21 @@ class API {
 
     }
 
+    async createStudent( options ) {
+
+        return this.axios.post( `/api/students`, options );
+
+    }
+
     async updateStudent( studentId, update ) {
 
         return this.axios.patch( `/api/students/${studentId}`, update );
+
+    }
+
+    async removeStudent( studentId ) {
+
+        return this.axios.delete( `/api/students/${studentId}` );
 
     }
 

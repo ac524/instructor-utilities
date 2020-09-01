@@ -11,6 +11,7 @@ import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from 
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 
 import "./style.sass";
+import api from "utils/api";
 
 export const StudentMenu = ({ _id }) => {
     
@@ -20,8 +21,8 @@ export const StudentMenu = ({ _id }) => {
         dispatch(gda(EDIT_STUDENT, _id));
     }
 
-    const removeStudent = (_id) => {
-        dispatch(gda(REMOVE_STUDENT, _id));
+    const removeStudent = async(_id) => {
+        await api.removeStudent( _id );
     }
 
     const dropdownLabel = <FontAwesomeIcon icon="ellipsis-h" />;

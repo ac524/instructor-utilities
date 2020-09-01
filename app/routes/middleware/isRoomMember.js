@@ -1,5 +1,7 @@
 const { Staff } = require("../../models");
 
+const roomIoLoader = req => req.roomIo = req.app.get("classroomIo").to(req.roomId);
+
 module.exports = async ( req, res, next ) => {
 
     try {
@@ -12,6 +14,8 @@ module.exports = async ( req, res, next ) => {
         if( !staffMember )
         
             return res.status(401).json({ default: "You are not a member of this class" });
+
+        roomIoLoader(req);
 
         next();
 
