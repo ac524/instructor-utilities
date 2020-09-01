@@ -67,6 +67,50 @@ export const DashboardContainer = () => {
         
     }, [ roomId, dispatch, completeStep, uncompleteStep ]);
 
+    useEffect(() => {
+
+        if( !roomId ) return;
+
+        // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
+        const socket = socketIOClient(`http://localhost:3000/${roomId}`);
+
+        // console.log( localStorage.jwtToken );
+
+        // socket.on('connect', () => {
+        //     socket
+        //         //send the jwt
+        //         .emit('authenticate', { token: localStorage.jwtToken })
+        //         .on('authenticated', () => {
+
+        //             //do other things
+        //             console.log('authenticated');
+
+        //         })
+        //         .on('unauthorized', (msg) => {
+
+        //             console.log(`unauthorized: ${JSON.stringify(msg.data)}`);
+        //             // throw new Error(msg.data.type);
+
+        //         })
+        // });
+
+        socket.on("FromAPI", data => {
+
+            console.log('fromapi',data);
+
+        });
+
+        socket.on("dispatch", data => {
+
+            console.log('dispatch',data);
+            dispatch(data);
+
+        });
+
+        return () => socket.disconnect();
+
+    }, [ roomId, dispatch ]);
+
     const content = isStepComplete
 
         ? (
@@ -101,25 +145,6 @@ export const DashboardContainer = () => {
 }
 
 function Dashboard() {
-
-    const { roomId } = useParams();
-
-    useEffect(() => {
-
-        if( !roomId ) return;
-
-        // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
-        const socket = socketIOClient(`http://localhost:3000/${roomId}`);
-
-        socket.on("FromAPI", data => {
-
-            console.log(data);
-
-        });
-
-        return () => socket.disconnect();
-
-    }, [ roomId ]);
 
     return (
         <DashboardProvider>

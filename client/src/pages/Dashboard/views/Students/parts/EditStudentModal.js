@@ -9,6 +9,7 @@ import Form from "components/Form";
 
 import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
 import { UPDATE_STUDENT, ADD_STUDENT, EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
+import api from "utils/api";
 
 function EditStudentModal() {
 
@@ -73,7 +74,7 @@ function EditStudentModal() {
 
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
@@ -90,6 +91,8 @@ function EditStudentModal() {
         }
 
         clearEditStudent(() => setIsModalActive( false ));
+
+        await api.updateStudent( _id, studentState );
 
     }
 

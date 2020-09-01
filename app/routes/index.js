@@ -30,6 +30,8 @@ fs
   .filter(filterFiles)
   .forEach(file => {
 
+    console.log(`/api${getPrefix(file)}`);
+
     router.use( `/api${getPrefix(file)}`, isAuthenticated, require(path.join(authRoutesDir, file)) );
 
   });

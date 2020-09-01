@@ -24,6 +24,12 @@ class API {
 
     }
 
+    async updateStudent( studentId, update ) {
+
+        return this.axios.patch( `/api/students/${studentId}`, update );
+
+    }
+
     /**
      * Authentication Routes
      */

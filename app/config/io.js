@@ -1,4 +1,7 @@
 const socketIo = require("socket.io");
+
+// const socketioJwt = require("socketio-jwt");
+
 // const ExtractJwt = require("passport-jwt").ExtractJwt;
 // const passportJwtSocketIo = require("passport-jwt.socketio");
 // const validateJwtPayload = require("./utils/validateJwtPayload");
@@ -26,9 +29,27 @@ module.exports = (server, app) => {
     // set the authorization middleware
     // classrooms.use(passportJwtSocketIo.authorize(passportOptions, verify));
 
+    // classrooms
+    //     .on('connection', socketioJwt.authorize({
+    //         secret: process.env.PASSPORT_SECRET,
+    //         timeout: 15000 // 15 seconds to send the authentication message
+    //     }))
+    //     .on('authenticated', (socket) => {
+
+    //         //this socket is authenticated, we are good to handle more events from it.
+    //         console.log(`hello! ${socket.decoded_token.name}`);
+
+    //         console.log( socket.nsp.name );
+        
+    //         socket.join( socket.nsp.name.substr(1) );
+        
+    //         socket.emit("FromAPI", "Test");
+
+    //     });
+
     classrooms.on('connection', socket => {
     
-        // console.log( socket.nsp.name );
+        console.log( socket.nsp.name );
     
         socket.join( socket.nsp.name.substr(1) );
     

@@ -6,7 +6,7 @@ module.exports = async ( req, res, next ) => {
 
         const staffMember = await Staff.findOne( {
             user: req.user._id,
-            classroom: req.params.roomId
+            classroom: req.roomId
         } );
 
         if( !staffMember )

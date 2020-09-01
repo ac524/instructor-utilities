@@ -4,13 +4,12 @@ const setReqRoomId = require("../middleware/setReqRoomId");
 const isRoomMember = require("../middleware/isRoomMember");
 
 const {
-    getSingle,
     update
-} = require("../../controllers/room");
+} = require("../../controllers/student");
 
 router
-    .route( "/:roomId" )
-    .get( setReqRoomId.fromParam, isRoomMember, getSingle )
-    .patch( setReqRoomId.fromParam, isRoomMember, update );
+    .route( "/:studentId" )
+    // .get( setReqRoomId.fromParam, isRoomMember, getSingle )
+    .patch( setReqRoomId.fromStudent, isRoomMember, update );
 
 module.exports = router;
