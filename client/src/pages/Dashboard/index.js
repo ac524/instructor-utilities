@@ -9,7 +9,7 @@ import { faArrowAltCircleLeft, faTrashAlt } from '@fortawesome/free-regular-svg-
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Button from "react-bulma-components/lib/components/button";
+// import Button from "react-bulma-components/lib/components/button";
 
 import api from "utils/api";
 import { useReadyStep } from "utils/ready";

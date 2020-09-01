@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import "./style.sass";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LogoutLink } from "../../../../components/Login";
 import { useDashboardContext } from "pages/Dashboard/store";
