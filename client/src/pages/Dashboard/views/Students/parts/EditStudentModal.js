@@ -13,7 +13,7 @@ import api from "utils/api";
 
 function EditStudentModal() {
 
-    const [ { classroom }, dispatch ] = useDashboardContext();
+    const [ { classroom, editStudent: editStudentId }, dispatch ] = useDashboardContext();
     const [ ,setIsModalActive ] = useModalContext();
 
     const staff = useStaff();
@@ -27,7 +27,15 @@ function EditStudentModal() {
 
         setStudent( editStudent );
 
-        if( editStudent._id ) setIsModalActive(true);
+        if( editStudentId === false ) {
+
+            setIsModalActive(false);
+
+        } else {
+        
+            setIsModalActive(true);
+
+        }
 
     }, [editStudent, setStudent, setIsModalActive]);
 
@@ -67,10 +75,9 @@ function EditStudentModal() {
         }
     ];
 
-    const clearEditStudent = (close) => {
-        
-        close();
-        dispatch(gda(EDIT_STUDENT, undefined));
+    const clearEditStudent = () => {
+
+        dispatch(gda(EDIT_STUDENT, false));
 
     }
 
@@ -78,14 +85,13 @@ function EditStudentModal() {
 
         e.preventDefault();
 
-
         if( _id ) {
             await api.updateStudent( _id, studentState );
         } else {
             await api.createStudent( { ...studentState, roomId: classroom._id } );
         }
 
-        clearEditStudent(() => setIsModalActive( false ));
+        clearEditStudent();
 
     }
 
@@ -96,7 +102,7 @@ function EditStudentModal() {
         
         await api.removeStudent( _id );
 
-        clearEditStudent(() => setIsModalActive( false ));
+        clearEditStudent();
 
     }
 

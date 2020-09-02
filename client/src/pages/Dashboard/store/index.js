@@ -100,7 +100,7 @@ export const DashboardProvider = ( { children } ) => {
 
     const reducerState = useReducer( reducer, {
         classroom: null,
-        editStudent: undefined,
+        editStudent: false,
         topbar: undefined
     } );
 
