@@ -1,119 +1,34 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useParams, Link } from "react-router-dom";
-import socketIOClient from "socket.io-client";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import { faArrowAltCircleLeft, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
-
+import dashboardIconsLoader from "./utils/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import Button from "react-bulma-components/lib/components/button";
-
-import api from "utils/api";
-import { useReadyStep } from "utils/ready";
 
 import Toolbar from "./parts/Toolbar";
 import Topbar from "./parts/Topbar";
 import Views from "./parts/Views";
 
-import { DashboardProvider, useDashboardContext, getDashboardAction as gda } from "./store";
-import { SET_CLASSROOM } from "./store/actions";
+import { DashboardProvider, useClassroomLoader, useClassroom } from "./store";
+import { useRoomSocketDispatch } from "./utils/socket.io";
 
 import "./style.sass";
 
-library.add( faHome, faArrowAltCircleLeft, faUsers, faUserGraduate, faPlusCircle, faPenSquare, faMinusSquare, faEllipsisH, faTrashAlt );
+dashboardIconsLoader();
 
 export const DashboardContainer = () => {
 
-    const [ { classroom }, dispatch ] = useDashboardContext();
-    const [ completeStep, uncompleteStep, isStepComplete ] = useReadyStep("getclassroom");
     const { roomId } = useParams();
+    const classroom = useClassroom();
 
-    useEffect(() => {
+    const isRoomLoaded = useClassroomLoader( roomId );
 
-        if( !roomId ) return;
-        
-        const loadClassroom = async () => {
+    // Live dispatch listener for shared updates.
+    useRoomSocketDispatch( roomId );
 
-            try {
-
-                const { data } = await api.getClassroom( roomId );
-
-                dispatch(gda(SET_CLASSROOM, data));
-
-            } catch( err ) {
-
-                dispatch(gda(SET_CLASSROOM, null));
-
-            }
-
-            completeStep();
-
-        }
-
-        /**
-         * HACK FIX FOR DASHBOARD UNMOUNTING DURING LOGIN PROCESS AND CAUSE DISPATCH ON AN UNMOUNTED COMPONENT.
-         * NEED TO FIND REAL ISSUE
-         */
-        // loadClassroom();
-        const timeout = setTimeout( loadClassroom, 500 );
-
-        return () => {
-            uncompleteStep();
-            clearTimeout(timeout)
-        };
-        
-    }, [ roomId, dispatch, completeStep, uncompleteStep ]);
-
-    useEffect(() => {
-
-        if( !roomId ) return;
-
-        // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
-        const socket = socketIOClient(`http://localhost:3000/${roomId}`);
-
-        // console.log( localStorage.jwtToken.substr(7) );
-        // console.log( localStorage.jwtToken );
-
-        // socket.on('connect', () => {
-        //     socket
-        //         //send the jwt
-        //         .emit('authenticate', { token: localStorage.jwtToken.substr(7) })
-        //         .on('authenticated', () => {
-
-        //             //do other things
-        //             console.log('authenticated');
-
-        //             socket.emit('authenticated');
-
-        //         })
-        //         .on('unauthorized', (msg) => {
-
-        //             console.log(`unauthorized: ${JSON.stringify(msg.data)}`);
-        //             // throw new Error(msg.data.type);
-
-        //         })
-        // });
-
-        // socket.on("FromAPI", data => {
-
-        //     console.log('fromapi',data);
-
-        // });
-
-        socket.on("dispatch", data => {
-
-            dispatch(data);
-
-        });
-
-        return () => socket.disconnect();
-
-    }, [ roomId, dispatch ]);
-
-    const content = isStepComplete
+    const content = isRoomLoaded
 
         ? (
             classroom
@@ -143,7 +58,8 @@ export const DashboardContainer = () => {
             <Toolbar />
             {content}
         </div>
-    )
+    );
+
 }
 
 function Dashboard() {
@@ -153,6 +69,7 @@ function Dashboard() {
             <DashboardContainer />
         </DashboardProvider>
     );
+
 }
 
 export default Dashboard;

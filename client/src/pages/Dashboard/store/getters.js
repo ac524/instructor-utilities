@@ -13,7 +13,18 @@ export const useDashboardDispatch = () => {
 }
 
 /**
- * TEAM GETTERS
+ * ROOM GETTERS
+ */
+export const useClassroom = () => {
+
+    const [ { classroom } ] = useDashboardContext();
+
+    return classroom;
+
+}
+
+/**
+ * STAFF GETTERS
  */
 export const useStaff = () => {
 
@@ -23,9 +34,6 @@ export const useStaff = () => {
 
 }
 
-/**
- * TEAM GETTERS
- */
 export const useStaffMember = ( staffId ) => {
 
     const staff = useStaff();
@@ -42,9 +50,8 @@ export const useStaffMember = ( staffId ) => {
 
 }
 
-
 /**
- * TEAM GETTERS
+ * STUDENT GETTERS
  */
 export const useStudents = () => {
 
@@ -54,9 +61,6 @@ export const useStudents = () => {
 
 }
 
-/**
- * STUDENT GETTERS
- */
 export const useStudent = ( targetId ) => {
 
     const students = useStudents();
