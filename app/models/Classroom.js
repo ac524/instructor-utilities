@@ -7,6 +7,10 @@ const ClassroomSchema = new Schema({
     type: String,
     required: true
   },
+  tools: [{
+      type: Schema.Types.ObjectId,
+      ref:'Tool',
+  }],
   staff: [{
     type: Schema.Types.ObjectId,
     ref:'Staff',
