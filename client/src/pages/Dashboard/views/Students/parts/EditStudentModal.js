@@ -8,7 +8,7 @@ import Modal, { useModalContext } from "components/Modal";
 import Form from "components/Form";
 
 import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
-import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 import api from "utils/api";
 
 function EditStudentModal() {
@@ -37,7 +37,7 @@ function EditStudentModal() {
 
         }
 
-    }, [editStudent, setStudent, setIsModalActive]);
+    }, [editStudent, editStudentId, setStudent, setIsModalActive]);
 
     const handleInputUpdate = ( { target: { name, value } } ) => {
 

@@ -8,7 +8,7 @@ import Tag from "react-bulma-components/lib/components/tag";
 
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
-import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 
 import "./style.sass";
 import api from "utils/api";
