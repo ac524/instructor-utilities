@@ -5,12 +5,13 @@ import { SET_TOPBAR } from "../../store/actions";
 
 import Heading from "react-bulma-components/lib/components/heading";
 
-export const useTopbarConfig = ( { name } ) => {
+export const useTopbarConfig = ( { name, tools } ) => {
 
     const [ ,dispatch ] = useDashboardContext();
 
     const [ state, setState ] = useState({
-        name
+        name,
+        tools
     });
 
     useEffect(() => {
@@ -29,10 +30,13 @@ function Topbar() {
 
     const [ { topbar } ] = useDashboardContext();
 
+    if(topbar) console.log( topbar );
+
     return topbar
         ? (
-            <div className="topbar has-background-white">
-                <Heading className="item title">{topbar.name}</Heading>
+            <div className="topbar has-background-white is-flex" style={{alignItems:"center"}}>
+                <Heading className="item title m-0">{topbar.name}</Heading>
+                { topbar.tools ? topbar.tools : null }
             </div>
         )
 

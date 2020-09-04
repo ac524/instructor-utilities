@@ -2,7 +2,7 @@ import React from "react";
 
 import { useParams, Link } from "react-router-dom";
 
-import dashboardIconsLoader from "./utils/icons";
+import loadDashboardIcons from "./utils/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import Button from "react-bulma-components/lib/components/button";
@@ -16,7 +16,7 @@ import { useRoomSocketDispatch } from "./utils/socket.io";
 
 import "./style.sass";
 
-dashboardIconsLoader();
+loadDashboardIcons();
 
 export const DashboardContainer = () => {
 

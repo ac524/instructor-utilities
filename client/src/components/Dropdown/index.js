@@ -22,7 +22,7 @@ function Dropdown( { label, labelSize, children, className, ...props } ) {
                 </div>
             </div>
         </div>
-    )
+    );
 
 }
 
