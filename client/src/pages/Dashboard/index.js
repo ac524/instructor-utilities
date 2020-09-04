@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Toolbar from "./components/Toolbar";
 import Topbar from "./components/Topbar";
 import Views from "./components/Views";
+import ManageApps from "./components/ManageApps";
 
 import { DashboardProvider, useClassroomLoader, useClassroom } from "./store";
 import { useRoomSocketDispatch } from "./utils/socket.io";
@@ -37,6 +38,7 @@ export const DashboardContainer = () => {
                     <div className="dashboard-panel has-background-white-bis">
                         <Topbar/>
                         <Views />
+                        <ManageApps />
                     </div>
                 )
 

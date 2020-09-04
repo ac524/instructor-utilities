@@ -10,6 +10,7 @@ import {
      * CLASSROOM ACTIONS
      */
     SET_CLASSROOM,
+    SET_MANAGE_APPS,
 
     /**
      * STUDENT VIEW ACTIONS
@@ -25,7 +26,8 @@ const DashboardContext = createContext([
     {
         classroom: null,
         editStudent: "",
-        topbar: {}
+        topbar: {},
+        isManagingApps: false
     },
     () => undefined
 ]);
@@ -44,6 +46,7 @@ const reducer = ( state, { type, payload } ) => {
          * CLASSROOM ACTIONS
          */
         [SET_CLASSROOM]: () => ({ ...state, classroom: payload }),
+        [SET_MANAGE_APPS]: () => ({ ...state, isManagingApps: payload }),
 
         /**
          * STUDENT VIEW ACTIONS
@@ -101,7 +104,8 @@ export const DashboardProvider = ( { children } ) => {
     const reducerState = useReducer( reducer, {
         classroom: null,
         editStudent: false,
-        topbar: undefined
+        topbar: undefined,
+        isManagingApps: false
     } );
 
     return <Provider value={reducerState}>{ children }</Provider>

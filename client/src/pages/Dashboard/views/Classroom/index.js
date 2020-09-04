@@ -15,6 +15,7 @@ import { useClassroom } from "pages/Dashboard/store";
 import { useAuthorizedUser } from "utils/auth";
 import RoomLink from "pages/Dashboard/components/RoomLink";
 import Dropdown from "components/Dropdown";
+import { useManageApps } from "pages/Dashboard/utils/apps";
 
 function Classroom() {
 
@@ -36,6 +37,7 @@ function Classroom() {
 
     const user = useAuthorizedUser();
     const { tools } = useClassroom();
+    const manageApps = useManageApps();
 
     return (
         <Section className="is-flex" style={{flexGrow:1,flexDirection:"column"}}>
@@ -57,7 +59,7 @@ function Classroom() {
                             <p>
                                 To get started with your classroom Dashboard
                                 <br /><br />
-                                <Button color="primary">Start exploring tools</Button>
+                                <Button color="primary" onClick={() => manageApps(true)}>Start exploring tools</Button>
                             </p>
                             <hr />
                             <p className="is-size-7">
