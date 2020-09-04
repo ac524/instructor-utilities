@@ -3,12 +3,12 @@ import React from "react";
 import Section from "react-bulma-components/lib/components/section";
 
 
-import { useTopbarConfig } from "../../parts/Topbar";
+import { useTopbarConfig } from "../../components/Topbar";
 
-import StudentList from "./parts/StudentList";
+import StudentList from "./components/StudentList";
 import { ModalProvider } from "components/Modal";
-import EditStudentModal from "./parts/EditStudentModal"
-import StudentListControls from "./parts/StudentListControls";
+import EditStudentModal from "./components/EditStudentModal"
+import StudentListControls from "./components/StudentListControls";
 
 function Students() {
 

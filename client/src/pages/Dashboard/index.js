@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import Button from "react-bulma-components/lib/components/button";
 
-import Toolbar from "./parts/Toolbar";
-import Topbar from "./parts/Topbar";
-import Views from "./parts/Views";
+import Toolbar from "./components/Toolbar";
+import Topbar from "./components/Topbar";
+import Views from "./components/Views";
 
 import { DashboardProvider, useClassroomLoader, useClassroom } from "./store";
 import { useRoomSocketDispatch } from "./utils/socket.io";

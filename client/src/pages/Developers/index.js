@@ -8,8 +8,8 @@ import MainWithLogin from "../../layouts/MainWithLogin";
 import githubApi from "../../utils/githubApi";
 import { useReadyStep } from "../../utils/ready";
 
-import LeadDev from "./parts/LeadDev";
-import Contributors from "./parts/Contributors";
+import LeadDev from "./components/LeadDev";
+import Contributors from "./components/Contributors";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';

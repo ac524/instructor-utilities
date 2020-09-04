@@ -8,12 +8,12 @@ import Button from "react-bulma-components/lib/components/button";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Widget from "./parts/Widget";
+import Widget from "./components/Widget";
 
-import { useTopbarConfig } from "../../parts/Topbar";
+import { useTopbarConfig } from "../../components/Topbar";
 import { useClassroom } from "pages/Dashboard/store";
 import { useAuthorizedUser } from "utils/auth";
-import RoomLink from "pages/Dashboard/parts/RoomLink";
+import RoomLink from "pages/Dashboard/components/RoomLink";
 import Dropdown from "components/Dropdown";
 
 function Classroom() {

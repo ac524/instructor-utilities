@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useStaff, useAssignedStudents } from "pages/Dashboard/store";
 import WebLink from "components/WebLink";
-import { StudentPriorityTag } from "pages/Dashboard/parts/StudentCard";
+import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
 // import { Link } from "react-router-dom";
 
 const { Column } = Columns;

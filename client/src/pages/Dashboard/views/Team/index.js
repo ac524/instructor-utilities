@@ -1,8 +1,8 @@
 import React from "react";
 
 import Section from "react-bulma-components/lib/components/section";
-import { useTopbarConfig } from "../../parts/Topbar";
-import Staff from "./parts/Staff";
+import { useTopbarConfig } from "../../components/Topbar";
+import Staff from "./components/Staff";
 
 function Team() {
 

@@ -3,7 +3,7 @@ import React from "react";
 import Columns from "react-bulma-components/lib/components/columns";
 
 import {  useStudents } from "pages/Dashboard/store";
-import { StudentCard } from "pages/Dashboard/parts/StudentCard";
+import { StudentCard } from "pages/Dashboard/components/StudentCard";
 
 function StudentList() {
 

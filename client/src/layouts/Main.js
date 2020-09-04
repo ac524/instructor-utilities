@@ -1,6 +1,6 @@
 import React from "react";
-import TopNavbar from "./parts/TopNavbar"
-import Footer from "./parts/Footer";
+import TopNavbar from "./components/TopNavbar"
+import Footer from "./components/Footer";
 
 function Main({ children }) {
     return (

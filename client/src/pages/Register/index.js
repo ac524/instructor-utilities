@@ -9,7 +9,7 @@ import Heading from 'react-bulma-components/lib/components/heading';
 import { LoginLink } from "../../components/Login";
 import MainWithLogin from "../../layouts/MainWithLogin";
 
-import RegisterForm from "./parts/RegisterForm";
+import RegisterForm from "./components/RegisterForm";
 
 const { Column } = Columns;
 
