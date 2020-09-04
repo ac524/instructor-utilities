@@ -25,25 +25,11 @@ const ToolbarItem = ({ icon, ...props }) => {
 
     const isActive = props.to === location.pathname;
 
-    const classroom = useClassroom();
-
     return (
         <div className={"item" + (isActive ? " is-active" : "")}>
-            {
-                classroom
-
-                    ? (
-                        <RoomLink {...props}>
-                            <FontAwesomeIcon icon={icon} />
-                        </RoomLink>
-                    )
-
-                    : (
-                        <Link {...props}>
-                            <FontAwesomeIcon icon={icon} />
-                        </Link>
-                    )
-            }
+            <RoomLink {...props}>
+                <FontAwesomeIcon icon={icon} />
+            </RoomLink>
         </div>
     )
 

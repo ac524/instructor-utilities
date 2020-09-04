@@ -10,7 +10,7 @@ function RoomLink( { to, ...props } ) {
     
         ? <Link to={`/${classroom._id}${to}`} {...props} />
 
-        : null;
+        : <Link to={to} {...props} />;
 
 }
 
