@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 
 import "./style.sass";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LogoutLink } from "../../../../components/Login";
-import { useDashboardContext } from "pages/Dashboard/store";
+import { useClassroom } from "pages/Dashboard/store";
+import RoomLink from "../RoomLink";
 
 export const useToolbarOffset = ( offset ) => {
 
@@ -24,11 +25,25 @@ const ToolbarItem = ({ icon, ...props }) => {
 
     const isActive = props.to === location.pathname;
 
+    const classroom = useClassroom();
+
     return (
         <div className={"item" + (isActive ? " is-active" : "")}>
-            <Link {...props}>
-                <FontAwesomeIcon icon={icon} />
-            </Link>
+            {
+                classroom
+
+                    ? (
+                        <RoomLink {...props}>
+                            <FontAwesomeIcon icon={icon} />
+                        </RoomLink>
+                    )
+
+                    : (
+                        <Link {...props}>
+                            <FontAwesomeIcon icon={icon} />
+                        </Link>
+                    )
+            }
         </div>
     )
 
@@ -38,13 +53,13 @@ function Toolbar() {
 
     useToolbarOffset(55);
 
-    const [ { classroom } ] = useDashboardContext();
+    const classroom = useClassroom();
 
     const links = classroom
         ? [
-            { to: `/${classroom._id}`, "aria-label": "Dashboard home", icon: "home" },
-            { to: `/${classroom._id}/team`, "aria-label": "Manage team", icon: "users" },
-            { to: `/${classroom._id}/students`, "aria-label": "Manage students", icon: "user-graduate" }
+            { to: `/`, "aria-label": "Dashboard home", icon: "home" },
+            { to: `/team`, "aria-label": "Manage team", icon: "users" },
+            { to: `/students`, "aria-label": "Manage students", icon: "user-graduate" }
         ]
         
         : [ { to: "/", "aria-label": "Dashboard home", icon: "home" } ];
