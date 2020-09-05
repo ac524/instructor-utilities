@@ -3,5 +3,6 @@ module.exports = {
   Classroom: require("./Classroom"),
   Staff: require("./Staff"),
   Student: require("./Student"),
-  App: require("./App")
+  App: require("./App"),
+  AppType: require("./AppType")
 }

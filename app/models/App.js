@@ -2,13 +2,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const ToolSchema = new Schema({
+const AppSchema = new Schema({
   room: {
       type: Schema.Types.ObjectId,
       ref:'Classroom',
       required: true
   },
   type: {
+    type: String,
+    required: true
+  },
+  name: {
     type: String,
     required: true
   },
@@ -21,4 +25,4 @@ const ToolSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("App", ToolSchema);
+module.exports = mongoose.model("App", AppSchema);
