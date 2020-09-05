@@ -21,7 +21,7 @@ router
 
 
 router
-    .route( "/:appId/:roomId" )
+    .route( "/:appTypeId/:roomId" )
     .post( setRoom.fromParam, isRoomMember, getSingle )
 
 module.exports = router;

@@ -20,20 +20,7 @@ module.exports = {
 
         try {
 
-            // const room =
-            //     await Classroom.findById( req.params.roomId )
-            //         .populate({
-            //             path: 'staff',
-            //             // Get friends of friends - populate the 'friends' array for every friend
-            //             populate: { path: 'user' }
-            //         })
-            //         .populate('students');
-
-            // const classroomIo = req.app.get("classroomIo");
-
-            // classroomIo.to(req.params.roomId).emit("FromAPI", "Welcome to class!");
-
-            res.json( {} );
+            res.json( await App.findOne({ room: req.roomId, type: req.params.appTypeId }).populate("type") );
 
         } catch( err ) {
 

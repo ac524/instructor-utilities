@@ -1,81 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
-    Button,
     Heading,
-    Tag,
-    Box,
-    Columns
+    Box
 } from "react-bulma-components";
 
-import { useStudents } from "pages/Dashboard/store";
-import Icon from "../../../../../components/Icon";
+import SelectStudent from "./Apps/SelectStudent";
+import Pulse from "components/Pulse";
+import api from "utils/api";
 
-const { Column } = Columns;
+const getAppComponent = ( app, setAppData ) => {
 
-const Widget = ( props ) => {
-
-    const students = useStudents();
-    const [ showStudents, setShowStudents ] = useState();
-    const [ selected, setSelected ] = useState([]);
-    
-    const studentIds = students.map( ({_id}) => _id );
-    const selectedStudent = selected.length
-
-        ? ( students.find( ({_id}) => _id === selected[selected.length-1] ) )
-
-        : false;
-
-    const selectPrevious = () => {
-
-        if(selected.length)
-
-            setSelected( [ ...selected.slice(0, selected.length-1) ] );
-
+    const types = {
+        studentselect: () => <SelectStudent data={app.data} setData={setAppData} />
     }
 
-    const selectNext = () => {
+    return types[app.type.type]();
 
-        const unselected = students.length === selected.length ? [] : studentIds.filter( id => !selected.includes(id) );
+}
 
-        setSelected( [ ...selected, unselected[ Math.floor( Math.random() * unselected.length) ] ] );
+const Widget = ( { roomId, appTypeId, ...props } ) => {
+
+    const [ app, setApp ] = useState( null );
+
+    useEffect(() => {
+
+        if( !roomId || !appTypeId ) return;
+
+        const loadApp = async () => setApp( (await api.getApp( roomId, appTypeId )).data );
+
+        loadApp();
+
+    }, [roomId, appTypeId, setApp]);
+
+    const setAppData = async ( data ) => {
+
+        setApp({ ...app, data });
 
     }
 
     return (
         <Box {...props}>
-            <Heading>Select a Student</Heading>
-            <div className="is-flex mb-4" style={{alignItems:"center"}}>
-                <Button onClick={selectPrevious} disabled={!selected.length}>
-                    <Icon icon={['far','arrow-alt-circle-left']} />
-                </Button>
-
-                <Tag className="ml-auto is-light is-radiusless" size="large" color="primary" style={{flexGrow:1}}>
-                    { selectedStudent ? ( selectedStudent.name ) : "No Selection" }
-                </Tag>
-
-                <Button className="ml-auto" onClick={selectNext}>
-                    <Icon icon={['far','arrow-alt-circle-right']} />
-                </Button>
-            </div>
-            <p><Button size="small" onClick={()=>setShowStudents(!showStudents)}>
-                <span>View Student List</span>
-                <Icon icon="angle-down" />
-            </Button></p>
             {
-                showStudents
-                    ? (
-                        <Columns className="mt-4 mx-0 is-grid">
-                            {students.map( student => (
-                                <Column key={student._id} size="one-third">
-                                    <input type="checkbox" checked={selected.includes(student._id)} className="mr-2" />
-                                    {student.name}
-                                </Column>
-                            ))}
-                        </Columns>
-                    )
+                app
 
-                    : null
+                ? (
+                    <div>
+                        <Heading size={4}>{app.name}</Heading>
+                        { getAppComponent(app, setAppData) }
+                    </div>
+                )
+
+                : <Pulse />
             }
         </Box>
     )

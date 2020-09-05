@@ -37,7 +37,7 @@ function Classroom() {
     useTopbarConfig({ name: "Classroom", tools: topbarTools });
 
     const user = useAuthorizedUser();
-    const { apps } = useClassroom();
+    const { _id: roomId, apps } = useClassroom();
     const manageApps = useManageApps();
 
     return (
@@ -48,7 +48,16 @@ function Classroom() {
                 ? (
                     <Tile kind="ancestor">
                         <Tile kind="parent">
-                            <Tile kind="child" renderAs={Widget} size={6} />
+                            { apps.map( appTypeId => (
+                                <Tile
+                                    key={appTypeId}
+                                    kind="child"
+                                    renderAs={Widget}
+                                    size={6}
+                                    roomId={roomId}
+                                    appTypeId={appTypeId}
+                                />
+                            ) ) }
                         </Tile>
                     </Tile>
                 )

@@ -48,6 +48,12 @@ class API {
 
     }
 
+    async getApp( roomId, type ) {
+
+        return this.axios.post( `/api/apps/${type}/${roomId}` );
+
+    }
+
     async getAppTypes() {
 
         return this.axios.get( "/api/apps/types" );
