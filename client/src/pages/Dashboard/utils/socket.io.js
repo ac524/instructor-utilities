@@ -1,50 +1,32 @@
-import { useEffect } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import socketIOClient from "socket.io-client";
 
-import { useDashboardDispatch } from "../store";
+const SocketContext = createContext({});
 
-export const useRoomSocketDispatch = (roomId) => {
+const { Provider } = SocketContext;
 
-    const dispatch = useDashboardDispatch();
+export const RoomSocketProvider = ({ roomId, children }) => {
+
+    const [ socket, setSocket ] = useState( false );
 
     useEffect(() => {
 
         if( !roomId ) return;
 
         // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
-        const socket = socketIOClient(`http://localhost:3000/${roomId}`);
+        const openSocket = socketIOClient(`http://localhost:3000/${roomId}`);
 
-        // console.log( localStorage.jwtToken.substr(7) );
-        // console.log( localStorage.jwtToken );
+        setSocket(openSocket);
 
-        // socket.on('connect', () => {
-        //     socket
-        //         //send the jwt
-        //         .emit('authenticate', { token: localStorage.jwtToken.substr(7) })
-        //         .on('authenticated', () => {
+        return () => {
+            openSocket.disconnect();
+            setSocket(false);
+        }
 
-        //             //do other things
-        //             console.log('authenticated');
+    }, [roomId, setSocket]);
 
-        //             socket.emit('authenticated');
+    return <Provider value={socket}>{ children }</Provider>
 
-        //         })
-        //         .on('unauthorized', (msg) => {
-
-        //             console.log(`unauthorized: ${JSON.stringify(msg.data)}`);
-        //             // throw new Error(msg.data.type);
-
-        //         })
-        // });
-
-        socket.on("dispatch", data => {
-
-            dispatch(data);
-
-        });
-
-        return () => socket.disconnect();
-
-    }, [ roomId, dispatch ]);
-    
 }
+
+export const useRoomSocket = () => useContext( SocketContext );

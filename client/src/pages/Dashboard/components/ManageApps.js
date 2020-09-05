@@ -35,9 +35,12 @@ const ManageApps = () => {
     const apps = [
         {
             name: "Student Picker",
-            type: "studentselect"
+            type: "studentselect",
+            defaultData: []
         }
     ];
+
+    
 
     return (
         <Modal

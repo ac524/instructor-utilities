@@ -7,7 +7,12 @@ export const SET_TOPBAR = "SET_TOPBAR";
  * CLASSROOM ACTIONS
  */
 export const SET_CLASSROOM = "SET_CLASSROOM";
+
+/**
+ * APP ACTIONS
+ */
 export const SET_MANAGE_APPS = "SET_MANAGE_APPS";
+export const ADD_APP = "ADD_APP";
 
 /**
  * STUDENT VIEW ACTIONS

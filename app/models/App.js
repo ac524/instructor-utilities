@@ -21,4 +21,4 @@ const ToolSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("Tool", ToolSchema);
+module.exports = mongoose.model("App", ToolSchema);

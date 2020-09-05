@@ -10,7 +10,12 @@ import {
      * CLASSROOM ACTIONS
      */
     SET_CLASSROOM,
+    
+    /**
+     * APP ACTIONS
+     */
     SET_MANAGE_APPS,
+    ADD_APP,
 
     /**
      * STUDENT VIEW ACTIONS
@@ -46,7 +51,18 @@ const reducer = ( state, { type, payload } ) => {
          * CLASSROOM ACTIONS
          */
         [SET_CLASSROOM]: () => ({ ...state, classroom: payload }),
+
+        /**
+         * APP ACTIONS
+         */
         [SET_MANAGE_APPS]: () => ({ ...state, isManagingApps: payload }),
+        [ADD_APP]: () => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                apps: [ ...state.classroom.apps, payload ]
+            }
+        }),
 
         /**
          * STUDENT VIEW ACTIONS

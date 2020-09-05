@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useParams, Link } from "react-router-dom";
 
@@ -12,8 +12,8 @@ import Topbar from "./components/Topbar";
 import Views from "./components/Views";
 import ManageApps from "./components/ManageApps";
 
-import { DashboardProvider, useClassroomLoader, useClassroom } from "./store";
-import { useRoomSocketDispatch } from "./utils/socket.io";
+import { DashboardProvider, useClassroomLoader, useClassroom, useDashboardDispatch } from "./store";
+import { RoomSocketProvider, useRoomSocket } from "./utils/socket.io";
 
 import "./style.sass";
 
@@ -21,13 +21,21 @@ loadDashboardIcons();
 
 export const DashboardContainer = () => {
 
+    const dispatch = useDashboardDispatch();
+
     const { roomId } = useParams();
+    const isRoomLoaded = useClassroomLoader( roomId );
     const classroom = useClassroom();
 
-    const isRoomLoaded = useClassroomLoader( roomId );
+    const socket = useRoomSocket();
 
-    // Live dispatch listener for shared updates.
-    useRoomSocketDispatch( roomId );
+    useEffect(() => {
+
+        if( socket )
+
+            socket.on("dispatch", data => dispatch(data));
+
+    }, [socket, dispatch]);
 
     const content = isRoomLoaded
 
@@ -66,9 +74,13 @@ export const DashboardContainer = () => {
 
 function Dashboard() {
 
+    const { roomId } = useParams();
+
     return (
         <DashboardProvider>
-            <DashboardContainer />
+            <RoomSocketProvider roomId={roomId}>
+                <DashboardContainer />
+            </RoomSocketProvider>
         </DashboardProvider>
     );
 

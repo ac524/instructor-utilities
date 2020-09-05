@@ -36,13 +36,13 @@ function Classroom() {
     useTopbarConfig({ name: "Classroom", tools: topbarTools });
 
     const user = useAuthorizedUser();
-    const { tools } = useClassroom();
+    const { apps } = useClassroom();
     const manageApps = useManageApps();
 
     return (
         <Section className="is-flex" style={{flexGrow:1,flexDirection:"column"}}>
             {
-                tools.length
+                apps.length
 
                 ? (
                     <Tile kind="ancestor">

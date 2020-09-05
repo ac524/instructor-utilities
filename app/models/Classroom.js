@@ -7,9 +7,9 @@ const ClassroomSchema = new Schema({
     type: String,
     required: true
   },
-  tools: [{
+  apps: [{
       type: Schema.Types.ObjectId,
-      ref:'Tool',
+      ref:'App',
   }],
   staff: [{
     type: Schema.Types.ObjectId,

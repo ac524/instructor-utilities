@@ -3,5 +3,5 @@ module.exports = {
   Classroom: require("./Classroom"),
   Staff: require("./Staff"),
   Student: require("./Student"),
-  Tool: require("./Tool")
+  App: require("./App")
 }
