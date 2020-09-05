@@ -10,11 +10,13 @@
 
 .has-text-nowrap
     white-space: nowrap
-.p-0
-    padding: 0 !important
 
-.m-0
-    margin: 0 !important
+// This exist in the github, but not for installed even though versions match.
+@each $property, $shortcut in $spacing-shortcuts
+  @each $name, $value in $spacing-values
+    // All directions
+    .#{$shortcut}-#{$name}
+      #{$property}: $value !important
 
 .mt-auto
     margin-top: auto 
