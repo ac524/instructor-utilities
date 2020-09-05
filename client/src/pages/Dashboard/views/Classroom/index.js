@@ -24,11 +24,11 @@ function Classroom() {
     const topbarTools = (
         <Dropdown label={dropdownLabel} labelSize="small">
             <Button className="dropdown-item" size="small">
-                <Icon icons="pen-square" />
+                <Icon icon="pen-square" />
                 <span>Edit Student</span>
             </Button>
             <Button className="dropdown-item" size="small">
-                <Icon icons={["far","trash-alt"]} />
+                <Icon icon={["far","trash-alt"]} />
                 <span>Remove Student</span>
             </Button>
         </Dropdown>

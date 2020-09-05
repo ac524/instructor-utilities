@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import {
     Modal,
@@ -10,6 +10,8 @@ import {
 import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
 import { SET_MANAGE_APPS } from "pages/Dashboard/store/actions";
 import Icon from "../../../components/Icon";
+import api from "../../../utils/api";
+import { useClassroom } from "../store";
 
 
 const { Column } = Columns;
@@ -29,21 +31,52 @@ const sizes = {
     widescreen: {size: 'one-fifth'}
 }
 
+export const AppTypeCard = ( { appType } ) => {
+
+    const { _id, apps: installedApps } = useClassroom();
+    const isInstalled = installedApps.includes( appType._id );
+    const icon = isInstalled ? "check" : "download";
+    const color = isInstalled ? "success" : "primary";
+    const text = isInstalled ? "Installed" : "Available";
+
+    const toggleAppInstall = async () => {
+
+        if( ! isInstalled ) await api.installApp( _id, appType._id );
+
+    }
+
+    return (
+        <Card>
+            <Card.Content>
+                {appType.name}
+            </Card.Content>
+            <Card.Footer>
+                <Card.Footer.Item renderAs={Button} color={color} className="is-radiusless is-light is-small" onClick={toggleAppInstall}>
+                    <Icon icon={icon} />
+                    <span>{text}</span>
+                </Card.Footer.Item>
+            </Card.Footer>
+        </Card>
+    );
+
+}
+
 const ManageApps = () => {
 
     const [ { isManagingApps }, dispatch ] = useDashboardContext();
+    const [ appTypes, setAppTypes ] = useState([]);
 
-    const apps = [
-        {
-            name: "Student Picker",
-            type: "studentselect",
-            defaultData: []
-        }
-    ];
+    useEffect(() => {
+        
+        if( !isManagingApps ) return;
 
-    // const installApp = (app) => {
+        const loadAppTypes = async () => setAppTypes( (await api.getAppTypes()).data );
 
-    // }
+        loadAppTypes();
+
+        return () => setAppTypes( [] );
+
+    }, [ isManagingApps, setAppTypes ]);
 
     return (
         <Modal
@@ -54,19 +87,9 @@ const ManageApps = () => {
             <Modal.Content style={modalStyles} className="has-background-white">
                 <Columns>
                 {
-                    apps.map(app => (
-                        <Column {...sizes}>
-                            <Card key={app.type}>
-                                <Card.Content>
-                                    {app.name}
-                                </Card.Content>
-                                <Card.Footer>
-                                    <Card.Footer.Item renderAs={Button} color="primary" className="is-radiusless is-light">
-                                        <Icon icon="plus-circle" />
-                                        <span>Install</span>
-                                    </Card.Footer.Item>
-                                </Card.Footer>
-                            </Card>
+                    appTypes.map(appType => (
+                        <Column key={appType.type} {...sizes}>
+                            <AppTypeCard appType={appType} />
                         </Column>
                     ))
                 }

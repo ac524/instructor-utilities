@@ -42,9 +42,15 @@ class API {
 
     }
 
-    async installApp( studentId ) {
+    async installApp( roomId, type ) {
 
-        return this.axios.delete( `/api/students/${studentId}` );
+        return this.axios.post( `/api/apps`, { roomId, type } );
+
+    }
+
+    async getAppTypes() {
+
+        return this.axios.get( "/api/apps/types" );
 
     }
 

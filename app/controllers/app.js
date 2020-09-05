@@ -1,6 +1,21 @@
 const { App, Classroom } = require("../models");
+const AppType = require("../models/AppType");
+const appTypes  = require("../config/apps/registry.json");
 
 module.exports = {
+    async getTypes( req, res ) {
+
+        try {
+
+            res.json( await AppType.find({ isDisabled: false }) );
+
+        } catch( err ) {
+
+            res.status(500).json({default:"Something went wrong"});
+
+        }
+
+    },
     async getSingle( req, res ) {
 
         try {
@@ -29,22 +44,34 @@ module.exports = {
     },
     async create( req, res ) {
 
-        const newApp = new App({
-            room: req.roomId,
-            type: req.body.type,
-            data: req.body.data
-        });
+        try {
 
-        await newApp.save();
+            const appType = await AppType.findById( req.body.type );
 
-        await Classroom.findByIdAndUpdate( req.roomId, { $push: apps._id } );
+            const newApp = new App({
+                room: req.roomId,
+                type: req.body.type,
+                name: appTypes[ appType.type ].name,
+                data: appTypes[ appType.type ].default
+            });
 
-        req.roomIo.emit( "dispatch", {
-            type: "ADD_APP",
-            payload: newApp._id
-        } );
+            await newApp.save();
 
-        res.json({success: true});
+            await Classroom.findByIdAndUpdate( req.roomId, { $push: { apps: appType._id } } );
+
+            req.roomIo.emit( "dispatch", {
+                type: "ADD_APP",
+                payload: appType._id
+            } );
+
+            res.json({success: true});
+
+        } catch( err ) {
+
+            console.log(err);
+            res.status(500).json({default:"Something went wrong"});
+
+        }
 
     }
 }

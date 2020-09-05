@@ -9,7 +9,8 @@ const AppSchema = new Schema({
       required: true
   },
   type: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref:'AppType',
     required: true
   },
   name: {
@@ -24,5 +25,7 @@ const AppSchema = new Schema({
     default: Date.now
   }
 });
+
+AppSchema.index({ room: 1, type: 1 }, { unique: true });
 
 module.exports = mongoose.model("App", AppSchema);
