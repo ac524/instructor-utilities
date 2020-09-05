@@ -4,4 +4,6 @@ import { faArrowAltCircleLeft, faArrowAltCircleRight } from '@fortawesome/free-r
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
-export default loadGlobalIcons = () => library.add( faArrowAltCircleLeft, faArrowAltCircleRight, faAngleDown, faGithub );
+const loadGlobalIcons = () => library.add( faArrowAltCircleLeft, faArrowAltCircleRight, faAngleDown, faGithub );
+
+export default loadGlobalIcons ;
