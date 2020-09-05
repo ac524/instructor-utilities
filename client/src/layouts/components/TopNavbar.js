@@ -2,11 +2,10 @@ import React, { useState } from "react";
 
 import { Navbar } from "react-bulma-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { LoginButton, LogoutButton } from "../../components/Login";
 import { useIsAuthenticated } from "../../utils/auth";
 import { Link } from "react-router-dom";
+import Icon from "../../components/Icon";
 
 const { Brand, Item, Burger, Menu, Container } = Navbar;
 
@@ -23,7 +22,7 @@ function TopNavbar() {
           <img src="/images/logo-color.png" alt="Classroom Logo" />
           { 
             isAuth
-              ? ( <span><FontAwesomeIcon icon={['far','arrow-alt-circle-left']} /> Back to Class</span> )
+              ? ( <span className="is-flex"><Icon className="ml-1" icon={['far','arrow-alt-circle-left']} /> <span>Back to Class</span></span> )
               : <span className="has-text-weight-bold">Classroom</span>
           }
         </Item>

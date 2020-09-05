@@ -7,12 +7,11 @@ import {
     Heading
 } from "react-bulma-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { useReadyStep } from "../../../utils/ready";
 import githubApi from "../../../utils/githubApi";
 import Pulse from "../../../components/Pulse";
 import WebLink from "../../../components/WebLink";
+import Icon from "../../../components/Icon";
 
 const { Column } = Columns;
 
@@ -57,7 +56,7 @@ function LeadDev({ login, contributions }) {
                                     <WebLink href={profile.html_url}>@{profile.login}</WebLink>
                                 </div>
                                 {profile.bio ? <p className="mb-3">{profile.bio}</p> : null}
-                                {profile.blog ? <p><WebLink href={profile.blog}><FontAwesomeIcon icon="globe" /> Website</WebLink></p> : null}
+                                {profile.blog ? <p><WebLink href={profile.blog} className="is-flex"><Icon icon="globe" /> Website</WebLink></p> : null}
                             </Column>
                             <Column className="has-text-centered">
                                 <p>

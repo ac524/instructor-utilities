@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 
 import "./style.sass";
 import { useLocation } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LogoutLink } from "../../../../components/Login";
 import { useClassroom } from "pages/Dashboard/store";
 import RoomLink from "../RoomLink";
+import Icon from "../../../../components/Icon";
 
 export const useToolbarOffset = ( offset ) => {
 
@@ -28,7 +28,7 @@ const ToolbarItem = ({ icon, ...props }) => {
     return (
         <div className={"item" + (isActive ? " is-active" : "")}>
             <RoomLink {...props}>
-                <FontAwesomeIcon icon={icon} />
+                <Icon icon={icon} />
             </RoomLink>
         </div>
     )
@@ -55,7 +55,7 @@ function Toolbar() {
             { links.map( link => <ToolbarItem key={link.to} {...link} /> ) }
             <div className="item end">
                 <LogoutLink aria-label="Logout">
-                    <FontAwesomeIcon icon={['far','arrow-alt-circle-left']} />
+                    <Icon icon={['far','arrow-alt-circle-left']} />
                 </LogoutLink>
             </div>
         </div>

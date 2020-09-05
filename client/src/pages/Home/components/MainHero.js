@@ -7,8 +7,8 @@ import {
   Button
 } from "react-bulma-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from "react-router-dom";
+import Icon from "../../../components/Icon";
 
 function MainHero() {
     return (
@@ -33,7 +33,7 @@ function MainHero() {
               <Button.Group>
                 <Button renderAs={Link} to="/register" color="primary" className="has-shadow">
                   Get started as an instructor
-                  <FontAwesomeIcon className="ml-2" icon={["far", "arrow-alt-circle-right"]} />
+                  <Icon className="ml-2" icon={["far", "arrow-alt-circle-right"]} />
                 </Button>
               </Button.Group>
           </Container>

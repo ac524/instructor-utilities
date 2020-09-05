@@ -8,8 +8,8 @@ import {
     Columns
 } from "react-bulma-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStudents } from "pages/Dashboard/store";
+import Icon from "../../../../../components/Icon";
 
 const { Column } = Columns;
 
@@ -47,9 +47,7 @@ const Widget = ( props ) => {
             <Heading>Select a Student</Heading>
             <div className="is-flex mb-4" style={{alignItems:"center"}}>
                 <Button onClick={selectPrevious} disabled={!selected.length}>
-                    <span className="icon">
-                        <FontAwesomeIcon icon={['far','arrow-alt-circle-left']} />
-                    </span>
+                    <Icon icon={['far','arrow-alt-circle-left']} />
                 </Button>
 
                 <Tag className="ml-auto is-light is-radiusless" size="large" color="primary" style={{flexGrow:1}}>
@@ -57,16 +55,12 @@ const Widget = ( props ) => {
                 </Tag>
 
                 <Button className="ml-auto" onClick={selectNext}>
-                    <span className="icon">
-                        <FontAwesomeIcon icon={['far','arrow-alt-circle-right']} />
-                    </span>
+                    <Icon icon={['far','arrow-alt-circle-right']} />
                 </Button>
             </div>
             <p><Button size="small" onClick={()=>setShowStudents(!showStudents)}>
                 <span>View Student List</span>
-                <span className="icon">
-                    <FontAwesomeIcon icon="angle-down" />
-                </span>
+                <Icon icon="angle-down" />
             </Button></p>
             {
                 showStudents

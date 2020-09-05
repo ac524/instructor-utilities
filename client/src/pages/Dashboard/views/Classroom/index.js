@@ -8,8 +8,6 @@ import {
     Button
 } from "react-bulma-components";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import Widget from "./components/Widget";
 
 import { useTopbarConfig } from "../../components/Topbar";
@@ -18,18 +16,19 @@ import { useAuthorizedUser } from "utils/auth";
 import RoomLink from "pages/Dashboard/components/RoomLink";
 import Dropdown from "components/Dropdown";
 import { useManageApps } from "pages/Dashboard/utils/apps";
+import Icon from "../../../../components/Icon";
 
 function Classroom() {
 
-    const dropdownLabel = <span><FontAwesomeIcon icon="plus-circle" className="mr-1" /> Classroom Tool</span>;
+    const dropdownLabel = <span className="is-flex"><Icon icon="plus-circle" className="mr-1" /> Classroom Tool</span>;
     const topbarTools = (
         <Dropdown label={dropdownLabel} labelSize="small">
             <Button className="dropdown-item" size="small">
-                <span className="icon"><FontAwesomeIcon icon="pen-square" /></span>
+                <Icon icons="pen-square" />
                 <span>Edit Student</span>
             </Button>
             <Button className="dropdown-item" size="small">
-                <span className="icon"><FontAwesomeIcon icon={["far","trash-alt"]} /></span>
+                <Icon icons={["far","trash-alt"]} />
                 <span>Remove Student</span>
             </Button>
         </Dropdown>

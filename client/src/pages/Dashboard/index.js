@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import loadDashboardIcons from "./utils/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import { Button } from "react-bulma-components";
 
@@ -16,6 +15,7 @@ import { DashboardProvider, useClassroomLoader, useClassroom, useDashboardDispat
 import { RoomSocketProvider, useRoomSocket } from "./utils/socket.io";
 
 import "./style.sass";
+import Icon from "../../components/Icon";
 
 loadDashboardIcons();
 
@@ -53,8 +53,8 @@ export const DashboardContainer = () => {
                 : (
                     <div className="dashboard-panel has-background-white-bis is-flex" style={{alignItems:"center",justifyContent:"center", flexDirection:"column"}}>
                         <span className="is-size-3">Classroom Not Found</span>
-                        <Link to="/">
-                            <FontAwesomeIcon className="mr-1" icon={['far','arrow-alt-circle-left']} />
+                        <Link to="/" className="is-flex">
+                            <Icon className="mr-1" icon={['far','arrow-alt-circle-left']} />
                             Back to class
                         </Link>
                     </div>

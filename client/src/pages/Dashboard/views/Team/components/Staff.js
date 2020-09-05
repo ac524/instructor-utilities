@@ -12,11 +12,10 @@ import {
     Tag
 } from "react-bulma-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { useStaff, useAssignedStudents } from "pages/Dashboard/store";
 import WebLink from "components/WebLink";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
+import Icon from "../../../../../components/Icon";
 // import { Link } from "react-router-dom";
 
 const { Column } = Columns;
@@ -68,8 +67,8 @@ export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
 
                                         ? (
                                         <p>
-                                            <WebLink href={`https://github.com/${github}`}>
-                                                <FontAwesomeIcon icon={["fab","github"]}/> {github}
+                                            <WebLink href={`https://github.com/${github}`} className="is-flex">
+                                                <Icon icon={["fab","github"]} /> {github}
                                             </WebLink>
                                         </p>
                                         )
@@ -86,7 +85,7 @@ export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
                     <Panel.Header className="is-flex" style={{alignItems:"center"}}>
                         Students
                         <Button className="ml-auto" size="small">
-                            <FontAwesomeIcon icon="ellipsis-h" />
+                            <Icon icon="ellipsis-h" />
                         </Button>
                     </Panel.Header>
                     {assignedStudents.map( ({_id, name, priorityLevel}) => (

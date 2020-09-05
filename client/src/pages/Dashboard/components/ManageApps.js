@@ -7,10 +7,9 @@ import {
     Button
 } from "react-bulma-components";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
 import { SET_MANAGE_APPS } from "pages/Dashboard/store/actions";
+import Icon from "../../../components/Icon";
 
 
 const { Column } = Columns;
@@ -63,9 +62,7 @@ const ManageApps = () => {
                                 </Card.Content>
                                 <Card.Footer>
                                     <Card.Footer.Item renderAs={Button} color="primary" className="is-radiusless is-light">
-                                        <span class="icon">
-                                            <FontAwesomeIcon icon="plus-circle" />
-                                        </span>
+                                        <Icon icon="plus-circle" />
                                         <span>Install</span>
                                     </Card.Footer.Item>
                                 </Card.Footer>

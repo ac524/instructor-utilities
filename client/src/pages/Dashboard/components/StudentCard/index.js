@@ -1,7 +1,5 @@
 import React from "react";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import {
     Card,
     Button,
@@ -14,6 +12,7 @@ import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 
 import "./style.sass";
 import api from "utils/api";
+import Icon from "../../../../components/Icon";
 
 export const StudentMenu = ({ _id }) => {
     
@@ -27,16 +26,16 @@ export const StudentMenu = ({ _id }) => {
         await api.removeStudent( _id );
     }
 
-    const dropdownLabel = <FontAwesomeIcon icon="ellipsis-h" />;
+    const dropdownLabel = <Icon icon="ellipsis-h" />;
 
     return (
         <Dropdown label={dropdownLabel} labelSize="small" className="ml-auto is-right">
             <Button className="dropdown-item" size="small" onClick={() => openEdit(_id) }>
-                <span className="icon"><FontAwesomeIcon icon="pen-square" /></span>
+                <Icon icon="pen-square" />
                 <span>Edit Student</span>
             </Button>
             <Button className="dropdown-item" size="small" onClick={() => removeStudent(_id) }>
-                <span className="icon"><FontAwesomeIcon icon={["far","trash-alt"]} /></span>
+                <Icon icon={["far","trash-alt"]} />
                 <span>Remove Student</span>
             </Button>
         </Dropdown>
