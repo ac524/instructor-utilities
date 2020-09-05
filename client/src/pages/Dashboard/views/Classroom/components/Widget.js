@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 
-import Button from "react-bulma-components/lib/components/button";
-import Heading from "react-bulma-components/lib/components/heading";
-import Tag from "react-bulma-components/lib/components/tag";
-import Box from "react-bulma-components/lib/components/box";
-import Columns from "react-bulma-components/lib/components/columns";
+import {
+    Button,
+    Heading,
+    Tag,
+    Box,
+    Columns
+} from "react-bulma-components";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStudents } from "pages/Dashboard/store";

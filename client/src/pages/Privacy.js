@@ -1,9 +1,11 @@
 import React from "react";
 
-import Section from "react-bulma-components/lib/components/section";
-import Container from "react-bulma-components/lib/components/container";
-import Content from "react-bulma-components/lib/components/content";
-import Heading from "react-bulma-components/lib/components/heading";
+import {
+    Section,
+    Container,
+    Content,
+    Heading
+} from "react-bulma-components";
 
 import MainWithLogin from "../layouts/MainWithLogin";
 

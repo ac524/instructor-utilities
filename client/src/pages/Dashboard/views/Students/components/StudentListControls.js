@@ -2,8 +2,11 @@ import React from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import Navbar from 'react-bulma-components/lib/components/navbar';
-import Button from 'react-bulma-components/lib/components/button';
+import {
+    Navbar,
+    Button
+} from "react-bulma-components";
+
 // import { ModalLink } from "components/Modal";
 import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actions";

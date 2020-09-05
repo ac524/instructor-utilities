@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 
-import Button from 'react-bulma-components/lib/components/button';
-import Box from 'react-bulma-components/lib/components/box';
-import Heading from 'react-bulma-components/lib/components/heading';
+import {
+    Button,
+    Box,
+    Heading
+} from "react-bulma-components";
+
 import { useLogout, useLogin } from "../utils/auth";
 import Form from "./Form";
 import { useHistory } from "react-router-dom";

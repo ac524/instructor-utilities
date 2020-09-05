@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 
-import Columns from "react-bulma-components/lib/components/columns";
-import Card from "react-bulma-components/lib/components/card";
-import Media from "react-bulma-components/lib/components/media";
-import Image from "react-bulma-components/lib/components/image";
-import Box from "react-bulma-components/lib/components/box";
-import Heading from "react-bulma-components/lib/components/heading";
-import Button from "react-bulma-components/lib/components/button";
-import Panel from "react-bulma-components/lib/components/panel";
-import Tag from "react-bulma-components/lib/components/tag";
+import {
+    Columns,
+    Card,
+    Media,
+    Image,
+    Box,
+    Heading,
+    Button,
+    Panel,
+    Tag
+} from "react-bulma-components";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

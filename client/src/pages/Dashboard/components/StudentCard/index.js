@@ -2,9 +2,11 @@ import React from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import Card from "react-bulma-components/lib/components/card";
-import Button from "react-bulma-components/lib/components/button";
-import Tag from "react-bulma-components/lib/components/tag";
+import {
+    Card,
+    Button,
+    Tag
+} from "react-bulma-components";
 
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";

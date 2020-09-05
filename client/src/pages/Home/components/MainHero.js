@@ -1,9 +1,11 @@
 import React from "react";
 
-import Hero from "react-bulma-components/lib/components/hero";
-import Heading from "react-bulma-components/lib/components/heading";
-import Container from "react-bulma-components/lib/components/container";
-import Button from "react-bulma-components/lib/components/button";
+import {
+  Hero,
+  Heading,
+  Container,
+  Button
+} from "react-bulma-components";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from "react-router-dom";

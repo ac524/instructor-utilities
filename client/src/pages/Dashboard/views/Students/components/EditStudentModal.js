@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import Box from "react-bulma-components/lib/components/box";
-import Heading from "react-bulma-components/lib/components/heading";
-import Button from "react-bulma-components/lib/components/button";
+import {
+    Box,
+    Heading,
+    Button
+} from "react-bulma-components";
 
 import Modal, { useModalContext } from "components/Modal";
 import Form from "components/Form";

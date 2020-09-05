@@ -1,10 +1,12 @@
 import React from "react";
 
-import Modal from 'react-bulma-components/lib/components/modal';
-import Columns from 'react-bulma-components/lib/components/columns';
-import Card from 'react-bulma-components/lib/components/card';
-import Button from 'react-bulma-components/lib/components/button'
-;
+import {
+    Modal,
+    Columns,
+    Card,
+    Button
+} from "react-bulma-components";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
@@ -40,7 +42,9 @@ const ManageApps = () => {
         }
     ];
 
-    
+    // const installApp = (app) => {
+
+    // }
 
     return (
         <Modal

@@ -5,7 +5,7 @@ import { useParams, Link } from "react-router-dom";
 import loadDashboardIcons from "./utils/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// import Button from "react-bulma-components/lib/components/button";
+// import { Button } from "react-bulma-components";
 
 import Toolbar from "./components/Toolbar";
 import Topbar from "./components/Topbar";

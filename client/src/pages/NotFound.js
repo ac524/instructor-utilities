@@ -1,10 +1,13 @@
 import React from "react";
 
-// import Section from "react-bulma-components/lib/components/section";
-import Hero from "react-bulma-components/lib/components/hero";
-import Container from "react-bulma-components/lib/components/container";
-import Heading from "react-bulma-components/lib/components/heading";
-import Content from "react-bulma-components/lib/components/content";
+import {
+    // Section,
+    Container,
+    Hero,
+    Heading,
+    Content
+} from "react-bulma-components";
+
 import { Link } from "react-router-dom";
 import MainWithLogin from "../layouts/MainWithLogin";
 import { LoginLink } from "components/Login";

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import Columns from "react-bulma-components/lib/components/columns";
-import Box from "react-bulma-components/lib/components/box";
-import Image from "react-bulma-components/lib/components/image";
-import Heading from "react-bulma-components/lib/components/heading";
+import {
+    Columns,
+    Box,
+    Image,
+    Heading
+} from "react-bulma-components";
 
 import { useReadyStep } from "../../../utils/ready";
 import githubApi from "../../../utils/githubApi";

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import Navbar from 'react-bulma-components/lib/components/navbar';
+
+import { Navbar } from "react-bulma-components";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { LoginButton, LogoutButton } from "../../components/Login";

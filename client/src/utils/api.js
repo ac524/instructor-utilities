@@ -42,6 +42,12 @@ class API {
 
     }
 
+    async installApp( studentId ) {
+
+        return this.axios.delete( `/api/students/${studentId}` );
+
+    }
+
     /**
      * Authentication Routes
      */

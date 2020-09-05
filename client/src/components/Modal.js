@@ -1,8 +1,9 @@
 import React, { useContext, useState, createContext } from "react";
 
-import BulmaModal from 'react-bulma-components/lib/components/modal';
-
-import Button from 'react-bulma-components/lib/components/button';
+import {
+    Modal as BulmaModal,
+    Button
+} from "react-bulma-components";
 
 // Define a new context
 const ModalContext = createContext(false);

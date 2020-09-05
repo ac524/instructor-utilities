@@ -1,8 +1,10 @@
 import React from "react";
 
-import { Field, Control, Label, Input, Select } from 'react-bulma-components/lib/components/form';
-import Button from 'react-bulma-components/lib/components/button';
+import { Form as FormCollection, Button } from "react-bulma-components";
+
 import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
+
+const { Field, Control, Label, Input, Select } = FormCollection;
 
 export const FormInput = ( { type = "text", options = [], ...props } ) => {
 

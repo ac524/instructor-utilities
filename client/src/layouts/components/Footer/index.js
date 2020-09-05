@@ -2,10 +2,12 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import Section from 'react-bulma-components/lib/components/section';
-import Container from 'react-bulma-components/lib/components/container';
-import Columns from 'react-bulma-components/lib/components/columns';
-import Heading from 'react-bulma-components/lib/components/heading';
+import {
+    Section,
+    Container,
+    Columns,
+    Heading
+} from "react-bulma-components";
 
 import "./style.sass";
 import WebLink from "../../../components/WebLink";

@@ -1,10 +1,12 @@
 import React from "react";
 
-import Section from "react-bulma-components/lib/components/section";
-import Tile from "react-bulma-components/lib/components/tile";
-import Heading from "react-bulma-components/lib/components/heading";
-import Content from "react-bulma-components/lib/components/content";
-import Button from "react-bulma-components/lib/components/button";
+import {
+    Section,
+    Tile,
+    Heading,
+    Content,
+    Button
+} from "react-bulma-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

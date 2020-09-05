@@ -1,6 +1,6 @@
 import React from "react";
 
-import Columns from "react-bulma-components/lib/components/columns";
+import { Columns } from "react-bulma-components";
 
 import {  useStudents } from "pages/Dashboard/store";
 import { StudentCard } from "pages/Dashboard/components/StudentCard";

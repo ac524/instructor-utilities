@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 
-import Message from 'react-bulma-components/lib/components/message';
+import { Message } from "react-bulma-components";
 
 const ErrorContext = createContext();
 
