@@ -1,19 +1,14 @@
 import React, { useEffect } from "react";
 import "./App.sass";
 
-import { useAuthTokenStore } from "./utils/auth";
-import { useReadyStep } from "./utils/ready";
-import Routes from "./components/Routes";
 import LoadingOverlay from "./components/LoadingOverlay";
-import { useIsReady } from "./utils/ready";
+import Routes from "./components/Routes";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { useAuthTokenStore } from "./utils/auth";
+import { useIsReady, useReadyStep } from "./utils/ready";
+import loadGlobalIcons from "./utils/icons";
 
-import { faArrowAltCircleLeft, faArrowAltCircleRight } from '@fortawesome/free-regular-svg-icons';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-
-library.add( faArrowAltCircleLeft, faArrowAltCircleRight, faAngleDown, faGithub );
+loadGlobalIcons();
 
 function App() {
 
