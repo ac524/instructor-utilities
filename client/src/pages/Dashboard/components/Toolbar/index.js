@@ -23,7 +23,7 @@ const ToolbarItem = ({ icon, ...props }) => {
 
     const location = useLocation();
 
-    const isActive = props.to === location.pathname;
+    const isActive = props.to === "/" ? (location.pathname.indexOf("/",1) < 0) : location.pathname.endsWith( props.to );
 
     return (
         <div className={"item" + (isActive ? " is-active" : "")}>
