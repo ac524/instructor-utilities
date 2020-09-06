@@ -10,7 +10,7 @@ import {
 
 import { Link } from "react-router-dom";
 import MainWithLogin from "../layouts/MainWithLogin";
-import { LoginLink } from "components/Login";
+import { LoginLink } from "../components/Login";
 
 function NotFound() {
     return (

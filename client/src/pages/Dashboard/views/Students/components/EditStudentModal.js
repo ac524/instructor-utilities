@@ -6,12 +6,12 @@ import {
     Button
 } from "react-bulma-components";
 
-import Modal, { useModalContext } from "components/Modal";
-import Form from "components/Form";
+import Modal, { useModalContext } from "../../../../../components/Modal";
+import Form from "../../../../../components/Form";
 
-import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
-import api from "utils/api";
+import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "../../../store";
+import { EDIT_STUDENT } from "../../../store/actions";
+import api from "../../../../../utils/api";
 
 function EditStudentModal() {
 

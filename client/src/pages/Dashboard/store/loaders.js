@@ -1,9 +1,9 @@
 import { getDashboardAction as gda } from "./";
 import { useDashboardDispatch } from "./getters";
-import { useReadyStep } from "utils/ready";
 import { useEffect } from "react";
-import api from "utils/api";
 import { SET_CLASSROOM } from "./actions";
+import api from "../../../utils/api";
+import { useReadyStep } from "../../../utils/ready";
 
 export const useClassroomLoader = ( roomId ) => {
 

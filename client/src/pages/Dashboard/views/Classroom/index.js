@@ -11,12 +11,12 @@ import {
 import Widget from "./components/Widget";
 
 import { useTopbarConfig } from "../../components/Topbar";
-import { useClassroom } from "pages/Dashboard/store";
-import { useAuthorizedUser } from "utils/auth";
-import RoomLink from "pages/Dashboard/components/RoomLink";
-import Dropdown from "components/Dropdown";
-import { useManageApps } from "pages/Dashboard/utils/apps";
+import Dropdown from "../../../../components/Dropdown";
 import Icon from "../../../../components/Icon";
+import { useManageApps } from "../../utils/apps";
+import RoomLink from "../../components/RoomLink";
+import { useClassroom } from "../../store";
+import { useAuthorizedUser } from "../../../../utils/auth";
 
 function Classroom() {
 

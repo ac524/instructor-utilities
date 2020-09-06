@@ -60,5 +60,30 @@ module.exports = {
 
         }
 
+    },
+    async update( req, res ) {
+
+        try {
+
+            const update = {};
+
+            [ "name", "data" ].forEach( prop => !req.body.hasOwnProperty(prop) || (update[prop] = req.body[prop]) );
+
+            await App.findOneAndUpdate( { room: req.roomId, type: req.params.appTypeId }, update );
+
+            req.roomIo.emit( `appupdate:${req.params.appTypeId}`, {
+                type: "ADD_APP",
+                payload: update
+            } );
+
+            res.json({success: true});
+
+        } catch( err ) {
+
+            console.log(err);
+            res.status(500).json({default:"Something went wrong"});
+
+        }
+
     }
 }

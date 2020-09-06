@@ -6,8 +6,8 @@ import {
     Columns
 } from "react-bulma-components";
 
-import { useStudents } from "pages/Dashboard/store";
-import Icon from "components/Icon";
+import Icon from "../../../../../../components/Icon";
+import { useStudents } from "../../../../store";
 
 const { Column } = Columns;
 

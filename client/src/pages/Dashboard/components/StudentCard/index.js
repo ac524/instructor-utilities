@@ -6,13 +6,12 @@ import {
     Tag
 } from "react-bulma-components";
 
-import Dropdown from "components/Dropdown";
-import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
-
 import "./style.sass";
-import api from "utils/api";
 import Icon from "../../../../components/Icon";
+import Dropdown from "../../../../components/Dropdown";
+import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "../../store";
+import { EDIT_STUDENT } from "../../store/actions";
+import api from "../../../../utils/api";
 
 export const StudentMenu = ({ _id }) => {
     

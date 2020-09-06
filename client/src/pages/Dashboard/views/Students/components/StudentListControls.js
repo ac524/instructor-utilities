@@ -5,10 +5,9 @@ import {
     Button
 } from "react-bulma-components";
 
-// import { ModalLink } from "components/Modal";
-import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 import Icon from "../../../../../components/Icon";
+import { useDashboardDispatch, getDashboardAction as gda } from "../../../store";
+import { EDIT_STUDENT } from "../../../store/actions";
 
 const { Item, Menu } = Navbar;
 

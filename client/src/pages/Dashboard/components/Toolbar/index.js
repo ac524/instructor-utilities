@@ -3,9 +3,9 @@ import React, { useEffect } from "react";
 import "./style.sass";
 import { useLocation } from "react-router-dom";
 import { LogoutLink } from "../../../../components/Login";
-import { useClassroom } from "pages/Dashboard/store";
 import RoomLink from "../RoomLink";
 import Icon from "../../../../components/Icon";
+import { useClassroom } from "../../store";
 
 export const useToolbarOffset = ( offset ) => {
 

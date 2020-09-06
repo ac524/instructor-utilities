@@ -2,8 +2,8 @@ import React from "react";
 
 import { Columns } from "react-bulma-components";
 
-import {  useStudents } from "pages/Dashboard/store";
-import { StudentCard } from "pages/Dashboard/components/StudentCard";
+import { useStudents } from "../../../store";
+import { StudentCard } from "../../../components/StudentCard";
 
 function StudentList() {
 

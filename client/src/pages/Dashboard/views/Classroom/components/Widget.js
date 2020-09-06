@@ -6,8 +6,9 @@ import {
 } from "react-bulma-components";
 
 import SelectStudent from "./Apps/SelectStudent";
-import Pulse from "components/Pulse";
-import api from "utils/api";
+import Pulse from "../../../../../components/Pulse";
+import { useRoomSocket } from "../../../utils/socket.io";
+import api from "../../../../../utils/api";
 
 const getAppComponent = ( app, setAppData ) => {
 
@@ -22,6 +23,7 @@ const getAppComponent = ( app, setAppData ) => {
 const Widget = ( { roomId, appTypeId, ...props } ) => {
 
     const [ app, setApp ] = useState( null );
+    const socket = useRoomSocket();
 
     useEffect(() => {
 
@@ -29,14 +31,22 @@ const Widget = ( { roomId, appTypeId, ...props } ) => {
 
         const loadApp = async () => setApp( (await api.getApp( roomId, appTypeId )).data );
 
+        const handleAppUpdate = ( update ) => {
+            console.log( update );
+        }
+
         loadApp();
 
-    }, [roomId, appTypeId, setApp]);
+        socket.on(`appupdate:${appTypeId}`, handleAppUpdate);
+
+        return () => socket.off(`appupdate:${appTypeId}`, handleAppUpdate)
+
+    }, [socket, roomId, appTypeId, setApp]);
 
     const setAppData = async ( data ) => {
 
         setApp({ ...app, data });
-
+        
     }
 
     return (

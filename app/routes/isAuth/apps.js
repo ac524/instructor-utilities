@@ -8,6 +8,7 @@ const {
     getSingle,
     create
 } = require("../../controllers/app");
+const { update } = require("../../models/App");
 
 router
     .route( "/" )
@@ -23,5 +24,6 @@ router
 router
     .route( "/:appTypeId/:roomId" )
     .post( setRoom.fromParam, isRoomMember, getSingle )
+    .patch( setRoom.fromParam, isRoomMember, update )
 
 module.exports = router;
