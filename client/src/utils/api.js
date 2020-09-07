@@ -6,6 +6,7 @@ class API {
 
     setConfiguration( config ) {
         this.configured = config ? axios.create( config ) : null;
+        console.log({ test: this.configured });
     }
 
     get axios() {
@@ -51,6 +52,12 @@ class API {
     async getApp( roomId, type ) {
 
         return this.axios.post( `/api/apps/${type}/${roomId}` );
+
+    }
+
+    async updateApp( roomId, type, data ) {
+
+        return this.axios.patch( `/api/apps/${type}/${roomId}`, data );
 
     }
 

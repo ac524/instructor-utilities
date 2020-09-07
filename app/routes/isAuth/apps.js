@@ -6,9 +6,9 @@ const isRoomMember = require("../middleware/isRoomMember");
 const {
     getTypes,
     getSingle,
-    create
+    create,
+    update
 } = require("../../controllers/app");
-const { update } = require("../../models/App");
 
 router
     .route( "/" )

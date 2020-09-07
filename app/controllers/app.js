@@ -69,11 +69,13 @@ module.exports = {
 
             [ "name", "data" ].forEach( prop => !req.body.hasOwnProperty(prop) || (update[prop] = req.body[prop]) );
 
-            await App.findOneAndUpdate( { room: req.roomId, type: req.params.appTypeId }, update );
+            const app = await App.findOneAndUpdate( { room: req.roomId, type: req.params.appTypeId }, update, { new: true } ).populate("type");
+
+            console.log( "cookies", req.cookies );
 
             req.roomIo.emit( `appupdate:${req.params.appTypeId}`, {
-                type: "ADD_APP",
-                payload: update
+                update,
+                from: req.user._id
             } );
 
             res.json({success: true});
