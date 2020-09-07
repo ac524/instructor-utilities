@@ -20,16 +20,13 @@ import { useAuthorizedUser } from "../../../../utils/auth";
 
 function Classroom() {
 
-    const dropdownLabel = <span className="is-flex"><Icon icon="plus-circle" className="mr-1" /> Classroom Tool</span>;
+    const dropdownLabel = <Icon icon="ellipsis-h" />;
+    const manageApps = useManageApps();
     const topbarTools = (
         <Dropdown label={dropdownLabel} labelSize="small">
-            <Button className="dropdown-item" size="small">
-                <Icon icon="pen-square" />
-                <span>Edit Student</span>
-            </Button>
-            <Button className="dropdown-item" size="small">
-                <Icon icon={["far","trash-alt"]} />
-                <span>Remove Student</span>
+            <Button className="dropdown-item" size="small" onClick={() => manageApps(true)}>
+                <Icon icon="download" />
+                <span>Manage Apps</span>
             </Button>
         </Dropdown>
     );
@@ -38,7 +35,6 @@ function Classroom() {
 
     const user = useAuthorizedUser();
     const { _id: roomId, apps } = useClassroom();
-    const manageApps = useManageApps();
 
     return (
         <Section className="is-flex" style={{flexGrow:1,flexDirection:"column"}}>
