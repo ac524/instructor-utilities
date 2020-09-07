@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
 import socketIOClient from "socket.io-client";
+import api from "../../../utils/api";
 
 const SocketContext = createContext({});
 
@@ -14,12 +15,15 @@ export const RoomSocketProvider = ({ roomId, children }) => {
         if( !roomId ) return;
 
         // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
-        const openSocket = socketIOClient(`http://localhost:3000/${roomId}`);
+        const openSocket = socketIOClient(`${window.location.origin}/${roomId}`);
 
         setSocket(openSocket);
 
+        openSocket.on("connect", () => api.setHeader( "Room-Socket-Id", openSocket.id ) );
+        
         return () => {
             openSocket.disconnect();
+            api.setHeader( "Room-Socket-Id", false );
             setSocket(false);
         }
 

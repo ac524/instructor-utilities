@@ -30,16 +30,10 @@ const applyAuthToken = token => {
     token
 
         // Apply authorization token to every request if logged in
-        ? api.setConfiguration({
-            headers: {
-                common: {
-                Authorization: token
-                }
-            }
-        })
+        ? api.setHeader( "Authorization", token )
 
         // Delete auth header
-        : api.setConfiguration( false );
+        : api.setHeader( "Authorization", false );
 
 };
 

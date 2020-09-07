@@ -2,15 +2,24 @@ import axios from "axios";
 
 class API {
 
-    configured = null;
+    axios;
 
-    setConfiguration( config ) {
-        this.configured = config ? axios.create( config ) : null;
-        console.log({ test: this.configured });
+    constructor() {
+
+        this.axios = axios.create();
+
     }
 
-    get axios() {
-        return this.configured || axios;
+    setHeader( name, value ) {
+
+        if( value )
+
+            this.axios.defaults.headers.common[name] = value;
+
+        else
+
+            delete this.axios.defaults.headers.common[name];
+
     }
 
     async getClassroom( roomId ) {

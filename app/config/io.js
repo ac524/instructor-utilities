@@ -49,8 +49,6 @@ module.exports = (server, app) => {
 
     classrooms.on('connection', socket => {
     
-        // console.log( socket.nsp.name );
-    
         socket.join( socket.nsp.name.substr(1) );
     
         // socket.emit("FromAPI", "Test");
