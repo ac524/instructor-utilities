@@ -12,6 +12,7 @@ import Dropdown from "../../../../components/Dropdown";
 import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "../../store";
 import { EDIT_STUDENT } from "../../store/actions";
 import api from "../../../../utils/api";
+import { usePriorityLevel } from "../../utils/student";
 
 export const StudentMenu = ({ _id }) => {
     
@@ -43,25 +44,32 @@ export const StudentMenu = ({ _id }) => {
 
 export const StudentPriorityTag = ( { level, ...props } ) => {
 
-    if( level < 4 )
+    const priorityLevel = usePriorityLevel( level );
 
-        return <Tag className="is-primary is-light" {...props}>Low Priority</Tag>;
+    return <Tag color={priorityLevel.color} className="is-light" {...props}><Icon icon="exclamation-circle"/><span>{priorityLevel.label}</span></Tag>;
+    
+}
 
-    if( level > 7 )
+export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
 
-        return <Tag color="danger" className="is-light" {...props}>High Priority</Tag>;
+    const assignedStaff = useStaffMember( assignedTo );
 
-    return <Tag color="warning" className="is-light" {...props}>Medium Priority</Tag>;
+    let assignedText;
+    const tagProps = {};
+
+    if( assignedStaff._id ) {
+        tagProps.color = "primary";
+        tagProps.className = "is-light";
+        assignedText = assignedStaff.user.name;
+    } else {
+        assignedText = "Not Assigned"
+    }
+
+    return <Tag {...tagProps} {...props}><Icon icon="user-friends"/><span>{assignedText}</span></Tag>
     
 }
 
 export const StudentCard = ({ student: { _id, name, priorityLevel, assignedTo } }) => {
-
-    const assignedStaff = useStaffMember( assignedTo );
-
-    const assignedToTag = assignedStaff._id
-        ? <Tag style={{flexGrow:1}}  className="is-primary is-light">{ `Assigned to ${assignedStaff.user.name}`}</Tag>
-        : <Tag style={{flexGrow:1}}>Not Assigned</Tag>
 
     return (
         <Card className="student-card is-flex" style={{flexDirection:"column"}}>
@@ -71,7 +79,7 @@ export const StudentCard = ({ student: { _id, name, priorityLevel, assignedTo } 
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />
-                {assignedToTag}
+                <StudentAssignmentTag assignedTo={assignedTo} style={{flexGrow:1}} />
             </Tag.Group>
         </Card>
     );
