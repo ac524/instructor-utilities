@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Section } from "react-bulma-components";
 
@@ -11,13 +11,14 @@ import StudentListControls from "./components/StudentListControls";
 
 function Students() {
 
+    const [ sort, setSort ] = useState("name:asc");
     useTopbarConfig({ name: "Students" });
 
     return (
         <Section>
             <ModalProvider>
-                <StudentListControls />
-                <StudentList />
+                <StudentListControls sort={[ sort, setSort ]}/>
+                <StudentList sort={sort} />
                 <EditStudentModal />
             </ModalProvider>
         </Section>

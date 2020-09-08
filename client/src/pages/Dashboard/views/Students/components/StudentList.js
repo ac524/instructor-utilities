@@ -5,9 +5,21 @@ import { Columns } from "react-bulma-components";
 import { useStudents } from "../../../store";
 import { StudentCard } from "../../../components/StudentCard";
 
-function StudentList() {
+function StudentList( { sort } ) {
 
     const students = useStudents();
+
+    const [ sortBy, sortOrder ] = sort.split(":");
+
+    const studentSort = ( studentA, studentB ) => {
+
+        if( studentA[sortBy] > studentB[sortBy] ) return sortOrder === "asc" ? 1 : -1;
+
+        if( studentA[sortBy] < studentB[sortBy] ) return sortOrder === "asc" ? -1 : 1;
+
+        return 0;
+
+    }
 
     const sizes = {
         tablet: {size: 'one-third'},
@@ -17,7 +29,7 @@ function StudentList() {
 
     return (
         <Columns className="is-multiline student-list">
-            {students.map(student => {
+            {students.sort( studentSort ).map(student => {
                 return (
                     <Columns.Column key={student._id} {...sizes} className="has-filled-content">
                         <StudentCard student={student} />
