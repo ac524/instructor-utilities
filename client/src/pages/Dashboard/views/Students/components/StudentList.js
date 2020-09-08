@@ -1,25 +1,16 @@
 import React from "react";
 
-import { Columns } from "react-bulma-components";
+import { Columns, Tag } from "react-bulma-components";
 
-import { useStudents } from "../../../store";
 import { StudentCard } from "../../../components/StudentCard";
+import { useStudentSort, useStudentGroups } from "../../../utils/student";
 
-function StudentList( { sort } ) {
+function StudentList( { sort, groupBy } ) {
 
-    const students = useStudents();
+    const groupedStudents = useStudentGroups( groupBy );
+    const studentSort = useStudentSort( sort );
 
-    const [ sortBy, sortOrder ] = sort.split(":");
-
-    const studentSort = ( studentA, studentB ) => {
-
-        if( studentA[sortBy] > studentB[sortBy] ) return sortOrder === "asc" ? 1 : -1;
-
-        if( studentA[sortBy] < studentB[sortBy] ) return sortOrder === "asc" ? -1 : 1;
-
-        return 0;
-
-    }
+    if( !groupedStudents.length ) return null;
 
     const sizes = {
         tablet: {size: 'one-third'},
@@ -29,13 +20,25 @@ function StudentList( { sort } ) {
 
     return (
         <Columns className="is-multiline student-list">
-            {students.sort( studentSort ).map(student => {
-                return (
-                    <Columns.Column key={student._id} {...sizes} className="has-filled-content">
-                        <StudentCard student={student} />
-                    </Columns.Column>
-                )
-            })}
+            {
+                groupedStudents[0].group.key === "default"
+
+                ? groupedStudents[0].entries.sort( studentSort ).map(student => {
+                    return (
+                        <Columns.Column key={student._id} {...sizes} className="has-filled-content">
+                            <StudentCard student={student} />
+                        </Columns.Column>
+                    )
+                })
+
+                : groupedStudents.map( ({ group, entries }) => (
+                        <Columns.Column key={group.key} {...sizes}>
+                            <Tag color={group.color} className="is-light w-100 has-shadow" size="large">{group.label}</Tag>
+                            {entries.sort( studentSort ).map( student => <StudentCard key={student._id} student={student} className="mt-4" /> )}
+                        </Columns.Column>
+                ) )
+            
+            }
         </Columns>
     )
 

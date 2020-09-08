@@ -30,9 +30,22 @@ const sortTypes = [
         label: "By priority 10 to 1",
         icon: "sort-numeric-up-alt"
     }
-]
+];
 
-function StudentListControls( { sort } ) {
+const groupTypes = [
+    {
+        key: "assignedTo",
+        label: "Group by staff",
+        icon: "user-friends"
+    },
+    {
+        key: "priority",
+        label: "Group by priorty",
+        icon: "exclamation-circle"
+    }
+];
+
+function StudentListControls( { sort, groupBy } ) {
 
     const dispatch = useDashboardDispatch();
 
@@ -41,7 +54,7 @@ function StudentListControls( { sort } ) {
 
     return (
         <div className="is-flex mb-5">
-            <Button outlined color="primary" onClick={() => dispatch(gda(EDIT_STUDENT, null))}>
+            <Button onClick={() => dispatch(gda(EDIT_STUDENT, null))}>
                 <Icon icon="plus-circle" />
                 <span>Add Student</span>
             </Button>
@@ -60,14 +73,18 @@ function StudentListControls( { sort } ) {
                 })}
             </Dropdown>
             <Dropdown className="is-right ml-2" label={groupLabel}>
-                <Button className="dropdown-item" size="small">
-                    <Icon icon="user-friends" />
-                    <span>Group by staff</span>
-                </Button>
-                <Button className="dropdown-item" size="small">
-                    <Icon icon="exclamation-circle" />
-                    <span>Group by priorty</span>
-                </Button>
+                {groupTypes.map( groupType => {
+                    const classes = ["dropdown-item"];
+
+                    if( groupType.key === groupBy[0] ) classes.push("is-active");
+
+                    return (
+                        <Button key={groupType.key} className={classes.join(" ")} size="small" onClick={() => groupBy[1](groupType.key)}>
+                            <Icon icon={groupType.icon} />
+                            <span>{groupType.label}</span>
+                        </Button>
+                    )
+                })}
             </Dropdown>
         </div>
                     

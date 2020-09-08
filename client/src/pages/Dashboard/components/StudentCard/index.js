@@ -69,10 +69,10 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
     
 }
 
-export const StudentCard = ({ student: { _id, name, priorityLevel, assignedTo } }) => {
+export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo } }) => {
 
     return (
-        <Card className="student-card is-flex" style={{flexDirection:"column"}}>
+        <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
                 <span>{name}</span>
                 <StudentMenu _id={_id} />

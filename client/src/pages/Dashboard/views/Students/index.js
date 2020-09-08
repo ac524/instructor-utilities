@@ -12,13 +12,14 @@ import StudentListControls from "./components/StudentListControls";
 function Students() {
 
     const [ sort, setSort ] = useState("name:asc");
+    const [ groupBy, setGroupBy ] = useState();
     useTopbarConfig({ name: "Students" });
 
     return (
         <Section>
             <ModalProvider>
-                <StudentListControls sort={[ sort, setSort ]}/>
-                <StudentList sort={sort} />
+                <StudentListControls sort={[ sort, setSort ]} groupBy={[ groupBy, setGroupBy ]}/>
+                <StudentList sort={sort} groupBy={groupBy} />
                 <EditStudentModal />
             </ModalProvider>
         </Section>

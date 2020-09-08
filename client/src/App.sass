@@ -40,6 +40,8 @@
 
 @for $i from 1 through 10
   $width: ($i * 10)
+  .w-#{$width}
+    width: percentage($width/100)
   .mw-#{$width}
     max-width: percentage($width/100)
 

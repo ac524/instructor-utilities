@@ -37,7 +37,7 @@ function Classroom() {
     const { _id: roomId, apps } = useClassroom();
 
     return (
-        <Section className="is-flex" style={{flexGrow:1,flexDirection:"column"}}>
+        <Section className="is-flex" style={{flexGrow:(apps.length ? 0 : 1),flexDirection:"column"}}>
             {
                 apps.length
 
