@@ -37,7 +37,7 @@ function StudentListControls( { sort } ) {
     const dispatch = useDashboardDispatch();
 
     const groupLabel = <Icon icon="columns" />
-    const sortLabel = <Icon icon="sort-alpha-down" />
+    const sortLabel = <Icon icon={sortTypes.find( ({key}) => key === sort[0] ).icon} />
 
     return (
         <div className="is-flex mb-5">
