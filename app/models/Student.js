@@ -20,7 +20,7 @@ const StudentSchema = new Schema({
   },
   assignedTo: {
       type: Schema.Types.ObjectId,
-      ref:'User'
+      ref: 'Staff'
   },
   date: {
     type: Date,

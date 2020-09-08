@@ -8,6 +8,7 @@ import Icon from "../../../../../components/Icon";
 import { useDashboardDispatch, getDashboardAction as gda } from "../../../store";
 import { EDIT_STUDENT } from "../../../store/actions";
 import Dropdown from "../../../../../components/Dropdown";
+import { useStudentGroupings } from "../../../utils/student";
 
 const sortTypes = [
     {
@@ -32,23 +33,27 @@ const sortTypes = [
     }
 ];
 
-const groupTypes = [
-    {
-        key: "assignedTo",
-        label: "Group by staff",
-        icon: "user-friends"
-    },
-    {
-        key: "priority",
-        label: "Group by priorty",
-        icon: "exclamation-circle"
-    }
-];
+// const groupTypes = [
+//     {
+//         key: "staff",
+//         label: "Group by staff",
+//         icon: "user-friends"
+//     },
+//     {
+//         key: "priority",
+//         label: "Group by priorty",
+//         icon: "exclamation-circle"
+//     }
+// ];
 
 function StudentListControls( { sort, groupBy } ) {
 
     const dispatch = useDashboardDispatch();
-
+    const groupTypes = useStudentGroupings().map( ({key, name, icon}) => ({
+        key,
+        label: `Group by ${name}`,
+        icon
+    }) )
     const groupLabel = <Icon icon="columns" />
     const sortLabel = <Icon icon={sortTypes.find( ({key}) => key === sort[0] ).icon} />
 
@@ -73,7 +78,7 @@ function StudentListControls( { sort, groupBy } ) {
                 })}
             </Dropdown>
             <Dropdown className="is-right ml-2" label={groupLabel}>
-                {groupTypes.map( groupType => {
+                {[ { key: "none", label: "No Grouping", icon: "ban" }, ...groupTypes ].map( groupType => {
                     const classes = ["dropdown-item"];
 
                     if( groupType.key === groupBy[0] ) classes.push("is-active");

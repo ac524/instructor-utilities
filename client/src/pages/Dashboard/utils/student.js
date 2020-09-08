@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStudents } from "../store";
+import { useStudents, useStaff } from "../store";
 
 export const priorityLevels = [
     {
@@ -33,9 +33,45 @@ export const studentGroupings = [
 
 export const usePriorityLevel = (level) => priorityLevels.find( priorityLevel => !priorityLevel.test || priorityLevel.test(level) );
 
+export const useStudentGroupings = () => {
+
+    const staff = useStaff();
+    const [groupings, setGroupings] = useState([]);
+
+    useEffect(() => {
+        
+        setGroupings([
+            {
+                name: "Priority",
+                key: "priority",
+                icon: "exclamation-circle",
+                prop: "priorityLevel",
+                groups: priorityLevels
+            },
+            {
+                name: "Staff",
+                key: "staff",
+                icon: "user-friends",
+                prop: "assignedTo",
+                groups: staff.map( member => ({
+                    key: member._id,
+                    label: member.user.name,
+                    test: assignedTo => assignedTo === member._id,
+                    color: "primary"
+                }) )
+            }
+        ]);
+
+    }, [staff, setGroupings]);
+
+    return groupings;
+
+}
+
 export const useStudentGroups = ( groupBy ) => {
 
     const students = useStudents();
+    const studentGroupings = useStudentGroupings();
     const [ studentGroups, setStudentGroups ] = useState([]);
 
     useEffect(() => {
@@ -62,7 +98,7 @@ export const useStudentGroups = ( groupBy ) => {
 
         setStudentGroups( grouping.groups.map( (group) => ({ group, entries: studentsByGroup[group.key] }) ) );
 
-    }, [students, groupBy, setStudentGroups])
+    }, [studentGroupings, students, groupBy, setStudentGroups])
 
     return studentGroups;
 

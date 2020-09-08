@@ -12,7 +12,7 @@ import StudentListControls from "./components/StudentListControls";
 function Students() {
 
     const [ sort, setSort ] = useState("name:asc");
-    const [ groupBy, setGroupBy ] = useState();
+    const [ groupBy, setGroupBy ] = useState("none");
     useTopbarConfig({ name: "Students" });
 
     return (

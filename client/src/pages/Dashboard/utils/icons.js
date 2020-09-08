@@ -18,6 +18,7 @@ import {
     faColumns,
     faUserFriends,
     faExclamationCircle,
+    faBan,
     // faWeight
     // faSortAmountDownAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -47,6 +48,7 @@ export default () => library.add(
     faColumns,
     faUserFriends,
     faExclamationCircle,
+    faBan
     // faWeight
     // faSortAmountDownAlt
 );
