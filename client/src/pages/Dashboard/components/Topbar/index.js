@@ -30,8 +30,6 @@ function Topbar() {
 
     const [ { topbar } ] = useDashboardContext();
 
-    if(topbar) console.log( topbar );
-
     return topbar
         ? (
             <div className="topbar has-background-white is-flex" style={{alignItems:"center"}}>

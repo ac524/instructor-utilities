@@ -77,8 +77,6 @@ const ManageApps = () => {
 
     }, [ isManagingApps, setAppTypes ]);
 
-    console.log( isManagingApps );
-
     return (
         <Modal
             show={isManagingApps}

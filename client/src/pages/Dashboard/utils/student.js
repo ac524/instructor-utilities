@@ -40,15 +40,11 @@ export const useStudentGroups = ( groupBy ) => {
 
     useEffect(() => {
 
-        
-
         const grouping = studentGroupings.find( group => group.key === groupBy ) || {
             name: "Default",
             key: "default",
             groups: [{ key: "default" }]
         };
-
-        console.log( "Sort student groups", grouping );
 
         const studentsByGroup = students.reduce( (byGroup, student) => {
 
