@@ -45,7 +45,7 @@ export const FormField = ( { label, type = "text", name, value, placeholder, onC
 
 }
 
-function Form( { fields, errors = {}, buttonText = "Submit", moreButtons = [], ...props } ) {
+function Form( { fields, errors = {}, button, buttonText = "Submit", moreButtons = [], ...props } ) {
 
     const inputErrorColor = useInputErrorColor( errors );
 
@@ -55,8 +55,9 @@ function Form( { fields, errors = {}, buttonText = "Submit", moreButtons = [], .
                 <Error name="default" type="message" />
                 { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
             </ErrorProvider>
+            <hr />
             <div className="is-flex">
-                <Button color="primary">{ buttonText }</Button>
+                { button ? button : <Button color="primary">{ buttonText }</Button> }
                 { moreButtons }
             </div>
         </form>

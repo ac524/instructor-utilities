@@ -41,13 +41,7 @@ function EditStudentModal() {
 
     }, [editStudent, editStudentId, setStudent, setIsModalActive]);
 
-    const handleInputUpdate = ( { target: { name, value } } ) => {
-
-        if( name === 'assignedTo' ) value = parseInt(value);
-
-        setStudent( { ...studentState, [name]: value } );
-
-    }
+    const handleInputUpdate = ( { target: { name, value } } ) => setStudent( { ...studentState, [name]: value } );
 
     // Student form fields configuration.
     const fields = [
@@ -71,7 +65,7 @@ function EditStudentModal() {
             label: "Staff Assignment",
             name: "assignedTo",
             type: "select",
-            options: staff.map(({ _id, user: { name } }) => ({ value: _id, label: name })),
+            options: [ { value: "", label: "Unassigned" }, ...staff.map(({ _id, user: { name } }) => ({ value: _id, label: name })) ],
             value: studentState.assignedTo,
             onChange: handleInputUpdate
         }
@@ -108,19 +102,26 @@ function EditStudentModal() {
 
     }
 
+    const button = <Button color="primary" className="is-light has-shadow-light">{(_id ? "Save" : "Create") + " Student"}</Button>;
+
     const moreButtons = [
         _id
-            ? <Button key="remove" color="danger" className="ml-auto" onClick={handleRemoveSubmit}>Remove</Button>
-            : <Button key="cancel" color="danger" className="ml-auto" onClick={() => clearEditStudent(() => setIsModalActive( false ))}>Cancel</Button>
+            ? (
+                <div className="ml-auto">
+                    <Button color="danger" outlined className="has-shadow-light" onClick={handleRemoveSubmit}>Remove</Button>
+                    <Button color="danger" className="is-light ml-2 has-shadow-light" onClick={() => clearEditStudent(() => setIsModalActive( false ))}>Cancel</Button>
+                </div>
+            )
+            : <Button color="danger" className="ml-auto is-light has-shadow-light" onClick={() => clearEditStudent(() => setIsModalActive( false ))}>Cancel</Button>
     ];
 
     return (
         // <span>test</span>
         <Modal onClose={clearEditStudent}>
             <Box className="py-5">
-                <Heading renderAs="h2">{_id ? "Edit" : "New"} User</Heading>
+                <Heading renderAs="h2">{_id ? "Edit" : "New"} Student</Heading>
                 <hr />
-                <Form fields={fields} onSubmit={handleSubmit} buttonText={(_id ? "Save" : "Create") + " Student"} moreButtons={moreButtons} />
+                <Form fields={fields} onSubmit={handleSubmit} button={button} moreButtons={moreButtons} />
             </Box>
         </Modal>
     )
