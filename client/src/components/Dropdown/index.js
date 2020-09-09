@@ -4,19 +4,28 @@ import { useOutsideClickDispatch } from "../../utils/detection";
 
 import "./style.sass";
 
-function Dropdown( { label, labelSize, children, className, ...props } ) {
+function Dropdown( { id = "dropdown-menu", label, ariaLabel, labelSize, children, className, ...props } ) {
 
     const [ isActive, dispatch ] = useReducer( ( state, action ) => action === "open" );
     const dropdownRef = useOutsideClickDispatch( { isActive, dispatch, action: "close" } );
 
+    const toggleBtnProps = {
+        className: "button" + (labelSize ? ` is-${labelSize}` : ""),
+        "aria-haspopup": "true",
+        "aria-controls": id,
+        onClick: () => dispatch("open")
+    }
+
+    if(ariaLabel) toggleBtnProps["aria-label"] = ariaLabel;
+
     return (
         <div ref={dropdownRef} className={className + " dropdown" + (isActive ? " is-active" : "")} {...props}>
             <div className="dropdown-trigger">
-                <button className={"button" + (labelSize ? ` is-${labelSize}` : "")} aria-haspopup="true" aria-controls="dropdown-menu" onClick={() => dispatch("open")}>
+                <button {...toggleBtnProps}>
                     {label}
                 </button>
             </div>
-            <div className="dropdown-menu" id="dropdown-menu" role="menu">
+            <div className="dropdown-menu" id={id} role="menu">
                 <div className="dropdown-content" onClick={() => dispatch("close")}>
                     {children}
                 </div>

@@ -14,7 +14,7 @@ import { EDIT_STUDENT } from "../../store/actions";
 import api from "../../../../utils/api";
 import { usePriorityLevel } from "../../utils/student";
 
-export const StudentMenu = ({ _id }) => {
+export const StudentMenu = ({ _id, name }) => {
     
     const dispatch = useDashboardDispatch();
 
@@ -29,7 +29,7 @@ export const StudentMenu = ({ _id }) => {
     const dropdownLabel = <Icon icon="ellipsis-h" />;
 
     return (
-        <Dropdown label={dropdownLabel} labelSize="small" className="ml-auto is-right">
+        <Dropdown id={`student-${_id}-ddoptions`} label={dropdownLabel} ariaLabel={`Open options for ${name}`} labelSize="small" className="ml-auto is-right">
             <Button className="dropdown-item" size="small" onClick={() => openEdit(_id) }>
                 <Icon icon="pen-square" />
                 <span>Edit Student</span>
@@ -75,7 +75,7 @@ export const StudentCard = ({ className, student: { _id, name, priorityLevel, as
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
                 <span>{name}</span>
-                <StudentMenu _id={_id} />
+                <StudentMenu _id={_id} name={name} />
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />
