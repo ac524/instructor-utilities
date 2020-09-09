@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+    Form as FormCollection,
     Button
 } from "react-bulma-components";
 
@@ -9,6 +10,8 @@ import { useDashboardDispatch, getDashboardAction as gda } from "../../../store"
 import { EDIT_STUDENT } from "../../../store/actions";
 import Dropdown from "../../../../../components/Dropdown";
 import { useStudentGroupings } from "../../../utils/student";
+
+const { Input } = FormCollection;
 
 const sortTypes = [
     {
@@ -46,24 +49,31 @@ const sortTypes = [
 //     }
 // ];
 
-function StudentListControls( { sort, groupBy } ) {
+function StudentListControls( { sort, groupBy, search } ) {
 
     const dispatch = useDashboardDispatch();
     const groupTypes = useStudentGroupings().map( ({key, name, icon}) => ({
         key,
         label: `Group by ${name}`,
         icon
-    }) )
+    }) );
     const groupLabel = <Icon icon="columns" />
     const sortLabel = <Icon icon={sortTypes.find( ({key}) => key === sort[0] ).icon} />
 
     return (
         <div className="is-flex mb-5">
-            <Button onClick={() => dispatch(gda(EDIT_STUDENT, null))}>
+            <Button className="is-icon-only-mobile" onClick={() => dispatch(gda(EDIT_STUDENT, null))}>
                 <Icon icon="plus-circle" />
                 <span>Add Student</span>
             </Button>
-            <Dropdown className="ml-auto is-right" label={sortLabel}>
+            <Input
+                className="ml-auto"
+                type="text"
+                value={search[0]}
+                placeholder="Search Name"
+                onChange={(e) => search[1](e.target.value)} style={{maxWidth:"135px"}}
+            />
+            <Dropdown className="ml-2 is-right" label={sortLabel}>
                 {sortTypes.map( sortType => {
                     const classes = ["dropdown-item"];
 

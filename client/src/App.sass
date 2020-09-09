@@ -81,3 +81,17 @@
 
 .has-background-clear
     background-color: transparent !important
+
+@media screen and (max-width: 768px)
+    .button.is-icon-only-mobile
+        .icon
+            margin-right: calc(-0.5em - 1px) !important
+
+            + *
+                display: none !important
+
+.card
+    @each $name, $pair in $colors
+        $color: nth($pair, 1)
+        &.is-#{$name}
+            border-top: 4px solid $color

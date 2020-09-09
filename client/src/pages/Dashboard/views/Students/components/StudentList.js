@@ -1,14 +1,15 @@
 import React from "react";
 
-import { Columns, Tag } from "react-bulma-components";
+import { Columns, Card } from "react-bulma-components";
 
 import { StudentCard } from "../../../components/StudentCard";
 import { useStudentSort, useStudentGroups } from "../../../utils/student";
 
-function StudentList( { sort, groupBy } ) {
+function StudentList( { sort, groupBy, search } ) {
 
     const groupedStudents = useStudentGroups( groupBy );
     const studentSort = useStudentSort( sort );
+    const studentFilter = student => !search || student.name.toLowerCase().includes( search );
 
     if( !groupedStudents.length ) return null;
 
@@ -23,7 +24,7 @@ function StudentList( { sort, groupBy } ) {
             {
                 groupedStudents[0].group.key === "default"
 
-                ? groupedStudents[0].entries.sort( studentSort ).map(student => {
+                ? groupedStudents[0].entries.filter( studentFilter ).sort( studentSort ).map(student => {
                     return (
                         <Columns.Column key={student._id} {...sizes} className="has-filled-content">
                             <StudentCard student={student} />
@@ -33,8 +34,8 @@ function StudentList( { sort, groupBy } ) {
 
                 : groupedStudents.map( ({ group, entries }) => (
                         <Columns.Column key={group.key} {...sizes}>
-                            <Tag color={group.color} className="is-light w-100 has-shadow" size="large">{group.label}</Tag>
-                            {entries.sort( studentSort ).map( student => <StudentCard key={student._id} student={student} className="mt-4" /> )}
+                            <Card className={`is-${group.color} is-light w-100 has-shadow`}><Card.Content>{group.label}</Card.Content></Card>
+                            {entries.filter( studentFilter ).sort( studentSort ).map( student => <StudentCard key={student._id} student={student} className="mt-4" /> )}
                         </Columns.Column>
                 ) )
             

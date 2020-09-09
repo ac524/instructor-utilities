@@ -13,13 +13,14 @@ function Students() {
 
     const [ sort, setSort ] = useState("name:asc");
     const [ groupBy, setGroupBy ] = useState("none");
+    const [ search, setSearch ] = useState("");
     useTopbarConfig({ name: "Students" });
 
     return (
         <Section>
             <ModalProvider>
-                <StudentListControls sort={[ sort, setSort ]} groupBy={[ groupBy, setGroupBy ]}/>
-                <StudentList sort={sort} groupBy={groupBy} />
+                <StudentListControls sort={[ sort, setSort ]} groupBy={[ groupBy, setGroupBy ]} search={[ search, setSearch ]} />
+                <StudentList sort={sort} groupBy={groupBy} search={search.toLowerCase()} />
                 <EditStudentModal />
             </ModalProvider>
         </Section>
