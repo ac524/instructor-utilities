@@ -2,7 +2,6 @@
 const http = require('http');
 const express = require("express");
 const passport = require("passport");
-var cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 3001;
 
@@ -12,7 +11,6 @@ const server = http.createServer(app);
 // Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser());
 
 require("./io")(server, app);
 
