@@ -1,3 +1,4 @@
+const sgMail = require('@sendgrid/mail');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -32,6 +33,13 @@ module.exports = {
 
     try {
 
+      await sgMail.send({
+        to: 'ac524.brown@gmail.com',
+        from: 'ac524.brown@gmail.com',
+        subject: 'Welcome to Classroom!',
+        html: '<strong>You did it!</strong>',
+      });
+
       const user = await User.findOne({ email: req.body.email });
 
       if( user )
@@ -55,7 +63,7 @@ module.exports = {
       await classroom.save();
 
       // Add the classroom id to the user
-      await newUser.update({ $push: { classrooms: classroom._id } })
+      await newUser.update({ $push: { classrooms: classroom._id } });
 
       // Create the user's staff entry for the classroom
       const staff = new Staff({
@@ -67,11 +75,13 @@ module.exports = {
       await staff.save();
 
       // Add the staff member to the classroom
-      await classroom.update({ $push: { staff: staff._id } })
+      await classroom.update({ $push: { staff: staff._id } });
 
       res.json( { success: true } );
 
     } catch( err ) {
+
+      console.log( err.response.body );
 
       res.status(500).json({ default: "Something went wrong" });
 

@@ -38,7 +38,6 @@ function StudentList( { sort, groupBy, search } ) {
                             {entries.filter( studentFilter ).sort( studentSort ).map( student => <StudentCard key={student._id} student={student} className="mt-4" /> )}
                         </Columns.Column>
                 ) )
-            
             }
         </Columns>
     )
