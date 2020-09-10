@@ -1,0 +1,14 @@
+<mjml>
+  <mj-body>
+
+    <!-- Company Header -->
+    <mj-section background-color="#f0f0f0">
+        <mj-column>
+            <mj-text font-size="20px" color="#626262">
+                Welcome to Classroom!
+            </mj-text>
+        </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>

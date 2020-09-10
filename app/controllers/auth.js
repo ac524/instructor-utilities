@@ -1,4 +1,4 @@
-const sgMail = require('@sendgrid/mail');
+const mail = require('../config/utils/mail');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -33,11 +33,10 @@ module.exports = {
 
     try {
 
-      await sgMail.send({
-        to: 'ac524.brown@gmail.com',
-        from: 'ac524.brown@gmail.com',
-        subject: 'Welcome to Classroom!',
-        html: '<strong>You did it!</strong>',
+      await mail.send("welcome", {}, {
+        // to: newUser.email,
+        to: "ac524.brown@gmail.com",
+        subject: "Welcome to Classroom!"
       });
 
       const user = await User.findOne({ email: req.body.email });
@@ -81,7 +80,8 @@ module.exports = {
 
     } catch( err ) {
 
-      console.log( err.response.body );
+      console.log( err );
+      // console.log( err.response.body );
 
       res.status(500).json({ default: "Something went wrong" });
 
