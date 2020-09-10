@@ -33,26 +33,20 @@ module.exports = {
 
     try {
 
-      await mail.send("welcome", {}, {
-        // to: newUser.email,
-        to: "ac524.brown@gmail.com",
-        subject: "Welcome to Classroom!"
-      });
+      const existingUser = await User.findOne({ email: req.body.email });
 
-      const user = await User.findOne({ email: req.body.email });
-
-      if( user )
+      if( existingUser )
 
         return res.status(400).json({ email: "Email already exists" });
 
       // Create the User
-      const newUser = new User({
+      const user = new User({
         name: req.body.name,
         email: req.body.email,
         password: await passwordHash( req.body.password )
       });
 
-      await newUser.save();
+      await user.save();
 
       // Create the User's classroom
       const classroom = new Classroom({
@@ -62,12 +56,12 @@ module.exports = {
       await classroom.save();
 
       // Add the classroom id to the user
-      await newUser.update({ $push: { classrooms: classroom._id } });
+      await user.update({ $push: { classrooms: classroom._id } });
 
       // Create the user's staff entry for the classroom
       const staff = new Staff({
         role: "instructor",
-        user: newUser._id,
+        user: user._id,
         classroom: classroom._id
       });
 
@@ -76,12 +70,17 @@ module.exports = {
       // Add the staff member to the classroom
       await classroom.update({ $push: { staff: staff._id } });
 
+      await mail.send("welcome", {}, {
+        to: user.email,
+        // to: "ac524.brown@gmail.com",
+        subject: "Welcome to Classroom!"
+      });
+
       res.json( { success: true } );
 
     } catch( err ) {
 
-      console.log( err );
-      // console.log( err.response.body );
+      // console.log( err );
 
       res.status(500).json({ default: "Something went wrong" });
 
