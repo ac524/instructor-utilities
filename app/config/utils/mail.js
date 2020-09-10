@@ -8,17 +8,52 @@ const readFileAsync = util.promisify( fs.readFile );
 
 class Mail {
 
+    isEnabled = false;
     from = "ac524.brown@gmail.com";
+    viewDir = "app/views/email/";
+
+    constructor() {
+
+        if( process.env.SENDGRID_API_KEY ) {
+            sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+            this.isEnabled = true;
+        }
+
+    }
+
+    disabledSend() {
+        return new Promise((resolve) => resolve(false));
+    }
+
+    async getView( view ) {
+
+            const { html, errors } = mjml2html( await readFileAsync( path.join( this.viewDir, `${view}.mjml` ), "utf8") );
+            
+            // TODO Error handling/logging
+
+            return html;
+    }
 
     async send( view, data, options ) {
 
-        const { html, errors } = mjml2html( await readFileAsync(`app/views/email/${view}.mjml`, "utf8") );
+        if(!this.isEnabled) return this.disabledSend();
 
-        return sgMail.send({
-            from: this.from,
-            html,
-            ...options
-        });
+        try {
+
+            return sgMail.send({
+                from: this.from,
+                html: await this.getView( view, data ),
+                ...options
+            });
+
+        } catch(err) {
+
+            // TODO Error handling/logging
+            console.log(err);
+            return this.disabledSend();
+
+        }
+
 
     }
 
