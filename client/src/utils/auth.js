@@ -82,14 +82,29 @@ export const useAuthTokenStore = () => {
 
             applyAuthToken(tokenString);
 
-            // Validate the token with the server
-            api
-                .authenticated()
-                .then( ({ data: user }) => {
-                    dispatch(gsa( LOGIN_USER, { token, user } ));
-                    setIsDone( true );
-                })
-                .catch( invalidate );
+            const authCheck = async () => {
+
+                let user;
+
+                try {
+
+                    const { data } = await api.authenticated();
+
+                    user = data;
+
+                } catch(res) {
+
+                    invalidate();
+
+                }
+
+                if( user ) dispatch(gsa( LOGIN_USER, { token, user } ));
+
+                setIsDone( true );
+
+            }
+
+            authCheck();
 
         }
 
@@ -112,6 +127,14 @@ export const useAuthorizedUser = () => {
     const [ { userAuth } ] = useStoreContext();
 
     return userAuth.user;
+
+}
+
+export const useIsUserVerified = () => {
+
+    const user = useAuthorizedUser();
+
+    return user && user.isVerified;
 
 }
 
