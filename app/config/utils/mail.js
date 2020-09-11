@@ -12,6 +12,10 @@ class Mail {
     from = "ac524.brown@gmail.com";
     viewDir = "app/views/email/";
 
+    defaultData = {
+        homeUrl: "http://localhost:3000"
+    }
+
     constructor() {
 
         if( process.env.SENDGRID_API_KEY ) {
@@ -25,13 +29,16 @@ class Mail {
         return new Promise((resolve) => resolve(false));
     }
 
-    async getView( view ) {
+    async getView( view, data = {} ) {
 
-            const { html, errors } = mjml2html( await readFileAsync( path.join( this.viewDir, `${view}.mjml` ), "utf8") );
+            const mapData = template => Object.entries( { ...this.defaultData, ...data } ).reduce( ( renderedTemplate, entry ) => renderedTemplate.replace( new RegExp(`\\[${entry[0]}\\]`, "g"), entry[1] ), template );
+
+            const { html, errors } = mjml2html( mapData( await readFileAsync( path.join( this.viewDir, `${view}.mjml` ), "utf8") ) );
             
             // TODO Error handling/logging
 
             return html;
+
     }
 
     async send( view, data, options ) {

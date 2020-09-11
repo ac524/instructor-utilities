@@ -1,12 +1,26 @@
 <mjml>
-  <mj-body>
+  <mj-body background-color="#fdfdfd">
 
-    <!-- Company Header -->
-    <mj-section background-color="#f0f0f0">
+    <!-- Logo Header -->
+    <mj-section>
+        <mj-image href="[homeUrl]" width="140px" src="[homeUrl]/images/logo-color.png"></mj-image>
+    </mj-section>
+
+    <!-- Body -->
+    <mj-section background-color="#FFFFFF" border="1px solid #f0f0f0">
         <mj-column>
             <mj-text font-size="20px" color="#626262">
                 Welcome to Classroom!
             </mj-text>
+            <mj-text>
+              We are so excited you've decided to take your student management to the next level!
+            </mj-text>
+            <mj-text>
+                Please click the button below to verify your email and get started with your new classroom.
+            </mj-text>
+            <mj-button href="[verificationLink]" font-family="Helvetica" background-color="#067CAC" color="white" align="left">
+                This is my email. Let's do this!
+            </mj-button>
         </mj-column>
     </mj-section>
 
