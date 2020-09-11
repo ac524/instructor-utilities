@@ -100,6 +100,25 @@ module.exports = {
     }
 
   },
+  async validateEmail(req, res) {
+
+    try {
+
+      const token = await Token.findOne({ token: req.params.token });
+
+      if( !token ) return res.status(404).json({default: "Token not found"});
+  
+      await User.findByIdAndUpdate( token._userId, { isVerified: true } );
+  
+      res.json({ success: true });
+
+    } catch {
+
+      return res.status(500).json({default: "Something went wrong"});
+
+    }
+
+  },
   async login(req, res) {
 
     // Form validation

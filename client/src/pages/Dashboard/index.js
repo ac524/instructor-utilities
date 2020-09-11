@@ -106,7 +106,7 @@ function Dashboard() {
                                         <p className="is-size-7">Didn't get an email?</p>
                                         <Button color="light" outlined>
                                             <Icon icon="paper-plane" />
-                                            <span>Resend Verification</span>
+                                            <span>Resend Verification Link</span>
                                         </Button>
                                     </Content>
                                 </Container>

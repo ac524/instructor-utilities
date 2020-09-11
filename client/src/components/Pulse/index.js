@@ -5,7 +5,7 @@ import "./style.sass";
  * @param {*} param0 
  * @see https://tobiasahlin.com/spinkit/
  */
-function Pulse( { color, size } ) {
+function Pulse( { className, color, size } ) {
 
     const style = {};
 
@@ -13,7 +13,7 @@ function Pulse( { color, size } ) {
     if( color ) style["--pulse-color"] = color;
 
     return (
-        <div className="spinner" style={style}>
+        <div className={"spinner" + (className ? " "+className : "")} style={style}>
             <div className="double-bounce1"></div>
             <div className="double-bounce2"></div>
         </div>

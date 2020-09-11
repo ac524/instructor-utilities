@@ -98,6 +98,12 @@ class API {
 
     }
 
+    async validate( token ) {
+
+        return this.axios.post(`/api/validate/${token}`);
+
+    }
+
 }
 
 export default new API();
