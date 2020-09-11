@@ -12,7 +12,7 @@ export const FormInput = ( { type = "text", options = [], ...props } ) => {
 
         return (
             <Select className="is-fullwidth" {...props}>
-                {options.map( ({ value, label }) => <option key={value} value={value}>{label}</option> )}
+                {options.map(item => ({ ...item, key: item.value || "empty" })).map( ({ key, value, label }) => <option key={key} value={value}>{label}</option> )}
             </Select>
         );
 

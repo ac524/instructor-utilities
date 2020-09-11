@@ -24,7 +24,7 @@ module.exports = (server, app) => {
     //     done(null, jwtPayload)
     // }
 
-    const classrooms = io.of(/^\/\w+$/);
+    const classrooms = io.of(/^\/room\/\w+$/);
 
     // set the authorization middleware
     // classrooms.use(passportJwtSocketIo.authorize(passportOptions, verify));
@@ -49,7 +49,7 @@ module.exports = (server, app) => {
 
     classrooms.on('connection', socket => {
     
-        socket.join( socket.nsp.name.substr(1) );
+        socket.join( socket.nsp.name.substr(6) );
     
         // socket.emit("FromAPI", "Test");
     

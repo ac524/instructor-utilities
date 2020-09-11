@@ -15,7 +15,7 @@ export const RoomSocketProvider = ({ roomId, children }) => {
         if( !roomId ) return;
 
         // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
-        const openSocket = socketIOClient(`${window.location.origin}/${roomId}`);
+        const openSocket = socketIOClient(`${window.location.origin}/room/${roomId}`);
 
         setSocket(openSocket);
 
