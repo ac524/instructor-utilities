@@ -1,4 +1,5 @@
 const mail = require('../config/utils/mail');
+const crypto = require('crypto');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -11,7 +12,7 @@ const validateLoginInput = require("../config/validation/login");
 const jwtSign = util.promisify( jwt.sign );
 
 // Load User model
-const { User } = require("../models");
+const { User, Token } = require("../models");
 const Classroom = require("../models/Classroom");
 const Staff = require("../models/Staff");
 
@@ -70,11 +71,23 @@ module.exports = {
       // Add the staff member to the classroom
       await classroom.update({ $push: { staff: staff._id } });
 
-      await mail.send("welcome", {}, {
-        to: user.email,
-        // to: "ac524.brown@gmail.com",
-        subject: "Welcome to Classroom!"
-      });
+      const token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
+ 
+      // Save the verification token
+      await token.save();
+
+      await mail.send(
+        "welcome",
+        {
+          name: "Anthony Brown",
+          verificationLink: `http://localhost:3000/validate-email/${token.token}`
+        },
+        {
+          to: user.email,
+          // to: "ac524.brown@gmail.com",
+          subject: "Welcome to Classroom! Please verify your email"
+        }
+      );
 
       res.json( { success: true } );
 

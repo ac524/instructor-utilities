@@ -55,6 +55,7 @@ function Routes() {
         <Switch>
             <Route path="/devs" exact component={Pages.Developers} />
             <Route path="/privacy" exact component={Pages.Privacy} />
+            <Route path="/validate-email/:tokenId" exact component={Pages.ValidateEmail} />
             <GuestRoute path="/register" exact><Pages.Register /></GuestRoute>
             <GuestRoute path="/" exact redirectTo={homeRedirect}><Pages.Home /></GuestRoute>
             <PrivateRoute path="/:roomId"><Pages.Dashboard /></PrivateRoute>

@@ -4,6 +4,7 @@ import Developers from "./Developers";
 import Privacy from "./Privacy";
 import Dashboard from "./Dashboard";
 import NotFound from "./NotFound";
+import ValidateEmail from "./ValidateEmail";
 
 export default {
     Home,
@@ -11,5 +12,6 @@ export default {
     Developers,
     Privacy,
     Dashboard,
-    NotFound
+    NotFound,
+    ValidateEmail
 }
