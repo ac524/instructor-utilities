@@ -24,13 +24,14 @@ fs
 // Read the /isAuth sub directory and load found modules into the authRoutesDir.
 const authRoutesDir = __dirname +  "/isAuth"
 const isAuthenticated = require("./middleware/isAuthenticated");
+const isVerified = require("./middleware/isVerified");
 
 fs
   .readdirSync(authRoutesDir)
   .filter(filterFiles)
   .forEach(file => {
 
-    router.use( `/api${getPrefix(file)}`, isAuthenticated, require(path.join(authRoutesDir, file)) );
+    router.use( `/api${getPrefix(file)}`, isAuthenticated, isVerified, require(path.join(authRoutesDir, file)) );
 
   });
 

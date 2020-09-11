@@ -23,7 +23,7 @@ import { RoomSocketProvider, useRoomSocket } from "./utils/socket.io";
 
 import "./style.sass";
 import Icon from "../../components/Icon";
-import { useIsUserVerified } from "../../utils/auth";
+import { useAuthorizedUser, useIsUserVerified } from "../../utils/auth";
 
 loadDashboardIcons();
 
@@ -83,6 +83,7 @@ export const DashboardContainer = () => {
 function Dashboard() {
 
     const { roomId } = useParams();
+    const user = useAuthorizedUser();
     const isUserVerified = useIsUserVerified();
 
     return (
@@ -98,6 +99,7 @@ function Dashboard() {
                                         <img src="/images/logo-white.png" style={{width: "60px", height: "auto"}} alt="Classroom Logo" />
                                         <span>Classroom</span>
                                     </Heading>
+                                    <p className="is-size-6">Hi, {user.name}</p>
                                     <Heading className="has-text-inherit">Email Validation Required</Heading>
                                     <Heading className="has-text-inherit" renderAs="p" subtitle>We sent you an email. Please click the provided link to verify your email.</Heading>
                                     <Content>
