@@ -110,6 +110,12 @@ class API {
 
     }
 
+    async resendValidation( data ) {
+
+        return this.axios.post("/api/validate/resend", data);
+
+    }
+
 }
 
 export default new API();

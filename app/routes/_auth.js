@@ -6,7 +6,8 @@ const {
     register,
     authenticated,
     subscribe,
-    validateEmail
+    validateEmail,
+    resendValidation
 } = require("../controllers/auth");
 
 router.post( "/authenticated", isAuthenticated, authenticated );
@@ -15,6 +16,7 @@ router.post( "/subscribe", isAuthenticated, subscribe );
 
 router.post( "/register", register );
 
+router.post( "/validate/resend", isAuthenticated, resendValidation );
 router.post( "/validate/:token", validateEmail );
 
 router.post( "/login", login );

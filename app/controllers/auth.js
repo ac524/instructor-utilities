@@ -16,6 +16,31 @@ const { User, Token } = require("../models");
 const Classroom = require("../models/Classroom");
 const Staff = require("../models/Staff");
 
+const sendUserVerifyEmail = async (user) => {
+
+    const token = new Token({
+       _userId: user._id,
+       token: crypto.randomBytes(16).toString('hex')
+    });
+ 
+    // Save the verification token
+    await token.save();
+
+    await mail.send(
+      "welcome",
+      {
+        name: "Anthony Brown",
+        verificationLink: `http://localhost:3000/validate-email/${token.token}`
+      },
+      {
+        to: user.email,
+        // to: "ac524.brown@gmail.com",
+        subject: "Welcome to Classroom! Please verify your email"
+      }
+    );
+
+}
+
 module.exports = {
   authenticated(req, res) {
 
@@ -82,23 +107,7 @@ module.exports = {
       // Add the staff member to the classroom
       await classroom.update({ $push: { staff: staff._id } });
 
-      const token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
- 
-      // Save the verification token
-      await token.save();
-
-      await mail.send(
-        "welcome",
-        {
-          name: "Anthony Brown",
-          verificationLink: `http://localhost:3000/validate-email/${token.token}`
-        },
-        {
-          to: user.email,
-          // to: "ac524.brown@gmail.com",
-          subject: "Welcome to Classroom! Please verify your email"
-        }
-      );
+      await sendUserVerifyEmail( user );
 
       res.json( { success: true } );
 
@@ -107,6 +116,27 @@ module.exports = {
       // console.log( err );
 
       res.status(500).json({ default: "Something went wrong" });
+
+    }
+
+  },
+  async resendValidation(req, res) {
+
+    try {
+
+      const user = await User.findOne({ email: req.body.email });
+
+      if( !user ) res.status(404).json({default: "Email not found"});
+
+      await sendUserVerifyEmail( user );
+
+      res.json({success: true});
+
+    } catch(err) {
+      
+      console.log( err );
+
+      return res.status(500).json({default: "Something went wrong"});
 
     }
 

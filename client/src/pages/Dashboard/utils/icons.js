@@ -10,7 +10,6 @@ import {
     faEllipsisH,
     faDownload,
     faUpload,
-    faCheck,
     faSortAlphaDown,
     faSortAlphaUpAlt,
     faSortNumericDown,
@@ -18,7 +17,6 @@ import {
     faColumns,
     faUserFriends,
     faExclamationCircle,
-    faBan,
     // faWeight
     // faSortAmountDownAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -40,15 +38,13 @@ export default () => library.add(
     faTrashAlt,
     faDownload,
     faUpload,
-    faCheck,
     faSortAlphaDown,
     faSortAlphaUpAlt,
     faSortNumericDown,
     faSortNumericUpAlt,
     faColumns,
     faUserFriends,
-    faExclamationCircle,
-    faBan
+    faExclamationCircle
     // faWeight
     // faSortAmountDownAlt
 );
