@@ -12,6 +12,8 @@ import {
     LOGIN_USER,
     LOGOUT_USER,
 
+    UPDATE_USER,
+
     /**
      * Ready Step Actions
      */
@@ -41,6 +43,16 @@ const reducer = ( state, { type, payload } ) => {
         [SET_SOCKET]: () => ({ ...state, socket: payload }),
         [LOGIN_USER]: () => ({ ...state, userAuth: payload }),
         [LOGOUT_USER]: () => ({ ...state, userAuth: { token: null, user: null } }),
+        [UPDATE_USER]: () => ({
+            ...state,
+            userAuth: {
+                ...state.userAuth,
+                user: {
+                    ...state.userAuth.user,
+                    ...payload
+                }
+            }
+        }),
         [ADD_READY_STEP]: () => {
             return {
                 ...state,

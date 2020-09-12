@@ -7,11 +7,13 @@ import Routes from "./components/Routes";
 import { useAuthTokenStore } from "./utils/auth";
 import { useIsReady, useReadyStep } from "./utils/ready";
 import loadGlobalIcons from "./utils/icons";
-import { useSocketConnection } from "./utils/socket.io";
+import { useAuthSubscription, useSocketConnection } from "./utils/socket.io";
 
 loadGlobalIcons();
 
 function App() {
+
+    useSocketConnection();
 
     const [ completeStep ] = useReadyStep("authcheck");
 
@@ -19,7 +21,7 @@ function App() {
 
     const isAuthCheckDone = useAuthTokenStore();
 
-    useSocketConnection();
+    useAuthSubscription();
 
     useEffect(() => {
 

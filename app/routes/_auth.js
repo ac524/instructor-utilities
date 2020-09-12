@@ -5,10 +5,13 @@ const {
     login,
     register,
     authenticated,
+    subscribe,
     validateEmail
 } = require("../controllers/auth");
 
 router.post( "/authenticated", isAuthenticated, authenticated );
+
+router.post( "/subscribe", isAuthenticated, subscribe );
 
 router.post( "/register", register );
 

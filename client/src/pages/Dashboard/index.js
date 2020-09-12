@@ -2,13 +2,6 @@ import React, { useEffect } from "react";
 
 import { useParams, Link } from "react-router-dom";
 
-import {
-    Heading,
-    Container,
-    Content,
-    Button
-} from "react-bulma-components";
-
 import loadDashboardIcons from "./utils/icons";
 
 // import { Button } from "react-bulma-components";
@@ -22,8 +15,9 @@ import { DashboardProvider, useClassroomLoader, useClassroom, useDashboardDispat
 
 import "./style.sass";
 import Icon from "../../components/Icon";
-import { useAuthorizedUser, useIsUserVerified } from "../../utils/auth";
+import { useIsUserVerified } from "../../utils/auth";
 import { useSocket } from "../../utils/socket.io";
+import PendingVerification from "./components/PendingVerification";
 
 loadDashboardIcons();
 
@@ -81,7 +75,6 @@ export const DashboardContainer = () => {
 
 function Dashboard() {
     
-    const user = useAuthorizedUser();
     const isUserVerified = useIsUserVerified();
 
     return (
@@ -89,26 +82,7 @@ function Dashboard() {
             {
                 isUserVerified
                     ? <DashboardContainer />
-                    : (
-                        <div className="is-overlay has-background-primary has-text-white is-flex" style={{ opacity: .9, alignItems: "center", zIndex: 100, position: "fixed" }}>
-                            <Container>
-                                <Heading renderAs="p" className="has-text-inherit is-flex" size={1} style={{alignItems:"center"}}>
-                                    <img src="/images/logo-white.png" style={{width: "60px", height: "auto"}} alt="Classroom Logo" />
-                                    <span>Classroom</span>
-                                </Heading>
-                                <p className="is-size-6">Hi, {user.name}</p>
-                                <Heading className="has-text-inherit">Email Validation Required</Heading>
-                                <Heading className="has-text-inherit" renderAs="p" subtitle>We sent you an email. Please click the provided link to verify your email.</Heading>
-                                <Content>
-                                    <p className="is-size-7">Didn't get an email?</p>
-                                    <Button color="light" outlined>
-                                        <Icon icon="paper-plane" />
-                                        <span>Resend Verification Link</span>
-                                    </Button>
-                                </Content>
-                            </Container>
-                        </div>
-                    )
+                    : <PendingVerification />
             }
         </DashboardProvider>
     );

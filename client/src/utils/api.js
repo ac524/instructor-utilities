@@ -92,6 +92,12 @@ class API {
 
     }
 
+    async subscribe() {
+
+        return this.axios.post("/api/subscribe");
+
+    }
+
     async register( userData ) {
 
         return this.axios.post("/api/register", userData);

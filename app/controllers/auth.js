@@ -19,7 +19,18 @@ const Staff = require("../models/Staff");
 module.exports = {
   authenticated(req, res) {
 
+    if( req.userSocket ) req.userSocket.join( room._id );
+
     res.json( req.user );
+
+  },
+  subscribe(req, res) {
+
+    if( !req.userSocket ) res.status(400).json({ default: "Missing socket identity." });
+    
+    req.userSocket.join( req.user._id );
+    
+    res.json({ success:true });
 
   },
   async register(req, res) {
@@ -108,7 +119,11 @@ module.exports = {
 
       if( !token ) return res.status(404).json({default: "Token not found"});
   
-      await User.findByIdAndUpdate( token._userId, { isVerified: true } );
+      const update = { isVerified: true };
+
+      await User.findByIdAndUpdate( token._userId, update );
+
+      req.app.get("io").to( token._userId ).emit("updateUser", update);
   
       res.json({ success: true });
 
