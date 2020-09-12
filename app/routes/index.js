@@ -4,9 +4,6 @@ const basename = path.basename(__filename);
 
 const router = require("express").Router();
 
-const controllers = [];
-const isAuthControllers = [];
-
 // Filter function for filtering out unwanted files from fs.readdirSync.
 const filterFiles = file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
 const getPrefix = file => file[0] === "_" ? "" : "/" + file.substr( 0, file.length-3 );

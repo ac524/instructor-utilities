@@ -7,8 +7,8 @@ import {
 
 import SelectStudent from "./Apps/SelectStudent";
 import Pulse from "../../../../../components/Pulse";
-import { useRoomSocket } from "../../../utils/socket.io";
 import api from "../../../../../utils/api";
+import { useSocket } from "../../../../../utils/socket.io";
 
 const getAppComponent = ( app, setAppData ) => {
 
@@ -33,7 +33,7 @@ const Widget = ( { roomId, appTypeId, ...props } ) => {
         }
     }, null );
 
-    const socket = useRoomSocket();
+    const socket = useSocket();
 
     useEffect(() => {
 

@@ -71,12 +71,9 @@ module.exports = {
 
             const app = await App.findOneAndUpdate( { room: req.roomId, type: req.params.appTypeId }, update, { new: true } ).populate("type");
 
-            console.log(req.header("Authorization"));
-            console.log(req.header("Room-Socket-Id"));
-
             req.roomIo.emit( `appupdate:${req.params.appTypeId}`, {
                 update,
-                from: req.header("Room-Socket-Id")
+                from: req.header("User-Socket-Id")
             } );
 
             res.json({success: true});

@@ -14,9 +14,7 @@ module.exports = {
                     })
                     .populate('students');
 
-            const classroomIo = req.app.get("classroomIo");
-
-            classroomIo.to(req.params.roomId).emit("FromAPI", "Welcome to class!");
+            if( req.userSocket ) req.userSocket.join( room._id );
 
             res.json( room );
 
@@ -27,13 +25,11 @@ module.exports = {
         }
 
     },
-    async update( req, res ) {
+    // async update( req, res ) {
 
-        const classroomIo = req.app.get("classroomIo");
+    //     roomIo.emit("FromAPI", "Welcome to class!");
 
-        classroomIo.to(req.params.roomId).emit("FromAPI", "Welcome to class!");
+    //     res.json({success: true});
 
-        res.json({success: true});
-
-    }
+    // }
 }

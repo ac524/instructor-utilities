@@ -7,6 +7,7 @@ import Routes from "./components/Routes";
 import { useAuthTokenStore } from "./utils/auth";
 import { useIsReady, useReadyStep } from "./utils/ready";
 import loadGlobalIcons from "./utils/icons";
+import { useSocketConnection } from "./utils/socket.io";
 
 loadGlobalIcons();
 
@@ -17,6 +18,8 @@ function App() {
     const isReady = useIsReady();
 
     const isAuthCheckDone = useAuthTokenStore();
+
+    useSocketConnection();
 
     useEffect(() => {
 

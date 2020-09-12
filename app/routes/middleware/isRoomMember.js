@@ -1,6 +1,6 @@
 const { Staff } = require("../../models");
 
-const roomIoLoader = req => req.roomIo = req.app.get("classroomIo").to(req.roomId);
+const roomIoLoader = req => req.roomIo = req.app.get("io").to(req.roomId);
 
 module.exports = async ( req, res, next ) => {
 

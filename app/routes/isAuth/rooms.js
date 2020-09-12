@@ -5,12 +5,12 @@ const isRoomMember = require("../middleware/isRoomMember");
 
 const {
     getSingle,
-    update
+    // update
 } = require("../../controllers/room");
 
 router
     .route( "/:roomId" )
     .get( setRoom.fromParam, isRoomMember, getSingle )
-    .patch( setRoom.fromParam, isRoomMember, update );
+    // .patch( setRoom.fromParam, isRoomMember, update );
 
 module.exports = router;
