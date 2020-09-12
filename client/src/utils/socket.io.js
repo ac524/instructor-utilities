@@ -55,6 +55,6 @@ export const useAuthSubscription = () => {
 
         return () => socket.off("updateUser", updateUser);
 
-    }, [socket, isAuth])
+    }, [socket, isAuth, dispatch])
 
 }

@@ -170,7 +170,7 @@ module.exports = {
 
       const token = await jwtSign(
         payload,
-        process.env.PASSPORT_SECRET,
+        process.env.JWT_SECRET,
         {
           expiresIn: 31556926 // 1 year in seconds
         }

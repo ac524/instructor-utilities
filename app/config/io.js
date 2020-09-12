@@ -13,7 +13,7 @@ module.exports = (server, app) => {
     // set the passport-jwt options
     // const passportOptions = {
     //     jwtFromRequest: ExtractJwt.fromUrlQueryParameter('token'),
-    //     secretOrKey: process.env.PASSPORT_SECRET
+    //     secretOrKey: process.env.JWT_SECRET
     // }
 
     // function verify(jwtPayload, done) {
@@ -31,7 +31,7 @@ module.exports = (server, app) => {
 
     // classrooms
     //     .on('connection', socketioJwt.authorize({
-    //         secret: process.env.PASSPORT_SECRET,
+    //         secret: process.env.JWT_SECRET,
     //         timeout: 15000 // 15 seconds to send the authentication message
     //     }))
     //     .on('authenticated', (socket) => {

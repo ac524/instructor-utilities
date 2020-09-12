@@ -17,9 +17,9 @@ const setupQuestions = [
         name: "DEV_DB_PASS"
     },
     {
-        message: "Please provide a unique string as your Passport secret.",
+        message: "Please provide a unique string as your JWT secret.",
         type: "input",
-        name: "PASSPORT_SECRET"
+        name: "JWT_SECRET"
     }
 ];
 
