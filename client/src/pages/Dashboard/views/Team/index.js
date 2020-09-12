@@ -4,6 +4,7 @@ import { Section } from "react-bulma-components";
 
 import { useTopbarConfig } from "../../components/Topbar";
 import Staff from "./components/Staff";
+import StaffListControls from "./components/StaffListControls";
 
 function Team() {
 
@@ -11,6 +12,7 @@ function Team() {
 
     return (
         <Section>
+            <StaffListControls />
             <Staff />
         </Section>
     );
