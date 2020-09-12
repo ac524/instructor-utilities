@@ -2,10 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const TokenSchema = new Schema({
-    _userId: {
+    relation: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
+        required: true
     },
     token: {
         type: String,

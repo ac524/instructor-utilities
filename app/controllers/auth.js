@@ -19,8 +19,8 @@ const Staff = require("../models/Staff");
 const sendUserVerifyEmail = async (user) => {
 
     const token = new Token({
-       _userId: user._id,
-       token: crypto.randomBytes(16).toString('hex')
+        relation: user._id,
+        token: crypto.randomBytes(16).toString('hex')
     });
  
     // Save the verification token
@@ -151,9 +151,9 @@ module.exports = {
   
       const update = { isVerified: true };
 
-      await User.findByIdAndUpdate( token._userId, update );
+      await User.findByIdAndUpdate( token.relation, update );
 
-      req.app.get("io").to( token._userId ).emit("updateUser", update);
+      req.app.get("io").to( token.relation ).emit("updateUser", update);
   
       res.json({ success: true });
 
