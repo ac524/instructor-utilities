@@ -1,4 +1,6 @@
-const { Classroom } = require("../models");
+const crypto = require('crypto');
+
+const { Classroom, Token } = require("../models");
 
 module.exports = {
     async getSingle( req, res ) {
@@ -9,7 +11,6 @@ module.exports = {
                 await Classroom.findById( req.params.roomId )
                     .populate({
                         path: 'staff',
-                        // Get friends of friends - populate the 'friends' array for every friend
                         populate: { path: 'user' }
                     })
                     .populate('students');
@@ -25,6 +26,35 @@ module.exports = {
         }
 
     },
+    async createInvite( req, res ) {
+
+        try {
+
+            const token = new Token({
+                relation: req.params.roomId,
+                token: crypto.randomBytes(16).toString('hex')
+            });
+
+            await token.save();
+
+            const room = await Classroom.findByIdAndUpdate( req.params.roomId, {
+                $push: {
+                    invites: {
+                        email: req.body.email,
+                        token: token._id
+                    }
+                }
+            }, { new: true } );
+
+            res.json( room.invites[ room.invites.length - 1 ] );
+
+        } catch( err ) {
+
+            res.status(500).json({default:"Something went wrong"});
+
+        }
+
+    }
     // async update( req, res ) {
 
     //     roomIo.emit("FromAPI", "Welcome to class!");

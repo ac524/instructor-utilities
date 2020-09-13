@@ -28,6 +28,12 @@ class API {
 
     }
 
+    async createInvite( roomId, data ) {
+
+        return this.axios.post( `/api/rooms/${roomId}/invites`, data );
+
+    }
+
     async updateClassroom( roomId, update ) {
 
         return this.axios.patch( `/api/rooms/${roomId}`, update );
