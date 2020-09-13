@@ -60,6 +60,32 @@ module.exports = {
 
         }
 
+    },
+    async deleteInvite( req, res ) {
+
+        try {
+
+            // await Classroom.findByIdAndUpdate( req.params.roomId, { $pull: { invites: { _id: req.params.inviteId } } } );
+
+            const room = await Classroom.findById( req.params.roomId );
+            const invite = room.invites.id( req.params.inviteId );
+
+            if( !invite ) res.status(404).json({default:"Invite not found"});
+
+            await Token.findByIdAndDelete( invite.token );
+
+            invite.remove();
+
+            await room.save();
+
+            res.json({ success: true });
+
+        } catch( err ) {
+
+            res.status(500).json({default:"Something went wrong"});
+
+        }
+
     }
     // async update( req, res ) {
 

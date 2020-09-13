@@ -15,6 +15,7 @@ import {
      * INVITE ACTIONS
      */
     ADD_INVITE,
+    DELETE_INVITE,
     
     /**
      * APP ACTIONS
@@ -65,6 +66,13 @@ const reducer = ( state, { type, payload } ) => {
             classroom: {
                 ...state.classroom,
                 invites: [ ...state.classroom.invites, payload ]
+            }
+        }),
+        [DELETE_INVITE]: () => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                invites: state.classroom.invites.filter( invite => invite._id !== payload )
             }
         }),
 

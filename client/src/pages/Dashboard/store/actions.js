@@ -12,6 +12,7 @@ export const SET_CLASSROOM = "SET_CLASSROOM";
  * INVITE ACTIONS
  */
 export const ADD_INVITE = "ADD_INVITE";
+export const DELETE_INVITE = "DELETE_INVITE";
 
 /**
  * APP ACTIONS

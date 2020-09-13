@@ -34,6 +34,12 @@ class API {
 
     }
 
+    async deleteInvite( roomId, inviteId ) {
+
+        return this.axios.delete( `/api/rooms/${roomId}/invites/${inviteId}` );
+
+    }
+
     async updateClassroom( roomId, update ) {
 
         return this.axios.patch( `/api/rooms/${roomId}`, update );

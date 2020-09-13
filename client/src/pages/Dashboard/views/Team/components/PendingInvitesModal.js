@@ -9,7 +9,9 @@ import {
 } from "react-bulma-components";
 
 import Icon from "../../../../../components/Icon";
-import { useClassroom } from "../../../store";
+import api from "../../../../../utils/api";
+import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "../../../store";
+import { DELETE_INVITE } from "../../../store/actions";
 
 export const usePendingInvitesModalState = () => {
 
@@ -39,9 +41,24 @@ export const PendingInvitesModalButton = ({ open }) => {
 
 const PendingInvitesModal = ( { show, onClose } ) => {
 
-    const { invites } = useClassroom();
+    const dispatch = useDashboardDispatch();
+    const { _id, invites } = useClassroom();
 
-    console.log(invites);
+    const deleteInvite = async ( inviteId ) => {
+
+        try {
+
+            await api.deleteInvite( _id, inviteId );
+
+            dispatch(gda(DELETE_INVITE, inviteId));
+
+        } catch(err) {
+
+            // TODO Error handling
+
+        }
+
+    }
 
     return (
         <Modal
@@ -60,7 +77,7 @@ const PendingInvitesModal = ( { show, onClose } ) => {
                                 <td>{invite.email}</td>
                                 <td>{invite.token ? <Tag color="warning">Pending</Tag> : <Tag color="danger">Expired</Tag>}</td>
                                 <td><Button className="is-small"><Icon icon="paper-plane" /><span>Resend</span></Button></td>
-                                <td><Button  className="is-small"><Icon icon="ban" /><span>Revoke</span></Button></td>
+                                <td><Button className="is-small" onClick={()=>deleteInvite(invite._id)}><Icon icon="ban" /><span>Revoke</span></Button></td>
                             </tr>
                         ) )}
                         </tbody>
