@@ -1,0 +1,25 @@
+<mjml>
+  <mj-body background-color="#fdfdfd">
+
+    <!-- Logo Header -->
+    <mj-section>
+        <mj-image href="[homeUrl]" width="140px" src="[homeUrl]/images/logo-color.png"></mj-image>
+    </mj-section>
+
+    <!-- Body -->
+    <mj-section background-color="#FFFFFF" border="1px solid #f0f0f0">
+        <mj-column>
+            <mj-text font-size="20px" color="#626262">
+                You've been invited to Classroom!
+            </mj-text>
+            <mj-text>
+                [name] has invited you to join his classroom [roomName] as a TA! Please click the button below to accept the invitation and join the classroom.
+            </mj-text>
+            <mj-button href="[inviteLink]" font-family="Helvetica" background-color="#067CAC" color="white" align="left">
+                Accept Invitation
+            </mj-button>
+        </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>

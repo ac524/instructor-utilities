@@ -1,6 +1,24 @@
 const crypto = require('crypto');
+const mail = require('../config/utils/mail');
 
 const { Classroom, Token } = require("../models");
+
+const sendInvite = ( room, invite, from ) => {
+
+    return mail.send(
+        "invite",
+        {
+            name: from.name,
+            roomName: room.name,
+            inviteLink: `http://localhost:3000/invite/${invite.token.token}`
+        },
+        {
+            to: invite.email,
+            subject: `You've been invited to Classroom by ${from.name}!`
+        }
+    );
+
+}
 
 module.exports = {
     async getSingle( req, res ) {
@@ -52,11 +70,17 @@ module.exports = {
                     .findByIdAndUpdate( req.params.roomId, update, { new: true } )
                     .populate( 'invites.token' );
 
-            res.json( room.invites[ room.invites.length - 1 ] );
+            const invite = room.invites[ room.invites.length - 1 ];
+
+            await sendInvite( room, invite, req.user );
+
+            res.json( invite );
 
         } catch( err ) {
 
-            res.status(500).json({default:"Something went wrong"});
+            console.log( err );
+
+            res.status(500).json({default:"Couldn't send invite"});
 
         }
 
