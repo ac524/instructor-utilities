@@ -10,6 +10,11 @@ import {
      * CLASSROOM ACTIONS
      */
     SET_CLASSROOM,
+
+    /**
+     * INVITE ACTIONS
+     */
+    ADD_INVITE,
     
     /**
      * APP ACTIONS
@@ -51,6 +56,17 @@ const reducer = ( state, { type, payload } ) => {
          * CLASSROOM ACTIONS
          */
         [SET_CLASSROOM]: () => ({ ...state, classroom: payload }),
+
+        /**
+         * INVITE ACTIONS
+         */
+        [ADD_INVITE]: () => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                invites: [ ...state.classroom.invites, payload ]
+            }
+        }),
 
         /**
          * APP ACTIONS

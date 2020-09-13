@@ -1,25 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 
-import {
-    Button
-} from "react-bulma-components";
-
-import Icon from "../../../../../components/Icon";
-import InviteModal from "./InviteModal";
+import { useClassroom } from "../../../store";
+import InviteModal, { InviteModalButton, useInviteModalState } from "./InviteModal";
+import PendingInvitesModal, { usePendingInvitesModalState, PendingInvitesModalButton } from "./PendingInvitesModal";
 
 function StaffListControls() {
 
-    const [ showInvite, setShowInvite ] = useState(false);
+    const room = useClassroom();
+    const invite = useInviteModalState();
+    const pendingInvites = usePendingInvitesModalState();
 
     return (
         <div className="staff-list-ctrls">
             <div className="is-flex mb-5">
-                <Button className="is-icon-only-mobile" onClick={()=>setShowInvite(true)}>
-                    <Icon icon="plus-circle" />
-                    <span>Invite TA</span>
-                </Button>
+                <InviteModalButton open={invite.open} />
+                { room.invites.length ? <PendingInvitesModalButton open={pendingInvites.open} /> : null }
             </div>
-            <InviteModal show={showInvite} onClose={() => setShowInvite(false)} />
+            <InviteModal show={invite.isActive} onClose={invite.close} />
+            { room.invites.length ? <PendingInvitesModal show={pendingInvites.isActive} onClose={pendingInvites.close} /> : null }
         </div>
     );
 

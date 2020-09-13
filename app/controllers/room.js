@@ -13,7 +13,8 @@ module.exports = {
                         path: 'staff',
                         populate: { path: 'user' }
                     })
-                    .populate('students');
+                    .populate('students')
+                    .populate('invites.token');
 
             if( req.userSocket ) req.userSocket.join( room._id );
 
@@ -37,14 +38,19 @@ module.exports = {
 
             await token.save();
 
-            const room = await Classroom.findByIdAndUpdate( req.params.roomId, {
+            const update = {
                 $push: {
                     invites: {
                         email: req.body.email,
                         token: token._id
                     }
                 }
-            }, { new: true } );
+            };
+
+            const room =
+                await Classroom
+                    .findByIdAndUpdate( req.params.roomId, update, { new: true } )
+                    .populate( 'invites.token' );
 
             res.json( room.invites[ room.invites.length - 1 ] );
 

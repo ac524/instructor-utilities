@@ -16,6 +16,7 @@ function Team() {
             <Staff />
         </Section>
     );
+    
 }
 
 export default Team;

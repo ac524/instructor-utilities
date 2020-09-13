@@ -9,6 +9,11 @@ export const SET_TOPBAR = "SET_TOPBAR";
 export const SET_CLASSROOM = "SET_CLASSROOM";
 
 /**
+ * INVITE ACTIONS
+ */
+export const ADD_INVITE = "ADD_INVITE";
+
+/**
  * APP ACTIONS
  */
 export const SET_MANAGE_APPS = "SET_MANAGE_APPS";

@@ -58,6 +58,12 @@
         border-right: 1px solid #b5b5b5
         border-bottom: 1px solid #b5b5b5
 
+@for $i from 1 through 3
+    .has-border-#{$i}
+        border-width: $i + 0px
+    button.has-border-#{$i}
+        border-color: inherit !important
+        
 
 .is-circle
     border-radius: 290486px
@@ -98,3 +104,8 @@
         $color: nth($pair, 1)
         &.is-#{$name}
             border-top: 4px solid $color
+
+.table
+    &.is-vcentered
+        td
+            vertical-align: middle

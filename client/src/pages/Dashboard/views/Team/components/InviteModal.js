@@ -3,15 +3,43 @@ import React, { useState } from "react";
 import {
     Modal,
     Box,
-    Heading
+    Heading,
+    Button
 } from "react-bulma-components";
 
+import Icon from "../../../../../components/Icon";
 import Form from "../../../../../components/Form";
 import api from "../../../../../utils/api";
-import { useClassroom } from "../../../store";
+import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "../../../store";
+import { ADD_INVITE } from "../../../store/actions";
+
+export const useInviteModalState = () => {
+
+    const [ isActive, setShowInvite ] = useState(false);
+
+    return {
+        isActive,
+        open: () => setShowInvite( true ),
+        close: () => setShowInvite( false )
+
+    }
+
+}
+
+export const InviteModalButton = ({ icon = "plus-circle", open, children }) => {
+
+    return (
+        <Button className="is-icon-only-mobile" onClick={open}>
+            <Icon icon={icon} />
+            <span>{ children || "Invite TA" }</span>
+        </Button>
+    );
+
+}
 
 const InviteModal = ( { show, onClose } ) => {
 
+    const dispatch = useDashboardDispatch();
     const { _id } = useClassroom();
     const [ email, setEmail ] = useState("");
     const [ errors, setErrors ] = useState({});
@@ -35,9 +63,11 @@ const InviteModal = ( { show, onClose } ) => {
 
             if(Object.keys(errors).length) setErrors({});
 
-            const invite = await api.createInvite( _id, { email } );
+            const { data: invite } = await api.createInvite( _id, { email } );
 
-            console.log( invite );
+            dispatch(gda(ADD_INVITE, invite));
+
+            onClose();
 
         } catch(err) {
 
