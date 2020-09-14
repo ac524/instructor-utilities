@@ -5,6 +5,7 @@ import Privacy from "./Privacy";
 import Dashboard from "./Dashboard";
 import NotFound from "./NotFound";
 import ValidateEmail from "./ValidateEmail";
+import Invite from "./Invite";
 
 export default {
     Home,
@@ -13,5 +14,6 @@ export default {
     Privacy,
     Dashboard,
     NotFound,
-    ValidateEmail
+    ValidateEmail,
+    Invite
 }

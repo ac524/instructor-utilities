@@ -40,6 +40,18 @@ class API {
 
     }
 
+    async acceptInvite( token ) {
+
+        return this.axios.post( `/api/invites/${token}` );
+
+    }
+
+    async inviteEmail( token ) {
+
+        return this.axios.get( `/api/invites/${token}/email` );
+
+    }
+
     async updateClassroom( roomId, update ) {
 
         return this.axios.patch( `/api/rooms/${roomId}`, update );
