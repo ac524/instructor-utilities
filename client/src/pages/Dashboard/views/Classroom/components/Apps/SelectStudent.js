@@ -46,8 +46,10 @@ const SelectStudent = ( { data: selected, setData: setSelected } ) => {
 
     const selectNext = () => {
 
-        const isListEnd = students.length === selected.length;
-        const unselected = isListEnd ? [] : studentIds.filter( id => !selected.includes(id) );
+        const isListEnd = studentIds.length === selected.length;
+
+        const unselected = isListEnd ? studentIds : studentIds.filter( id => !selected.includes(id) );
+
         const next = unselected[ Math.floor( Math.random() * unselected.length) ];
 
         setSelected( isListEnd ? [ next ] : [ ...selected, next ] );
