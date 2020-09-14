@@ -10,7 +10,7 @@ module.exports = {
 
             req.userInviteToken = await Token.findOne({ token: req.params.token });
     
-            if( !req.userInviteToken ) return res.status(404).json({default: "Invitation Expired"});
+            if( !req.userInviteToken ) return res.status(404).json({default: "This invitation is no longer available"});
     
             req.userInviteRoom = await Classroom.findById( req.userInviteToken.relation );
     
@@ -116,7 +116,7 @@ module.exports = {
 
             await req.userInviteRoom.save();
 
-            res.json( { success: true } );
+            res.json( { success: true, roomId: req.userInviteRoom._id } );
 
         } catch(err) {
 

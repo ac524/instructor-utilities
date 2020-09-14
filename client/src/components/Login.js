@@ -76,13 +76,13 @@ export const LoginModal = () => {
 
 }
 
-export const LoginForm = ( { afterLogin } ) => {
+export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = "" } ) => {
 
     const login = useLogin();
     const history = useHistory();
 
     // Form state.
-    const [ email, setEmail ] = useState( "" );
+    const [ email, setEmail ] = useState( emailStart );
     const [ password, setPassword ] = useState( "" );
     const [ errors, setErrors ] = useState({});
 
@@ -137,7 +137,7 @@ export const LoginForm = ( { afterLogin } ) => {
 
             if( afterLogin ) afterLogin();
 
-            history.push("/");
+            if(redirect) history.push("/");
 
         } catch( err ) {
 

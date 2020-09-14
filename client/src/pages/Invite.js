@@ -16,8 +16,10 @@ import Icon from "../components/Icon";
 import { LoginForm } from "../components/Login";
 import Pulse from "../components/Pulse";
 import MainWithLogin from "../layouts/MainWithLogin";
+import { getStoreAction as gsa, useStoreDispatch } from "../store";
+import { ADD_USER_ROOM_ID } from "../store/actions";
 import api from "../utils/api";
-import { useAuthorizedUser, useLogin } from "../utils/auth";
+import { useAuthorizedUser, useIsAuthenticated, useLogin } from "../utils/auth";
 
 const { Column } = Columns;
 
@@ -98,38 +100,45 @@ const RegstrationContent = ({ token, email }) => {
 
 }
 
-const LoginContent = () => {
+const LoginContent = ({ email }) => {
+
+    const isAuth = useIsAuthenticated();
+
     return (
         <Columns>
             <Column {...columnSizes}>
                 <p className="mb-5">
                     <strong>Thanks for accepting the invite!</strong><br />
-                    Please log into you account to complete the process and join your new team.
+                    Please log into { isAuth ? "the correct" : "your" } account to complete the process and join your new team.
                 </p>
                 <Box>
                     <Heading renderAs="h2" className="has-text-dark">Login</Heading>
                     <hr />
-                    <LoginForm />
+                    <LoginForm redirect={false} email={email} />
                 </Box>
             </Column>
         </Columns>
-    )
+    );
+
 }
 
 const Invite = () => {
 
     const user = useAuthorizedUser();
+    const dispatch = useStoreDispatch();
     const { token } = useParams();
     const [ error, setError ] = useState();
     const [ accepted, setAccepted ] = useState(false);
+    const [ joinedRoom, setJoinedRoom ] = useState(false);
     const [ email, setEmail ] = useState();
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {   
 
-        const checkInviteUser = async () => {
+        // Stop reprocessing after the invite has been accepted.
+        if( accepted ) return;
 
-            console.log( "checkInviteUser" );
+        const checkInviteUser = async () => {
 
             try {
 
@@ -139,17 +148,17 @@ const Invite = () => {
 
                 if( res.data.hasUser && user ) {
 
-                    await api.acceptInvite( token );
+                    const acceptRes = await api.acceptInvite( token );
 
                     setAccepted(true);
+                    setJoinedRoom( acceptRes.data.roomId );
+                    dispatch(gsa( ADD_USER_ROOM_ID, acceptRes.data.roomId ));
 
                 }
 
-            } catch(err) {
-
-                console.log( err );
+            } catch( err ) {
     
-                if( err.response && err.response.data.default ) setError( err.response.data.default );
+                if( err.response && err.response.status !== 401 && err.response.data.default ) setError( err.response.data.default );
 
             }
 
@@ -160,29 +169,7 @@ const Invite = () => {
 
         checkInviteUser();
 
-        // const acceptInvite = async () => {
-
-        //     try {
-    
-        //         const res = await api.acceptInvite( token );
-    
-        //         setInvite( res.data );
-    
-        //     } catch(err) {
-
-        //         console.log( err );
-    
-        //         if( err.response && err.response.data.default ) setError( err.response.data.default );
-            
-        //     }
-    
-        //     setIsLoading(false);
-
-        // }
-
-        // acceptInvite();
-
-    }, [token, user, setEmail, setIsLoading, setError, setAccepted]);
+    }, [token, user, accepted, dispatch, setEmail, setIsLoading, setError, setAccepted, setJoinedRoom]);
 
     return (
         <MainWithLogin>
@@ -205,8 +192,8 @@ const Invite = () => {
                                 
                                     ? (
                                         <div>
-                                            <p className="mb-4">Congratulations, invitation accepted!</p>
-                                            <Button to="/" color="light" renderAs={Link} outlined>
+                                            <p className="mb-4"><strong>Congratulations</strong>, your invitation has been accepted!</p>
+                                            <Button to={`/${joinedRoom}`} color="light" renderAs={Link} outlined>
                                                 <span>Go to class</span>
                                                 <Icon icon={['far','arrow-alt-circle-right']} />
                                             </Button>
@@ -217,7 +204,7 @@ const Invite = () => {
                                         email.hasUser
     
                                         ? ( 
-                                            <LoginContent />
+                                            <LoginContent email={email.email} />
                                         )
         
                                         : <RegstrationContent token={token} email={email.email} />
@@ -233,4 +220,4 @@ const Invite = () => {
 
 }
 
-export default Invite;
+export default Invite;  
