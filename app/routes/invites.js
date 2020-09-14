@@ -1,17 +1,23 @@
 const router = require("express").Router();
+const isAuthenticated = require("./middleware/isAuthenticated");
 
 const {
     accept,
     setInvite,
-    emailCheck
+    emailCheck,
+    registerInvite
 } = require("../controllers/invite");
 
 router
     .route('/:token')
-    .post( setInvite, accept );
+    .post( isAuthenticated, setInvite, accept );
 
 router
     .route('/:token/email')
     .get( setInvite, emailCheck );
+
+router
+    .route('/:token/register')
+    .post( setInvite, registerInvite );
 
 module.exports = router;

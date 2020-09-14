@@ -13,19 +13,27 @@ import { Link, useParams } from "react-router-dom";
 import Form from "../components/Form";
 
 import Icon from "../components/Icon";
-import { LoginButton } from "../components/Login";
+import { LoginForm } from "../components/Login";
 import Pulse from "../components/Pulse";
 import MainWithLogin from "../layouts/MainWithLogin";
 import api from "../utils/api";
-import { useIsAuthenticated } from "../utils/auth";
+import { useAuthorizedUser, useLogin } from "../utils/auth";
 
 const { Column } = Columns;
 
-const RegstrationForm = () => {
+const columnSizes = {
+    tablet: {size: 'two-thirds'},
+    desktop: {size: 'three-fifths'},
+    widescreen: {size: 'half'}
+};
+
+const RegstrationContent = ({ token, email }) => {
 
     const [ name, setName ] = useState("");
     const [ password, setPassword ] = useState("");
     const [ password2, setPassword2 ] = useState("");
+    const [ errors, setErrors ] = useState({});
+    const login = useLogin();
 
     const fields = [
         {
@@ -54,23 +62,35 @@ const RegstrationForm = () => {
         }
     ];
 
-    const formBoxSizes = {
-        tablet: {size: 'two-thirds'},
-        desktop: {size: 'three-fifths'},
-        widescreen: {size: 'half'}
-    };
+    const handleSubmit = async e => {
+
+        e.preventDefault();
+
+        try {
+
+            await api.registerInvite( token, { name, password, password2 } );
+
+            await login( { email, password } );
+
+        } catch(err) {
+
+            if( err.response && err.response.data ) setErrors( err.response.data );
+
+        }
+
+    }
 
     return (
         <Columns>
-            <Column {...formBoxSizes}>
+            <Column {...columnSizes}>
                 <p className="mb-5">
                     <strong>Thanks for accepting the invite!</strong><br />
-                    Please create an account complete the process and join your team.
+                    Please create an account to complete the process and join your team.
                 </p>
                 <Box>
                     <Heading renderAs="h2" className="has-text-dark">Create an account</Heading>
                     <hr />
-                    <Form fields={fields} buttonText="Join Classroom" />
+                    <Form fields={fields} errors={errors} buttonText="Join Classroom" onSubmit={handleSubmit} />
                 </Box>
             </Column>
         </Columns>
@@ -78,9 +98,27 @@ const RegstrationForm = () => {
 
 }
 
+const LoginContent = () => {
+    return (
+        <Columns>
+            <Column {...columnSizes}>
+                <p className="mb-5">
+                    <strong>Thanks for accepting the invite!</strong><br />
+                    Please log into you account to complete the process and join your new team.
+                </p>
+                <Box>
+                    <Heading renderAs="h2" className="has-text-dark">Login</Heading>
+                    <hr />
+                    <LoginForm />
+                </Box>
+            </Column>
+        </Columns>
+    )
+}
+
 const Invite = () => {
 
-    const isAuth = useIsAuthenticated();
+    const user = useAuthorizedUser();
     const { token } = useParams();
     const [ error, setError ] = useState();
     const [ accepted, setAccepted ] = useState(false);
@@ -91,15 +129,19 @@ const Invite = () => {
 
         const checkInviteUser = async () => {
 
+            console.log( "checkInviteUser" );
+
             try {
 
-                const res = await api.inviteEmail( token );
+                const res = await api.getInviteEmail( token );
 
                 setEmail( res.data );
 
-                if( res.data.hasUser && isAuth ) {
+                if( res.data.hasUser && user ) {
 
-                    const res = await api.acceptInvite( token );
+                    await api.acceptInvite( token );
+
+                    setAccepted(true);
 
                 }
 
@@ -140,7 +182,7 @@ const Invite = () => {
 
         // acceptInvite();
 
-    }, [token, isAuth, setEmail, setIsLoading, setError]);
+    }, [token, user, setEmail, setIsLoading, setError, setAccepted]);
 
     return (
         <MainWithLogin>
@@ -161,16 +203,24 @@ const Invite = () => {
                                 : (
                                     accepted
                                 
-                                    ? <p>Invitation Accepted!</p>
+                                    ? (
+                                        <div>
+                                            <p className="mb-4">Congratulations, invitation accepted!</p>
+                                            <Button to="/" color="light" renderAs={Link} outlined>
+                                                <span>Go to class</span>
+                                                <Icon icon={['far','arrow-alt-circle-right']} />
+                                            </Button>
+                                        </div>
+                                    )
     
                                     : (
                                         email.hasUser
     
                                         ? ( 
-                                            <p>Sign in form</p>
+                                            <LoginContent />
                                         )
         
-                                        : <RegstrationForm />
+                                        : <RegstrationContent token={token} email={email.email} />
                                     )
                                 )
                             )

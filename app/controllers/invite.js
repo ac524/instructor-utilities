@@ -1,28 +1,30 @@
-const { Token, Classroom } = require("../models");
-const User = require("../models/User");
+const { Token, Classroom, User, Staff } = require("../models");
+
+const validateRegisterInput = require("../config/validation/register");
+const passwordHash = require("../config/utils/passwordHash");
 
 module.exports = {
     async setInvite( req, res, next ) {
 
         try {
 
-            const token = await Token.findOne({ token: req.params.token });
+            req.userInviteToken = await Token.findOne({ token: req.params.token });
     
-            if( !token ) return res.status(404).json({default: "Invitation Expired"});
+            if( !req.userInviteToken ) return res.status(404).json({default: "Invitation Expired"});
     
-            const room = await Classroom.findById( token.relation );
+            req.userInviteRoom = await Classroom.findById( req.userInviteToken.relation );
     
-            if( !room ) return res.status(400).json({default: "This invitation is not longer valid"});
+            if( !req.userInviteRoom ) return res.status(400).json({default: "This invitation is not longer valid"});
     
-            const invite = room.invites.find( invite => invite.token.toString() === token._id.toString() );
+            req.userInvite = req.userInviteRoom.invites.find( invite => invite.token.toString() === req.userInviteToken._id.toString() );
     
-            if( !invite ) return res.status(400).json({default: "This invitation is not longer valid"});
-    
-            req.roomInvite = invite;
+            if( !req.userInvite ) return res.status(400).json({default: "This invitation is not longer valid"});
 
             next();
 
         } catch(err) {
+
+            console.log(err);
 
             res.status(500).json({ default: "Unable to process invitation" });
 
@@ -33,12 +35,50 @@ module.exports = {
 
         try {
 
-            const user = await User.findOne({ email: req.roomInvite.email });
+            const user = await User.findOne({ email: req.userInvite.email });
 
             res.json({
                 hasUser: Boolean( user ),
-                email: req.roomInvite.email
+                email: req.userInvite.email
             });
+
+        } catch(err) {
+
+            console.log(err);
+
+            res.status(500).json({ default: "Unable to process invitation" });
+
+        }
+
+    },
+    async registerInvite( req, res ) {
+
+        try {
+
+            const { errors, isValid } = validateRegisterInput(req.body, ["email","roomname"]);
+
+            // Check validation
+            if (!isValid)
+
+                return res.status(400).json(errors);
+
+            const existingUser = await User.findOne({ email: req.userInvite.email });
+
+            if( existingUser )
+
+                return res.status(400).json({ email: "Email already exists" });
+
+            // Create the User
+            const user = new User({
+                name: req.body.name,
+                email: req.userInvite.email,
+                password: await passwordHash( req.body.password ),
+                isVerified: true
+            });
+
+            await user.save();
+
+            return res.json({ success: true });
 
         } catch(err) {
 
@@ -50,10 +90,37 @@ module.exports = {
     async accept( req, res ) {
 
         try {
-    
-            res.json( req.roomInvite );
+
+            if( req.user.email !== req.userInvite.email )
+
+                return res.status(401).json({default:"Please log into the correct account"});
+            
+            // Create the user's staff entry for the classroom
+            const staff = new Staff({
+                role: "ta",
+                user: req.user._id,
+                classroom: req.userInviteRoom._id
+            });
+
+            await staff.save();
+
+            // Add the staff member to the classroom
+            await req.userInviteRoom.update({ $push: { staff: staff._id } });
+
+            // Add the room to the user
+            await req.user.update({ $push: { classrooms: req.userInviteRoom._id } });
+
+            await req.userInviteToken.remove();
+
+            req.userInvite.remove();
+
+            await req.userInviteRoom.save();
+
+            res.json( { success: true } );
 
         } catch(err) {
+
+            console.log(err);
 
             res.status(500).json({ default: "Unable to process invitation" });
 

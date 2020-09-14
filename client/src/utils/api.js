@@ -46,9 +46,15 @@ class API {
 
     }
 
-    async inviteEmail( token ) {
+    async getInviteEmail( token ) {
 
         return this.axios.get( `/api/invites/${token}/email` );
+
+    }
+
+    async registerInvite( token, data ) {
+
+        return this.axios.post( `/api/invites/${token}/register`, data );
 
     }
 
