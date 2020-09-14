@@ -9,7 +9,18 @@ export const useIsReady = () => {
 
     useEffect(() => {
 
-        setIsReady( !steps.length || steps.every( step => complete.includes( step ) ) );
+        const isReady = !steps.length || steps.every( step => complete.includes( step ) );
+
+        if( !isReady ) {
+            // Apply false states immediately.
+            setIsReady( isReady );
+            return;
+        }
+
+        // Add a small delay to setting true states.
+        const timeout = setTimeout( () => setIsReady( isReady ), 250 );
+
+        return () => clearTimeout(timeout);
 
     }, [ steps, complete, setIsReady ] )
 
