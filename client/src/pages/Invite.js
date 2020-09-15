@@ -10,6 +10,7 @@ import {
 } from "react-bulma-components";
 
 import { Link, useParams } from "react-router-dom";
+import Fade from "../animations/Fade";
 import Form from "../components/Form";
 
 import Icon from "../components/Icon";
@@ -183,33 +184,27 @@ const Invite = () => {
                             ? <Pulse color="#FFFFFF" className="m-0" />
 
                             : (
-                                error
-
-                                ? <p>Sorry! {error}</p>
-
-                                : (
-                                    accepted
-                                
-                                    ? (
-                                        <div>
+                                <div>
+                                    <Fade show={error} type="in"><p>Sorry! {error}</p></Fade>
+                                    <Fade show={!error && accepted} type="in">
                                             <p className="mb-4"><strong>Congratulations</strong>, your invitation has been accepted!</p>
                                             <Button to={`/${joinedRoom}`} color="light" renderAs={Link} outlined>
                                                 <span>Go to class</span>
                                                 <Icon icon={['far','arrow-alt-circle-right']} />
                                             </Button>
-                                        </div>
-                                    )
+                                    </Fade>
+                                    <Fade show={!error && !accepted} type="in">
+                                        {
+                                            email.hasUser
     
-                                    : (
-                                        email.hasUser
-    
-                                        ? ( 
-                                            <LoginContent email={email.email} />
-                                        )
-        
-                                        : <RegstrationContent token={token} email={email.email} />
-                                    )
-                                )
+                                            ? ( 
+                                                <LoginContent email={email.email} />
+                                            )
+            
+                                            : <RegstrationContent token={token} email={email.email} />
+                                        }
+                                    </Fade>
+                                </div>
                             )
                         }
                     </Container>
