@@ -185,7 +185,7 @@ const Invite = () => {
 
                             : (
                                 <div>
-                                    <Fade show={error} type="in"><p>Sorry! {error}</p></Fade>
+                                    <Fade show={Boolean(error)} type="in"><p>Sorry! {error}</p></Fade>
                                     <Fade show={!error && accepted} type="in">
                                             <p className="mb-4"><strong>Congratulations</strong>, your invitation has been accepted!</p>
                                             <Button to={`/${joinedRoom}`} color="light" renderAs={Link} outlined>
@@ -193,17 +193,17 @@ const Invite = () => {
                                                 <Icon icon={['far','arrow-alt-circle-right']} />
                                             </Button>
                                     </Fade>
-                                    <Fade show={!error && !accepted} type="in">
-                                        {
-                                            email.hasUser
-    
-                                            ? ( 
-                                                <LoginContent email={email.email} />
-                                            )
-            
-                                            : <RegstrationContent token={token} email={email.email} />
-                                        }
-                                    </Fade>
+                                    {
+                                        email
+
+                                        ? (
+                                            <Fade show={!error && !accepted} type="in">
+                                                { email.hasUser ? <LoginContent email={email.email} /> : <RegstrationContent token={token} email={email.email} /> }
+                                            </Fade>
+                                        )
+
+                                        : null
+                                    }
                                 </div>
                             )
                         }
