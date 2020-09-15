@@ -7,6 +7,7 @@ import {
     Box,
     Heading
   } from "react-bulma-components";
+import Fade from "../../animations/Fade";
 
 import { LoginLink } from "../../components/Login";
 import MainWithLogin from "../../layouts/MainWithLogin";
@@ -30,12 +31,14 @@ function Register() {
                     <Container>
                         <Columns>
                             <Column {...formBoxSizes}>
-                                <Box>
-                                    <Heading renderAs="h2" className="has-text-dark">Register</Heading>
-                                    <hr />
-                                    <RegisterForm />
-                                    <p className="mt-3 has-text-grey is-size-7">Already have an account? <LoginLink /></p>
-                                </Box>
+                                <Fade>
+                                    <Box>
+                                        <Heading renderAs="h2" className="has-text-dark">Register</Heading>
+                                        <hr />
+                                        <RegisterForm />
+                                        <p className="mt-3 has-text-grey is-size-7">Already have an account? <LoginLink /></p>
+                                    </Box>
+                                </Fade>
                             </Column>
                         </Columns>
                     </Container>

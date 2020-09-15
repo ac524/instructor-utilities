@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import "./style.sass";
 
-const Fade = ({ show, type = "both", duration="1s", style = {}, children, ...props }) => {
+const Fade = ({ show = true, type = "both", duration="1s", style = {}, children, ...props }) => {
 
     const [shouldRender, setRender] = useState(show);
 
