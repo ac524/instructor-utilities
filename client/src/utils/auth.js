@@ -98,8 +98,6 @@ export const useAuthTokenStore = () => {
 
                 }
 
-                console.log( user );
-
                 if( user ) dispatch(gsa( LOGIN_USER, { token, user } ));
 
                 setIsDone( true );

@@ -1,6 +1,9 @@
 {
     "studentselect": {
         "name": "Select Student",
-        "default": []
+        "default": {
+            "selected": [],
+            "disabled": []
+        }
     }
 }

@@ -23,7 +23,10 @@ import {
 
 import {
     faArrowAltCircleLeft,
-    faTrashAlt
+    faTrashAlt,
+    faEye,
+    faEyeSlash,
+    faSquare
 } from '@fortawesome/free-regular-svg-icons';
 
 export default () => library.add(
@@ -44,7 +47,10 @@ export default () => library.add(
     faSortNumericUpAlt,
     faColumns,
     faUserFriends,
-    faExclamationCircle
+    faExclamationCircle,
+    faEye,
+    faEyeSlash,
+    faSquare
     // faWeight
     // faSortAmountDownAlt
 );
