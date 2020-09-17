@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
     Section,
@@ -17,35 +17,49 @@ import { useManageApps } from "../../utils/apps";
 import RoomLink from "../../components/RoomLink";
 import { useClassroom } from "../../store";
 import { useAuthorizedUser } from "../../../../utils/auth";
+import { useUserRoomnames } from "../../../../utils/user";
+import { Link } from "react-router-dom";
 
 const Classroom = () => {
 
-    const manageApps = useManageApps();
+    const user = useAuthorizedUser();
+    const { _id: roomId, name: roomName, apps } = useClassroom();
 
-    const topbarTools = [
-        (
-            <Dropdown key="rooms" label={<Icon icon="chevron-circle-down" />} labelSize="small" className="is-right">
-                {
-                    [ "Room 1", "Room 2" ].map(room => (
-                        <Button className="dropdown-item" size="small">
-                            {room}
-                        </Button>
-                    ))
-                }
-            </Dropdown>
-        ),
-        (
+    const manageApps = useManageApps();
+    const roomnames = useUserRoomnames();
+    const [ topbarTools, setTopbarTools ] = useState();
+
+    useEffect(() => {
+
+        const tools = [];
+    
+        if( roomnames.length > 1 ) {
+            tools.push((
+                <Dropdown key="rooms" label={<Icon icon="chevron-circle-down" />} labelSize="small" className="is-right">
+                    {
+                        roomnames.map(room => (
+                            <Button renderAs={Link} to={`/${room._id}`} className={"dropdown-item" + (roomId === room._id ? " is-active" : "")} size="small" key={room._id}>
+                                {room.name}
+                            </Button>
+                        ))
+                    }
+                </Dropdown>
+            ))
+        }
+    
+        tools.push((
             <Dropdown key="apps" label={<Icon icon="ellipsis-h" />} labelSize="small" className="ml-auto mr-3 is-right">
                 <Button className="dropdown-item" size="small" onClick={() => manageApps(true)}>
                     <Icon icon="download" />
                     <span>Manage Apps</span>
                 </Button>
             </Dropdown>
-        )
-    ];  
+        ));
 
-    const user = useAuthorizedUser();
-    const { _id: roomId, name: roomName, apps } = useClassroom();
+        setTopbarTools(tools);
+
+    }, [roomId, roomnames, setTopbarTools]);
+
 
     useTopbarConfig({ name: roomName, tools: topbarTools });
 

@@ -1,5 +1,4 @@
-const { Student } = require("../models");
-const Classroom = require("../models/Classroom");
+const { Student, Classroom } = require("../models");
 
 /**
  * All routes require isRoomMember middleware for authentication

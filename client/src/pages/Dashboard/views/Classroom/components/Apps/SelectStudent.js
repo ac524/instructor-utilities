@@ -84,8 +84,6 @@ const SelectStudent = ( { data, setData } ) => {
 
     const setIsSelected = student => ({ ...student, isSelected: selected.includes(student._id) });
 
-    console.log( students.map( setIsSelected ) );
-
     return (
         <div>
             <div className="is-flex mb-4" style={{alignItems:"center"}}>

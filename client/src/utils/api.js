@@ -107,6 +107,15 @@ class API {
     }
 
     /**
+     * User Routes
+     */
+    async userRoomnames() {
+
+        return this.axios.get("/api/user/roomnames");
+
+    }
+
+    /**
      * Authentication Routes
      */
 

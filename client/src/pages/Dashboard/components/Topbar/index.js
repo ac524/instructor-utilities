@@ -15,6 +15,10 @@ export const useTopbarConfig = ( { name, tools } ) => {
     });
 
     useEffect(() => {
+        setState({ name, tools });
+    }, [name, tools, setState]);
+
+    useEffect(() => {
 
         dispatch(gda( SET_TOPBAR, state ));
 
