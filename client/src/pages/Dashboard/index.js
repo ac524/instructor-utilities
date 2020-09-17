@@ -18,6 +18,7 @@ import Icon from "../../components/Icon";
 import { useIsUserVerified } from "../../utils/auth";
 import { useSocket } from "../../utils/socket.io";
 import PendingVerification from "./components/PendingVerification";
+import Fade from "../../animations/Fade";
 
 loadDashboardIcons();
 
@@ -79,11 +80,8 @@ const Dashboard = () => {
 
     return (
         <DashboardProvider>
-            {
-                isUserVerified
-                    ? <DashboardContainer />
-                    : <PendingVerification />
-            }
+            <Fade show={isUserVerified}><DashboardContainer /></Fade>
+            <Fade show={!isUserVerified}><PendingVerification /></Fade>
         </DashboardProvider>
     );
 
