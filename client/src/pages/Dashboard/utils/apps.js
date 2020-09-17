@@ -1,5 +1,5 @@
-import { useDashboardDispatch, getDashboardAction as gda } from "../store"
-import { SET_MANAGE_APPS } from "../store/actions";
+import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store"
+import { SET_MANAGE_APPS } from "pages/Dashboard/store/actions";
 
 export const useManageApps = () => {
 

@@ -7,12 +7,12 @@ import {
 } from "react-bulma-components";
 
 import "./style.sass";
-import Icon from "../../../../components/Icon";
-import Dropdown from "../../../../components/Dropdown";
-import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "../../store";
-import { EDIT_STUDENT } from "../../store/actions";
-import api from "../../../../utils/api";
-import { usePriorityLevel } from "../../utils/student";
+import Icon from "components/Icon";
+import Dropdown from "components/Dropdown";
+import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import api from "utils/api";
+import { usePriorityLevel } from "pages/Dashboard/utils/student";
 
 export const StudentMenu = ({ _id, name }) => {
     

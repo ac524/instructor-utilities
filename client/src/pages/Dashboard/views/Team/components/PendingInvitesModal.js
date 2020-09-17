@@ -8,10 +8,10 @@ import {
     Tag
 } from "react-bulma-components";
 
-import Icon from "../../../../../components/Icon";
-import api from "../../../../../utils/api";
-import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "../../../store";
-import { DELETE_INVITE } from "../../../store/actions";
+import Icon from "components/Icon";
+import api from "utils/api";
+import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { DELETE_INVITE } from "pages/Dashboard/store/actions";
 
 export const usePendingInvitesModalState = () => {
 

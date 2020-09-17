@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import api from "../../../utils/api";
-import { useLogin } from "../../../utils/auth";
-import Form from "../../../components/Form";
+import api from "utils/api";
+import { useLogin } from "utils/auth";
+import Form from "components/Form";
 import { useHistory } from "react-router-dom";
 
 const RegisterForm = () => {

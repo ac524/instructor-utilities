@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStudents, useStaff } from "../store";
+import { useStudents, useStaff } from "pages/Dashboard/store";
 
 export const priorityLevels = [
     {

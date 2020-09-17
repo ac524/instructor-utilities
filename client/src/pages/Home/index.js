@@ -1,6 +1,6 @@
 import React from "react";
 import MainHero from "./components/MainHero";
-import MainWithLogin from "../../layouts/MainWithLogin";
+import MainWithLogin from "layouts/MainWithLogin";
 
 const Home = () => {
     return (

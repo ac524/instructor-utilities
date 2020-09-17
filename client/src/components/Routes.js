@@ -1,9 +1,9 @@
 import React from "react";
 
 import { Route, Switch, Redirect } from "react-router-dom";
-import Pages from "../pages";
+import Pages from "pages";
 
-import { useIsAuthenticated, useAuthorizedUser } from "../utils/auth";
+import { useIsAuthenticated, useAuthorizedUser } from "utils/auth";
 
 export const GuestRoute = ({ children, redirectTo = "/", ...props }) => {
 

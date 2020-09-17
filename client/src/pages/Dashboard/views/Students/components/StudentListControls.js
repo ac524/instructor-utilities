@@ -5,11 +5,11 @@ import {
     Button
 } from "react-bulma-components";
 
-import Icon from "../../../../../components/Icon";
-import { useDashboardDispatch, getDashboardAction as gda } from "../../../store";
-import { EDIT_STUDENT } from "../../../store/actions";
-import Dropdown from "../../../../../components/Dropdown";
-import { useStudentGroupings } from "../../../utils/student";
+import Icon from "components/Icon";
+import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import Dropdown from "components/Dropdown";
+import { useStudentGroupings } from "pages/Dashboard/utils/student";
 
 const { Input } = FormCollection;
 

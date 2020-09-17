@@ -2,7 +2,7 @@ import React from "react";
 
 import { Section } from "react-bulma-components";
 
-import { useTopbarConfig } from "../../components/Topbar";
+import { useTopbarConfig } from "pages/Dashboard/components/Topbar";
 import Staff from "./components/Staff";
 import StaffListControls from "./components/StaffListControls";
 

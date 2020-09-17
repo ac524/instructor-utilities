@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useClassroom } from "../../../store";
+import { useClassroom } from "pages/Dashboard/store";
 import InviteModal, { InviteModalButton, useInviteModalState } from "./InviteModal";
 import PendingInvitesModal, { usePendingInvitesModalState, PendingInvitesModalButton } from "./PendingInvitesModal";
 

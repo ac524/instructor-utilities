@@ -11,27 +11,29 @@ import {
 import Widget from "./components/Widget";
 
 import { useTopbarConfig } from "../../components/Topbar";
-import Dropdown from "../../../../components/Dropdown";
-import Icon from "../../../../components/Icon";
-import { useManageApps } from "../../utils/apps";
+import Dropdown from "components/Dropdown";
+import Icon from "components/Icon";
 import RoomLink from "../../components/RoomLink";
 import { useClassroom } from "../../store";
-import { useAuthorizedUser } from "../../../../utils/auth";
-import { useUserRoomnames } from "../../../../utils/user";
+import { useAuthorizedUser } from "utils/auth";
+import { useUserRoomnames } from "utils/user";
 import { Link } from "react-router-dom";
+import { useDashboardDispatch, getDashboardAction as gda } from "../../store"
+import { SET_MANAGE_APPS } from "../../store/actions";
 
 const Classroom = () => {
 
+    const dispatch = useDashboardDispatch();
     const user = useAuthorizedUser();
     const { _id: roomId, name: roomName, apps } = useClassroom();
 
-    const manageApps = useManageApps();
     const roomnames = useUserRoomnames();
     const [ topbarTools, setTopbarTools ] = useState();
 
     useEffect(() => {
 
         const tools = [];
+        const manageApps = ( state ) => dispatch( gda( SET_MANAGE_APPS, state ) );
     
         if( roomnames.length > 1 ) {
             tools.push((
@@ -58,7 +60,7 @@ const Classroom = () => {
 
         setTopbarTools(tools);
 
-    }, [roomId, roomnames, setTopbarTools]);
+    }, [roomId, roomnames, dispatch, setTopbarTools]);
 
 
     useTopbarConfig({ name: roomName, tools: topbarTools });
@@ -93,7 +95,7 @@ const Classroom = () => {
                             <p>
                                 To get started with your classroom Dashboard
                                 <br /><br />
-                                <Button color="primary" onClick={() => manageApps(true)}>Start exploring tools</Button>
+                                <Button color="primary" onClick={() => dispatch( gda( SET_MANAGE_APPS, true ) )}>Start exploring tools</Button>
                             </p>
                             <hr />
                             <p className="is-size-7">

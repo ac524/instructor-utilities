@@ -6,7 +6,7 @@ import {
     Heading
 } from "react-bulma-components";
 
-import { useLogout, useLogin } from "../utils/auth";
+import { useLogout, useLogin } from "utils/auth";
 import Form from "./Form";
 import { useHistory } from "react-router-dom";
 import Modal, { ModalButton, ModalLink } from "./Modal";

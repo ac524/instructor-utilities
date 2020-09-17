@@ -7,11 +7,11 @@ import {
     Button
 } from "react-bulma-components";
 
-import Icon from "../../../../../components/Icon";
-import Form from "../../../../../components/Form";
-import api from "../../../../../utils/api";
-import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "../../../store";
-import { ADD_INVITE } from "../../../store/actions";
+import Icon from "components/Icon";
+import Form from "components/Form";
+import api from "utils/api";
+import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { ADD_INVITE } from "pages/Dashboard/store/actions";
 
 export const useInviteModalState = () => {
 

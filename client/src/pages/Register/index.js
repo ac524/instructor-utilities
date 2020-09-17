@@ -7,10 +7,10 @@ import {
     Box,
     Heading
   } from "react-bulma-components";
-import Fade from "../../animations/Fade";
+import Fade from "animations/Fade";
 
-import { LoginLink } from "../../components/Login";
-import MainWithLogin from "../../layouts/MainWithLogin";
+import { LoginLink } from "components/Login";
+import MainWithLogin from "layouts/MainWithLogin";
 
 import RegisterForm from "./components/RegisterForm";
 

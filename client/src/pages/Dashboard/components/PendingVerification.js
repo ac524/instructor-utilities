@@ -7,10 +7,10 @@ import {
     Button
 } from "react-bulma-components";
 
-import Icon from "../../../components/Icon";
-import api from "../../../utils/api";
+import Icon from "components/Icon";
+import api from "utils/api";
 
-import { useAuthorizedUser } from "../../../utils/auth";
+import { useAuthorizedUser } from "utils/auth";
 
 const PendingVerification = () => {
     

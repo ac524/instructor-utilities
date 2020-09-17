@@ -7,10 +7,10 @@ import {
     Button
 } from "react-bulma-components";
 
-import Icon from "../../../components/Icon";
-import api from "../../../utils/api";
-import { useClassroom, useDashboardContext, getDashboardAction as gda } from "../store";
-import { SET_MANAGE_APPS } from "../store/actions";
+import Icon from "components/Icon";
+import api from "utils/api";
+import { useClassroom, useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
+import { SET_MANAGE_APPS } from "pages/Dashboard/store/actions";
 
 
 const { Column } = Columns;

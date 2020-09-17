@@ -1,8 +1,8 @@
 import React from "react";
 import { Switch, Route, useParams } from "react-router-dom";
-import Classroom from "../views/Classroom";
-import Students from "../views/Students";
-import Team from "../views/Team";
+import Classroom from "pages/Dashboard/views/Classroom";
+import Students from "pages/Dashboard/views/Students";
+import Team from "pages/Dashboard/views/Team";
 
 const Views = () => {
 

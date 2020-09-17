@@ -8,8 +8,8 @@ import {
 } from "react-bulma-components";
 
 import { Link } from "react-router-dom";
-import Fade from "../../../animations/Fade";
-import Icon from "../../../components/Icon";
+import Fade from "animations/Fade";
+import Icon from "components/Icon";
 
 const MainHero = () => {
     return (

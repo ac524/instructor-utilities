@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./style.sass";
-import { useDashboardContext, getDashboardAction as gda } from "../../store";
-import { SET_TOPBAR } from "../../store/actions";
+import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
+import { SET_TOPBAR } from "pages/Dashboard/store/actions";
 
 import { Heading } from "react-bulma-components";
 

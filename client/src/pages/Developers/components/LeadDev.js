@@ -7,11 +7,11 @@ import {
     Heading
 } from "react-bulma-components";
 
-import { useReadyStep } from "../../../utils/ready";
-import githubApi from "../../../utils/githubApi";
-import Pulse from "../../../components/Pulse";
-import WebLink from "../../../components/WebLink";
-import Icon from "../../../components/Icon";
+import { useReadyStep } from "utils/ready";
+import githubApi from "utils/githubApi";
+import Pulse from "components/Pulse";
+import WebLink from "components/WebLink";
+import Icon from "components/Icon";
 
 const { Column } = Columns;
 

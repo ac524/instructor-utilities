@@ -1,5 +1,5 @@
 import React from "react";
-import { useClassroom } from "../store";
+import { useClassroom } from "pages/Dashboard/store";
 import { Link } from "react-router-dom";
 
 const RoomLink = ( { to, ...props } ) => {

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 
 import api from "./api";
-import { useStoreContext, getStoreAction as gsa } from "../store";
-import { LOGIN_USER, LOGOUT_USER } from "../store/actions";
+import { useStoreContext, getStoreAction as gsa } from "store";
+import { LOGIN_USER, LOGOUT_USER } from "store/actions";
 import { useHistory } from "react-router-dom";
 
 const setAuthToken = token => {

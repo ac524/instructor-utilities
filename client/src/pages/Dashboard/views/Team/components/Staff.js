@@ -12,10 +12,10 @@ import {
     Tag
 } from "react-bulma-components";
 
-import WebLink from "../../../../../components/WebLink";
-import Icon from "../../../../../components/Icon";
-import { useAssignedStudents, useStaff } from "../../../store";
-import { StudentPriorityTag } from "../../../components/StudentCard";
+import WebLink from "components/WebLink";
+import Icon from "components/Icon";
+import { useAssignedStudents, useStaff } from "pages/Dashboard/store";
+import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
 
 const { Column } = Columns;
 

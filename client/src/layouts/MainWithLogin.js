@@ -1,7 +1,7 @@
 import React from "react";
 import Main from "./Main";
-import { LoginModal } from "../components/Login"
-import { ModalProvider } from "../components/Modal";
+import { LoginModal } from "components/Login"
+import { ModalProvider } from "components/Modal";
 
 const MainWithLogin = ({ children }) => {
     return (

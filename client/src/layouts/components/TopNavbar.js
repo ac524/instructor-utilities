@@ -2,10 +2,10 @@ import React, { useState } from "react";
 
 import { Navbar } from "react-bulma-components";
 
-import { LoginButton, LogoutButton } from "../../components/Login";
-import { useIsAuthenticated } from "../../utils/auth";
+import { LoginButton, LogoutButton } from "components/Login";
+import { useIsAuthenticated } from "utils/auth";
 import { Link } from "react-router-dom";
-import Icon from "../../components/Icon";
+import Icon from "components/Icon";
 
 const { Brand, Item, Burger, Menu, Container } = Navbar;
 

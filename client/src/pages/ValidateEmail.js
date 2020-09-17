@@ -10,12 +10,12 @@ import {
 } from "react-bulma-components";
 import { Link, useParams } from "react-router-dom";
 
-import Icon from "../components/Icon";
-import { LoginButton } from "../components/Login";
-import Pulse from "../components/Pulse";
-import MainWithLogin from "../layouts/MainWithLogin";
-import api from "../utils/api";
-import { useIsAuthenticated } from "../utils/auth";
+import Icon from "components/Icon";
+import { LoginButton } from "components/Login";
+import Pulse from "components/Pulse";
+import MainWithLogin from "layouts/MainWithLogin";
+import api from "utils/api";
+import { useIsAuthenticated } from "utils/auth";
 
 const { Input } = Form;
 const { Column } = Columns;

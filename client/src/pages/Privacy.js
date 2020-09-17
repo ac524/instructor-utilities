@@ -7,7 +7,7 @@ import {
     Heading
 } from "react-bulma-components";
 
-import MainWithLogin from "../layouts/MainWithLogin";
+import MainWithLogin from "layouts/MainWithLogin";
 
 const Privacy = () => {
     return (

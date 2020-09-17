@@ -10,8 +10,8 @@ import {
 } from "react-bulma-components";
 
 import "./style.sass";
-import WebLink from "../../../components/WebLink";
-import { useIsAuthenticated } from "../../../utils/auth";
+import WebLink from "components/WebLink";
+import { useIsAuthenticated } from "utils/auth";
 
 const { Column } = Columns;
 

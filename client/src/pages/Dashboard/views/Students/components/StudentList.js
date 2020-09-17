@@ -2,8 +2,8 @@ import React from "react";
 
 import { Columns, Card } from "react-bulma-components";
 
-import { StudentCard } from "../../../components/StudentCard";
-import { useStudentSort, useStudentGroups } from "../../../utils/student";
+import { StudentCard } from "pages/Dashboard/components/StudentCard";
+import { useStudentSort, useStudentGroups } from "pages/Dashboard/utils/student";
 
 const StudentList = ( { sort, groupBy, search } ) => {
 

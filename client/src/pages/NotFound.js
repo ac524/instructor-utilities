@@ -9,8 +9,8 @@ import {
 } from "react-bulma-components";
 
 import { Link } from "react-router-dom";
-import MainWithLogin from "../layouts/MainWithLogin";
-import { LoginLink } from "../components/Login";
+import MainWithLogin from "layouts/MainWithLogin";
+import { LoginLink } from "components/Login";
 
 const NotFound = () => {
     return (

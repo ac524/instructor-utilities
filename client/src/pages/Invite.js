@@ -10,17 +10,17 @@ import {
 } from "react-bulma-components";
 
 import { Link, useParams } from "react-router-dom";
-import Fade from "../animations/Fade";
-import Form from "../components/Form";
+import Fade from "animations/Fade";
+import Form from "components/Form";
 
-import Icon from "../components/Icon";
-import { LoginForm } from "../components/Login";
-import Pulse from "../components/Pulse";
-import MainWithLogin from "../layouts/MainWithLogin";
-import { getStoreAction as gsa, useStoreDispatch } from "../store";
-import { ADD_USER_ROOM_ID } from "../store/actions";
-import api from "../utils/api";
-import { useAuthorizedUser, useIsAuthenticated, useLogin } from "../utils/auth";
+import Icon from "components/Icon";
+import { LoginForm } from "components/Login";
+import Pulse from "components/Pulse";
+import MainWithLogin from "layouts/MainWithLogin";
+import { getStoreAction as gsa, useStoreDispatch } from "store";
+import { ADD_USER_ROOM_ID } from "store/actions";
+import api from "utils/api";
+import { useAuthorizedUser, useIsAuthenticated, useLogin } from "utils/auth";
 
 const { Column } = Columns;
 

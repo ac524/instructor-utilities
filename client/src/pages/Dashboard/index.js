@@ -14,11 +14,11 @@ import ManageApps from "./components/ManageApps";
 import { DashboardProvider, useClassroomLoader, useClassroom, useDashboardDispatch } from "./store";
 
 import "./style.sass";
-import Icon from "../../components/Icon";
-import { useIsUserVerified } from "../../utils/auth";
-import { useSocket } from "../../utils/socket.io";
+import Icon from "components/Icon";
+import { useIsUserVerified } from "utils/auth";
+import { useSocket } from "utils/socket.io";
 import PendingVerification from "./components/PendingVerification";
-import Fade from "../../animations/Fade";
+import Fade from "animations/Fade";
 
 loadDashboardIcons();
 

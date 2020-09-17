@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 
-import { useOutsideClickDispatch } from "../../utils/detection";
+import { useOutsideClickDispatch } from "utils/detection";
 
 import "./style.sass";
 

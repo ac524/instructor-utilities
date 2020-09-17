@@ -6,9 +6,9 @@ import {
 } from "react-bulma-components";
 
 import SelectStudent from "./Apps/SelectStudent";
-import Pulse from "../../../../../components/Pulse";
-import api from "../../../../../utils/api";
-import { useSocket } from "../../../../../utils/socket.io";
+import Pulse from "components/Pulse";
+import api from "utils/api";
+import { useSocket } from "utils/socket.io";
 
 const getAppComponent = ( app, setAppData ) => {
 

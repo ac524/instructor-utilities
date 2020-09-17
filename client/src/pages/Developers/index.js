@@ -6,9 +6,9 @@ import {
     Heading
 } from "react-bulma-components";
 
-import MainWithLogin from "../../layouts/MainWithLogin";
-import githubApi from "../../utils/githubApi";
-import { useReadyStep } from "../../utils/ready";
+import MainWithLogin from "layouts/MainWithLogin";
+import githubApi from "utils/githubApi";
+import { useReadyStep } from "utils/ready";
 
 import LeadDev from "./components/LeadDev";
 import Contributors from "./components/Contributors";
