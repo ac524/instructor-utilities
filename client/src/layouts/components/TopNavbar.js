@@ -9,7 +9,7 @@ import Icon from "../../components/Icon";
 
 const { Brand, Item, Burger, Menu, Container } = Navbar;
 
-function TopNavbar() {
+const TopNavbar = () => {
 
   const [ isNavActive, setIsNavActive ] = useState( false );
 

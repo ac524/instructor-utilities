@@ -102,7 +102,7 @@ export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
 
 }
 
-function Staff() {
+const Staff = () => {
 
     const staff = useStaff();
 

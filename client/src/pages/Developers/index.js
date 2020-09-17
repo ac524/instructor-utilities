@@ -18,7 +18,7 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 library.add( faGlobe );
 
-function Developers() {
+const Developers = () => {
 
     const [ completeStep ] = useReadyStep("setupDevs");
 

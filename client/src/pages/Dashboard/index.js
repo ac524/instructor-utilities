@@ -73,7 +73,7 @@ export const DashboardContainer = () => {
 
 }
 
-function Dashboard() {
+const Dashboard = () => {
     
     const isUserVerified = useIsUserVerified();
 

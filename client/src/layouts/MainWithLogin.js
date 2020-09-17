@@ -3,7 +3,7 @@ import Main from "./Main";
 import { LoginModal } from "../components/Login"
 import { ModalProvider } from "../components/Modal";
 
-function MainWithLogin({ children }) {
+const MainWithLogin = ({ children }) => {
     return (
         <ModalProvider>
             <Main>{children}</Main>

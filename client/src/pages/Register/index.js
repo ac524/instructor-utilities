@@ -16,7 +16,7 @@ import RegisterForm from "./components/RegisterForm";
 
 const { Column } = Columns;
 
-function Register() {
+const Register = () => {
 
     const formBoxSizes = {
         tablet: {size: 'two-thirds'},

@@ -70,7 +70,7 @@ export const ModalLink = ({ children, onClick, ...props }) => {
 
 }
 
-function Modal( { children, onClose, ...props } ) {
+const Modal = ( { children, onClose, ...props } ) => {
 
     const [ isActive, setIsActive ] = useContext( ModalContext );
 

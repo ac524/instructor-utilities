@@ -35,7 +35,7 @@ const ToolbarItem = ({ icon, ...props }) => {
 
 }
 
-function Toolbar() {
+const Toolbar = () => {
 
     useToolbarOffset(55);
 

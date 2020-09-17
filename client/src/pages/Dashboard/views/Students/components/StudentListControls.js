@@ -49,7 +49,7 @@ const sortTypes = [
 //     }
 // ];
 
-function StudentListControls( { sort, groupBy, search } ) {
+const StudentListControls = ( { sort, groupBy, search } ) => {
 
     const dispatch = useDashboardDispatch();
     const groupTypes = useStudentGroupings().map( ({key, name, icon}) => ({

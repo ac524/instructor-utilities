@@ -2,7 +2,7 @@ import React from "react";
 import { useClassroom } from "../store";
 import { Link } from "react-router-dom";
 
-function RoomLink( { to, ...props } ) {
+const RoomLink = ( { to, ...props } ) => {
     
     const classroom = useClassroom();
 

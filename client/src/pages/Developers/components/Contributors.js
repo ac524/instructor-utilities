@@ -79,7 +79,7 @@ export const Contributor = ({ login, contributions }) => {
     );
 }
 
-function Contributors({ list }) {
+const Contributors = ({ list }) => {
     return (
         <Columns>
             {list.map( contributor => <Contributor key={contributor.login} {...contributor} /> )}

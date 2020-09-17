@@ -2,7 +2,7 @@ import React from "react";
 import MainHero from "./components/MainHero";
 import MainWithLogin from "../../layouts/MainWithLogin";
 
-function Home() {
+const Home = () => {
     return (
         <MainWithLogin>
             <MainHero />

@@ -13,7 +13,7 @@ import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaf
 import { EDIT_STUDENT } from "../../../store/actions";
 import api from "../../../../../utils/api";
 
-function EditStudentModal() {
+const EditStudentModal = () => {
 
     const [ { classroom, editStudent: editStudentId }, dispatch ] = useDashboardContext();
     const [ ,setIsModalActive ] = useModalContext();

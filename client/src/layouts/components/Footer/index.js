@@ -15,7 +15,7 @@ import { useIsAuthenticated } from "../../../utils/auth";
 
 const { Column } = Columns;
 
-function Footer() {
+const Footer = () => {
 
     const isAuth = useIsAuthenticated();
 

@@ -6,7 +6,7 @@ import { useTopbarConfig } from "../../components/Topbar";
 import Staff from "./components/Staff";
 import StaffListControls from "./components/StaffListControls";
 
-function Team() {
+const Team = () => {
 
     useTopbarConfig({ name: "Team" });
 

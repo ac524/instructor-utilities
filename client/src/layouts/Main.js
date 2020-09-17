@@ -2,7 +2,7 @@ import React from "react";
 import TopNavbar from "./components/TopNavbar"
 import Footer from "./components/Footer";
 
-function Main({ children }) {
+const Main = ({ children }) => {
     return (
         <div>
             <TopNavbar />

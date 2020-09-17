@@ -5,7 +5,7 @@ import { Columns, Card } from "react-bulma-components";
 import { StudentCard } from "../../../components/StudentCard";
 import { useStudentSort, useStudentGroups } from "../../../utils/student";
 
-function StudentList( { sort, groupBy, search } ) {
+const StudentList = ( { sort, groupBy, search } ) => {
 
     const groupedStudents = useStudentGroups( groupBy );
     const studentSort = useStudentSort( sort );

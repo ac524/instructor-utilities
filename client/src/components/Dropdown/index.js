@@ -4,7 +4,7 @@ import { useOutsideClickDispatch } from "../../utils/detection";
 
 import "./style.sass";
 
-function Dropdown( { id = "dropdown-menu", label, ariaLabel, labelSize, children, className, ...props } ) {
+const Dropdown = ( { id = "dropdown-menu", label, ariaLabel, labelSize, children, className, ...props } ) => {
 
     const [ isActive, dispatch ] = useReducer( ( state, action ) => action === "open" );
     const dropdownRef = useOutsideClickDispatch( { isActive, dispatch, action: "close" } );

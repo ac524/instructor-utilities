@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import MainWithLogin from "../layouts/MainWithLogin";
 import { LoginLink } from "../components/Login";
 
-function NotFound() {
+const NotFound = () => {
     return (
         <MainWithLogin>
             <Hero className="is-fullheight-with-navbar">

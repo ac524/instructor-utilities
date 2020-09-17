@@ -45,7 +45,7 @@ export const FormField = ( { label, type = "text", name, value, placeholder, onC
 
 }
 
-function Form( { fields, errors = {}, button, buttonText = "Submit", moreButtons = [], ...props } ) {
+const Form = ( { fields, errors = {}, button, buttonText = "Submit", moreButtons = [], ...props } ) => {
 
     const inputErrorColor = useInputErrorColor( errors );
 

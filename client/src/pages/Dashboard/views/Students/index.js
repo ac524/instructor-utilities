@@ -9,7 +9,7 @@ import { ModalProvider } from "../../../../components/Modal";
 import EditStudentModal from "./components/EditStudentModal"
 import StudentListControls from "./components/StudentListControls";
 
-function Students() {
+const Students = () => {
 
     const [ sort, setSort ] = useState("name:asc");
     const [ groupBy, setGroupBy ] = useState("none");

@@ -18,7 +18,7 @@ import RoomLink from "../../components/RoomLink";
 import { useClassroom } from "../../store";
 import { useAuthorizedUser } from "../../../../utils/auth";
 
-function Classroom() {
+const Classroom = () => {
 
     const dropdownLabel = <Icon icon="ellipsis-h" />;
     const manageApps = useManageApps();

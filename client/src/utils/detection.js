@@ -11,7 +11,7 @@ export const useOutsideClickDispatch = ( { isActive, dispatch, action } ) => {
         /**
          * Alert if clicked on outside of element
          */
-        function handleClickOutside(event) {
+        const handleClickOutside = event => {
             if (inBoundsElementRef.current && !inBoundsElementRef.current.contains(event.target)) {
                 dispatch( action );
             }

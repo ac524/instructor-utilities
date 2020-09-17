@@ -5,7 +5,7 @@ import "./style.sass";
  * @param {*} param0 
  * @see https://tobiasahlin.com/spinkit/
  */
-function Pulse( { className, color, size } ) {
+const Pulse = ( { className, color, size } ) => {
 
     const style = {};
 

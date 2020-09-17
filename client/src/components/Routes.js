@@ -45,7 +45,7 @@ export const PrivateRoute = ({ children, redirectTo = "/", ...props }) => {
 
 }
 
-function Routes() {
+const Routes = () => {
 
     const authUser = useAuthorizedUser();
 

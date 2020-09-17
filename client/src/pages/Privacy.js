@@ -9,7 +9,7 @@ import {
 
 import MainWithLogin from "../layouts/MainWithLogin";
 
-function Privacy() {
+const Privacy = () => {
     return (
         <MainWithLogin>
             <Section renderAs="main">

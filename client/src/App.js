@@ -12,7 +12,7 @@ import Fade from "./animations/Fade";
 
 loadGlobalIcons();
 
-function App() {
+const App = () => {
 
     useSocketConnection();
 

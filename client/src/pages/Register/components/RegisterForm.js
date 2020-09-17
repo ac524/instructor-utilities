@@ -5,7 +5,7 @@ import { useLogin } from "../../../utils/auth";
 import Form from "../../../components/Form";
 import { useHistory } from "react-router-dom";
 
-function RegisterForm() {
+const RegisterForm = () => {
 
     const login = useLogin();
     const history = useHistory();

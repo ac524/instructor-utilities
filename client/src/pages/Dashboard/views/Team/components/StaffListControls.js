@@ -4,7 +4,7 @@ import { useClassroom } from "../../../store";
 import InviteModal, { InviteModalButton, useInviteModalState } from "./InviteModal";
 import PendingInvitesModal, { usePendingInvitesModalState, PendingInvitesModalButton } from "./PendingInvitesModal";
 
-function StaffListControls() {
+const StaffListControls = () => {
 
     const room = useClassroom();
     const invite = useInviteModalState();

@@ -26,7 +26,7 @@ export const useTopbarConfig = ( { name, tools } ) => {
 
 };
 
-function Topbar() {
+const Topbar = () => {
 
     const [ { topbar } ] = useDashboardContext();
 

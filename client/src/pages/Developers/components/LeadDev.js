@@ -15,7 +15,7 @@ import Icon from "../../../components/Icon";
 
 const { Column } = Columns;
 
-function LeadDev({ login, contributions }) {
+const LeadDev = ({ login, contributions }) => {
 
     const [ completeStep ] = useReadyStep(`LeadDev-${login}`);
     const [ profile, setProfile ] = useState();

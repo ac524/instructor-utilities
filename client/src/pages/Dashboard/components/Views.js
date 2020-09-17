@@ -4,7 +4,7 @@ import Classroom from "../views/Classroom";
 import Students from "../views/Students";
 import Team from "../views/Team";
 
-function Views() {
+const Views = () => {
 
     const {roomId} = useParams();
 
