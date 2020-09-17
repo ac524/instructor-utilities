@@ -20,21 +20,35 @@ import { useAuthorizedUser } from "../../../../utils/auth";
 
 const Classroom = () => {
 
-    const dropdownLabel = <Icon icon="ellipsis-h" />;
     const manageApps = useManageApps();
-    const topbarTools = (
-        <Dropdown label={dropdownLabel} labelSize="small">
-            <Button className="dropdown-item" size="small" onClick={() => manageApps(true)}>
-                <Icon icon="download" />
-                <span>Manage Apps</span>
-            </Button>
-        </Dropdown>
-    );
 
-    useTopbarConfig({ name: "Classroom", tools: topbarTools });
+    const topbarTools = [
+        (
+            <Dropdown key="rooms" label={<Icon icon="chevron-circle-down" />} labelSize="small" className="is-right">
+                {
+                    [ "Room 1", "Room 2" ].map(room => (
+                        <Button className="dropdown-item" size="small">
+                            {room}
+                        </Button>
+                    ))
+                }
+            </Dropdown>
+        ),
+        (
+            <Dropdown key="apps" label={<Icon icon="ellipsis-h" />} labelSize="small" className="ml-auto mr-3 is-right">
+                <Button className="dropdown-item" size="small" onClick={() => manageApps(true)}>
+                    <Icon icon="download" />
+                    <span>Manage Apps</span>
+                </Button>
+            </Dropdown>
+        )
+    ];  
 
     const user = useAuthorizedUser();
-    const { _id: roomId, apps } = useClassroom();
+    const { _id: roomId, name: roomName, apps } = useClassroom();
+
+    useTopbarConfig({ name: roomName, tools: topbarTools });
+
 
     return (
         <Section className="is-flex" style={{flexGrow:(apps.length ? 0 : 1),flexDirection:"column"}}>

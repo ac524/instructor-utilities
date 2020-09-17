@@ -34,7 +34,7 @@ const Topbar = () => {
         ? (
             <div className="topbar has-background-white is-flex" style={{alignItems:"center"}}>
                 <Heading className="item title m-0">{topbar.name}</Heading>
-                { topbar.tools ? topbar.tools : null }
+                { topbar.tools ? <div className="is-flex topbar-tools" style={{flexGrow:1,alignItems:"center"}}>{topbar.tools}</div> : null }
             </div>
         )
 
