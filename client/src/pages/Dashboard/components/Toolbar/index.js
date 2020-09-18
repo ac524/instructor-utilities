@@ -8,7 +8,7 @@ import {
 } from "react-bulma-components";
 
 import { Link, useLocation } from "react-router-dom";
-import { LogoutButton, LogoutLink } from "components/Login";
+import { LogoutButton } from "components/Login";
 import RoomLink from "pages/Dashboard/components/RoomLink";
 import Icon from "components/Icon";
 import { useClassroom } from "pages/Dashboard/store";

@@ -109,6 +109,12 @@ class API {
     /**
      * User Routes
      */
+    async updateUser( data ) {
+
+        return this.axios.patch( "/api/user", data );
+
+    }
+
     async userRoomnames() {
 
         return this.axios.get("/api/user/roomnames");

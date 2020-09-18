@@ -37,9 +37,10 @@ export const useClassroomLoader = ( roomId ) => {
          * NEED TO FIND REAL ISSUE
          */
         // loadClassroom();
-        const timeout = setTimeout( loadClassroom, 1000 );
+        const timeout = setTimeout( loadClassroom, 500 );
 
         return () => {
+            dispatch(gda(SET_CLASSROOM, null));
             uncompleteStep();
             clearTimeout(timeout)
         };

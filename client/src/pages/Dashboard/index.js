@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Switch, Route } from "react-router-dom";
 
 import loadDashboardIcons from "./utils/icons";
 
@@ -19,6 +19,7 @@ import { useIsUserVerified } from "utils/auth";
 import { useSocket } from "utils/socket.io";
 import PendingVerification from "./components/PendingVerification";
 import Fade from "animations/Fade";
+import UserSettings from "./views/UserSettings";
 
 loadDashboardIcons();
 
@@ -32,14 +33,19 @@ export const DashboardContainer = () => {
     const socket = useSocket();
 
     useEffect(() => {
+        
+        if( !socket ) return;
 
-        if( socket )
+        const dispatchData = data => dispatch(data);
 
-            socket.on("dispatch", data => dispatch(data));
+        socket.on("dispatch", dispatchData);
+
+        return () => socket.off("dispatch", dispatchData);
 
     }, [socket, dispatch]);
 
-    const content = isRoomLoaded
+    
+    return isRoomLoaded
 
         ? (
             classroom
@@ -65,13 +71,6 @@ export const DashboardContainer = () => {
 
         : null;
 
-    return (
-        <div className="dashboard-container">
-            <Toolbar />
-            {content}
-        </div>
-    );
-
 }
 
 const Dashboard = () => {
@@ -80,7 +79,20 @@ const Dashboard = () => {
 
     return (
         <DashboardProvider>
-            <Fade show={isUserVerified}><DashboardContainer /></Fade>
+            <div className="dashboard-container">
+                <Toolbar />
+                <Switch>
+                    <Route path="/settings">
+                        <div className="dashboard-panel has-background-white-bis">
+                            <Topbar />
+                            <UserSettings />
+                        </div>
+                    </Route>
+                    <Route>
+                        <Fade show={isUserVerified}><DashboardContainer /></Fade>
+                    </Route>
+                </Switch>
+            </div>
             <Fade show={!isUserVerified}><PendingVerification /></Fade>
         </DashboardProvider>
     );

@@ -19,7 +19,7 @@ const RegisterForm = () => {
 
     const fields = [
         {
-            label: "Username",
+            label: "Your Name",
             onChange: (e) => setName(e.target.value),
             value: name,
             name: "name"

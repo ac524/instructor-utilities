@@ -1,6 +1,27 @@
 const { Classroom } = require("../models");
 
 module.exports = {
+    async update( req, res ) {
+        try {
+            
+            const updateList = [];
+
+            ["name"].forEach( key => {
+                if( req.body.hasOwnProperty(key) ) updateList.push( [ key,req.body[key] ] );
+            });
+
+            if( updateList.length )
+
+                await req.user.update( Object.fromEntries( updateList ) );
+
+            res.json({success: true});
+
+        } catch(err) {
+
+            res.status(500).json({ default: "Unable to update user." });
+
+        }
+    },
     async roomNames( req, res ) {
         try {
 
@@ -8,7 +29,7 @@ module.exports = {
 
         } catch(err) {
 
-            res.status(500).json({ default: "Unable to create student." });
+            res.status(500).json({ default: "Unable to get user's room names." });
 
         }
     }

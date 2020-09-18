@@ -20,13 +20,13 @@ export const FormInput = ( { type = "text", options = [], ...props } ) => {
 
 }
 
-export const FormField = ( { label, type = "text", name, value, placeholder, onChange, options, inputColor, ...props } ) => {
+export const FormField = ( { label, type = "text", name, state, placeholder, value, onChange, options, inputColor, ...props } ) => {
 
     const inputProps = {
         name,
         type,
-        value,
-        onChange
+        value: state ? state[0] : value,
+        onChange: onChange || (state ? e=>state[1](e.target.value) : null),
     };
 
     if( options ) inputProps.options = options;
@@ -45,7 +45,7 @@ export const FormField = ( { label, type = "text", name, value, placeholder, onC
 
 }
 
-const Form = ( { fields, errors = {}, button, buttonText = "Submit", moreButtons = [], ...props } ) => {
+const Form = ( { fields, stateValues={}, errors = {}, button, buttonText = "Submit", moreButtons = [], ...props } ) => {
 
     const inputErrorColor = useInputErrorColor( errors );
 
@@ -53,7 +53,7 @@ const Form = ( { fields, errors = {}, button, buttonText = "Submit", moreButtons
         <form {...props}>
             <ErrorProvider value={errors}>
                 <Error name="default" type="message" />
-                { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
+                { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} state={stateValues[field.name]} { ...field } /> ) }
             </ErrorProvider>
             <hr />
             <div className="is-flex">
