@@ -4,7 +4,8 @@ import "./style.sass";
 
 import {
     Heading,
-    Button
+    Button,
+    Image
 } from "react-bulma-components";
 
 import { Link, useLocation } from "react-router-dom";
@@ -52,15 +53,20 @@ const Toolbar = () => {
 
     const links = classroom
         ? [
-            { to: `/`, "aria-label": "Dashboard home", icon: "home" },
+            { to: `/`, "aria-label": "Dashboard home", icon: "chalkboard-teacher" },
             { to: `/team`, "aria-label": "Manage team", icon: "users" },
             { to: `/students`, "aria-label": "Manage students", icon: "user-graduate" }
         ]
         
-        : [ { to: "/", "aria-label": "Dashboard home", icon: "home" } ];
+        : [];
 
     return (
-        <div className="toolbar has-background-white">
+        <div className="toolbar has-background-white pt-1 pb-3">
+            <div className="item">
+                <Link to="/" className="action-plain p-1" style={{marginTop:"2px"}}>
+                    <Image src="/images/logo-color.png" size="square" />
+                </Link>
+            </div>
             { links.map( link => <ToolbarItem key={link.to} {...link} /> ) }
             <div className="item end">
                 <Dropdown label={user.name[0]} labelClassName="action is-circle" className="is-up is-over-btn">
