@@ -17,7 +17,10 @@ export const useUserSettingFields = () => {
 
         if(!user) return;
 
-        setState({ name: user.name }); 
+        setState({
+            name: user.name,
+            email: user.email
+        }); 
 
     }, [user, setState]);
 
@@ -30,6 +33,12 @@ export const useUserSettingFields = () => {
                 label: "Name",
                 onChange,
                 value: state.name,
+                name: "name"
+            },
+            {
+                label: "Email",
+                onChange,
+                value: state.email,
                 name: "name"
             }
         ])
@@ -72,7 +81,7 @@ const UserSettingsForm = () => {
 
     }
 
-    return <Form fields={fields} errors={errors} onSubmit={handleSubmit} />;
+    return <Form fields={fields} errors={errors} buttonBreak={false} onSubmit={handleSubmit} className="is-flat" />;
 
 }
 

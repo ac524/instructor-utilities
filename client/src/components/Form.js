@@ -45,7 +45,7 @@ export const FormField = ( { label, type = "text", name, state, placeholder, val
 
 }
 
-const Form = ( { fields, stateValues={}, errors = {}, button, buttonText = "Submit", moreButtons = [], ...props } ) => {
+const Form = ( { fields, stateValues={}, errors = {}, button, buttonText = "Submit", moreButtons = [], buttonBreak=true, ...props } ) => {
 
     const inputErrorColor = useInputErrorColor( errors );
 
@@ -55,7 +55,7 @@ const Form = ( { fields, stateValues={}, errors = {}, button, buttonText = "Subm
                 <Error name="default" type="message" />
                 { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} state={stateValues[field.name]} { ...field } /> ) }
             </ErrorProvider>
-            <hr />
+            {buttonBreak ? <hr /> : null}
             <div className="is-flex">
                 { button ? button : <Button color="primary">{ buttonText }</Button> }
                 { moreButtons }

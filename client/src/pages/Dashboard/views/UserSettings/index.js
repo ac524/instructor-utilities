@@ -28,7 +28,7 @@ const UserSettings = () => {
                     <UserSettingsForm />
                 </Column>
                 <Column>
-                    <Box>
+                    <Box className="is-shadowless">
                         <Heading renderAs="h2" size={4}>Classrooms</Heading>
                         <Heading renderAs="h3" size={6} className="is-primary">Instructor Rooms</Heading>
                         <div className="has-flex-rows is-hover">
