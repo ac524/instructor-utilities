@@ -118,3 +118,15 @@
     &.is-vcentered
         td
             vertical-align: middle
+
+.has-flex-rows
+    &.is-hover
+        .is-flex:hover
+            background-color: $scheme-main-bis
+
+.title
+    @each $name, $pair in $colors
+        $color: nth($pair, 1)
+        &.is-#{$name}
+            padding-top: .5em
+            border-top: 4px solid $color

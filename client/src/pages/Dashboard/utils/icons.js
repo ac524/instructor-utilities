@@ -19,7 +19,8 @@ import {
     faExclamationCircle,
     faChevronCircleDown,
     faCog,
-    faChalkboardTeacher
+    faChalkboardTeacher,
+    faSignOutAlt
     // faWeight
     // faSortAmountDownAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -53,6 +54,7 @@ export default () => library.add(
     faChevronCircleDown,
     faCog,
     faChalkboardTeacher,
+    faSignOutAlt,
 
     // Regular Icons
     faArrowAltCircleLeft,
