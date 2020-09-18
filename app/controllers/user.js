@@ -6,7 +6,9 @@ module.exports = {
             
             const updateList = [];
 
-            ["name"].forEach( key => {
+            // TODO - Email updates should not be automatic, instead there needs to be a verification process for the new email.
+
+            ["name", "email"].forEach( key => {
                 if( req.body.hasOwnProperty(key) ) updateList.push( [ key,req.body[key] ] );
             });
 
