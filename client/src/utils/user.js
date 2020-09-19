@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react"
 import api from "./api";
-import { useIsAuthenticated } from "./auth";
+import { useAuthorizedUser, useIsAuthenticated } from "./auth";
 
-export const useUserRoomnames = () => {
+export const useUserRoomsInfo = () => {
 
-    const [ roomnames, setRoomnames ] = useState([]);
+    const [ rooms, setRooms ] = useState([]);
     const isAuth = useIsAuthenticated();
 
     useEffect(() => {
 
         if( !isAuth ) {
-            setRoomnames([])
+            setRooms([])
             return;
         }
 
-        const getRoomnames = async () => setRoomnames( ( await api.userRoomnames() ).data );
+        const getRoomnames = async () => setRooms( ( await api.userRoomnames() ).data );
 
         try {
 
@@ -26,8 +26,40 @@ export const useUserRoomnames = () => {
 
         }
 
-    }, [isAuth, setRoomnames]);
+    }, [isAuth, setRooms]);
     
-    return roomnames;
+    return rooms;
+
+}
+
+export const useUserRoomsInfoByRole = () => {
+
+    const rooms = useUserRoomsInfo();
+    const user = useAuthorizedUser();
+    const [ roomsByRole, setRoomsByRole ] = useState([]);
+
+    useEffect(() => {
+
+        if( !rooms.length ) {
+            setRoomsByRole({});
+            return;
+        }
+
+        const groupReducer = (groups, room) => {
+
+            const { role } = room.staff.find( member => member.user === user._id );
+
+            return {
+                ...groups,
+                [role]: groups[role] ? [ ...groups[role], room ] : [ room ]
+            }
+
+        }
+
+        setRoomsByRole( rooms.reduce( groupReducer, {} ) );
+
+    }, [rooms, user, setRoomsByRole]);
+
+    return roomsByRole;
 
 }

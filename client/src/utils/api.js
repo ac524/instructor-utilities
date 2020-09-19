@@ -117,7 +117,7 @@ class API {
 
     async userRoomnames() {
 
-        return this.axios.get("/api/user/roomnames");
+        return this.axios.get("/api/user/roomsshort");
 
     }
 

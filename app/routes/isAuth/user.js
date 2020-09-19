@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const {
     update,
-    roomNames
+    getRoomsShort
 } = require("../../controllers/user");
 
 router
@@ -10,7 +10,7 @@ router
     .patch( update );
 
 router
-    .route("/roomnames")
-    .get( roomNames );
+    .route("/roomsshort")
+    .get( getRoomsShort );
 
 module.exports = router;

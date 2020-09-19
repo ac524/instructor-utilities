@@ -39,7 +39,7 @@ export const useUserSettingFields = () => {
                 label: "Email",
                 onChange,
                 value: state.email,
-                name: "name"
+                name: "email"
             }
         ])
 

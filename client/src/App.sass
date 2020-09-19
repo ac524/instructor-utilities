@@ -120,9 +120,21 @@
             vertical-align: middle
 
 .has-flex-rows
+    &.is-bordered
+        border: 1px solid $border
+        border-bottom:  none
+        .is-flex
+            border-bottom:  1px solid $border
+
     &.is-hover
         .is-flex:hover
             background-color: $scheme-main-bis
+    .is-flex
+        .button
+            border-top: none
+            border-right: none
+            border-bottom: none
+            border-radius: 0
 
 .title
     @each $name, $pair in $colors

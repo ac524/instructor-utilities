@@ -16,7 +16,7 @@ import Icon from "components/Icon";
 import RoomLink from "../../components/RoomLink";
 import { useClassroom } from "../../store";
 import { useAuthorizedUser } from "utils/auth";
-import { useUserRoomnames } from "utils/user";
+import { useUserRoomsInfo } from "utils/user";
 import { Link } from "react-router-dom";
 import { useDashboardDispatch, getDashboardAction as gda } from "../../store"
 import { SET_MANAGE_APPS } from "../../store/actions";
@@ -27,7 +27,7 @@ const Classroom = () => {
     const user = useAuthorizedUser();
     const { _id: roomId, name: roomName, apps } = useClassroom();
 
-    const roomnames = useUserRoomnames();
+    const roomnames = useUserRoomsInfo();
     const [ topbarTools, setTopbarTools ] = useState();
 
     useEffect(() => {

@@ -24,14 +24,19 @@ module.exports = {
 
         }
     },
-    async roomNames( req, res ) {
+    async getRoomsShort( req, res ) {
         try {
 
-            res.json( await Classroom.find({ _id: { $in: req.user.classrooms } }).select("name") );
+            res.json(
+                await Classroom
+                    .find({ _id: { $in: req.user.classrooms } })
+                    .populate("staff", "role user")
+                    .select("name")
+            );
 
         } catch(err) {
 
-            res.status(500).json({ default: "Unable to get user's room names." });
+            res.status(500).json({ default: "Unable to get user's rooms." });
 
         }
     }
