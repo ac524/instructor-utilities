@@ -12,18 +12,20 @@ import Dropdown from "components/Dropdown";
 import api from "utils/api";
 import { useAuthorizedUser } from "utils/auth";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
-import { UPDATE_USER } from "store/actions";
+import { REMOVE_USER_ROOM_ID, UPDATE_USER } from "store/actions";
 
 const InstructorRoomsList = ( { rooms, ...props } ) => {
 
+    const dispatch = useStoreDispatch();
+
     if( !rooms.length ) return;
 
-    const handleLeaveRoom = async roomId => {
+    const handleArchiveRoom = async roomId => {
 
         try {
 
-            await api.userLeaveRoom( roomId );
-            // dispatch(gsa( UPDATE_USER, { classrooms: user.classrooms.filter( id => roomId === id ) } ));
+            await api.userArchiveRoom( roomId );
+            dispatch(gsa( REMOVE_USER_ROOM_ID, roomId ));
 
         } catch(err) {
 
@@ -46,7 +48,7 @@ const InstructorRoomsList = ( { rooms, ...props } ) => {
                                 <Icon icon="cog" />
                                 <span>Manage</span>
                             </Button>
-                            <Button size="small" className="dropdown-item" onClick={()=>handleLeaveRoom(room._id)}>
+                            <Button size="small" className="dropdown-item" onClick={()=>handleArchiveRoom(room._id)}>
                                 <Icon icon="archive" />
                                 <span>Archive</span>
                             </Button>
@@ -62,7 +64,6 @@ const InstructorRoomsList = ( { rooms, ...props } ) => {
 
 const TaRoomsList = ( { rooms, ...props } ) => {
 
-    const user = useAuthorizedUser();
     const dispatch = useStoreDispatch();
 
     const handleLeaveRoom = async roomId => {
@@ -70,7 +71,7 @@ const TaRoomsList = ( { rooms, ...props } ) => {
         try {
 
             await api.userLeaveRoom( roomId );
-            dispatch(gsa( UPDATE_USER, { classrooms: user.classrooms.filter( id => roomId === id ) } ));
+            dispatch(gsa( REMOVE_USER_ROOM_ID, roomId ));
 
         } catch(err) {
 

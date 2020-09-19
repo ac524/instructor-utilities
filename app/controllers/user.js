@@ -1,4 +1,4 @@
-const { Classroom, Staff } = require("../models");
+const { User, Classroom, Staff } = require("../models");
 
 module.exports = {
     async update( req, res ) {
@@ -29,7 +29,6 @@ module.exports = {
      * - Removes the classroom ID from the user.
      * - Removes the staff entry
      * - Removes the staff reference from the classroom.
-     * TODO research 
      */
     async leaveRoom( req, res ) {
 
@@ -49,6 +48,40 @@ module.exports = {
             await Classroom.findByIdAndUpdate( req.params.roomId, { $pull: { staff: member._id } } );
 
             await req.user.update({ $pull: { classrooms: req.params.roomId } });
+
+            res.json({success:true});
+
+        } catch(err) {
+
+            console.log( err );
+
+            res.status(500).json({ default: "Unable to get user's rooms." });
+
+        }
+
+    },
+
+    /**
+     * Removes a room's id from all associated user docs to remove all direct associations starting from a user. The room
+     * and staff are left intact,so they can later be brought back if needed.
+     * - Removes the classroom ID from all known associated users.
+     */
+    async archiveRoom( req, res ) {
+
+        try {
+            
+            if( !req.user.classrooms.find( _id => _id.equals( req.params.roomId ) ) ) return res.status(404).send({ default: "That is not a classroom you belong to." });
+
+            const member = await Staff.findOne( {
+                user: req.user._id,
+                classroom: req.params.roomId
+            } );
+
+            if( member.role !== "instructor") return res.status(401).send({ default: "Only instructors can archive a room." });
+
+            const staff = await Staff.find({ classroom: req.params.roomId }).populate("user");
+            
+            for(let i=0; i < staff.length; i++) await staff[i].user.update( { $pull: { classrooms: req.params.roomId } } );
 
             res.json({success:true});
 

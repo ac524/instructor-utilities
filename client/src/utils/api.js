@@ -127,6 +127,12 @@ class API {
 
     }
 
+    async userArchiveRoom( roomId ) {
+
+        return this.axios.delete(`/api/user/rooms/${roomId}/archive`);
+
+    }
+
     /**
      * Authentication Routes
      */

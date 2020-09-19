@@ -3,7 +3,8 @@ const router = require("express").Router();
 const {
     update,
     getRoomsShort,
-    leaveRoom
+    leaveRoom,
+    archiveRoom
 } = require("../../controllers/user");
 
 router
@@ -13,6 +14,10 @@ router
 router
     .route("/rooms/:roomId/leave")
     .delete( leaveRoom );
+
+router
+    .route("/rooms/:roomId/archive")
+    .delete( archiveRoom );
 
 router
     .route("/rooms/short")
