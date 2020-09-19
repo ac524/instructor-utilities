@@ -5,11 +5,11 @@ import { useAuthorizedUser, useIsAuthenticated } from "./auth";
 export const useUserRoomsInfo = () => {
 
     const [ rooms, setRooms ] = useState([]);
-    const isAuth = useIsAuthenticated();
+    const user = useAuthorizedUser();
 
     useEffect(() => {
 
-        if( !isAuth ) {
+        if( !user.classrooms.length ) {
             setRooms([])
             return;
         }
@@ -26,7 +26,7 @@ export const useUserRoomsInfo = () => {
 
         }
 
-    }, [isAuth, setRooms]);
+    }, [user.classrooms, setRooms]);
     
     return rooms;
 

@@ -117,7 +117,13 @@ class API {
 
     async userRoomnames() {
 
-        return this.axios.get("/api/user/roomsshort");
+        return this.axios.get("/api/user/rooms/short");
+
+    }
+
+    async userLeaveRoom( roomId ) {
+
+        return this.axios.delete(`/api/user/rooms/${roomId}/leave`);
 
     }
 

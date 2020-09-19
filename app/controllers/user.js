@@ -1,4 +1,4 @@
-const { Classroom } = require("../models");
+const { Classroom, Staff } = require("../models");
 
 module.exports = {
     async update( req, res ) {
@@ -23,6 +23,36 @@ module.exports = {
             res.status(500).json({ default: "Unable to update user." });
 
         }
+    },
+    async leaveRoom( req, res ) {
+
+        try {
+            
+            if( !req.user.classrooms.find( (_id) => _id.toString() === req.params.roomId ) ) return res.status(404).send({ default: "That is not a classroom you belong to." });
+
+            const member = await Staff.findOne( {
+                user: req.user._id,
+                classroom: req.params.roomId
+            } );
+
+            if( member.role === "instructor") return res.status(401).send({ default: "Instructors cannot leave rooms." });
+
+            await member.remove();
+
+            await Classroom.findByIdAndUpdate( req.params.roomId, { $pull: { staff: member._id } } );
+
+            await req.user.update({ $pull: { classrooms: req.params.roomId } });
+
+            res.json({success:true});
+
+        } catch(err) {
+
+            console.log( err );
+
+            res.status(500).json({ default: "Unable to get user's rooms." });
+
+        }
+
     },
     async getRoomsShort( req, res ) {
         try {
