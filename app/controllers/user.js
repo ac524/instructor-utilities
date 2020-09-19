@@ -24,11 +24,18 @@ module.exports = {
 
         }
     },
+    /**
+     * Disassociate the currect user from a classroom.
+     * - Removes the classroom ID from the user.
+     * - Removes the staff entry
+     * - Removes the staff reference from the classroom.
+     * TODO research 
+     */
     async leaveRoom( req, res ) {
 
         try {
             
-            if( !req.user.classrooms.find( (_id) => _id.toString() === req.params.roomId ) ) return res.status(404).send({ default: "That is not a classroom you belong to." });
+            if( !req.user.classrooms.find( _id => _id.equals( req.params.roomId ) ) ) return res.status(404).send({ default: "That is not a classroom you belong to." });
 
             const member = await Staff.findOne( {
                 user: req.user._id,

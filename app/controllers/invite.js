@@ -16,7 +16,7 @@ module.exports = {
     
             if( !req.userInviteRoom ) return res.status(400).json({default: "This invitation is not longer valid"});
     
-            req.userInvite = req.userInviteRoom.invites.find( invite => invite.token.toString() === req.userInviteToken._id.toString() );
+            req.userInvite = req.userInviteRoom.invites.find( invite => invite.token.equals( req.userInviteToken._id ) );
     
             if( !req.userInvite ) return res.status(400).json({default: "This invitation is not longer valid"});
 
