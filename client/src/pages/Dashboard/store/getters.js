@@ -69,7 +69,11 @@ export const useStudent = ( targetId ) => {
 
     useEffect(() => {
 
-        setStudent( students.find( ({ _id }) => _id === targetId ) || {} );
+        setStudent( students.find( ({ _id }) => _id === targetId ) || {
+            name: "",
+            priorityLevel: 1,
+            assignedTo: ""
+        } );
 
     }, [students, targetId]);
 

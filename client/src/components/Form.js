@@ -6,38 +6,59 @@ import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
 
 const { Field, Control, Label, Input, Select } = FormCollection;
 
-export const FormInput = ( { type = "text", options = [], ...props } ) => {
+export const RangeInput = ( { id, name, value, color, ...props } ) => {
 
-    if( type === "select" )
+    if( !id ) id = `slider-${name}`;
 
-        return (
-            <Select className="is-fullwidth" {...props}>
-                {options.map(item => ({ ...item, key: item.value || "empty" })).map( ({ key, value, label }) => <option key={key} value={value}>{label}</option> )}
-            </Select>
-        );
+    const classes = ["slider has-output is-fullwidth m-0"];
 
-    return <Input type={type} {...props} />
+    if( color ) classes.push(`is-${color}`);
+
+    return (
+        <div>
+            <input id={id} className={classes.join(" ")} type="range" name={name} value={value || 0} {...props} />
+            <output htmlFor={id}>{value}</output>
+        </div>
+    );
 
 }
 
-export const FormField = ( { label, type = "text", name, state, placeholder, value, onChange, options, inputColor, ...props } ) => {
+export const FormInput = ( { type = "text", options = [], ...props } ) => {
 
-    const inputProps = {
+    switch( type ) {
+        case "select":
+            return (
+                <Select className="is-fullwidth" {...props}>
+                    {options.map(item => ({ ...item, key: item.value || "empty" })).map( ({ key, value, label }) => <option key={key} value={value}>{label}</option> )}
+                </Select>
+            );
+        case "range":
+            return <RangeInput {...props} />
+        default:
+            return <Input type={type} {...props} />
+    }
+
+}
+
+export const FormField = ( { label, type = "text", name, state, placeholder, value, onChange, options, inputColor, inputProps={}, ...props } ) => {
+
+    const fieldInputProps = {
         name,
         type,
         value: state ? state[0] : value,
         onChange: onChange || (state ? e=>state[1](e.target.value) : null),
+        ...inputProps
     };
 
-    if( options ) inputProps.options = options;
-    if( placeholder ) inputProps.placeholder = placeholder;
-    if( inputColor ) inputProps.color = inputColor(name);
+    if( options ) fieldInputProps.options = options;
+    if( placeholder ) fieldInputProps.placeholder = placeholder;
+    if( !fieldInputProps.color && inputColor ) fieldInputProps.color = inputColor(name);
 
     return (
         <Field {...props}>
             { !label || <Label>{label}</Label>}
             <Control>
-                <FormInput {...inputProps} />
+                <FormInput {...fieldInputProps} />
                 <Error name={name} />
             </Control>
         </Field>

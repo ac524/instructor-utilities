@@ -12,6 +12,7 @@ import Form from "components/Form";
 import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 import api from "utils/api";
+import { usePriorityLevel } from "pages/Dashboard/utils/student";
 
 const EditStudentModal = () => {
 
@@ -41,7 +42,12 @@ const EditStudentModal = () => {
 
     }, [editStudent, editStudentId, setStudent, setIsModalActive]);
 
-    const handleInputUpdate = ( { target: { name, value } } ) => setStudent( { ...studentState, [name]: value } );
+    const handleInputUpdate = ( { target: { name, value } } ) => {
+        // console.log();
+        setStudent( { ...studentState, [name]: value } )
+    };
+
+    const priorityLevel = usePriorityLevel(studentState.priorityLevel);
 
     // Student form fields configuration.
     const fields = [
@@ -55,11 +61,16 @@ const EditStudentModal = () => {
         },
         {
             label: "Priority",
-            placeholder: "Priority",
             name: "priorityLevel",
-            type: "number",
+            type: "range",
             value: studentState.priorityLevel,
-            onChange: handleInputUpdate
+            onChange: handleInputUpdate,
+            inputProps: {
+                min: 1,
+                max: 10,
+                step: 1,
+                color: priorityLevel ? priorityLevel.color : null
+            }
         },
         {
             label: "Staff Assignment",
