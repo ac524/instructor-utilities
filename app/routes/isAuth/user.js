@@ -1,5 +1,8 @@
 const router = require("express").Router();
 
+const setRoom = require("../middleware/setRoom");
+const isRoomMember = require("../middleware/isRoomMember");
+
 const {
     update,
     getRoomsShort,
@@ -13,11 +16,11 @@ router
 
 router
     .route("/rooms/:roomId/leave")
-    .delete( leaveRoom );
+    .delete( setRoom.fromParam, isRoomMember, leaveRoom );
 
 router
     .route("/rooms/:roomId/archive")
-    .delete( archiveRoom );
+    .delete( setRoom.fromParam, isRoomMember, archiveRoom );
 
 router
     .route("/rooms/short")

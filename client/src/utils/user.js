@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "./api";
-import { useAuthorizedUser, useIsAuthenticated } from "./auth";
+import { useAuthorizedUser } from "./auth";
 
 export const useUserRoomsInfo = () => {
 

@@ -4,6 +4,7 @@ export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
 export const UPDATE_USER = "UPDATE_USER";
+export const REFRESH_USER_ROOMS = "REFRESH_USER_ROOMS";
 export const ADD_USER_ROOM_ID = "ADD_USER_ROOM_ID";
 export const REMOVE_USER_ROOM_ID = "REMOVE_USER_ROOM_ID";
 

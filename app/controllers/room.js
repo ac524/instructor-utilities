@@ -45,6 +45,33 @@ module.exports = {
         }
 
     },
+    async update( req, res ) {
+
+        try {
+
+            if( req.roomStaffMember.role !== "instructor" ) return res.status(401).json({default:"You must be an instructor to update the class."});
+
+            const updateList = [];
+
+            // TODO - Email updates should not be automatic, instead there needs to be a verification process for the new email.
+
+            ["name"].forEach( key => {
+                if( req.body.hasOwnProperty(key) ) updateList.push( [ key,req.body[key] ] );
+            });
+
+            if( updateList.length )
+
+                await Classroom.findByIdAndUpdate( req.roomId, Object.fromEntries( updateList ) );
+
+            res.json({success:true});
+
+        } catch( err ) {
+
+            res.status(500).json({default:"Something went wrong"});
+
+        }
+
+    },
     async createInvite( req, res ) {
 
         try {
@@ -111,11 +138,4 @@ module.exports = {
         }
 
     }
-    // async update( req, res ) {
-
-    //     roomIo.emit("FromAPI", "Welcome to class!");
-
-    //     res.json({success: true});
-
-    // }
 }

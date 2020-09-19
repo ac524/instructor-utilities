@@ -33,19 +33,12 @@ module.exports = {
     async leaveRoom( req, res ) {
 
         try {
-            
-            if( !req.user.classrooms.find( _id => _id.equals( req.params.roomId ) ) ) return res.status(404).send({ default: "That is not a classroom you belong to." });
 
-            const member = await Staff.findOne( {
-                user: req.user._id,
-                classroom: req.params.roomId
-            } );
+            if( req.roomStaffMember.role === "instructor") return res.status(401).send({ default: "Instructors cannot leave rooms." });
 
-            if( member.role === "instructor") return res.status(401).send({ default: "Instructors cannot leave rooms." });
+            await req.roomStaffMember.remove();
 
-            await member.remove();
-
-            await Classroom.findByIdAndUpdate( req.params.roomId, { $pull: { staff: member._id } } );
+            await Classroom.findByIdAndUpdate( req.params.roomId, { $pull: { staff: req.roomStaffMember._id } } );
 
             await req.user.update({ $pull: { classrooms: req.params.roomId } });
 
@@ -69,15 +62,8 @@ module.exports = {
     async archiveRoom( req, res ) {
 
         try {
-            
-            if( !req.user.classrooms.find( _id => _id.equals( req.params.roomId ) ) ) return res.status(404).send({ default: "That is not a classroom you belong to." });
 
-            const member = await Staff.findOne( {
-                user: req.user._id,
-                classroom: req.params.roomId
-            } );
-
-            if( member.role !== "instructor") return res.status(401).send({ default: "Only instructors can archive a room." });
+            if( req.roomStaffMember.role !== "instructor") return res.status(401).send({ default: "Only instructors can archive a room." });
 
             const staff = await Staff.find({ classroom: req.params.roomId }).populate("user");
             

@@ -5,7 +5,7 @@ const isRoomMember = require("../middleware/isRoomMember");
 
 const {
     getSingle,
-    // update,
+    update,
     createInvite,
     deleteInvite
 } = require("../../controllers/room");
@@ -13,7 +13,7 @@ const {
 router
     .route( "/:roomId" )
     .get( setRoom.fromParam, isRoomMember, getSingle )
-    // .patch( setRoom.fromParam, isRoomMember, update );
+    .patch( setRoom.fromParam, isRoomMember, update );
 
 router
     .route( "/:roomId/invites" )

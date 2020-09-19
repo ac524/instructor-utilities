@@ -28,6 +28,12 @@ class API {
 
     }
 
+    async updateClassroom( roomId, data ) {
+
+        return this.axios.patch( `/api/rooms/${roomId}`, data );
+
+    }
+
     async createInvite( roomId, data ) {
 
         return this.axios.post( `/api/rooms/${roomId}/invites`, data );
@@ -55,12 +61,6 @@ class API {
     async registerInvite( token, data ) {
 
         return this.axios.post( `/api/invites/${token}/register`, data );
-
-    }
-
-    async updateClassroom( roomId, update ) {
-
-        return this.axios.patch( `/api/rooms/${roomId}`, update );
 
     }
 

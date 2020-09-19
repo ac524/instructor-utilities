@@ -15,6 +15,8 @@ module.exports = async ( req, res, next ) => {
         
             return res.status(401).json({ default: "You are not a member of this class" });
 
+        req.roomStaffMember = staffMember
+
         roomIoLoader(req);
 
         next();

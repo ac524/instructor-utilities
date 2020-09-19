@@ -15,6 +15,7 @@ import {
     UPDATE_USER,
     ADD_USER_ROOM_ID,
     REMOVE_USER_ROOM_ID,
+    REFRESH_USER_ROOMS,
 
     /**
      * Ready Step Actions
@@ -72,6 +73,16 @@ const reducer = ( state, { type, payload } ) => {
                 user: {
                     ...state.userAuth.user,
                     classrooms: state.userAuth.user.classrooms.filter( roomId => roomId !== payload )
+                }
+            }
+        }),
+        [REFRESH_USER_ROOMS]: () => ({
+            ...state,
+            userAuth: {
+                ...state.userAuth,
+                user: {
+                    ...state.userAuth.user,
+                    classrooms: [ ...state.userAuth.user.classrooms ]
                 }
             }
         }),

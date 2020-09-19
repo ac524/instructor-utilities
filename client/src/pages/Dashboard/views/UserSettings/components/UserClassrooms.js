@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
     Box,
@@ -10,11 +10,11 @@ import { useUserRoomsInfoByRole } from "utils/user";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 import api from "utils/api";
-import { useAuthorizedUser } from "utils/auth";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
-import { REMOVE_USER_ROOM_ID, UPDATE_USER } from "store/actions";
+import { REMOVE_USER_ROOM_ID } from "store/actions";
+import ClassroomModal from "./ClassroomModal";
 
-const InstructorRoomsList = ( { rooms, ...props } ) => {
+const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
 
     const dispatch = useStoreDispatch();
 
@@ -44,10 +44,14 @@ const InstructorRoomsList = ( { rooms, ...props } ) => {
                     <div key={room._id} className="is-flex p-2" style={{alignItems:"center"}}>
                         <span>{room.name}</span>
                         <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
-                            <Button size="small" className="dropdown-item">
-                                <Icon icon="cog" />
-                                <span>Manage</span>
-                            </Button>
+                            {
+                                onEdit && (
+                                    <Button size="small" className="dropdown-item" onClick={()=>onEdit(room._id)}>
+                                        <Icon icon="cog" />
+                                        <span>Manage</span>
+                                    </Button>
+                                )
+                            }
                             <Button size="small" className="dropdown-item" onClick={()=>handleArchiveRoom(room._id)}>
                                 <Icon icon="archive" />
                                 <span>Archive</span>
@@ -107,12 +111,14 @@ const TaRoomsList = ( { rooms, ...props } ) => {
 const UserClassrooms = () => {
 
     const roomsByRole = useUserRoomsInfoByRole();
+    const [ editRoomId, setEditRoomId ] = useState(false);
 
     return (
         <Box className="is-shadowless">
             <Heading renderAs="h2" size={4}>Classrooms</Heading>
-            {roomsByRole.instructor && <InstructorRoomsList  className="mt-5" rooms={roomsByRole.instructor} />}
+            {roomsByRole.instructor && <InstructorRoomsList  className="mt-5" rooms={roomsByRole.instructor} onEdit={(roomId)=>setEditRoomId(roomId)} />}
             {roomsByRole.ta && <TaRoomsList  className="mt-5" rooms={roomsByRole.ta} />}
+            <ClassroomModal roomId={editRoomId} onClose={()=>setEditRoomId(false)} />
         </Box>
     );
 
