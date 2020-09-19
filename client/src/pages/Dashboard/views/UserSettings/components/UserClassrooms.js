@@ -8,6 +8,63 @@ import {
 
 import { useUserRoomsInfoByRole } from "utils/user";
 import Icon from "components/Icon";
+import Dropdown from "components/Dropdown";
+
+const InstructorRoomsList = ( { rooms, ...props } ) => {
+
+    if( !rooms.length ) return;
+
+    return (
+        <div {...props}>
+            <Heading renderAs="h3" size={6} className="is-primary">Instructor Rooms</Heading>
+            <div className="has-flex-rows is-bordered">
+            {
+                rooms.map( room => (
+                    <p key={room._id} className="is-flex p-2" style={{alignItems:"center"}}>
+                        <span>{room.name}</span>
+                        <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
+                            <Button size="small" className="dropdown-item">
+                                <Icon icon="cog" />
+                                <span>Manage</span>
+                            </Button>
+                            <Button size="small" className="dropdown-item">
+                                <Icon icon="archive" />
+                                <span>Archive</span>
+                            </Button>
+                        </Dropdown>
+                    </p>
+                ) )
+            }
+            </div>
+        </div>
+    )
+
+}
+
+const TaRoomsList = ( { rooms, ...props } ) => {
+
+    return (
+        <div  {...props}>
+            <Heading renderAs="h3" size={6} className="is-primary">TA Rooms</Heading>
+            <div className="has-flex-rows is-bordered">
+            {
+                rooms.map( room => (
+                    <p key={room._id} className="is-flex p-2" style={{alignItems:"center"}}>
+                        <span>{room.name}</span>
+                        <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
+                            <Button size="small" className="dropdown-item">
+                                <Icon icon="sign-out-alt" />
+                                <span>Leave</span>
+                            </Button>
+                        </Dropdown>
+                    </p>
+                ) )
+            }
+            </div>
+        </div>
+    );
+
+}
 
 const UserClassrooms = () => {
 
@@ -16,54 +73,8 @@ const UserClassrooms = () => {
     return (
         <Box className="is-shadowless">
             <Heading renderAs="h2" size={4}>Classrooms</Heading>
-            {
-                roomsByRole.instructor && roomsByRole.instructor.length
-
-                ? (
-                    <div className="mt-5">
-                        <Heading renderAs="h3" size={6} className="is-primary">Instructor Rooms</Heading>
-                        <div className="has-flex-rows is-bordered">
-                        {
-                            roomsByRole.instructor.map( room => (
-                                <p key={room._id} className="is-flex" style={{alignItems:"center"}}>
-                                    <span style={{flexGrow:1}} className="px-2">{room.name}</span>
-                                    <Button>
-                                        <Icon icon="sign-out-alt" />
-                                        <span>Leave</span>
-                                    </Button>
-                                </p>
-                            ) )
-                        }
-                        </div>
-                    </div>
-                )
-
-                : null
-            }
-            {
-                roomsByRole.ta && roomsByRole.ta.length
-
-                ? (
-                    <div className="mt-5">
-                        <Heading renderAs="h3" size={6} className="is-primary">TA Rooms</Heading>
-                        <div className="has-flex-rows is-bordered">
-                        {
-                            roomsByRole.ta.map( room => (
-                                <p key={room._id} className="is-flex" style={{alignItems:"center"}}>
-                                    <span style={{flexGrow:1}} className="px-2">{room.name}</span>
-                                    <Button>
-                                        <Icon icon="sign-out-alt" />
-                                        <span>Leave</span>
-                                    </Button>
-                                </p>
-                            ) )
-                        }
-                        </div>
-                    </div>
-                )
-
-                : null
-            }
+            {roomsByRole.instructor && <InstructorRoomsList  className="mt-5" rooms={roomsByRole.instructor} />}
+            {roomsByRole.ta && <TaRoomsList  className="mt-5" rooms={roomsByRole.ta} />}
         </Box>
     );
 
