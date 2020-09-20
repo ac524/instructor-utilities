@@ -69,7 +69,9 @@ const EditStudentModal = () => {
                 min: 1,
                 max: 10,
                 step: 1,
-                color: priorityLevel ? priorityLevel.color : null
+                color: priorityLevel ? priorityLevel.color : null,
+                light: true,
+                size: "large"
             }
         },
         {

@@ -153,3 +153,40 @@
         border-left: none
         border-radius: 0px
         box-shadow: none !important
+
+input[type="range"]
+	&.slider
+        &:not([orient="vertical"])
+            &.has-output,
+            &.has-output-tooltip
+                + output
+                    font-weight: bold
+                    font-size: 1rem
+                    line-height: 1.25rem
+
+//         @each $name, $pair in $colors
+//             $color: nth($pair, 1)
+//             $color-invert: nth($pair, 2)
+//             &.is-#{$name}
+//                 // If light and dark colors are provided
+//                 @if length($pair) >= 4
+//                     $color-light: bulmaDarken(nth($pair, 3), 30%)
+//                     $color-dark: nth($pair, 4)
+//                     &.is-light
+//                         &::-moz-range-track
+//                             background: $color-light !important
+//                         &::-webkit-slider-runnable-track
+//                             background: $color-light !important
+//                         &::-ms-track
+//                             background: $color-light !important
+
+//                         &::-ms-fill-lower
+//                             background: $color-light
+//                         &::-ms-fill-upper
+//                             background: $color-light
+
+//                         &.has-output,
+//                         .has-output-tooltip
+//                             + output
+//                                 background-color: $color-light
+//                                 color: $color-invert
