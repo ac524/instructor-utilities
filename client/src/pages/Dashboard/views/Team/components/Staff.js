@@ -80,13 +80,13 @@ export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
                 </Box>
             </Column>
             <Column className="has-filled-content">
-                <Panel className="has-background-white">
-                    <Panel.Header className="is-flex" style={{alignItems:"center"}}>
+                <Panel className="has-background-white is-shadowless">
+                    <Heading className="is-flex is-primary px-3" renderAs="h2" size={4} style={{alignItems:"center"}}>
                         Students
                         <Button className="ml-auto" size="small">
                             <Icon icon="ellipsis-h" />
                         </Button>
-                    </Panel.Header>
+                    </Heading>
                     {assignedStudents.map( ({_id, name, priorityLevel}) => (
                         <Panel.Block key={_id}>
                             {name}

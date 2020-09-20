@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
     Modal,
     Box,
+    Panel,
     Heading,
     Button,
     Tag
@@ -67,22 +68,19 @@ const PendingInvitesModal = ( { show, onClose } ) => {
             closeOnBlur={true}
             >
             <Modal.Content>
-                <Box className="py-5">
-                    <Heading renderAs="h2">Pending Invites</Heading>
-                    <hr className="mb-0" />
-                    <table className="table is-vcentered is-hoverable is-fullwidth">
-                        <tbody>
-                        {invites.map( invite => (
-                            <tr key={invite._id}>
-                                <td>{invite.email}</td>
-                                <td>{invite.token ? <Tag color="warning">Pending</Tag> : <Tag color="danger">Expired</Tag>}</td>
-                                <td><Button className="is-small"><Icon icon="paper-plane" /><span>Resend</span></Button></td>
-                                <td><Button className="is-small" onClick={()=>deleteInvite(invite._id)}><Icon icon="ban" /><span>Revoke</span></Button></td>
-                            </tr>
-                        ) )}
-                        </tbody>
-                    </table>
-                </Box>
+                <Panel className="has-background-white is-shadowless">
+                    <Heading renderAs="h2" className="is-primary">Pending Invites</Heading>
+                    {invites.map( invite => (
+                        <Panel.Block key={invite._id}>
+                            {invite.email}
+                            <span className="ml-auto">
+                                {invite.token ? <Tag color="warning">Pending</Tag> : <Tag color="danger">Expired</Tag>}
+                                <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button>
+                                <Button size="small" className="ml-2 is-icon-only-mobile" onClick={()=>deleteInvite(invite._id)}><Icon icon="ban" /><span>Revoke</span></Button>
+                            </span>
+                        </Panel.Block>
+                    ))}
+                </Panel>
             </Modal.Content>
         </Modal>
     );
