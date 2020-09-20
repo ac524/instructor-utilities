@@ -1,18 +1,36 @@
-const { Student } = require("../../models");
+const { Classroom, Student } = require("../../models");
+
+const setClassroom = async (req, res, next) => {
+    try {
+
+        req.classroom = await Classroom.findById( req.roomId ).select("staff");
+
+        // console.log(req.classroom);
+
+        if( !req.classroom ) return res.status(404).json({ default: "Classroom not found" });
+
+        next();
+
+    } catch(err) {
+
+        res.status(500).json({ default: "Could not load classroom" });
+
+    }
+}
 
 module.exports = {
-    fromBody(req, res, next) {
+    async fromBody(req, res, next) {
 
         req.roomId = req.body.roomId;
 
-        next();
+        await setClassroom(req, res, next);
 
     },
-    fromParam(req, res, next) {
+    async fromParam(req, res, next) {
 
         req.roomId = req.params.roomId;
 
-        next();
+        await setClassroom(req, res, next);
 
     },
     async fromStudent(req, res, next) {
@@ -25,7 +43,7 @@ module.exports = {
 
         req.roomId = student.classroom;
 
-        next();
+        await setClassroom(req, res, next);
 
     }
 }

@@ -1,29 +1,21 @@
-const mongoose = require("mongoose");
-const { Classroom, User, Staff } = require("../../models");
+const { Classroom, User } = require("../../models");
 
 module.exports = async () => {
 
     await Classroom.deleteMany({});
 
-    const staff = await Staff.find({});
+    const users = await User.find({});
 
-    const seedData = await require("../data/classrooms")( staff );
+    const seedData = await require("../data/classrooms")( users );
 
     const results = await Classroom.collection.insertMany(seedData);
 
     const classroomId = results.insertedIds['0'];
 
-    for( let i = 0; i < staff.length; i++ ) {
-
-        let { _id, user } = staff[i];
-
-        // Add the classroom id to each staff
-        await Staff.findByIdAndUpdate( _id, { classroom: classroomId } );
+    for( let i = 0; i < users.length; i++ )
 
         // Push the classroom id to the user
-        await User.findByIdAndUpdate( user, { $push: { classrooms: classroomId } } );
-
-    }
+        await users[i].update( { $push: { classrooms: classroomId } } );
 
     return results;
 

@@ -2,7 +2,6 @@ require("../config/mongoose");
 
 const {
     seedUser,
-    seedStaff,
     seedClassroom,
     seedStudent
 } = require("./seeds");
@@ -14,7 +13,6 @@ const seedDb = async () => {
      */
     const seeds = [
         [ "User", seedUser ],
-        [ "Staff", seedStaff ],
         [ "Classroom", seedClassroom ],
         [ "Student", seedStudent ]
     ];

@@ -1,4 +1,4 @@
-const { Token, Classroom, User, Staff } = require("../models");
+const { Token, Classroom, User } = require("../models");
 
 const validateRegisterInput = require("../config/validation/register");
 const passwordHash = require("../config/utils/passwordHash");
@@ -94,18 +94,13 @@ module.exports = {
             if( req.user.email !== req.userInvite.email )
 
                 return res.status(401).json({default:"Please log into the correct account"});
-            
-            // Create the user's staff entry for the classroom
-            const staff = new Staff({
+
+            // Add the staff member to the classroom
+            await req.userInviteRoom.update({ $push: { staff: {
                 role: "ta",
                 user: req.user._id,
                 classroom: req.userInviteRoom._id
-            });
-
-            await staff.save();
-
-            // Add the staff member to the classroom
-            await req.userInviteRoom.update({ $push: { staff: staff._id } });
+            } } });
 
             // Add the room to the user
             await req.user.update({ $push: { classrooms: req.userInviteRoom._id } });

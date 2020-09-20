@@ -1,4 +1,4 @@
-const { User, Classroom, Staff } = require("../models");
+const { User, Classroom } = require("../models");
 
 module.exports = {
     async update( req, res ) {
@@ -38,9 +38,9 @@ module.exports = {
 
             await req.roomStaffMember.remove();
 
-            await Classroom.findByIdAndUpdate( req.params.roomId, { $pull: { staff: req.roomStaffMember._id } } );
+            await req.classroom.save();
 
-            await req.user.update({ $pull: { classrooms: req.params.roomId } });
+            await req.user.update({ $pull: { classrooms: req.roomId } });
 
             res.json({success:true});
 
@@ -65,9 +65,11 @@ module.exports = {
 
             if( req.roomStaffMember.role !== "instructor") return res.status(401).send({ default: "Only instructors can archive a room." });
 
-            const staff = await Staff.find({ classroom: req.params.roomId }).populate("user");
-            
-            for(let i=0; i < staff.length; i++) await staff[i].user.update( { $pull: { classrooms: req.params.roomId } } );
+            const staffUserIds = req.classroom.staff.map(({user})=>user);
+
+            console.log( staffUserIds );
+
+            await User.updateMany({ _id: { $in: staffUserIds } }, { $pull: { classrooms: req.roomId } });
 
             res.json({success:true});
 
@@ -86,8 +88,7 @@ module.exports = {
             res.json(
                 await Classroom
                     .find({ _id: { $in: req.user.classrooms } })
-                    .populate("staff", "role user")
-                    .select("name")
+                    .select("name staff.role staff.user")
             );
 
         } catch(err) {

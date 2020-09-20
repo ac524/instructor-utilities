@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Invites = new Schema({
+const InvitesSchema = new Schema({
   email: {
     type: String,
     required: true
@@ -9,6 +9,23 @@ const Invites = new Schema({
   token: {
     type: Schema.Types.ObjectId,
     ref:"Token",
+  }
+});
+
+// Create Schema
+const StaffSchema = new Schema({
+  role: {
+    type: String,
+    required: true
+  },
+  user: {
+      type: Schema.Types.ObjectId,
+      ref:'User',
+      required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 });
 
@@ -22,15 +39,12 @@ const ClassroomSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref:"App",
   }],
-  staff: [{
-    type: Schema.Types.ObjectId,
-    ref:"Staff",
-  }],
+  staff: [StaffSchema],
   students: [{
     type: Schema.Types.ObjectId,
     ref:"Student",
   }],
-  invites: [Invites],
+  invites: [InvitesSchema],
   date: {
     type: Date,
     default: Date.now

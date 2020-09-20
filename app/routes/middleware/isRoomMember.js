@@ -1,15 +1,10 @@
-const { Staff } = require("../../models");
-
 const roomIoLoader = req => req.roomIo = req.app.get("io").to(req.roomId);
 
 module.exports = async ( req, res, next ) => {
 
     try {
 
-        const staffMember = await Staff.findOne( {
-            user: req.user._id,
-            classroom: req.roomId
-        } );
+        const staffMember = req.classroom.staff.find( member => member.user.equals(req.user._id) );
 
         if( !staffMember )
         

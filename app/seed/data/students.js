@@ -33,7 +33,7 @@ module.exports = async ( classroom ) => {
   }
 
   const randomStaffId = () => {
-    return classroom.staff[ Math.floor( (Math.random() * classroom.staff.length) ) ];
+    return classroom.staff[ Math.floor( (Math.random() * classroom.staff.length) ) ]._id;
   }
 
   return names.map( name => ({

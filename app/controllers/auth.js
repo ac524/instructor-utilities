@@ -14,7 +14,6 @@ const jwtSign = util.promisify( jwt.sign );
 // Load User model
 const { User, Token } = require("../models");
 const Classroom = require("../models/Classroom");
-const Staff = require("../models/Staff");
 
 const sendUserVerifyEmail = async (user) => {
 
@@ -95,17 +94,11 @@ module.exports = {
       // Add the classroom id to the user
       await user.update({ $push: { classrooms: classroom._id } });
 
-      // Create the user's staff entry for the classroom
-      const staff = new Staff({
-        role: "instructor",
-        user: user._id,
-        classroom: classroom._id
-      });
-
-      await staff.save();
-
       // Add the staff member to the classroom
-      await classroom.update({ $push: { staff: staff._id } });
+      await classroom.update({ $push: { staff: {
+        role: "instructor",
+        user: user._id
+      } } });
 
       await sendUserVerifyEmail( user );
 
