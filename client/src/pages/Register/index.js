@@ -31,9 +31,13 @@ const Register = () => {
                     <Container>
                         <Columns>
                             <Column {...formBoxSizes}>
+                                <Heading>Classroom Registration</Heading>
+                                <p className="mb-5">
+                                    Create a new account and classroom with the form below to get started. From there you can start inviting TA's, adding students and kicking ass at managing student success and support!
+                                </p>
                                 <Fade>
                                     <Box>
-                                        <Heading renderAs="h2" className="has-text-dark">Register</Heading>
+                                        <Heading renderAs="h2" className="has-text-dark">Become an Instructor</Heading>
                                         <hr />
                                         <RegisterForm />
                                         <p className="mt-3 has-text-grey is-size-7">Already have an account? <LoginLink /></p>

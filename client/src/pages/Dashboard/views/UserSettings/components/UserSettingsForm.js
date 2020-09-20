@@ -96,7 +96,7 @@ const UserSettingsForm = () => {
 
     }
 
-    return <Form flat fields={fields} errors={errors} onSubmit={handleSubmit} />;
+    return <Form flat fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Save" />;
 
 }
 

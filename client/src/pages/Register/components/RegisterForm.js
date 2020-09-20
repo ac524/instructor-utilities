@@ -19,6 +19,13 @@ const RegisterForm = () => {
 
     const fields = [
         {
+            label: "Classroom Name",
+            onChange: (e) => setRoomName(e.target.value),
+            value: roomname,
+            type:"text",
+            name: "roomname"
+        },
+        {
             label: "Your Name",
             onChange: (e) => setName(e.target.value),
             value: name,
@@ -44,13 +51,6 @@ const RegisterForm = () => {
             value: password2,
             type:"password",
             name: "password2"
-        },
-        {
-            label: "Classroom Name",
-            onChange: (e) => setRoomName(e.target.value),
-            value: roomname,
-            type:"text",
-            name: "roomname"
         }
     ];
 
