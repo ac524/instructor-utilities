@@ -72,6 +72,18 @@ module.exports = {
 
         try {
 
+            const roomEmails = await Classroom.findById(req.params.roomId).populate('staff.user',"email").select("invites.email");
+
+            // Check if the email is already registered to a staff member.
+            if( roomEmails.staff.map( ({user}) => user.email ).includes( req.body.email ) )
+
+                return res.status(400).json({ email: "This email is already registered to a staff member" });
+
+            // Check if the email is already registered to an invite.
+            if( roomEmails.invites.map( ({email}) => email ).includes( req.body.email ) )
+
+                return res.status(400).json({ email: "This email already has an invite." });
+
             const token = new Token({
                 relation: req.params.roomId,
                 token: crypto.randomBytes(16).toString('hex')
