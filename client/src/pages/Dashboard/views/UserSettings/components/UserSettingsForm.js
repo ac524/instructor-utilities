@@ -81,7 +81,7 @@ const UserSettingsForm = () => {
 
     }
 
-    return <Form fields={fields} errors={errors} buttonBreak={false} onSubmit={handleSubmit} className="is-flat" />;
+    return <Form flat fields={fields} errors={errors} onSubmit={handleSubmit} />;
 
 }
 

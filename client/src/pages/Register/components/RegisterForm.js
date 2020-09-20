@@ -2,8 +2,40 @@ import React, { useState } from "react";
 
 import api from "utils/api";
 import { useLogin } from "utils/auth";
-import Form from "components/Form";
+import Form, { createValidator } from "components/Form";
 import { useHistory } from "react-router-dom";
+
+const validateRegistrationData = createValidator({
+    validators: {
+        name: ({ name }) => Boolean(name) || "Your name is required",
+        email: ({ email }) => Boolean(email) || "Email is required",
+        password: ({ password, password2 }) => {
+
+            const errors = [];
+
+            if( password ) {
+
+                // TODO stronger password validation for both client and server.
+                if( password.length < 6 ) errors.push(["password", "Password must be at least 6 characters"] );
+
+            } else {
+                errors.push( ["password", "Password is required"] );
+            }
+
+            if( !password2 ) errors.push( ["password2", "Confirm password is required"] );
+
+            if( !errors.length ) {
+                
+                if( password !== password2 ) errors.push( ["password", "Passwords must match"], ["password2", "Passwords must match"] );
+
+            }
+
+            if( errors.length ) return Object.fromEntries( errors );
+
+        },
+        roomname: ({ roomname }) => Boolean(roomname) || "Room name is required",
+    }
+});
 
 const RegisterForm = () => {
 
@@ -60,7 +92,16 @@ const RegisterForm = () => {
 
         try {
 
-            await api.register({ name, email, password, password2, roomname });
+            const [ data, errors, hasErrors ] = validateRegistrationData({ name, email, password, password2, roomname });
+
+            if( hasErrors ) {
+                setErrors(errors);
+                return
+            }
+
+            setErrors({});
+
+            await api.register(data);
 
             // Auto Login after registration
             await login( { email, password } );
@@ -75,7 +116,7 @@ const RegisterForm = () => {
 
     }
 
-    return <Form fields={fields} errors={errors} buttonText="Sign Up" onSubmit={handleSubmit} />;
+    return <Form flat fields={fields} errors={errors} buttonText="Sign Up" onSubmit={handleSubmit} />;
 
 }
 

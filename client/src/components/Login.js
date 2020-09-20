@@ -114,7 +114,7 @@ export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = ""
         },
         {
             label: "Password",
-            placeholder: "Password",
+            placeholder: "Login Password",
             name: "password",
             type: "password",
             value: password,
@@ -152,6 +152,6 @@ export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = ""
         
     };
 
-    return <Form fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Login" />;
+    return <Form flat fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Login" />;
 
 };

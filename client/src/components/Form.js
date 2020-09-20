@@ -125,17 +125,31 @@ export const FormField = ( { label, type = "text", name, state, placeholder, val
 
 }
 
-const Form = ( { fields, stateValues={}, errors = {}, button, buttonText = "Submit", moreButtons = [], buttonBreak=true, ...props } ) => {
+const Form = ( {
+    fields,
+    stateValues={},
+    errors = {},
+    button,
+    buttonText = "Submit",
+    moreButtons = [],
+    flat,
+    className,
+    ...props
+} ) => {
 
     const inputErrorColor = useInputErrorColor( errors );
 
+    const classes = className ? [className] : [];
+
+    if(flat) classes.push("is-flat")
+
     return (
-        <form {...props}>
+        <form className={classes.join(" ")} {...props}>
             <ErrorProvider value={errors}>
                 <Error name="default" type="message" />
                 { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} state={stateValues[field.name]} { ...field } /> ) }
             </ErrorProvider>
-            {buttonBreak ? <hr /> : null}
+            {flat ? null : <hr />}
             <div className="is-flex">
                 { button ? button : <Button color="primary">{ buttonText }</Button> }
                 { moreButtons }
