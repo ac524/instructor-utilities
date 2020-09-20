@@ -7,9 +7,25 @@ import {
 } from "react-bulma-components";
 
 import { useLogout, useLogin } from "utils/auth";
-import Form from "./Form";
+import Form, { createValidator } from "./Form";
 import { useHistory } from "react-router-dom";
 import Modal, { ModalButton, ModalLink } from "./Modal";
+
+const validateLoginData = createValidator({
+    validators: {
+        email: ({ email }) => Boolean(email) || "Email is required",
+        password: ({ password }) => Boolean(password) || "Password is required",
+        default: ( data, errors ) => {
+
+            const errorCount = Object.keys(errors).length;
+
+            if( !errorCount ) return true;
+
+            return errorCount > 1 ? "You're not even trying!" : "Almost there!";
+
+        }
+    }
+});
 
 /**
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
@@ -111,21 +127,10 @@ export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = ""
 
         e.preventDefault();
 
-        const formErrors = [];
+        const [ data, errors, hasErrors ] = validateLoginData({ email, password });
 
-        if( !email ) formErrors.push(["email", "Email is required"]);
-
-        if( !password ) formErrors.push(["password", "Password is required"]);
-
-        if( formErrors.length ) {
-
-            formErrors.length > 1
-            
-                ? formErrors.push(["default", "You're not even trying!"])
-
-                : formErrors.push(["default", "Almost there!"]);
-
-            setErrors( Object.fromEntries(formErrors) );
+        if( hasErrors ) {
+            setErrors( errors );
             return;
         }
 
@@ -133,7 +138,7 @@ export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = ""
 
         try {
 
-            await login( { email, password } );
+            await login( data );
 
             if( afterLogin ) afterLogin();
 

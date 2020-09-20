@@ -27,7 +27,7 @@ export const createValidator = ({ filters = {}, validators = {} }) => ( rawData 
             if( !validators[key] ) return errors;
 
             // Get the validation return.
-            const fieldValidation = validators[key](data);
+            const fieldValidation = validators[key]( data, errors );
 
             // If given an object, append them it as new errors.
             if( fieldValidation !== null && (typeof fieldValidation === 'object') ) return { ...errors, ...fieldValidation };
@@ -43,15 +43,14 @@ export const createValidator = ({ filters = {}, validators = {} }) => ( rawData 
 
         } catch(err) {
 
-            // TODO build in error catchs to adding error messages.
-            console.log(err);
-            return errors;
+            // Set err message as validation return.
+            return { ...errors, [key]: err.message };
 
         }
 
     }
 
-    const errors = Object.keys( data ).reduce( validationReducer, {} );
+    const errors = [ ...Object.keys( data ), "default" ].reduce( validationReducer, {} );
 
     return [
         // Filtered data
