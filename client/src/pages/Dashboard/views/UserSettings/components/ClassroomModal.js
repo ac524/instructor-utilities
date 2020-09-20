@@ -1,4 +1,4 @@
-import Form from "components/Form";
+import Form, { createValidator } from "components/Form";
 import Pulse from "components/Pulse";
 import React, { useEffect, useState } from "react";
 
@@ -13,7 +13,11 @@ import { REFRESH_USER_ROOMS } from "store/actions";
 
 import api from "utils/api";
 
-
+const validateClassroomData = createValidator({
+    validators: {
+        name: ({ name }) => Boolean(name) || "Classroom name is required",
+    }
+});
 
 export const useClassroomFields = (room) => {
 
@@ -108,9 +112,16 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
 
             const updates = Object.fromEntries( updateList );
 
+            const [data, errors, hasErrors] = validateClassroomData( updates );
+
+            if(hasErrors) {
+                setErrors(errors);
+                return
+            }
+
             try {
 
-                await api.updateClassroom( room._id, updates );
+                await api.updateClassroom( room._id, data );
                 dispatch(gsa( REFRESH_USER_ROOMS ))
                 if( afterUpdate ) afterUpdate();
 
@@ -124,7 +135,7 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
 
     }
 
-    return room ? <Form fields={fields} onSubmit={handleSubmit} errors={errors} /> : <Pulse />;
+    return room ? <Form flat fields={fields} onSubmit={handleSubmit} errors={errors} /> : <Pulse />;
 
 }
 
