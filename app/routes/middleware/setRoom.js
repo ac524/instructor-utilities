@@ -32,18 +32,5 @@ module.exports = {
 
         await setClassroom(req, res, next);
 
-    },
-    async fromStudent(req, res, next) {
-
-        const student = await Student.findById( req.params.studentId );
-
-        if( !student )
-        
-            return res.status(404).json({ default: "Student not found" });
-
-        req.roomId = student.classroom;
-
-        await setClassroom(req, res, next);
-
     }
 }

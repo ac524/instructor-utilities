@@ -95,7 +95,7 @@ const EditStudentModal = () => {
         e.preventDefault();
 
         if( _id ) {
-            await api.updateStudent( _id, studentState );
+            await api.updateStudent( classroom._id, _id, studentState );
         } else {
             await api.createStudent( { ...studentState, roomId: classroom._id } );
         }
@@ -109,7 +109,7 @@ const EditStudentModal = () => {
 
         e.preventDefault();
         
-        await api.removeStudent( _id );
+        await api.removeStudent( classroom._id, _id );
 
         clearEditStudent();
 

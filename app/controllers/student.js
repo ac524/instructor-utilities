@@ -1,4 +1,9 @@
-const { Student, Classroom } = require("../models");
+const { Classroom } = require("../models");
+
+const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
+const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
+const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Classroom.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
+
 
 /**
  * All routes require isRoomMember middleware for authentication
@@ -8,25 +13,33 @@ module.exports = {
 
         try {
 
-            const newStudent = new Student({
+            const data = {
                 name: req.body.name,
-                priorityLevel: req.body.priorityLevel,
-                assignedTo: req.body.assignedTo,
-                classroom: req.roomId
-            });
+                priorityLevel: req.body.priorityLevel
+            }
 
-            await newStudent.save();
+            if( req.body.assignedTo ) data.assignedTo = req.body.assignedTo;
 
-            await Classroom.findByIdAndUpdate( req.roomId, { $push: { students: newStudent._id } } );
+            const update = {
+                $push: {
+                    students: data
+                }
+            };
+
+            const room = await Classroom.findByIdAndUpdate( req.roomId, update, { new: true } ).select("students");
+
+            const student = room.students[ room.students.length - 1 ];
 
             req.roomIo.emit( "dispatch", {
                 type: "ADD_STUDENT",
-                payload: newStudent
+                payload: student
             } );
 
             res.json( { success: true } );
                 
         } catch(err) {
+
+            console.log(err);
 
             res.status(500).json({ default: "Unable to create student." });
 
@@ -37,7 +50,8 @@ module.exports = {
 
         try {
 
-            const student = await Student.findById( req.params.studentId );
+
+            const student = await findStudentById( req.roomId, req.params.studentId ); // (await Classroom.findById(req.roomId).select("students")).students.id(req.params.studentId);
 
             if( !student )
 
@@ -54,15 +68,17 @@ module.exports = {
     },
     async update( req, res ) {
 
-        const update = {
-            name: req.body.name,
-            priorityLevel: req.body.priorityLevel,
-            assignedTo: req.body.assignedTo
-        };
-
         try {
 
-            const student = await Student.findByIdAndUpdate( req.params.studentId, update, {new: true} );
+            const update = ["name","priorityLevel","assignedTo"].reduce((update, name) => {
+
+                if( !req.body.hasOwnProperty(name) ) return update;
+
+                return { ...update, [`students.$.${name}`]: req.body[name] };
+
+            }, {});
+            
+            const student = await findStudentByIdAndUpdate( req.roomId, req.params.studentId, update );
 
             if( !student )
 
@@ -77,7 +93,9 @@ module.exports = {
                 
         } catch(err) {
 
-            res.status(500).json({ default: "Unable to create student." });
+            console.log(err);
+
+            res.status(500).json({ default: "Unable to update student." });
 
         }
 
@@ -86,22 +104,29 @@ module.exports = {
 
         try {
 
-            const deletedStudent = await Student.findByIdAndDelete( req.params.studentId );
+            const room = await getRoomWithStudents(req.roomId);
+            const student = room.students.id(req.params.studentId);
 
-            if( !deletedStudent )
+            if( !student )
 
                 res.status(404).json({ default: "Student not found." });
 
+            student.remove();
+
+            await room.save();
+
             req.roomIo.emit( "dispatch", {
                 type: "REMOVE_STUDENT",
-                payload: deletedStudent._id
+                payload: student._id
             } );
 
             res.json( { success: true } );
                 
         } catch(err) {
 
-            res.status(500).json({ default: "Unable to create student." });
+            console.log(err);
+
+            res.status(500).json({ default: "Unable to delete student." });
 
         }
 

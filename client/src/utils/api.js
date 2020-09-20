@@ -70,15 +70,15 @@ class API {
 
     }
 
-    async updateStudent( studentId, update ) {
+    async updateStudent( roomId, studentId, update ) {
 
-        return this.axios.patch( `/api/students/${studentId}`, update );
+        return this.axios.patch( `/api/students/${roomId}/${studentId}`, update );
 
     }
 
-    async removeStudent( studentId ) {
+    async removeStudent( roomId, studentId ) {
 
-        return this.axios.delete( `/api/students/${studentId}` );
+        return this.axios.delete( `/api/students/${roomId}/${studentId}` );
 
     }
 

@@ -2,8 +2,7 @@ require("../config/mongoose");
 
 const {
     seedUser,
-    seedClassroom,
-    seedStudent
+    seedClassroom
 } = require("./seeds");
 
 const seedDb = async () => {
@@ -13,8 +12,7 @@ const seedDb = async () => {
      */
     const seeds = [
         [ "User", seedUser ],
-        [ "Classroom", seedClassroom ],
-        [ "Student", seedStudent ]
+        [ "Classroom", seedClassroom ]
     ];
 
     const divider = "================================";

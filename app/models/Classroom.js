@@ -30,21 +30,39 @@ const StaffSchema = new Schema({
 });
 
 // Create Schema
+const StudentSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  priorityLevel: {
+    type: Number,
+    min: 1,
+    max: 10,
+    required: true
+  },
+  assignedTo: {
+      type: Schema.Types.ObjectId
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+});
+
+// Create Schema
 const ClassroomSchema = new Schema({
   name: {
     type: String,
     required: true
   },
-  apps: [{
-      type: Schema.Types.ObjectId,
-      ref:"App",
-  }],
   staff: [StaffSchema],
-  students: [{
-    type: Schema.Types.ObjectId,
-    ref:"Student",
-  }],
+  students: [StudentSchema],
   invites: [InvitesSchema],
+  apps: [{
+    type: Schema.Types.ObjectId,
+    ref:"App",
+  }],
   date: {
     type: Date,
     default: Date.now

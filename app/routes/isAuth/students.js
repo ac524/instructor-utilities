@@ -11,14 +11,14 @@ const {
 } = require("../../controllers/student");
 
 const newAuthMiddleware = [ setRoom.fromBody, isRoomMember ];
-const existingAuthMiddleware = [ setRoom.fromStudent, isRoomMember ];
+const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
 
 router
     .route( "/" )
     .post( newAuthMiddleware, create );
 
 router
-    .route( "/:studentId" )
+    .route( "/:roomId/:studentId" )
     .get( existingAuthMiddleware, getSingle )
     .patch( existingAuthMiddleware, update )
     .delete( existingAuthMiddleware, deleteSingle );
