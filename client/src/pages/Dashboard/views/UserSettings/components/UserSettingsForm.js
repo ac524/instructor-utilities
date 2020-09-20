@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-import Form from "components/Form";
+import Form, { createValidator } from "components/Form";
 import { useAuthorizedUser } from "utils/auth";
 import api from "utils/api";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { UPDATE_USER } from "store/actions";
+
+const validateUserSettingsData = createValidator({
+    validators: {
+        name: ({ name }) => Boolean(name) || "Your name is required",
+        email: ({ email }) => Boolean(email) || "Email is required"
+    }
+});
 
 export const useUserSettingFields = () => {
 
@@ -65,11 +72,19 @@ const UserSettingsForm = () => {
         if( updateList.length ) {
 
             const updates = Object.fromEntries( updateList );
-            dispatch(gsa(UPDATE_USER, updates));
+
+            const [ data, errors, hasErrors ] = validateUserSettingsData( updates );
+
+            if( hasErrors ) {
+                setErrors(errors);
+                return;
+            }
+
+            dispatch(gsa(UPDATE_USER, data));
 
             try {
 
-                await api.updateUser( updates );
+                await api.updateUser( data );
 
             } catch(err) {
 
