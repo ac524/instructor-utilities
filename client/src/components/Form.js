@@ -6,6 +6,64 @@ import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
 
 const { Field, Control, Label, Input, Select } = FormCollection;
 
+export const createValidator = ({ filters = {}, validators = {} }) => ( rawData ) => {
+
+    const filterMap = ([ key, rawValue ]) => {
+        return [
+            key,
+            filters[key] ? filters[key](rawValue) : rawValue
+        ];
+    }
+
+    const data = Object.fromEntries(Object.entries( rawData ).map( filterMap ));
+
+    const validationReducer = ( errors, key ) => {
+
+        if( !validators[key] ) return errors;
+
+        try {
+            
+            // If there is no validator for the key, return.
+            if( !validators[key] ) return errors;
+
+            // Get the validation return.
+            const fieldValidation = validators[key](data);
+
+            // If given an object, append them it as new errors.
+            if( fieldValidation !== null && (typeof fieldValidation === 'object') ) return { ...errors, ...fieldValidation };
+
+            // If given false, append a default error.
+            if( false === fieldValidation ) return { ...errors, [key]: "Invalid" };
+
+            // If given true or other false values, assume the validation passed and return.
+            if( fieldValidation === true || !fieldValidation ) return errors;
+
+            // Othewise, append the validation return.
+            return { ...errors, [key]: fieldValidation };
+
+        } catch(err) {
+
+            // TODO build in error catchs to adding error messages.
+            console.log(err);
+            return errors;
+
+        }
+
+    }
+
+    const errors = Object.keys( data ).reduce( validationReducer, {} );
+
+    return [
+        // Filtered data
+        data,
+        // Errors object
+        errors,
+        // Has Errors boolean
+        Boolean(Object.keys(errors).length)
+    ];
+
+}
+
 export const RangeInput = ( { id, name, value, color, light, size, ...props } ) => {
 
     if( !id ) id = `slider-${name}`;

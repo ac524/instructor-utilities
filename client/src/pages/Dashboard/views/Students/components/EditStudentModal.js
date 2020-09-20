@@ -7,12 +7,21 @@ import {
 } from "react-bulma-components";
 
 import Modal, { useModalContext } from "components/Modal";
-import Form from "components/Form";
+import Form, { createValidator } from "components/Form";
 
 import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 import api from "utils/api";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
+
+const validateStudentData = createValidator({
+    filters: {
+        assignedTo: value => value || null
+    },
+    validators: {
+        name: ({ name }) => name ? null : "Please provide a name"
+    }
+});
 
 const EditStudentModal = () => {
 
@@ -25,6 +34,7 @@ const EditStudentModal = () => {
     const { _id } = editStudent;
 
     const [ studentState, setStudent ] = useState( editStudent );
+    const [ errors, setErrors ] = useState( {} );
 
     useEffect(() => {
 
@@ -94,16 +104,30 @@ const EditStudentModal = () => {
 
         e.preventDefault();
 
-        if( _id ) {
-            await api.updateStudent( classroom._id, _id, studentState );
-        } else {
-            await api.createStudent( { ...studentState, roomId: classroom._id } );
+        const [ data, errors, hasErrors ] = validateStudentData(studentState);
+
+        if( hasErrors ) {
+            setErrors( errors );
+            return
+        }
+
+        try {
+
+            if( _id ) {
+                await api.updateStudent( classroom._id, _id, data );
+            } else {
+                await api.createStudent( { ...data, roomId: classroom._id } );
+            }
+
+        } catch(err) {
+
+            if( err.response ) setErrors( err.response.data );
+
         }
 
         clearEditStudent();
 
     }
-
 
     const handleRemoveSubmit = async (e) => {
 
@@ -132,7 +156,7 @@ const EditStudentModal = () => {
             <Box className="py-5">
                 <Heading renderAs="h2">{_id ? "Edit" : "New"} Student</Heading>
                 <hr />
-                <Form fields={fields} onSubmit={handleSubmit} button={button} moreButtons={moreButtons} />
+                <Form fields={fields} onSubmit={handleSubmit} button={button} moreButtons={moreButtons} errors={errors} />
             </Box>
         </Modal>
     )
