@@ -1,41 +1,9 @@
 import React, { useState } from "react";
 
 import api from "utils/api";
-import { useLogin } from "utils/auth";
-import Form, { createValidator } from "components/Form";
+import { useLogin, validateRegistrationData } from "utils/auth";
+import Form from "components/Form";
 import { useHistory } from "react-router-dom";
-
-const validateRegistrationData = createValidator({
-    validators: {
-        name: ({ name }) => Boolean(name) || "Your name is required",
-        email: ({ email }) => Boolean(email) || "Email is required",
-        password: ({ password, password2 }) => {
-
-            const errors = [];
-
-            if( password ) {
-
-                // TODO stronger password validation for both client and server.
-                if( password.length < 6 ) errors.push(["password", "Password must be at least 6 characters"] );
-
-            } else {
-                errors.push( ["password", "Password is required"] );
-            }
-
-            if( !password2 ) errors.push( ["password2", "Confirm password is required"] );
-
-            if( !errors.length ) {
-                
-                if( password !== password2 ) errors.push( ["password", "Passwords must match"], ["password2", "Passwords must match"] );
-
-            }
-
-            if( errors.length ) return Object.fromEntries( errors );
-
-        },
-        roomname: ({ roomname }) => Boolean(roomname) || "Room name is required",
-    }
-});
 
 const RegisterForm = () => {
 

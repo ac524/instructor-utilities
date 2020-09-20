@@ -20,7 +20,7 @@ import MainWithLogin from "layouts/MainWithLogin";
 import { getStoreAction as gsa, useStoreDispatch } from "store";
 import { ADD_USER_ROOM_ID } from "store/actions";
 import api from "utils/api";
-import { useAuthorizedUser, useIsAuthenticated, useLogin } from "utils/auth";
+import { useAuthorizedUser, useIsAuthenticated, useLogin, validateRegistrationData } from "utils/auth";
 
 const { Column } = Columns;
 
@@ -71,7 +71,16 @@ const RegstrationContent = ({ token, email }) => {
 
         try {
 
-            await api.registerInvite( token, { name, password, password2 } );
+            const [ data, errors, hasErrors ] = validateRegistrationData({ name, password, password2 });
+
+            if( hasErrors ) {
+                setErrors(errors);
+                return
+            }
+
+            if(Object.keys(errors).length) setErrors({});
+
+            await api.registerInvite( token, data );
 
             await login( { email, password } );
 
@@ -93,7 +102,7 @@ const RegstrationContent = ({ token, email }) => {
                 <Box>
                     <Heading renderAs="h2" className="has-text-dark">Create an account</Heading>
                     <hr />
-                    <Form fields={fields} errors={errors} buttonText="Join Classroom" onSubmit={handleSubmit} />
+                    <Form flat fields={fields} errors={errors} buttonText="Join Classroom" onSubmit={handleSubmit} />
                 </Box>
             </Column>
         </Columns>
