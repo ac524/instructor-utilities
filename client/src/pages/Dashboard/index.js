@@ -36,7 +36,16 @@ export const DashboardContainer = () => {
         
         if( !socket ) return;
 
-        const dispatchData = data => dispatch(data);
+        const dispatchData = ( message ) => {
+
+            // console.log(message);
+
+            // // Ignore update message from current user.
+            if( !message.from || socket.id === message.from ) return;
+
+            dispatch( message.payload );
+
+        }
 
         socket.on("dispatch", dispatchData);
 

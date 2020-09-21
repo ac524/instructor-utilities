@@ -12,6 +12,11 @@ import {
     SET_CLASSROOM,
 
     /**
+     * STAFF ACTIONS
+     */
+    ADD_STAFF,
+
+    /**
      * INVITE ACTIONS
      */
     ADD_INVITE,
@@ -57,6 +62,17 @@ const reducer = ( state, { type, payload } ) => {
          * CLASSROOM ACTIONS
          */
         [SET_CLASSROOM]: () => ({ ...state, classroom: payload }),
+
+        /**
+         * STAFF ACTIONS
+         */
+        [ADD_STAFF]: () => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                staff: [ ...state.classroom.staff, payload ]
+            }
+        }),
 
         /**
          * INVITE ACTIONS

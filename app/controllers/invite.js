@@ -2,6 +2,19 @@ const { Token, Classroom, User } = require("../models");
 
 const validateRegisterInput = require("../config/validation/register");
 const passwordHash = require("../config/utils/passwordHash");
+const ioEmit = require("./utils/ioEmit");
+
+const addStaff = async (roomId, member) => {
+
+    const { staff } =
+        await Classroom
+            .findByIdAndUpdate(roomId, { $push: { staff: member } }, {new:true})
+            .select("staff")
+            .populate("staff.user");
+
+    return staff[ staff.length - 1 ];
+
+}
 
 module.exports = {
     async setInvite( req, res, next ) {
@@ -91,19 +104,26 @@ module.exports = {
 
         try {
 
+            const roomId = req.userInviteRoom._id;
+            const roomIo = req.app.get("io").to( roomId );
+
             if( req.user.email !== req.userInvite.email )
 
                 return res.status(401).json({default:"Please log into the correct account"});
 
             // Add the staff member to the classroom
-            await req.userInviteRoom.update({ $push: { staff: {
+            const staff = await addStaff( roomId, {
                 role: "ta",
-                user: req.user._id,
-                classroom: req.userInviteRoom._id
-            } } });
+                user: req.user._id
+            } );
 
             // Add the room to the user
-            await req.user.update({ $push: { classrooms: req.userInviteRoom._id } });
+            await req.user.update({ $push: { classrooms: roomId } });
+
+            ioEmit( req, roomIo, "dispatch", {
+                type: "ADD_STAFF",
+                payload: staff
+            } );
 
             await req.userInviteToken.remove();
 
@@ -111,7 +131,12 @@ module.exports = {
 
             await req.userInviteRoom.save();
 
-            res.json( { success: true, roomId: req.userInviteRoom._id } );
+            ioEmit( req, roomIo, "dispatch", {
+                type: "DELETE_INVITE",
+                payload: req.userInvite._id
+            } );
+
+            res.json( { success: true, roomId: roomId } );
 
         } catch(err) {
 

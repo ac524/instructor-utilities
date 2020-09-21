@@ -9,6 +9,11 @@ export const SET_TOPBAR = "SET_TOPBAR";
 export const SET_CLASSROOM = "SET_CLASSROOM";
 
 /**
+ * STAFF ACTIONS
+ */
+export const ADD_STAFF = "ADD_STAFF";
+
+/**
  * INVITE ACTIONS
  */
 export const ADD_INVITE = "ADD_INVITE";
