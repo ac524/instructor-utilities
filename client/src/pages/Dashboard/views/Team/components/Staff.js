@@ -5,17 +5,17 @@ import {
     Card,
     Media,
     Image,
-    Box,
     Heading,
     Button,
     Panel,
     Tag
 } from "react-bulma-components";
 
-import WebLink from "components/WebLink";
 import Icon from "components/Icon";
-import { useAssignedStudents, useStaff } from "pages/Dashboard/store";
+import { useAssignedStudents, useStaffByRole } from "pages/Dashboard/store";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
+import RoomLink from "pages/Dashboard/components/RoomLink";
+import { Redirect, Route, Switch, useLocation, useParams } from "react-router-dom";
 
 const { Column } = Columns;
 
@@ -44,84 +44,78 @@ export const MemberCardButton = ( { isActive, onClick = () => undefined, member:
 
 }
 
-export const Member = ( { member: { _id, role, user: { name, github } } } ) => {
+export const Member = () => {
 
-    const assignedStudents = useAssignedStudents( _id );
+    const { memberId } = useParams();
+    const assignedStudents = useAssignedStudents( memberId );
 
     return (
-        <Columns>
-            <Column size="one-quarter" className="has-filled-content">
-                <Box className="has-text-centered has-filled-content">
-                    {
-                        <div className="is-flex" style={{ flexDirection: "column" }}>
-                            <div className="is-circle has-background-light mb-4 mx-auto" style={{width:"128px",height:"128px"}}></div>
-                            {name ? <Heading renderAs="h2" size={4} className="my-0">{name}</Heading> : null }
-                            {<Heading renderAs="p" size={5} subtitle className="my-0">{role}</Heading> }
-                            {/* <div className="mt-4">
-                                <Button renderAs={Link} to="/team">View</Button>
-                            </div> */}
-                            <div className="mt-4">
-                                {
-                                    github
-
-                                        ? (
-                                        <p>
-                                            <WebLink href={`https://github.com/${github}`} className="is-flex">
-                                                <Icon icon={["fab","github"]} /> {github}
-                                            </WebLink>
-                                        </p>
-                                        )
-                                        
-                                        : null
-                                }
-                            </div>
-                        </div>
-                    }
-                </Box>
-            </Column>
-            <Column className="has-filled-content">
-                <Panel className="has-background-white is-shadowless">
-                    <Heading className="is-flex is-primary px-3" renderAs="h2" size={4} style={{alignItems:"center"}}>
-                        Students
-                        <Button className="ml-auto" size="small">
-                            <Icon icon="ellipsis-h" />
-                        </Button>
-                    </Heading>
-                    {assignedStudents.map( ({_id, name, priorityLevel}) => (
-                        <Panel.Block key={_id}>
-                            {name}
-                            <Tag.Group gapless className="ml-auto">
-                                <StudentPriorityTag level={priorityLevel} />
-                            </Tag.Group>
-                        </Panel.Block>
-                    ))}
-                </Panel>
-            </Column>
-        </Columns>
+        <Panel className="has-background-white is-shadowless" renderAs="div">
+            <Heading className="is-flex is-primary px-3" renderAs="h2" size={4} style={{alignItems:"center"}}>
+                <Icon icon="user-graduate" />
+                <span>Students</span>
+                <Button className="ml-auto" size="small">
+                    <Icon icon="ellipsis-h" />
+                </Button>
+            </Heading>
+            {assignedStudents.map( ({_id, name, priorityLevel}) => (
+                <Panel.Block key={_id}>
+                    {name}
+                    <Tag.Group gapless className="ml-auto">
+                        <StudentPriorityTag level={priorityLevel} />
+                    </Tag.Group>
+                </Panel.Block>
+            ))}
+        </Panel>
     )
 
 }
 
+const StaffGroupPanel = ({ title, staff }) => {
+
+    const location = useLocation();
+
+    const isMemberActive = memberId => location.pathname.endsWith(`/team/${memberId}`);
+
+    return (
+        <Panel className="has-background-white is-shadowless is-radiusless">
+            <Heading className="is-flex is-light px-3" renderAs="h3" size={5}>
+                <span>{title}</span>
+            </Heading>
+            {staff.map( ({_id, user}) => (
+                <Panel.Block key={_id} renderAs={RoomLink} to={`/team/${_id}`} active={isMemberActive(_id)}>
+                    {user.name}
+                </Panel.Block>
+            ))}
+        </Panel>
+    )
+}
+
 const Staff = () => {
 
-    const staff = useStaff();
+    const staff = useStaffByRole();
+    const { roomId } = useParams();
 
     const [ selected, setSelected ] = useState({});
 
     useEffect(() => {
         if( staff.length && !selected._id ) setSelected( staff[0] );
-    }, [staff, selected])
+    }, [staff, selected]);
 
     return (
         <div className="staff">
             <Columns>
-                {staff.map(member => (
-                    <Column key={member._id} style={{flexGrow:0}}>
-                        <MemberCardButton member={member} isActive={member._id === selected._id} onClick={()=>setSelected(member)} /> 
-                    </Column>
-                ))}
+                <Column tablet={{size:"half"}} desktop={{size:"one-quarter"}}>
+                    {staff.instructor && <StaffGroupPanel title="Instructors" staff={staff.instructor} />}
+                    {staff.ta && <StaffGroupPanel title="TAs" staff={staff.ta} />}
+                </Column>
+                <Column>
+                    <Switch>
+                        <Route exact path={`/${roomId}/team/:memberId`} component={Member} />
+                        <Route render={({ location })=><Redirect to={{ pathname: `/${roomId}/team/${staff.instructor[0]._id}`, state: { from: location } }} />} />
+                    </Switch>
+                </Column>
             </Columns>
-            { selected._id ? <Member member={selected} /> : null }
         </div>
     )
 

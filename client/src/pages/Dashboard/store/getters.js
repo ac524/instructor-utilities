@@ -34,19 +34,36 @@ export const useStaff = () => {
 
 }
 
-export const useStaffMember = ( staffId ) => {
+export const useStaffMember = memberId => {
 
     const staff = useStaff();
 
-    const [ staffMember, setStaffMember ] = useState({});
+    return staff.find( member => member._id === memberId );
+
+}
+
+const staffByRoleReducer = (byRole, member) => {
+
+    return byRole[member.role]
+
+        ? { ...byRole, [member.role]: [ ...byRole[member.role], member ] }
+
+        : { ...byRole, [member.role]: [ member ] };
+
+}
+
+export const useStaffByRole = () => {
+
+    const staff = useStaff();
+    const [ staffByRole, setStaffByRole ] = useState( staff.reduce(staffByRoleReducer, {}) );
 
     useEffect(() => {
 
-        setStaffMember( staff.find( ({ _id }) => _id === staffId ) || {} );
+        setStaffByRole( staff.reduce(staffByRoleReducer, {}) );
 
-    }, [staff, staffId]);
+    }, [staff, setStaffByRole]);
 
-    return staffMember;
+    return staffByRole;
 
 }
 

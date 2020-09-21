@@ -132,11 +132,18 @@
             background-color: $scheme-main-bis
 
 .title
+    .icon:first-child
+        margin-right: 0.5rem
     @each $name, $pair in $colors
         $color: nth($pair, 1)
         &.is-#{$name}
             padding-top: .5em
             border-top: 4px solid $color
+            // If light and dark colors are provided
+            // @if length($pair) >= 4
+            //     $color-light: nth($pair, 3)
+            //     &.is-light
+            //         border-top-color: $color-light
 
 .is-flat
     .field:not(:last-child)
@@ -156,6 +163,11 @@
         border-radius: 0px
         box-shadow: none !important
 
+.has-overflow-ellipsis
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+
 .panel
     .title
         margin: 0
@@ -167,6 +179,16 @@
         border-top-left-radius: $panel-heading-radius
         border-top-right-radius: $panel-heading-radius
         // border-bottom: 1px solid #ededed
+    a.panel-block
+        transition: border-left-color .5s
+        border-left-width: 4px
+        border-left-style: solid
+        &:not(.is-active)
+            border-left-color: $light
+    &.is-radiusless
+        .title,
+        .panel-block
+            border-radius: 0 !important
 
 .modal-content
     max-width: 90%

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import {
     Modal,
-    Box,
     Panel,
     Heading,
     Button,
@@ -68,11 +67,11 @@ const PendingInvitesModal = ( { show, onClose } ) => {
             closeOnBlur={true}
             >
             <Modal.Content>
-                <Panel className="has-background-white is-shadowless">
+                <Panel className="has-background-white is-shadowless" renderAs="div">
                     <Heading renderAs="h2" className="is-primary">Pending Invites</Heading>
                     {invites.map( invite => (
                         <Panel.Block key={invite._id}>
-                            {invite.email}
+                            <span className="has-overflow-ellipsis mw-60">{invite.email}</span>
                             <span className="ml-auto">
                                 {invite.token ? <Tag color="warning">Pending</Tag> : <Tag color="danger">Expired</Tag>}
                                 <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button>
