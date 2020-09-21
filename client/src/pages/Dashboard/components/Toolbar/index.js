@@ -72,7 +72,7 @@ const Toolbar = () => {
                 <Dropdown label={user.name[0]} labelClassName="action is-circle" className="is-up is-over-btn">
                     <Heading renderAs="h2" size={6}>Hi, {user.name}</Heading>
                     <hr className="dropdown-divider" />
-                    <Button renderAs={Link} to="/settings" className="dropdown-item" size="small">
+                    <Button renderAs={Link} to="/settings" className="dropdown-item" size="small">.
                         <Icon icon="cog" />
                         <span>Settings</span>
                     </Button>

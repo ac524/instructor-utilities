@@ -19,9 +19,6 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  github: {
-    type: String
-  },
   classrooms: [
     {
       type: Schema.Types.ObjectId,
