@@ -8,7 +8,7 @@ import {
     Image
 } from "react-bulma-components";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { LogoutButton } from "components/Login";
 import RoomLink from "pages/Dashboard/components/RoomLink";
 import Icon from "components/Icon";
@@ -28,15 +28,15 @@ export const useToolbarOffset = ( offset ) => {
 
 }
 
-const ToolbarItem = ({ icon, ...props }) => {
+const ToolbarItem = ({ icon, exact, to="", ...props }) => {
 
-    const location = useLocation();
+    const match = useRouteMatch({ path: `/:roomId${to}` });
 
-    const isActive = props.to === "/" ? (location.pathname.indexOf("/",1) < 0) : location.pathname.endsWith( props.to );
+    const isActive = Boolean( match && (!exact || match.isExact) );
 
     return (
         <div className={"item" + (isActive ? " is-active" : "")}>
-            <RoomLink {...props} className="action">
+            <RoomLink {...props} to={to} className="action">
                 <Icon icon={icon} />
             </RoomLink>
         </div>
@@ -53,7 +53,7 @@ const Toolbar = () => {
 
     const links = classroom
         ? [
-            { to: `/`, "aria-label": "Dashboard home", icon: "chalkboard-teacher" },
+            { to: "", "aria-label": "Dashboard home", icon: "chalkboard-teacher", exact: true },
             { to: `/team`, "aria-label": "Manage team", icon: "users" },
             { to: `/students`, "aria-label": "Manage students", icon: "user-graduate" }
         ]
