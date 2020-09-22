@@ -43,11 +43,14 @@ export const StudentMenu = ({ _id, name }) => {
     );
 }
 
-export const StudentPriorityTag = ( { level, ...props } ) => {
+export const StudentPriorityTag = ( { level, className, ...props } ) => {
 
     const priorityLevel = usePriorityLevel( level );
 
-    return <Tag color={priorityLevel.color} className="is-light" {...props}><Icon icon="exclamation-circle"/><span>{priorityLevel.label}</span></Tag>;
+    const classes = className ? [className] : [];
+    classes.push("is-light");
+
+    return <Tag color={priorityLevel.color} className={classes.join(" ")} {...props}><Icon icon="exclamation-circle"/><span>{priorityLevel.label}</span></Tag>;
     
 }
 

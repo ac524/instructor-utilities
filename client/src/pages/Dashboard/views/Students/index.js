@@ -6,7 +6,7 @@ import { useTopbarConfig } from "pages/Dashboard/components/Topbar";
 
 import StudentList from "./components/StudentList";
 import { ModalProvider } from "components/Modal";
-import EditStudentModal from "./components/EditStudentModal"
+import EditStudentModal from "../../components/EditStudentModal"
 import StudentListControls from "./components/StudentListControls";
 
 const Students = () => {

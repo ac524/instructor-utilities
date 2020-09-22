@@ -12,12 +12,15 @@ import {
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
-import { useAssignedStudents, useStaffByRole } from "pages/Dashboard/store";
+import { useAssignedStudents, useDashboardDispatch, getDashboardAction as gda, useStaffByRole } from "pages/Dashboard/store";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
 import RoomLink from "pages/Dashboard/components/RoomLink";
 import { Redirect, Route, Switch, useLocation, useParams } from "react-router-dom";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
-import { useStudentSort } from "pages/Dashboard/utils/student";
+import { useStudentSort, useStudentGroups } from "pages/Dashboard/utils/student";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import EditStudentModal from "pages/Dashboard/components/EditStudentModal";
+import { ModalProvider } from "components/Modal";
 
 const { Column } = Columns;
 
@@ -48,10 +51,13 @@ export const MemberCardButton = ( { isActive, onClick = () => undefined, member:
 
 export const Member = () => {
 
+    const dispatch = useDashboardDispatch();
     const { memberId } = useParams();
     const [ sort, setSort ] = useState("priorityLevel:desc");
     const assignedStudents = useAssignedStudents( memberId );
     const studentSort = useStudentSort(sort);
+
+    const openEdit = _id => dispatch(gda(EDIT_STUDENT, _id));
 
     return (
         <Panel className="has-background-white is-shadowless" renderAs="div">
@@ -62,10 +68,11 @@ export const Member = () => {
             </Heading>
             {assignedStudents.sort( studentSort ).map( ({_id, name, priorityLevel}) => (
                 <Panel.Block key={_id}>
-                    {name}
-                    <Tag.Group gapless className="ml-auto">
-                        <StudentPriorityTag level={priorityLevel} />
+                    <span>{name}</span>
+                    <Tag.Group gapless className="ml-auto mb-0">
+                        <StudentPriorityTag level={priorityLevel} className="mb-0"/>
                     </Tag.Group>
+                    <Button size="small" onClick={()=>openEdit(_id)} className="ml-2"><Icon icon="ellipsis-h" /></Button>
                 </Panel.Block>
             ))}
         </Panel>
@@ -73,21 +80,36 @@ export const Member = () => {
 
 }
 
-const StaffGroupPanel = ({ title, staff }) => {
+const StaffGroupPanelBlock = ( { member: { _id, user } } ) => {
+
+    const assignedStudents = useAssignedStudents( _id );
+    const groupedStudents = useStudentGroups( assignedStudents, "priority" );
 
     const location = useLocation();
-
     const isMemberActive = memberId => location.pathname.endsWith(`/team/${memberId}`);
+
+    return (
+        <Panel.Block key={_id} renderAs={RoomLink} to={`/team/${_id}`} active={isMemberActive(_id)}>
+            <span className="has-overflow-ellipsis">{user.name}</span>
+            <Tag.Group gapless className="ml-auto mb-0" style={{flexWrap:"nowrap"}}>
+                {groupedStudents.filter(group=>group.entries.length).map( group => {
+                    return <Tag color={group.group.color} className="is-light mb-0">{group.entries.length}</Tag>;
+                } )}
+            </Tag.Group>
+        </Panel.Block>
+    )
+
+}
+
+const StaffGroupPanel = ({ title, staff }) => {
 
     return (
         <Panel className="has-background-white is-shadowless is-radiusless">
             <Heading className="is-flex is-light px-3" renderAs="h3" size={5}>
                 <span>{title}</span>
             </Heading>
-            {staff.map( ({_id, user}) => (
-                <Panel.Block key={_id} renderAs={RoomLink} to={`/team/${_id}`} active={isMemberActive(_id)}>
-                    {user.name}
-                </Panel.Block>
+            {staff.map( member => (
+                <StaffGroupPanelBlock member={member} />
             ))}
         </Panel>
     )
@@ -106,18 +128,21 @@ const Staff = () => {
 
     return (
         <div className="staff">
-            <Columns>
-                <Column tablet={{size:"half"}} desktop={{size:"one-quarter"}}>
-                    {staff.instructor && <StaffGroupPanel title="Instructors" staff={staff.instructor} />}
-                    {staff.ta && <StaffGroupPanel title="TAs" staff={staff.ta} />}
-                </Column>
-                <Column>
-                    <Switch>
-                        <Route exact path={`/${roomId}/team/:memberId`} component={Member} />
-                        <Route render={({ location })=><Redirect to={{ pathname: `/${roomId}/team/${staff.instructor[0]._id}`, state: { from: location } }} />} />
-                    </Switch>
-                </Column>
-            </Columns>
+            <ModalProvider>
+                <Columns>
+                    <Column tablet={{size:"half"}} desktop={{size:"one-quarter"}}>
+                        {staff.instructor && <StaffGroupPanel title="Instructors" staff={staff.instructor} />}
+                        {staff.ta && <StaffGroupPanel title="TAs" staff={staff.ta} />}
+                    </Column>
+                    <Column>
+                        <Switch>
+                            <Route exact path={`/${roomId}/team/:memberId`} component={Member} />
+                            <Route render={({ location })=><Redirect to={{ pathname: `/${roomId}/team/${staff.instructor[0]._id}`, state: { from: location } }} />} />
+                        </Switch>
+                    </Column>
+                </Columns>
+                <EditStudentModal />
+            </ModalProvider>
         </div>
     )
 

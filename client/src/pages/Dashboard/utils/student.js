@@ -68,9 +68,8 @@ export const useStudentGroupings = () => {
 
 }
 
-export const useStudentGroups = ( groupBy ) => {
+export const useStudentGroups = ( students, groupBy ) => {
 
-    const students = useStudents();
     const studentGroupings = useStudentGroupings();
     const [ studentGroups, setStudentGroups ] = useState([]);
 

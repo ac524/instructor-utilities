@@ -4,10 +4,12 @@ import { Columns, Card } from "react-bulma-components";
 
 import { StudentCard } from "pages/Dashboard/components/StudentCard";
 import { useStudentSort, useStudentGroups } from "pages/Dashboard/utils/student";
+import { useStudents } from "pages/Dashboard/store";
 
 const StudentList = ( { sort, groupBy, search } ) => {
 
-    const groupedStudents = useStudentGroups( groupBy );
+    const students = useStudents();
+    const groupedStudents = useStudentGroups( students, groupBy );
     const studentSort = useStudentSort( sort );
     const studentFilter = student => !search || student.name.toLowerCase().includes( search );
 
