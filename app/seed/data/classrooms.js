@@ -1,6 +1,19 @@
+const { Feed } = require("../../models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const createStudents = (staff) => {
+const createStudentFeed = async (roomId,studentId) => {
+    const feed = new Feed({
+      room: roomId,
+      for: studentId,
+      in: "students"
+    });
+
+    await feed.save();
+
+    return feed._id;
+}
+
+const createStudents = async (roomId, staff) => {
 
   const names = [
     "Sue Watts",
@@ -38,12 +51,20 @@ const createStudents = (staff) => {
     return staff[ Math.floor( (Math.random() * staff.length) ) ]._id;
   }
 
-  return names.map( name => ({
-    _id: new ObjectId(),
+  const studentId = new ObjectId()
+
+  const students = names.map( name => ({
+    _id: studentId,
     name,
     priorityLevel: randomPriority(),
     assignedTo: randomStaffId()
   }) );
+
+  for(let i=0; i < students.length; i++)
+
+    students[i].feed = await createStudentFeed(roomId, studentId);
+
+  return students;
 
 }
 
@@ -62,15 +83,17 @@ const createStaff = users => [
 
 module.exports = async ( users ) => {
 
+  const roomId = new ObjectId();
   const staff = createStaff(users);
 
   // console.log( createStudents(staff) );
 
   return [
     {
+      _id: roomId,
       name: "My First Classroom",
       staff: staff,
-      students: createStudents(staff)
+      students: await createStudents(roomId, staff)
     }
   ];
 

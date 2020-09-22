@@ -44,6 +44,11 @@ const StudentSchema = new Schema({
   assignedTo: {
       type: Schema.Types.ObjectId
   },
+  feed: {
+    type: Schema.Types.ObjectId,
+    ref: "Feed",
+    required: true
+  },
   date: {
     type: Date,
     default: Date.now
