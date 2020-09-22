@@ -106,15 +106,17 @@ export const useEditStudent = () => {
 
 }
 
-export const useAssignedStudents = ( staffId ) => {
+export const filterStudentsAssignedTo = ( students, staffId ) => students.filter(({ assignedTo }) => assignedTo === staffId);
+
+export const useAssignedStudents = staffId => {
 
     const students = useStudents();
 
-    const [ assignedStudents, setAssignedStudents ] = useState([]);
+    const [ assignedStudents, setAssignedStudents ] = useState( filterStudentsAssignedTo( students, staffId ) );
 
     useEffect(() => {
 
-        setAssignedStudents( students.filter( ({ assignedTo }) => assignedTo === staffId ) );
+        setAssignedStudents( filterStudentsAssignedTo( students, staffId ) );
 
     }, [students, staffId]);
 

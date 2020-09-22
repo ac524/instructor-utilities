@@ -16,6 +16,8 @@ import { useAssignedStudents, useStaffByRole } from "pages/Dashboard/store";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
 import RoomLink from "pages/Dashboard/components/RoomLink";
 import { Redirect, Route, Switch, useLocation, useParams } from "react-router-dom";
+import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
+import { useStudentSort } from "pages/Dashboard/utils/student";
 
 const { Column } = Columns;
 
@@ -47,18 +49,18 @@ export const MemberCardButton = ( { isActive, onClick = () => undefined, member:
 export const Member = () => {
 
     const { memberId } = useParams();
+    const [ sort, setSort ] = useState("priorityLevel:desc");
     const assignedStudents = useAssignedStudents( memberId );
+    const studentSort = useStudentSort(sort);
 
     return (
         <Panel className="has-background-white is-shadowless" renderAs="div">
             <Heading className="is-flex is-primary px-3" renderAs="h2" size={4} style={{alignItems:"center"}}>
                 <Icon icon="user-graduate" />
                 <span>Students</span>
-                <Button className="ml-auto" size="small">
-                    <Icon icon="ellipsis-h" />
-                </Button>
+                <SortSelectDropdown className="ml-auto is-right" state={[ sort, setSort ]} />
             </Heading>
-            {assignedStudents.map( ({_id, name, priorityLevel}) => (
+            {assignedStudents.sort( studentSort ).map( ({_id, name, priorityLevel}) => (
                 <Panel.Block key={_id}>
                     {name}
                     <Tag.Group gapless className="ml-auto">
