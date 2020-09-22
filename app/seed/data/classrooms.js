@@ -43,12 +43,14 @@ const createStudents = async (roomId, staff) => {
     "Nafeesa Gilliam"
   ];
 
+  const taStaff = staff.filter(({role})=>role === "ta");
+
   const randomPriority = ( max = 10, min = 1  ) => {
     return Math.floor( (Math.random() * max)+min )
   }
 
   const randomStaffId = () => {
-    return staff[ Math.floor( (Math.random() * staff.length) ) ]._id;
+    return taStaff[ Math.floor( (Math.random() * taStaff.length) ) ]._id;
   }
 
   const studentId = new ObjectId()
