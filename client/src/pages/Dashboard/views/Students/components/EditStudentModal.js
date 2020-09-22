@@ -10,7 +10,7 @@ import Modal, { useModalContext } from "components/Modal";
 import Form, { createValidator } from "components/Form";
 
 import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import { ADD_STUDENT, EDIT_STUDENT, UPDATE_STUDENT } from "pages/Dashboard/store/actions";
 import api from "utils/api";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
 
@@ -24,7 +24,7 @@ const validateStudentData = createValidator({
 });
 
 const EditStudentModal = () => {
-
+    
     const [ { classroom, editStudent: editStudentId }, dispatch ] = useDashboardContext();
     const [ ,setIsModalActive ] = useModalContext();
 
@@ -114,9 +114,15 @@ const EditStudentModal = () => {
         try {
 
             if( _id ) {
+
+                dispatch(gda( UPDATE_STUDENT, { _id, ...data } ));
+
                 await api.updateStudent( classroom._id, _id, data );
+
             } else {
-                await api.createStudent( { ...data, roomId: classroom._id } );
+
+                dispatch(gda( ADD_STUDENT, (await api.createStudent( { ...data, roomId: classroom._id } )).data ));
+
             }
 
         } catch(err) {

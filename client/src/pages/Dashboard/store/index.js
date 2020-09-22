@@ -125,7 +125,7 @@ const reducer = ( state, { type, payload } ) => {
             ...state,
             classroom: {
                 ...state.classroom,
-                students: state.classroom.students.map( student => student._id === payload._id ? payload : student )
+                students: state.classroom.students.map( student => student._id === payload._id ? { ...student, ...payload } : student )
             }
         }),
         [REMOVE_STUDENT]: () => ({

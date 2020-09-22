@@ -1,9 +1,10 @@
 const { Classroom } = require("../models");
+const ioEmit = require("./utils/ioEmit");
 
 const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
 const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Classroom.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
-
+const mapUpdateKeys = updates => Object.fromEntries(Object.entries(updates).map(([key,value])=>[`students.$.${key}`,value]));
 
 /**
  * All routes require isRoomMember middleware for authentication
@@ -30,12 +31,12 @@ module.exports = {
 
             const student = room.students[ room.students.length - 1 ];
 
-            req.roomIo.emit( "dispatch", {
+            ioEmit( req, req.roomIo, "dispatch", {
                 type: "ADD_STUDENT",
                 payload: student
             } );
 
-            res.json( { success: true } );
+            res.json( student );
                 
         } catch(err) {
 
@@ -74,19 +75,22 @@ module.exports = {
 
                 if( !req.body.hasOwnProperty(name) ) return update;
 
-                return { ...update, [`students.$.${name}`]: req.body[name] };
+                return { ...update, [name]: req.body[name] };
 
             }, {});
             
-            const student = await findStudentByIdAndUpdate( req.roomId, req.params.studentId, update );
+            const student = await findStudentByIdAndUpdate( req.roomId, req.params.studentId, mapUpdateKeys(update) );
 
             if( !student )
 
                 res.status(404).json({ default: "Student not found." });
 
-            req.roomIo.emit( "dispatch", {
+            ioEmit( req, req.roomIo, "dispatch", {
                 type: "UPDATE_STUDENT",
-                payload: student
+                payload: {
+                    _id: req.params.studentId,
+                    ...update
+                }
             } );
 
             res.json({ success: true });

@@ -58,7 +58,7 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
     let assignedText;
     const tagProps = {};
 
-    if( assignedStaff._id ) {
+    if( assignedStaff && assignedStaff._id ) {
         tagProps.color = "primary";
         tagProps.className = "is-light";
         assignedText = assignedStaff.user.name;
