@@ -17,7 +17,7 @@ const Deelevate = ( { by, date, student } ) => {
                 <Icon icon="level-down-alt" />
             </Tag>
             <span>
-                <a href="#fake"><UserName user={by} /></a> delevated <strong>{student.name}</strong>
+                <a href="#fake"><UserName user={by} /></a> de-elevated <strong>{student.name}</strong>
             </span>
             <Date date={date} className="end" />
         </FeedEntry>
