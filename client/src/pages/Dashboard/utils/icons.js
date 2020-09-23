@@ -21,7 +21,9 @@ import {
     faCog,
     faChalkboardTeacher,
     faSignOutAlt,
-    faArchive
+    faArchive,
+    faLevelUpAlt,
+    faLevelDownAlt
     // faWeight
     // faSortAmountDownAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -57,6 +59,8 @@ export default () => library.add(
     faChalkboardTeacher,
     faSignOutAlt,
     faArchive,
+    faLevelUpAlt,
+    faLevelDownAlt,
 
     // Regular Icons
     faArrowAltCircleLeft,

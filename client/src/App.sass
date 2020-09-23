@@ -92,6 +92,17 @@
 .has-background-clear
     background-color: transparent !important
 
+.columns
+    &.is-gapless
+        .column:not(:first-child)
+            > .box
+                border-top-left-radius: 0
+                border-bottom-left-radius: 0
+        .column:not(:last-child)
+            > .box
+                border-top-right-radius: 0
+                border-bottom-right-radius: 0
+
 @media screen and (max-width: 768px)
     .button.is-icon-only-mobile
         .icon
@@ -190,6 +201,10 @@
         .panel-block
             border-radius: 0 !important
 
+.modal
+    &.is-full
+        width: 100%
+        
 .modal-content
     max-width: 90%
 

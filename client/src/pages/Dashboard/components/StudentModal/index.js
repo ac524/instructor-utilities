@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 import {
     Box,
+    Columns,
     Heading
 } from "react-bulma-components";
 
@@ -11,8 +12,10 @@ import Modal, { useModalContext } from "components/Modal";
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 // import api from "utils/api";
-import StudentSettingsForm from "./components/StudentSettingsForm";
+import SettingsForm from "./components/SettingsForm";
+import ActivtyFeed from "./components/ActivityFeed";
 
+const { Column } = Columns;
 
 const StudentModal = () => {
     
@@ -60,12 +63,21 @@ const StudentModal = () => {
 
     return (
         // <span>test</span>
-        <Modal onClose={clearEditStudent}>
-            <Box className="py-5">
-                <Heading renderAs="h2">{_id ? "Edit" : "New"} Student</Heading>
-                <hr />
-                <StudentSettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} />
-            </Box>
+        <Modal onClose={clearEditStudent} contentProps={{style:{width:"100%",height:"800px"},className:"has-filled-content"}}>
+            <Columns gapless>
+                <Column className="has-filled-content">
+                    <Box className="py-5 is-shadowless">
+                        <Heading renderAs="h2">{_id ? "Edit" : "New"} Student</Heading>
+                        <hr />
+                        <SettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} />
+                    </Box>
+                </Column>
+                <Column className="has-filled-content">
+                    <Box className="p-6 is-shadowless has-background-white-bis has-text-grey">
+                        <ActivtyFeed />
+                    </Box>
+                </Column>
+            </Columns>
         </Modal>
     )
 

@@ -70,7 +70,7 @@ export const ModalLink = ({ children, onClick, ...props }) => {
 
 }
 
-const Modal = ( { children, onClose, ...props } ) => {
+const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
 
     const [ isActive, setIsActive ] = useContext( ModalContext );
 
@@ -84,7 +84,7 @@ const Modal = ( { children, onClose, ...props } ) => {
 
     return (
         <BulmaModal show={isActive} onClose={onModalClose} closeOnBlur={true} {...props}>
-            <BulmaModal.Content>
+            <BulmaModal.Content {...contentProps}>
                 {children}
             </BulmaModal.Content>
         </BulmaModal>

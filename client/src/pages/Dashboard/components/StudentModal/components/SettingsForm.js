@@ -83,7 +83,7 @@ export const useStudentSettingsFormFields = ( student ) => {
     
 }
 
-const StudentSettingsForm = ({ roomId, student, afterSubmit }) => {
+const SettingsForm = ({ roomId, student, afterSubmit }) => {
 
     const dispatch = useDashboardDispatch();
     const [ errors, setErrors ] = useState( {} );
@@ -131,4 +131,4 @@ const StudentSettingsForm = ({ roomId, student, afterSubmit }) => {
 
 }
 
-export default StudentSettingsForm;
+export default SettingsForm;

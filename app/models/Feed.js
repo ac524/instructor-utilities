@@ -2,9 +2,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const FeedItem = new Schema({
-    type: {
+    action: {
       type: String,
       required: true
+    },
+    by: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     data: {
         type: Schema.Types.Mixed
