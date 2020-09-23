@@ -1,107 +1,14 @@
-import Icon from "components/Icon";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "utils/api";
 
 import {
-    Button,
-    Tag
-} from "react-bulma-components";
+    Comment,
+    Created,
+    Elevate,
+    Deelevate
+} from "./entries"
 
 import "./style.sass";
-
-// const dateFormat = new Intl.DateTimeFormat("en-US", {
-//     year: "numeric",
-//     month: "long",
-//     day: "2-digit"
-// });
-
-const Date = ( { date, className, ...props } ) => {
-
-    const classes = [ "date" ];
-    if( className ) classes.push( className );
-
-    console.log(date, className, props);
-
-    return (
-        <span className={classes.join(" ")} {...props}>
-            {/*dateFormat.format(date)*/}
-            {date}
-        </span>
-    )
-
-}
-
-const FeedEntry = ({ children, block }) => {
-
-    const classes = ["feed-entry"];
-
-    if( block ) classes.push("is-block-entry");
-
-    return <div className={classes.join(" ")}>{children}</div>;
-
-}
-
-const Created = ( { by, date } ) => {
-
-    return (
-        <FeedEntry>
-            <span>
-                <a href="#fake">You</a> added <strong>name</strong>
-            </span>
-            <Date date={date} className="end" />
-        </FeedEntry>
-    );
-
-}
-
-const Comment = ( { by, data, date } ) => {
-
-    return (
-        <FeedEntry block>
-            <Button className="start is-circle">
-                <span className="icon">{by.name[0]}</span>
-            </Button>
-            <div className="fill box">
-                <Date date={date} />
-                <p>{data.comment}</p>
-            </div>
-        </FeedEntry>
-    );
-
-}
-
-const Elevate = ( { by, data, date } ) => {
-
-    return (
-        <FeedEntry>
-            <Tag className="start" color="danger">
-                <Icon icon="level-up-alt" />
-            </Tag>
-            <span>
-                <a href="#fake">{by.name}</a> elevated <strong>name</strong> to <a href="#fake">{data.to.name}</a>
-            </span>
-            <Date date={date} className="end" />
-        </FeedEntry>
-    );
-
-}
-
-const Deelevate = ( { by, data, date } ) => {
-
-    return (
-        <FeedEntry>
-            <Tag className="start" color="primary">
-                <Icon icon="level-down-alt" />
-            </Tag>
-            <span>
-                <a href="#fake">{by.name}</a> de-elevated <strong>name</strong>
-            </span>
-            <span className="date end">
-                {date}
-            </span>
-        </FeedEntry>
-    );
-
-}
 
 const typeMap = {
     create: Created,
@@ -120,9 +27,28 @@ const feedEntryComponentMap = item => {
 
 }
 
-const ActivtyFeed = () => {
+const ActivtyFeed = ({ student }) => {
 
-    const feed = [
+    const [ , setItems ] = useState([]);
+    const { feed } = student;
+
+    useEffect(() => {
+
+        const getItems = async () => setItems( (await api.getFeedItems(feed) ).data );
+
+        try {
+
+            getItems();
+
+        } catch(err) {
+
+            console.log( err );
+
+        }
+
+    },[feed]);
+
+    const items = [
         {
             _id: 1,
             action: "create",
@@ -165,7 +91,7 @@ const ActivtyFeed = () => {
 
     return (
         <div className="feed">
-            {feed.map( feedEntryComponentMap )}
+            {items.map( feedEntryComponentMap )}
         </div>
     );
 

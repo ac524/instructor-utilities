@@ -1,4 +1,4 @@
-const { Classroom, Student } = require("../../models");
+const { Classroom, Feed } = require("../../models");
 
 const setClassroom = async (req, res, next) => {
     try {
@@ -29,6 +29,15 @@ module.exports = {
     async fromParam(req, res, next) {
 
         req.roomId = req.params.roomId;
+
+        await setClassroom(req, res, next);
+
+    },
+    async fromFeed(req, res, next) {
+
+        const feed = await Feed.findById( req.params.feedId ).select( "room" );
+
+        req.roomId = feed.room;
 
         await setClassroom(req, res, next);
 

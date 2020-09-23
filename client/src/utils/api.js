@@ -22,6 +22,10 @@ class API {
 
     }
 
+    /**
+     * Classroom Routes
+     */
+
     async getClassroom( roomId ) {
 
         return this.axios.get( `/api/rooms/${roomId}` );
@@ -33,6 +37,10 @@ class API {
         return this.axios.patch( `/api/rooms/${roomId}`, data );
 
     }
+
+    /**
+     * Invite Routes
+     */
 
     async createInvite( roomId, data ) {
 
@@ -64,6 +72,10 @@ class API {
 
     }
 
+    /**
+     * Student Routes
+     */
+
     async createStudent( options ) {
 
         return this.axios.post( `/api/students`, options );
@@ -81,6 +93,26 @@ class API {
         return this.axios.delete( `/api/students/${roomId}/${studentId}` );
 
     }
+
+    /**
+     * Feed Routes
+     */
+
+    async getFeed( feedId ) {
+
+        return this.axios.get( `/api/feeds/${feedId}` );
+
+    }
+
+    async getFeedItems( feedId ) {
+
+        return this.axios.get( `/api/feeds/${feedId}/items` );
+
+    }
+
+    /**
+     * App Routes
+     */
 
     async installApp( roomId, type ) {
 
@@ -109,6 +141,7 @@ class API {
     /**
      * User Routes
      */
+
     async updateUser( data ) {
 
         return this.axios.patch( "/api/user", data );

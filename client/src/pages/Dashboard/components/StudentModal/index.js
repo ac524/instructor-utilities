@@ -74,7 +74,7 @@ const StudentModal = () => {
                 </Column>
                 <Column className="has-filled-content">
                     <Box className="p-6 is-shadowless has-background-white-bis has-text-grey">
-                        <ActivtyFeed />
+                        <ActivtyFeed student={editStudent} />
                     </Box>
                 </Column>
             </Columns>
