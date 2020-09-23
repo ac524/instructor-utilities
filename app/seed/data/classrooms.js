@@ -1,11 +1,43 @@
 const { Feed } = require("../../models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const createStudentFeed = async (roomId,studentId) => {
+const createStudentFeed = async (roomId,student,instructor,assignedTo) => {
     const feed = new Feed({
       room: roomId,
-      for: studentId,
-      in: "students"
+      for: student._id,
+      in: "students",
+      items: [
+        {
+            _id: new ObjectId(),
+            action: "create",
+            by: instructor.user,
+            date: Date.now()
+        },
+        {
+            _id: new ObjectId(),
+            action: "comment",
+            by: assignedTo.user,
+            data: {
+                comment: "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man."
+            },
+            date: Date.now()
+        },
+        {
+            _id: new ObjectId(),
+            action: "elevate",
+            by: assignedTo.user,
+            data: {
+                to: instructor.user,
+            },
+            date: Date.now()
+        },
+        {
+            _id: new ObjectId(),
+            action: "deelevate",
+            by: instructor.user,
+            date: Date.now()
+        }
+      ]
     });
 
     await feed.save();
@@ -43,6 +75,7 @@ const createStudents = async (roomId, staff) => {
     "Nafeesa Gilliam"
   ];
 
+  const instructor = staff.find(({role})=>role === "instructor");
   const taStaff = staff.filter(({role})=>role === "ta");
 
   const randomPriority = ( max = 10, min = 1  ) => {
@@ -62,7 +95,12 @@ const createStudents = async (roomId, staff) => {
 
   for(let i=0; i < students.length; i++)
 
-    students[i].feed = await createStudentFeed(roomId, students[i]._id);
+    students[i].feed = await createStudentFeed(
+      roomId,
+      students[i],
+      instructor,
+      taStaff.find(({_id})=>_id.equals(students[i].assignedTo))
+    );
 
   return students;
 
