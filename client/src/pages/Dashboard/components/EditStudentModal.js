@@ -10,7 +10,7 @@ import Modal, { useModalContext } from "components/Modal";
 import Form, { createValidator } from "components/Form";
 
 import { useDashboardContext, getDashboardAction as gda, useEditStudent, useStaff } from "pages/Dashboard/store";
-import { ADD_STUDENT, EDIT_STUDENT, UPDATE_STUDENT } from "pages/Dashboard/store/actions";
+import { ADD_STUDENT, EDIT_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT } from "pages/Dashboard/store/actions";
 import api from "utils/api";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
 
@@ -139,6 +139,8 @@ const EditStudentModal = () => {
 
         e.preventDefault();
         
+        dispatch(gda( REMOVE_STUDENT, _id ));
+
         await api.removeStudent( classroom._id, _id );
 
         clearEditStudent();

@@ -10,7 +10,7 @@ import "./style.sass";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useClassroom, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 import api from "utils/api";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
 
@@ -24,6 +24,7 @@ export const StudentMenu = ({ _id, name }) => {
     }
 
     const removeStudent = async(_id) => {
+        dispatch(gda( REMOVE_STUDENT, _id ));
         await api.removeStudent( roomId, _id );
     }
 
