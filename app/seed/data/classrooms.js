@@ -53,10 +53,8 @@ const createStudents = async (roomId, staff) => {
     return taStaff[ Math.floor( (Math.random() * taStaff.length) ) ]._id;
   }
 
-  const studentId = new ObjectId()
-
   const students = names.map( name => ({
-    _id: studentId,
+    _id: new ObjectId(),
     name,
     priorityLevel: randomPriority(),
     assignedTo: randomStaffId()
@@ -64,7 +62,7 @@ const createStudents = async (roomId, staff) => {
 
   for(let i=0; i < students.length; i++)
 
-    students[i].feed = await createStudentFeed(roomId, studentId);
+    students[i].feed = await createStudentFeed(roomId, students[i]._id);
 
   return students;
 
