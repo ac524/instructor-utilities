@@ -19,7 +19,7 @@ import { Redirect, Route, Switch, useLocation, useParams } from "react-router-do
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
 import { useStudentSort, useStudentGroups } from "pages/Dashboard/utils/student";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
-import EditStudentModal from "pages/Dashboard/components/EditStudentModal";
+import StudentModal from "pages/Dashboard/components/StudentModal";
 import { ModalProvider } from "components/Modal";
 
 const { Column } = Columns;
@@ -93,7 +93,7 @@ const StaffGroupPanelBlock = ( { member: { _id, user } } ) => {
             <span className="has-overflow-ellipsis">{user.name}</span>
             <Tag.Group gapless className="ml-auto mb-0" style={{flexWrap:"nowrap"}}>
                 {groupedStudents.filter(group=>group.entries.length).map( group => {
-                    return <Tag color={group.group.color} className="is-light mb-0">{group.entries.length}</Tag>;
+                    return <Tag key={group.group.key} color={group.group.color} className="is-light mb-0">{group.entries.length}</Tag>;
                 } )}
             </Tag.Group>
         </Panel.Block>
@@ -109,7 +109,7 @@ const StaffGroupPanel = ({ title, staff }) => {
                 <span>{title}</span>
             </Heading>
             {staff.map( member => (
-                <StaffGroupPanelBlock member={member} />
+                <StaffGroupPanelBlock key={member._id} member={member} />
             ))}
         </Panel>
     )
@@ -141,7 +141,7 @@ const Staff = () => {
                         </Switch>
                     </Column>
                 </Columns>
-                <EditStudentModal />
+                <StudentModal />
             </ModalProvider>
         </div>
     )
