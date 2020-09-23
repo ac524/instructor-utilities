@@ -1,8 +1,9 @@
-const { Classroom, User } = require("../../models");
+const { Feed, Classroom, User } = require("../../models");
 
 module.exports = async () => {
 
     await Classroom.deleteMany({});
+    await Feed.deleteMany({});
 
     const users = await User.find({});
 

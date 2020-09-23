@@ -1,4 +1,6 @@
-const { Classroom } = require("../models");
+const { Classroom, Feed } = require("../models");
+const ObjectId = require("mongoose").Types.ObjectId;
+
 const ioEmit = require("./utils/ioEmit");
 
 const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
@@ -14,9 +16,14 @@ module.exports = {
 
         try {
 
+            const feedId = new ObjectId();
+            const studentId = new ObjectId();
+
             const data = {
+                _id: studentId,
                 name: req.body.name,
-                priorityLevel: req.body.priorityLevel
+                priorityLevel: req.body.priorityLevel,
+                feed: feedId
             }
 
             if( req.body.assignedTo ) data.assignedTo = req.body.assignedTo;
@@ -29,7 +36,16 @@ module.exports = {
 
             const room = await Classroom.findByIdAndUpdate( req.roomId, update, { new: true } ).select("students");
 
-            const student = room.students[ room.students.length - 1 ];
+            const student = room.students.id( studentId );
+
+            const feed = new Feed({
+                _id: feedId,
+                room: req.roomId,
+                for: studentId,
+                in: "students"
+            });
+
+            await feed.save();
 
             ioEmit( req, req.roomIo, "dispatch", {
                 type: "ADD_STUDENT",
