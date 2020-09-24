@@ -13,6 +13,25 @@ const populateEntry = async entry => {
 
 }
 
+const createEntry = async ( by, action, data ) => {
+
+    const entryId = new ObjectId();
+
+    const feed = await Feed.findByIdAndUpdate( req.params.feedId, {
+        $push: {
+            items: {
+                _id: entryId,
+                action,
+                by,
+                data
+            }
+        }
+    }, { new: true } ).populate("items.by", "name").select("items");
+
+    return await populateEntry( feed.items.id( entryId ) );
+
+}
+
 module.exports = {
     async getSingle( req, res ) {
 
@@ -56,26 +75,54 @@ module.exports = {
 
         try {
 
-            const entryId = new ObjectId();
-
-            const feed = await Feed.findByIdAndUpdate( req.params.feedId, {
-                $push: {
-                    items: {
-                        _id: entryId,
-                        action: "comment",
-                        by: req.user._id,
-                        data: {
-                            comment: req.body.comment
-                        }
-                    }
-                }
-            }, { new: true } ).populate("items.by", "name").select("items");
-
-            res.json( feed.items.id( entryId ) );
+            res.json(
+                await createEntry(
+                    req.user._id,
+                    "comment",
+                    { comment: req.body.comment }
+                )
+            );
 
         } catch(err) {
 
             res.status(500).json({default:"Unable to get create comment"});
+
+        }
+
+    },
+    async createElevate( req, res ) {
+
+        try {
+
+            res.json(
+                await createEntry(
+                    req.user._id,
+                    "elevate",
+                    { to: req.body.to }
+                )
+            );
+
+        } catch(err) {
+
+            res.status(500).json({default:"Unable to elevate student"});
+
+        }
+
+    },
+    async createDeelevate( req, res ) {
+
+        try {
+
+            res.json(
+                await createEntry(
+                    req.user._id,
+                    "deelevate"
+                )
+            );
+
+        } catch(err) {
+
+            res.status(500).json({default:"Unable to de-elevate student"});
 
         }
 
