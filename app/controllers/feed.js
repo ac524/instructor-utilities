@@ -1,4 +1,5 @@
 const { Feed, User } =  require("../models");
+const ioEmit = require("./utils/ioEmit");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const populateEntry = async entry => {
@@ -29,6 +30,12 @@ const createEntry = async ( feedId, by, action, data ) => {
     }, { new: true } ).populate("items.by", "name").select("items");
 
     return await populateEntry( feed.items.id( entryId ) );
+
+}
+
+const broadcastEntry = async ( req, feedId, entry ) => {
+
+    ioEmit( req, req.roomIo, `feedpush:${feedId}`, entry );
 
 }
 
@@ -75,14 +82,16 @@ module.exports = {
 
         try {
 
-            res.json(
-                await createEntry(
-                    req.params.feedId,
-                    req.user._id,
-                    "comment",
-                    { comment: req.body.comment }
-                )
+            const entry = await createEntry(
+                req.params.feedId,
+                req.user._id,
+                "comment",
+                { comment: req.body.comment }
             );
+
+            broadcastEntry( req, req.params.feedId, entry );
+
+            res.json( entry );
 
         } catch(err) {
 
@@ -95,14 +104,16 @@ module.exports = {
 
         try {
 
-            res.json(
-                await createEntry(
-                    req.params.feedId,
-                    req.user._id,
-                    "elevate",
-                    { to: req.body.to }
-                )
+            const entry = await createEntry(
+                req.params.feedId,
+                req.user._id,
+                "elevate",
+                { to: req.body.to }
             );
+
+            broadcastEntry( req, req.params.feedId, entry );
+
+            res.json( entry );
 
         } catch(err) {
 
@@ -115,13 +126,15 @@ module.exports = {
 
         try {
 
-            res.json(
-                await createEntry(
-                    req.params.feedId,
-                    req.user._id,
-                    "deelevate"
-                )
+            const entry = await createEntry(
+                req.params.feedId,
+                req.user._id,
+                "deelevate"
             );
+
+            broadcastEntry( req, req.params.feedId, entry );
+
+            res.json( entry );
 
         } catch(err) {
 

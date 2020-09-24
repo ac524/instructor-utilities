@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import api from "utils/api";
+import { useSocket } from "utils/socket.io";
 import CommentForm from "./components/CommentForm";
 
 import {
@@ -18,10 +19,23 @@ const typeMap = {
     deelevate: Deelevate
 }
 
+const getAction = ( action, payload ) => ({action, payload});
+
 const ActivtyFeed = ({ student }) => {
 
-    const [ items, setItems ] = useState([]);
+    const [ items, dispatch ] = useReducer((state, { action, payload })=>{
+        switch(action) {
+            case "set":
+                return [ ...payload ];
+            case "add":
+                return [ ...state, payload ];
+            default:
+                return state;
+        }
+    }, []);
+
     const { feed } = student;
+    const socket = useSocket();
 
     const feedEntryComponentMap = item => {
 
@@ -33,13 +47,21 @@ const ActivtyFeed = ({ student }) => {
 
     }
 
-    const pushItem = (item) => {
-        setItems([ ...items, item ]);
-    }
+    // const pushItem = item => dispatch(getAction("add",item));
 
     useEffect(() => {
 
-        const getItems = async () => setItems( (await api.getFeedItems(feed) ).data );
+        const handleFeedPush = message => dispatch(getAction("add",message.payload));
+
+        socket.on( `feedpush:${feed}`, handleFeedPush );
+
+        return () => socket.off( `feedpush:${feed}`, handleFeedPush );
+
+    }, [feed, socket, dispatch]);
+
+    useEffect(() => {
+
+        const getItems = async () => dispatch(getAction( "set", (await api.getFeedItems(feed)).data ));
 
         try {
 
@@ -99,7 +121,7 @@ const ActivtyFeed = ({ student }) => {
             <div className="feed-entries">
                 {items.map( feedEntryComponentMap )}
             </div>
-            <CommentForm feedId={feed} pushItem={pushItem} />
+            <CommentForm feedId={feed} />
         </div>
     );
 
