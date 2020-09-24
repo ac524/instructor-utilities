@@ -5,15 +5,20 @@ const isRoomMember = require("../middleware/isRoomMember");
 
 const {
     getSingle,
-    getSingleItems
+    getSingleItems,
+    createComment
 } = require("../../controllers/feed");
 
 router
     .route( "/:feedId" )
-    .get( setRoom.fromFeed, isRoomMember, getSingle )
+    .get( setRoom.fromFeed, isRoomMember, getSingle );
 
 router
     .route( "/:feedId/items" )
-    .get( setRoom.fromFeed, isRoomMember, getSingleItems )
+    .get( setRoom.fromFeed, isRoomMember, getSingleItems );
+
+router
+    .route( "/:feedId/comments" )
+    .post( setRoom.fromFeed, isRoomMember, createComment );
 
 module.exports = router;

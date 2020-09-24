@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 
 import Form, { createValidator } from "components/Form";
+import api from "utils/api";
 
 const validateInviteData = createValidator({
     validators: {
-        comment: ({ email }) => Boolean(email) || "Email is required"
+        comment: ({ comment }) => Boolean(comment) || "A comment is required"
     }
 });
 
 const useCommentFormFields = () => {
 
-    const [ state, setState ] = useState({});
+    const [ state, setState ] = useState({ comment: "" });
 
     const onChange = e => setState({ ...state, [e.target.name]: e.target.value });
 
@@ -28,7 +29,7 @@ const useCommentFormFields = () => {
 
 }
 
-const CommentForm = () => {
+const CommentForm = ({ feedId, pushItem }) => {
 
     const [ fields, values ] = useCommentFormFields();
     const [ errors, setErrors ] = useState({});
@@ -46,7 +47,9 @@ const CommentForm = () => {
                 return
             }
 
-            console.log(data);
+            const res = await api.createComment( feedId, data );
+            
+            pushItem( res.data );
 
         } catch(err) {
             

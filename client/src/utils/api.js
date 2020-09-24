@@ -110,6 +110,14 @@ class API {
 
     }
 
+
+
+    async createComment( feedId, data ) {
+
+        return this.axios.post( `/api/feeds/${feedId}/comments`, data );
+
+    }
+
     /**
      * App Routes
      */

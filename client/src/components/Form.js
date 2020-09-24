@@ -117,7 +117,7 @@ export const FormField = ( { label, type = "text", name, state, placeholder, val
 
     return (
         <Field {...props}>
-            { !label || <Label>{label}</Label>}
+            { label && <Label>{label}</Label>}
             <Control>
                 <FormInput {...fieldInputProps} />
                 <Error name={name} />

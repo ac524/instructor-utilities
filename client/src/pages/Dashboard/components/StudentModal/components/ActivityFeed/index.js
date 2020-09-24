@@ -33,6 +33,10 @@ const ActivtyFeed = ({ student }) => {
 
     }
 
+    const pushItem = (item) => {
+        setItems([ ...items, item ]);
+    }
+
     useEffect(() => {
 
         const getItems = async () => setItems( (await api.getFeedItems(feed) ).data );
@@ -95,7 +99,7 @@ const ActivtyFeed = ({ student }) => {
             <div className="feed-entries">
                 {items.map( feedEntryComponentMap )}
             </div>
-            <CommentForm />
+            <CommentForm feedId={feed} pushItem={pushItem} />
         </div>
     );
 

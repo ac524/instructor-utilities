@@ -1,5 +1,5 @@
-const { Feed } =  require("../models");
-const User = require("../models/User");
+const { Feed, User } =  require("../models");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const populateEntry = async entry => {
 
@@ -48,6 +48,34 @@ module.exports = {
         } catch(err) {
 
             res.status(500).json({default:"Unable to get feed items"});
+
+        }
+
+    },
+    async createComment( req, res ) {
+
+        try {
+
+            const entryId = new ObjectId();
+
+            const feed = await Feed.findByIdAndUpdate( req.params.feedId, {
+                $push: {
+                    items: {
+                        _id: entryId,
+                        action: "comment",
+                        by: req.user._id,
+                        data: {
+                            comment: req.body.comment
+                        }
+                    }
+                }
+            }, { new: true } ).populate("items.by", "name").select("items");
+
+            res.json( feed.items.id( entryId ) );
+
+        } catch(err) {
+
+            res.status(500).json({default:"Unable to get create comment"});
 
         }
 
