@@ -110,11 +110,21 @@ class API {
 
     }
 
-
-
     async createComment( feedId, data ) {
 
         return this.axios.post( `/api/feeds/${feedId}/comments`, data );
+
+    }
+
+    async createElevate( feedId, data ) {
+
+        return this.axios.post( `/api/feeds/${feedId}/elevate`, data );
+
+    }
+
+    async createDeelevate( feedId ) {
+
+        return this.axios.post( `/api/feeds/${feedId}/deelevate` );
 
     }
 

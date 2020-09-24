@@ -14,6 +14,7 @@ import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 // import api from "utils/api";
 import SettingsForm from "./components/SettingsForm";
 import ActivtyFeed from "./components/ActivityFeed";
+import ElevateControls from "./components/ElevateControls";
 
 const { Column } = Columns;
 
@@ -74,7 +75,10 @@ const StudentModal = () => {
             <Columns gapless>
                 <Column className="has-filled-content">
                     <Box className="py-5 is-shadowless">
-                        <Heading renderAs="h2">{_id ? "Edit" : "New"} Student</Heading>
+                        <div className="is-flex">
+                            <Heading renderAs="h2">{_id ? "Edit" : "New"} Student</Heading>
+                            { _id && <ElevateControls student={editStudent} className="ml-auto" /> }
+                        </div>
                         <hr />
                         <SettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} />
                     </Box>
