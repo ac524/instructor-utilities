@@ -20,6 +20,8 @@ export const useClassroomLoader = ( roomId ) => {
 
                 const { data } = await api.getClassroom( roomId );
 
+                console.log( data );
+
                 dispatch(gda(SET_CLASSROOM, data));
 
             } catch( err ) {

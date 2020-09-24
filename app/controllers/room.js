@@ -31,12 +31,15 @@ module.exports = {
                     .populate("staff.user", "name email date")
                     .populate("invites.token");
 
+            await room.populateStudentFeedAggregates();
+
             if( req.userSocket ) req.userSocket.join( room._id );
 
             res.json( room );
 
         } catch( err ) {
 
+            console.log(err);
             res.status(500).json({default:"Something went wrong"});
 
         }
