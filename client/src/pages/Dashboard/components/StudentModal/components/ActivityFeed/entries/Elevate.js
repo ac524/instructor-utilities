@@ -9,7 +9,7 @@ import Date from "../components/Date";
 import FeedEntry from "../components/FeedEntry";
 import UserName from "../components/UserName";
 
-const Elevate = ( { student, by, data, date } ) => {
+const Elevate = ( { by, data, date } ) => {
 
     return (
         <FeedEntry>
@@ -17,7 +17,7 @@ const Elevate = ( { student, by, data, date } ) => {
                 <Icon icon="level-up-alt" />
             </Tag>
             <span>
-                <a href="#fake"><UserName user={by} /></a> elevated <strong>{student.name}</strong> to <a href="#fake"><UserName user={data.to} /></a>
+                <a href="#fake"><UserName user={by} /></a> elevated this student to <a href="#fake"><UserName user={data.to} /></a>
             </span>
             <Date date={date} className="end" />
         </FeedEntry>
