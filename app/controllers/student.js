@@ -42,8 +42,7 @@ module.exports = {
                 _id: feedId,
                 room: req.roomId,
                 for: studentId,
-                in: "students",
-                items: []
+                in: "students"
             });
 
             feed.pushItem( req.user._id, "create" );

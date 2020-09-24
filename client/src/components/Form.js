@@ -4,7 +4,7 @@ import { Form as FormCollection, Button } from "react-bulma-components";
 
 import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
 
-const { Field, Control, Label, Input, Select } = FormCollection;
+const { Field, Control, Label, Input, Select, Textarea } = FormCollection;
 
 export const createValidator = ({ filters = {}, validators = {} }) => ( rawData ) => {
 
@@ -93,6 +93,8 @@ export const FormInput = ( { type = "text", options = [], ...props } ) => {
             );
         case "range":
             return <RangeInput {...props} />
+        case "textarea":
+            return <Textarea {...props} />
         default:
             return <Input type={type} {...props} />
     }

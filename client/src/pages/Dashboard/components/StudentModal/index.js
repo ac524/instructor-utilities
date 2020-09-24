@@ -82,7 +82,7 @@ const StudentModal = () => {
                 {
                     _id && (
                         <Column className="has-filled-content">
-                            <Box className="p-6 is-shadowless has-background-white-bis has-text-grey">
+                            <Box className="p-6 is-shadowless has-background-white-bis has-text-grey has-filled-content">
                                 <ActivtyFeed student={editStudent} />
                             </Box>
                         </Column>

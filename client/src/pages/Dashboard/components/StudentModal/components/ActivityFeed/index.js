@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "utils/api";
+import CommentForm from "./components/CommentForm";
 
 import {
     Comment,
@@ -90,8 +91,11 @@ const ActivtyFeed = ({ student }) => {
     // ];
 
     return (
-        <div className="feed">
-            {items.map( feedEntryComponentMap )}
+        <div className="feed has-filled-content">
+            <div className="feed-entries">
+                {items.map( feedEntryComponentMap )}
+            </div>
+            <CommentForm />
         </div>
     );
 
