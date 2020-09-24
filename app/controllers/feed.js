@@ -13,11 +13,11 @@ const populateEntry = async entry => {
 
 }
 
-const createEntry = async ( by, action, data ) => {
+const createEntry = async ( feedId, by, action, data ) => {
 
     const entryId = new ObjectId();
 
-    const feed = await Feed.findByIdAndUpdate( req.params.feedId, {
+    const feed = await Feed.findByIdAndUpdate( feedId, {
         $push: {
             items: {
                 _id: entryId,
@@ -77,6 +77,7 @@ module.exports = {
 
             res.json(
                 await createEntry(
+                    req.params.feedId,
                     req.user._id,
                     "comment",
                     { comment: req.body.comment }
@@ -96,6 +97,7 @@ module.exports = {
 
             res.json(
                 await createEntry(
+                    req.params.feedId,
                     req.user._id,
                     "elevate",
                     { to: req.body.to }
@@ -115,6 +117,7 @@ module.exports = {
 
             res.json(
                 await createEntry(
+                    req.params.feedId,
                     req.user._id,
                     "deelevate"
                 )
