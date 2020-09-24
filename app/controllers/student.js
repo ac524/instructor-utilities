@@ -135,6 +135,8 @@ module.exports = {
 
             await room.save();
 
+            await Feed.findByIdAndDelete(student.feed);
+
             req.roomIo.emit( "dispatch", {
                 type: "REMOVE_STUDENT",
                 payload: student._id
