@@ -61,9 +61,16 @@ const StudentModal = () => {
 
     // }
 
+    const contentProps = {};
+
+    if(_id) {
+        contentProps.style = {width:"100%",height:"800px"};
+        contentProps.className = "has-filled-content";
+    }
+
     return (
         // <span>test</span>
-        <Modal onClose={clearEditStudent} contentProps={{style:{width:"100%",height:"800px"},className:"has-filled-content"}}>
+        <Modal onClose={clearEditStudent} contentProps={contentProps}>
             <Columns gapless>
                 <Column className="has-filled-content">
                     <Box className="py-5 is-shadowless">
@@ -72,11 +79,15 @@ const StudentModal = () => {
                         <SettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} />
                     </Box>
                 </Column>
-                <Column className="has-filled-content">
-                    <Box className="p-6 is-shadowless has-background-white-bis has-text-grey">
-                        <ActivtyFeed student={editStudent} />
-                    </Box>
-                </Column>
+                {
+                    _id && (
+                        <Column className="has-filled-content">
+                            <Box className="p-6 is-shadowless has-background-white-bis has-text-grey">
+                                <ActivtyFeed student={editStudent} />
+                            </Box>
+                        </Column>
+                    )
+                }
             </Columns>
         </Modal>
     )

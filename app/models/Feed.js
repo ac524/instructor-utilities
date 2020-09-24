@@ -38,4 +38,16 @@ const FeedSchema = new Schema({
   items: [ FeedItem ]
 });
 
+FeedSchema.methods.pushItem = function ( by, action, data ) {
+
+  this.items.push({
+    by,
+    action,
+    data
+  });
+
+  return this;
+
+};
+
 module.exports = mongoose.model("Feed", FeedSchema);
