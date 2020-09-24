@@ -28,7 +28,7 @@ module.exports = {
 
             const room =
                 await Classroom.findById( req.params.roomId )
-                    .populate("staff.user")
+                    .populate("staff.user", "name email date")
                     .populate("invites.token");
 
             if( req.userSocket ) req.userSocket.join( room._id );

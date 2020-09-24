@@ -3,6 +3,7 @@ const { User } = require("../../models");
 module.exports = (jwtPayload, done) => {
 
     User.findById(jwtPayload.id)
+      .select("name email isVerified classrooms date")
       .then(user => {
         if (user) {
           return done(null, user);
