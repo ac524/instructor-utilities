@@ -81,6 +81,11 @@ StudentSchema.methods.getElevation = async function() {
 
 }
 
+/**
+ * Aggregate is the right approach, but can't be done in vitual properties.
+ * Aggregation should also start from the classroom. See the $lookup example below in
+ * commented out code below ClassroomSchema
+ */
 // StudentSchema.virtual('elevation').get(async function() {
 
   // const [ feed ] = await Feed.aggregate([
