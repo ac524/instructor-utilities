@@ -27,15 +27,19 @@ module.exports = {
         try {
 
             const room =
-                await Classroom.findById( req.params.roomId )
+                await Classroom.findById( req.roomId )
                     .populate("staff.user", "name email date")
                     .populate("invites.token");
 
-            await room.populateStudentFeedAggregates();
+            const roomAgg = await room.getFeedAggregate();
+
+            // console.log( roomAgg );
+
+            // await room.populateStudentFeedAggregates();
 
             if( req.userSocket ) req.userSocket.join( room._id );
 
-            res.json( room );
+            res.json( roomAgg );
 
         } catch( err ) {
 
@@ -84,7 +88,7 @@ module.exports = {
                 return res.status(400).json({ email: "This email is already registered to a staff member" });
 
             // Check if the email is already registered to an invite.
-            if( roomEmails.invites.map( ({email}) => email ).includes( req.body.email ) )
+            if( roomEmails.invites && roomEmails.invites.map( ({email}) => email ).includes( req.body.email ) )
 
                 return res.status(400).json({ email: "This email already has an invite." });
 

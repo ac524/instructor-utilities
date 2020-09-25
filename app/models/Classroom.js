@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-const Feed = require("./Feed");
 const Schema = mongoose.Schema;
+const studentMethods = require("./methods/student");
+const classroomMethods = require("./methods/classroom");
 
 const InvitesSchema = new Schema({
   email: {
@@ -54,55 +55,11 @@ const StudentSchema = new Schema({
     type: Date,
     default: Date.now
   },
-}/*, {
-  toObject: {
-    virtuals: true
-  },
-  toJSON: {
-    virtuals: true 
-  }
-}*/);
+});
 
-StudentSchema.methods.getElevation = async function() {
+StudentSchema.methods.getFeedAggregateData = studentMethods.getFeedAggregateData;
 
-  const [ feed ] = await Feed.aggregate([
-
-    { $match: { _id: this.feed } },
-
-    { $unwind: '$items'},
-
-    { $match: {"items.action": {$in: [ "elevate", "deelevate" ]}}},
-
-    { $group: { _id: '$_id', items: { $push: '$items' }}}
-
-  ])
-
-  return feed.items.reduce( (elevation, entry) => elevation + (entry.action === "elevate" ? 1 : -1), 0 );
-
-}
-
-/**
- * Aggregate is the right approach, but can't be done in vitual properties.
- * Aggregation should also start from the classroom. See the $lookup example below in
- * commented out code below ClassroomSchema
- */
-// StudentSchema.virtual('elevation').get(async function() {
-
-  // const [ feed ] = await Feed.aggregate([
-
-  //   { $match: { _id: this.feed } },
-
-  //   { $unwind: '$items'},
-
-  //   { $match: {"items.action": {$in: [ "elevate", "deelevate" ]}}},
-
-  //   { $group: { _id: '$_id', items: { $push: '$items' }}}
-
-  // ])
-
-  // return 0; //feed.items.reduce( (elevation, entry) => elevation + (entry.action === "elevate" ? 1 : -1), 0 );
-
-// });
+StudentSchema.methods.getFeedAggregate = studentMethods.getFeedAggregate;
 
 // Create Schema
 const ClassroomSchema = new Schema({
@@ -123,40 +80,6 @@ const ClassroomSchema = new Schema({
   }
 });
 
-ClassroomSchema.methods.populateStudentFeedAggregates = async function() {
-  
-  for( let i=0; i < this.students.length; i++ )
-
-    this.students[i] = {
-      ...this.students[i].toObject(),
-      elevation: await this.students[i].getElevation()
-    }
-
-  return this;
-
-}
-
-// ClassroomSchema.statics. = async function() {
-
-//   return this.aggregate([
-//     { $match: { _id: this.feed } },
-//     {
-//         $project: {
-//             _id: '$_id',
-//             patients: 1,
-//             _id: 0
-//         }
-//     },
-//     {
-//         $lookup: {
-//             from: "patients",
-//             localField: "patient",
-//             foreignField: "_id",
-//             as: "patient_doc"
-//         }
-//     }
-//   ]);
-
-// }
+ClassroomSchema.methods.getFeedAggregate = classroomMethods.getFeedAggregate;
 
 module.exports = mongoose.model("Classroom", ClassroomSchema);
