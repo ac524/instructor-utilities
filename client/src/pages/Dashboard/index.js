@@ -41,7 +41,7 @@ export const DashboardContainer = () => {
             // console.log(message);
 
             // // Ignore update message from current user.
-            if( !message.from || socket.id === message.from ) return;
+            if( !message.force && (!message.from || socket.id === message.from) ) return;
 
             dispatch( message.payload );
 

@@ -8,6 +8,9 @@ import {
 import Dropdown from "components/Dropdown";
 import Icon from "components/Icon";
 import api from "utils/api";
+import { useParams } from "react-router-dom";
+import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 
 const ElevateButton = ({feed}) => {
 
@@ -65,11 +68,44 @@ const DeelevateButton = ({feed}) => {
 
 }
 
+const RemoveButton = ({studentId}) => {
+
+    const dispatch = useDashboardDispatch();
+    const { roomId } = useParams();
+
+    const remove = async () => {
+
+        try {
+
+            await api.removeStudent( roomId, studentId );
+
+            dispatch(gda( EDIT_STUDENT, false ));
+            dispatch(gda( REMOVE_STUDENT, studentId ));
+
+        } catch(err) {
+
+            // TODO error handling
+            console.log(err);
+
+        }
+        
+    }
+
+    return (
+        <Button className="dropdown-item" size="small" onClick={remove}>
+            <Icon icon={["far", "trash-alt"]} />
+            <span>Remove</span>
+        </Button>
+    )
+
+}
+
 const StudentOptions = ({ student, ...props }) => {
 
     return (
         <Dropdown label={<Icon icon="ellipsis-h" />} ariaLabel={`Open options for ${student.name}`} {...props}>
             { student.elevation ? <DeelevateButton feed={student.feed} /> : <ElevateButton feed={student.feed} /> }
+            <RemoveButton studentId={student._id} />
         </Dropdown>
     );
 

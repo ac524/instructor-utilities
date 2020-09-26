@@ -6,13 +6,14 @@ import {
     Tag
 } from "react-bulma-components";
 
-import "./style.sass";
+import api from "utils/api";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useClassroom, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
-import api from "utils/api";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
+
+import "./style.sass";
 
 export const StudentMenu = ({ _id, name }) => {
     
@@ -76,11 +77,14 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
 
 export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo, elevation } }) => {
 
+    const dispatch = useDashboardDispatch();
+    const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
+
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
                 <span>{name}</span>
-                <StudentMenu _id={_id} name={name} />
+                <Button aria-label="Edit student" onClick={openEdit} size="small" className="ml-auto"><Icon icon="ellipsis-h" /></Button>
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />

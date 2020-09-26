@@ -47,9 +47,25 @@ const createAndBroadcast = async (req, feedId, by, action, data) => {
 
 }
 
+const broadcastStudentAggUpdate = async (req, feedId) => {
+
+    const feed = await Feed.findById( feedId ).populate("room", "students");
+    const student = feed.room.students.id( feed.for );
+
+    ioEmit( req, req.roomIo, "dispatch", {
+        type: "UPDATE_STUDENT",
+        payload: {
+            _id: feed.for,
+            ...(await student.getFeedAggregateData())
+        }
+    }, true );
+
+}
+
 module.exports = {
     populate,
     create,
     broadcast,
-    createAndBroadcast
+    createAndBroadcast,
+    broadcastStudentAggUpdate
 };

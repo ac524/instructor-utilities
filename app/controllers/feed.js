@@ -1,4 +1,4 @@
-const { Feed } =  require("../models");
+const { Feed, Classroom } =  require("../models");
 
 const feedEntry = require("./utils/feedEntry");
 
@@ -66,14 +66,19 @@ module.exports = {
 
         try {
 
-            res.json(
-                await feedEntry.createAndBroadcast(
-                    req,
-                    req.params.feedId,
-                    req.user._id,
-                    "elevate"
-                )
+            const entry = await feedEntry.createAndBroadcast(
+                req,
+                req.params.feedId,
+                req.user._id,
+                "elevate"
             );
+
+            await feedEntry.broadcastStudentAggUpdate(
+                req,
+                req.params.feedId
+            )
+
+            res.json( entry );
 
         } catch(err) {
 
@@ -86,14 +91,19 @@ module.exports = {
 
         try {
 
-            res.json(
-                await feedEntry.createAndBroadcast(
-                    req,
-                    req.params.feedId,
-                    req.user._id,
-                    "deelevate"
-                )
-            );
+            const entry = await feedEntry.createAndBroadcast(
+                req,
+                req.params.feedId,
+                req.user._id,
+                "deelevate"
+            )
+
+            await feedEntry.broadcastStudentAggUpdate(
+                req,
+                req.params.feedId
+            )
+
+            res.json( entry );
 
         } catch(err) {
 
