@@ -17,7 +17,7 @@ const Elevate = ( { by, data, date } ) => {
                 <Icon icon="level-up-alt" />
             </Tag>
             <span>
-                <a href="#fake"><UserName user={by} /></a> elevated this student to <a href="#fake"><UserName user={data.to} /></a>
+                <a href="#fake"><UserName user={by} /></a> elevated this student
             </span>
             <Date date={date} className="end" />
         </FeedEntry>

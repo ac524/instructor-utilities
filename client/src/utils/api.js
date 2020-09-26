@@ -116,9 +116,9 @@ class API {
 
     }
 
-    async createElevate( feedId, data ) {
+    async createElevate( feedId ) {
 
-        return this.axios.post( `/api/feeds/${feedId}/elevate`, data );
+        return this.axios.post( `/api/feeds/${feedId}/elevate` );
 
     }
 

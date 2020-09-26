@@ -74,7 +74,7 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
     
 }
 
-export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo } }) => {
+export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo, elevation } }) => {
 
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
@@ -85,6 +85,7 @@ export const StudentCard = ({ className, student: { _id, name, priorityLevel, as
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />
                 <StudentAssignmentTag assignedTo={assignedTo} style={{flexGrow:1}} />
+                { elevation ? <Tag color="danger"><Icon icon="level-up-alt" /></Tag> : null }
             </Tag.Group>
         </Card>
     );

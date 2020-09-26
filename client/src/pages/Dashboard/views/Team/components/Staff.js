@@ -66,11 +66,12 @@ export const Member = () => {
                 <span>Students</span>
                 <SortSelectDropdown className="ml-auto is-right" state={[ sort, setSort ]} />
             </Heading>
-            {assignedStudents.sort( studentSort ).map( ({_id, name, priorityLevel}) => (
+            {assignedStudents.sort( studentSort ).map( ({_id, name, priorityLevel, elevation}) => (
                 <Panel.Block key={_id}>
                     <span>{name}</span>
                     <Tag.Group gapless className="ml-auto mb-0">
                         <StudentPriorityTag level={priorityLevel} className="mb-0"/>
+                        { elevation ? <Tag color="danger" className="mb-0"><Icon icon="level-up-alt" /></Tag> : null }
                     </Tag.Group>
                     <Button size="small" onClick={()=>openEdit(_id)} className="ml-2"><Icon icon="ellipsis-h" /></Button>
                 </Panel.Block>

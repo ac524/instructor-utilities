@@ -3,7 +3,8 @@ import React, { useEffect } from "react";
 import {
     Box,
     Columns,
-    Heading
+    Heading,
+    Tag
 } from "react-bulma-components";
 
 import Modal, { useModalContext } from "components/Modal";
@@ -14,7 +15,8 @@ import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 // import api from "utils/api";
 import SettingsForm from "./components/SettingsForm";
 import ActivtyFeed from "./components/ActivityFeed";
-import ElevateControls from "./components/ElevateControls";
+import StudentOptions from "./components/StudentOptions";
+import Icon from "components/Icon";
 
 const { Column } = Columns;
 
@@ -77,7 +79,12 @@ const StudentModal = () => {
                     <Box className="py-5 is-shadowless">
                         <div className="is-flex">
                             <Heading renderAs="h2">{_id ? "Edit" : "New"} Student</Heading>
-                            { _id && <ElevateControls student={editStudent} className="ml-auto" /> }
+                            { _id && (
+                                <span className="ml-auto">
+                                    { editStudent.elevation ? <Tag color="danger" className="mr-2"><Icon icon="level-up-alt" /></Tag> : null }
+                                    <StudentOptions student={editStudent} labelSize="small" className="is-right" />
+                                </span>
+                            ) }
                         </div>
                         <hr />
                         <SettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} />

@@ -71,8 +71,7 @@ module.exports = {
                     req,
                     req.params.feedId,
                     req.user._id,
-                    "elevate",
-                    { to: req.body.to }
+                    "elevate"
                 )
             );
 

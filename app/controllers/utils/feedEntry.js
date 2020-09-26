@@ -3,11 +3,11 @@ const ioEmit = require("./ioEmit");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const populate = async entry => {
-    switch( entry.action ) {
-        case "elevate":
-            entry.data.to = await User.findById(entry.data.to).select("name");
-            break;
-    }
+    // switch( entry.action ) {
+    //     case "elevate":
+    //         entry.data.to = await User.findById(entry.data.to).select("name");
+    //         break;
+    // }
 
     return entry;
 }
