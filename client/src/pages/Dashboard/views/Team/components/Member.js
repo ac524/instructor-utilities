@@ -9,16 +9,15 @@ import {
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
-import { useAssignedStudents, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { useAssignedStudents, useDashboardDispatch, getDashboardAction as gda, useStaffMember } from "pages/Dashboard/store";
 import { useStudentSort } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 
-const Member = () => {
+const MemberAssignedStudentsPanel = ( { memberId } ) => {
 
     const dispatch = useDashboardDispatch();
-    const { memberId } = useParams();
     const [ sort, setSort ] = useState("priorityLevel:desc");
     const assignedStudents = useAssignedStudents( memberId );
     const studentSort = useStudentSort(sort);
@@ -44,6 +43,36 @@ const Member = () => {
             ))}
         </Panel>
     )
+
+}
+
+const InstructorMember = () => {
+
+    return <span>Instructor</span>;
+
+}
+
+const TaMember = ({ member }) => {
+
+    return <MemberAssignedStudentsPanel memberId={member._id} />;
+
+}
+
+const componentByRole = {
+    instructor: InstructorMember,
+    ta: TaMember
+}
+
+const Member = () => {
+
+    const { memberId } = useParams();
+    const member = useStaffMember(memberId);
+
+    if( !componentByRole[ member.role ] ) return <Heading>Role view missing</Heading>;
+
+    const MemberComponent = componentByRole[ member.role ];
+
+    return <MemberComponent member={member} />;
 
 }
 
