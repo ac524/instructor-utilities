@@ -47,8 +47,6 @@ export const useAuthSubscription = () => {
 
         if( !socket || !isAuth ) return;
 
-        api.subscribe();
-
         const updateUser = data => dispatch( gsa( UPDATE_USER, data ) );
 
         socket.on("updateUser", updateUser);

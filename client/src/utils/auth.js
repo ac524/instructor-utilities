@@ -6,6 +6,7 @@ import { useStoreContext, getStoreAction as gsa } from "store";
 import { LOGIN_USER, LOGOUT_USER } from "store/actions";
 import { useHistory } from "react-router-dom";
 import { createValidator } from "components/Form";
+import { useSocket } from "./socket.io";
 
 const setAuthToken = token => {
 
@@ -42,12 +43,15 @@ export const useAuthTokenStore = () => {
 
     const [ ,dispatch ] = useStoreContext();
     const [ isDone, setIsDone ] = useState(false);
+    const socket = useSocket();
 
     const history = useHistory();
 
     useEffect(() => {
 
-        if( isDone ) return;
+        if( !socket || isDone ) return;
+
+        console.log(socket);
 
         // Check for token to keep user logged in
         if ( !localStorage.jwtToken ) {
@@ -66,6 +70,8 @@ export const useAuthTokenStore = () => {
 
         const invalidate = () => {
 
+            console.log("invalidate");
+
             // Logout user
             setAuthToken( false );
             dispatch(gsa( LOGOUT_USER ));
@@ -77,6 +83,7 @@ export const useAuthTokenStore = () => {
         
         if (token.exp < currentTime) {
             
+            console.log("Expired");
             invalidate();
 
         } else {
@@ -94,7 +101,8 @@ export const useAuthTokenStore = () => {
                     user = data;
 
                 } catch(res) {
-
+                    
+                    console.log("Failed");
                     invalidate();
 
                 }
@@ -109,7 +117,7 @@ export const useAuthTokenStore = () => {
 
         }
 
-    }, [ dispatch, history, isDone ])
+    }, [ socket, dispatch, history, isDone ])
 
     return isDone;
 

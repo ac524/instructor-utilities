@@ -43,18 +43,9 @@ const sendUserVerifyEmail = async (user) => {
 module.exports = {
   authenticated(req, res) {
 
-    if( req.userSocket ) req.userSocket.join( room._id );
+    if( req.userSocket ) req.userSocket.join( req.user._id );
 
     res.json( req.user );
-
-  },
-  subscribe(req, res) {
-
-    if( !req.userSocket ) res.status(400).json({ default: "Missing socket identity." });
-    
-    req.userSocket.join( req.user._id );
-    
-    res.json({ success:true });
 
   },
   async register(req, res) {
