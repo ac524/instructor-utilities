@@ -61,7 +61,7 @@ export const useStaffByRole = () => {
 
         setStaffByRole( staff.reduce(staffByRoleReducer, {}) );
 
-    }, [staff, setStaffByRole]);
+    }, [staff]);
 
     return staffByRole;
 
@@ -121,5 +121,23 @@ export const useAssignedStudents = staffId => {
     }, [students, staffId]);
 
     return assignedStudents;
+
+}
+
+export const filterElevatedStudents = students => students.filter(({ elevation }) => elevation > 0);
+
+export const useElevatedStudents = () => {
+
+    const students = useStudents();
+
+    const [ elevatedStudents, setElevatedStudents ] = useState( filterElevatedStudents( students ) );
+
+    useEffect(() => {
+
+        setElevatedStudents( filterElevatedStudents( students ) );
+
+    }, [students]);
+
+    return elevatedStudents;
 
 }

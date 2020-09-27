@@ -9,29 +9,32 @@ import {
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
-import { useAssignedStudents, useDashboardDispatch, getDashboardAction as gda, useStaffMember } from "pages/Dashboard/store";
+import { useAssignedStudents, useElevatedStudents, useDashboardDispatch, getDashboardAction as gda, useStaffMember } from "pages/Dashboard/store";
 import { useStudentSort } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
 
-const MemberAssignedStudentsPanel = ( { memberId } ) => {
+const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-graduate", title="Students" } ) => {
 
     const dispatch = useDashboardDispatch();
     const [ sort, setSort ] = useState("priorityLevel:desc");
-    const assignedStudents = useAssignedStudents( memberId );
     const studentSort = useStudentSort(sort);
 
     const openEdit = _id => dispatch(gda(EDIT_STUDENT, _id));
 
+    const headingClasses = ["is-flex px-3"];
+
+    if(color) headingClasses.push(`is-${color}`);
+
     return (
         <Panel className="has-background-white is-shadowless" renderAs="div">
-            <Heading className="is-flex is-primary px-3" renderAs="h2" size={4} style={{alignItems:"center"}}>
-                <Icon icon="user-graduate" />
-                <span>Students</span>
+            <Heading className={headingClasses.join(" ")} renderAs="h2" size={4} style={{alignItems:"center"}}>
+                <Icon icon={icon} />
+                <span>{title}</span>
                 <SortSelectDropdown className="ml-auto is-right" state={[ sort, setSort ]} />
             </Heading>
-            {assignedStudents.sort( studentSort ).map( ({_id, name, priorityLevel, elevation}) => (
+            {students.sort( studentSort ).map( ({_id, name, priorityLevel, elevation}) => (
                 <Panel.Block key={_id}>
                     <span>{name}</span>
                     <Tag.Group gapless className="ml-auto mb-0">
@@ -48,13 +51,17 @@ const MemberAssignedStudentsPanel = ( { memberId } ) => {
 
 const InstructorMember = () => {
 
-    return <span>Instructor</span>;
+    const elevatedStudents = useElevatedStudents();
+
+    return <MemberAssignedStudentsPanel icon="level-up-alt" title="Elevated Students" color="danger" students={elevatedStudents} />;
 
 }
 
 const TaMember = ({ member }) => {
 
-    return <MemberAssignedStudentsPanel memberId={member._id} />;
+    const assignedStudents = useAssignedStudents( member._id );
+
+    return <MemberAssignedStudentsPanel students={assignedStudents} />;
 
 }
 
