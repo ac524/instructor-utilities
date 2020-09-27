@@ -51,8 +51,6 @@ export const useAuthTokenStore = () => {
 
         if( !socket || isDone ) return;
 
-        console.log(socket);
-
         // Check for token to keep user logged in
         if ( !localStorage.jwtToken ) {
             setIsDone( true );
@@ -70,8 +68,6 @@ export const useAuthTokenStore = () => {
 
         const invalidate = () => {
 
-            console.log("invalidate");
-
             // Logout user
             setAuthToken( false );
             dispatch(gsa( LOGOUT_USER ));
@@ -83,7 +79,6 @@ export const useAuthTokenStore = () => {
         
         if (token.exp < currentTime) {
             
-            console.log("Expired");
             invalidate();
 
         } else {
@@ -102,7 +97,6 @@ export const useAuthTokenStore = () => {
 
                 } catch(res) {
                     
-                    console.log("Failed");
                     invalidate();
 
                 }
