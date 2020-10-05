@@ -29,7 +29,7 @@ const useCommentFormFields = () => {
 
 }
 
-const CommentForm = ({ feedId }) => {
+const CommentForm = ({ feedId, add }) => {
 
     const [ fields, values, setValues ] = useCommentFormFields();
     const [ errors, setErrors ] = useState({});
@@ -47,7 +47,7 @@ const CommentForm = ({ feedId }) => {
                 return
             }
 
-            await api.createComment( feedId, data );
+            add( (await api.createComment( feedId, data )).data );
 
             setValues({ comment: "" });
 

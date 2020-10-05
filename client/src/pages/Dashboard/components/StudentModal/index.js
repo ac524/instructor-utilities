@@ -41,7 +41,7 @@ const StudentModal = () => {
     return (
         // <span>test</span>
             <Modal onClose={clearEditStudent} show={show} closeOnBlur={true}>
-                <Fade show={show} duration=".5s">
+                <Fade style={{width:"100%"}} show={show} duration=".5s">
                     <Modal.Content {...contentProps}>
                         <Columns gapless>
                             <Column className="has-filled-content">
