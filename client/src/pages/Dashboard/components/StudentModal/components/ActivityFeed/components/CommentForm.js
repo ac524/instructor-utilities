@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import Form, { createValidator } from "components/Form";
 import api from "utils/api";
+import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { ADD_STUDENT_FEED_ITEM } from "pages/Dashboard/store/actions";
 
 const validateInviteData = createValidator({
     validators: {
@@ -29,8 +31,9 @@ const useCommentFormFields = () => {
 
 }
 
-const CommentForm = ({ feedId, add }) => {
+const CommentForm = ({ feedId }) => {
 
+    const dispatch = useDashboardDispatch();
     const [ fields, values, setValues ] = useCommentFormFields();
     const [ errors, setErrors ] = useState({});
 
@@ -47,7 +50,7 @@ const CommentForm = ({ feedId, add }) => {
                 return
             }
 
-            add( (await api.createComment( feedId, data )).data );
+            dispatch(gda( ADD_STUDENT_FEED_ITEM, (await api.createComment( feedId, data )).data ) );
 
             setValues({ comment: "" });
 

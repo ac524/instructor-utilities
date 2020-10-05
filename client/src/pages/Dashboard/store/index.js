@@ -35,13 +35,20 @@ import {
     ADD_STUDENT,
     UPDATE_STUDENT,
     REMOVE_STUDENT,
-    EDIT_STUDENT
+
+    /**
+     * STUDENT MODAL ACTIONS
+     */
+    EDIT_STUDENT,
+    SET_STUDENT_FEED,
+    ADD_STUDENT_FEED_ITEM
 } from "./actions";
 
 const DashboardContext = createContext([
     {
         classroom: null,
         editStudent: "",
+        studentFeed: null,
         topbar: {},
         isManagingApps: false
     },
@@ -138,6 +145,14 @@ const reducer = ( state, { type, payload } ) => {
         [EDIT_STUDENT]: () => ({
             ...state,
             editStudent: payload
+        }),
+        [SET_STUDENT_FEED]: () => ({
+            ...state,
+            studentFeed: payload
+        }),
+        [ADD_STUDENT_FEED_ITEM]: () => ({
+            ...state,
+            studentFeed: [ ...state.studentFeed, payload ]
         })
     };
 
@@ -160,6 +175,7 @@ export const DashboardProvider = ( { children } ) => {
     const reducerState = useReducer( reducer, {
         classroom: null,
         editStudent: false,
+        studentFeed: null,
         topbar: undefined,
         isManagingApps: false
     } );

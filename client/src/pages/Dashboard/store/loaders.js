@@ -1,7 +1,7 @@
 import { getDashboardAction as gda } from "./";
 import { useDashboardDispatch } from "./getters";
 import { useEffect } from "react";
-import { SET_CLASSROOM } from "./actions";
+import { SET_CLASSROOM, SET_STUDENT_FEED } from "./actions";
 import api from "../../../utils/api";
 import { useReadyStep } from "../../../utils/ready";
 import { useSocket } from "utils/socket.io";
@@ -53,5 +53,29 @@ export const useClassroomLoader = ( roomId ) => {
     }, [ roomId, socket, dispatch, completeStep, uncompleteStep ]);
 
     return isStepComplete;
+
+}
+
+export const useStudentFeedLoader = ( feedId ) => {
+
+    const dispatch = useDashboardDispatch();
+
+    useEffect(() => {
+
+        if( !feedId ) return dispatch(gda( SET_STUDENT_FEED, null ));
+
+        const getItems = async () => dispatch(gda( SET_STUDENT_FEED, (await api.getFeedItems(feedId)).data ));
+
+        try {
+
+            getItems();
+
+        } catch(err) {
+
+            console.log( err );
+
+        }
+
+    },[ feedId, dispatch ]);
 
 }

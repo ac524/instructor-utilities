@@ -106,6 +106,16 @@ export const useEditStudent = () => {
 
 }
 
+
+
+export const useStudentFeed = () => {
+
+    const [ { studentFeed } ] = useDashboardContext();
+
+    return studentFeed;
+
+}
+
 export const filterStudentsAssignedTo = ( students, staffId ) => students.filter(({ assignedTo }) => assignedTo === staffId);
 
 export const useAssignedStudents = staffId => {

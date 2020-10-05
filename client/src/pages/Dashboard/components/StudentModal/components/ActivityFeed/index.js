@@ -1,3 +1,4 @@
+import { useStudentFeed, useStudentFeedLoader } from "pages/Dashboard/store";
 import React, { useEffect, useReducer } from "react";
 import api from "utils/api";
 import { useSocket } from "utils/socket.io";
@@ -23,19 +24,24 @@ const getAction = ( action, payload ) => ({action, payload});
 
 const ActivtyFeed = ({ student }) => {
 
-    const [ items, dispatch ] = useReducer((state, { action, payload })=>{
-        switch(action) {
-            case "set":
-                return [ ...payload ];
-            case "add":
-                return [ ...state, payload ];
-            default:
-                return state;
-        }
-    }, []);
+    // const [ items, dispatch ] = useReducer((state, { action, payload })=>{
+    //     switch(action) {
+    //         case "set":
+    //             return [ ...payload ];
+    //         case "add":
+    //             return [ ...state, payload ];
+    //         default:
+    //             return state;
+    //     }
+    // }, []);
 
     const { feed } = student;
-    const socket = useSocket();
+
+    useStudentFeedLoader(feed);
+    const entries = useStudentFeed();
+
+    // const socket = useSocket();
+
 
     const feedEntryComponentMap = item => {
 
@@ -47,7 +53,7 @@ const ActivtyFeed = ({ student }) => {
 
     }
 
-    const pushItem = item => dispatch(getAction("add",item));
+    // const pushItem = item => dispatch(getAction("add",item));
 
     // useEffect(() => {
 
@@ -60,28 +66,31 @@ const ActivtyFeed = ({ student }) => {
 
     // }, [feed, socket, dispatch]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const getItems = async () => dispatch(getAction( "set", (await api.getFeedItems(feed)).data ));
+    //     const getItems = async () => dispatch(getAction( "set", (await api.getFeedItems(feed)).data ));
 
-        try {
+    //     try {
 
-            getItems();
+    //         getItems();
 
-        } catch(err) {
+    //     } catch(err) {
 
-            console.log( err );
+    //         console.log( err );
 
-        }
+    //     }
 
-    },[feed]);
+    // },[feed]);
+
+    console.log(entries);
 
     return (
+        entries &&
         <div className="feed has-filled-content">
             <div className="feed-entries">
-                {items.map( feedEntryComponentMap )}
+                {entries.map( feedEntryComponentMap )}
             </div>
-            <CommentForm feedId={feed} add={pushItem} />
+            <CommentForm feedId={feed} />
         </div>
     );
 
