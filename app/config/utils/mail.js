@@ -9,7 +9,7 @@ const readFileAsync = util.promisify( fs.readFile );
 class Mail {
 
     isEnabled = false;
-    from = "ac524.brown@gmail.com";
+    from = process.env.SENDGRID_FROM;
     viewDir = "app/views/email/";
 
     defaultData = {

@@ -1,5 +1,5 @@
 const { Feed, User } =  require("../../models");
-const ioEmit = require("./ioEmit");
+// const ioEmit = require("./ioEmit");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const populate = async entry => {
@@ -33,7 +33,7 @@ const create = async (feedId, by, action, data) => {
 
 const broadcast = async (req, feedId, entry) => {
 
-    ioEmit( req, req.roomIo, `feedpush:${feedId}`, entry );
+    // ioEmit( req, req.roomIo, `feedpush:${feedId}`, entry );
 
 }
 
@@ -52,13 +52,13 @@ const broadcastStudentAggUpdate = async (req, feedId) => {
     const feed = await Feed.findById( feedId ).populate("room", "students");
     const student = feed.room.students.id( feed.for );
 
-    ioEmit( req, req.roomIo, "dispatch", {
-        type: "UPDATE_STUDENT",
-        payload: {
-            _id: feed.for,
-            ...(await student.getFeedAggregateData())
-        }
-    }, true );
+    // ioEmit( req, req.roomIo, "dispatch", {
+    //     type: "UPDATE_STUDENT",
+    //     payload: {
+    //         _id: feed.for,
+    //         ...(await student.getFeedAggregateData())
+    //     }
+    // }, true );
 
 }
 

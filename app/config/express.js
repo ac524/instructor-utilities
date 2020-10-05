@@ -31,8 +31,11 @@ passport.use( require("./jwtstrategy") );
 app.use(express.static("public"));
 
 // Register routes
-const setUserSocket = require("../routes/middleware/setUserSocket");
-app.use( setUserSocket, require("../routes") );
+// const setUserSocket = require("../routes/middleware/setUserSocket");
+app.use(
+    // setUserSocket,
+    require("../routes")
+);
 
 server.listen(PORT, () => {
     console.log(`App listening on Port: ${PORT}`);

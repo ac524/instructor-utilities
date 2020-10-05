@@ -2,7 +2,7 @@ const { Token, Classroom, User } = require("../models");
 
 const validateRegisterInput = require("../config/validation/register");
 const passwordHash = require("../config/utils/passwordHash");
-const ioEmit = require("./utils/ioEmit");
+// const ioEmit = require("./utils/ioEmit");
 
 const addStaff = async (roomId, member) => {
 
@@ -120,10 +120,10 @@ module.exports = {
             // Add the room to the user
             await req.user.update({ $push: { classrooms: roomId } });
 
-            ioEmit( req, roomIo, "dispatch", {
-                type: "ADD_STAFF",
-                payload: staff
-            } );
+            // ioEmit( req, roomIo, "dispatch", {
+            //     type: "ADD_STAFF",
+            //     payload: staff
+            // } );
 
             await req.userInviteToken.remove();
 
@@ -131,10 +131,10 @@ module.exports = {
 
             await req.userInviteRoom.save();
 
-            ioEmit( req, roomIo, "dispatch", {
-                type: "DELETE_INVITE",
-                payload: req.userInvite._id
-            } );
+            // ioEmit( req, roomIo, "dispatch", {
+            //     type: "DELETE_INVITE",
+            //     payload: req.userInvite._id
+            // } );
 
             res.json( { success: true, roomId: roomId } );
 

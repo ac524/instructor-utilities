@@ -4,10 +4,12 @@ import { useEffect } from "react";
 import { SET_CLASSROOM } from "./actions";
 import api from "../../../utils/api";
 import { useReadyStep } from "../../../utils/ready";
+import { useSocket } from "utils/socket.io";
 
 export const useClassroomLoader = ( roomId ) => {
 
     const dispatch = useDashboardDispatch();
+    const socket = useSocket();
     const [ completeStep, uncompleteStep, isStepComplete ] = useReadyStep("getclassroom");
 
     useEffect(() => {
@@ -43,11 +45,12 @@ export const useClassroomLoader = ( roomId ) => {
 
         return () => {
             dispatch(gda(SET_CLASSROOM, null));
+            socket.emit("leave", `room/${roomId}`);
             uncompleteStep();
             clearTimeout(timeout)
         };
         
-    }, [ roomId, dispatch, completeStep, uncompleteStep ]);
+    }, [ roomId, socket, dispatch, completeStep, uncompleteStep ]);
 
     return isStepComplete;
 

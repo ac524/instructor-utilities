@@ -40,7 +40,18 @@ module.exports = {
         
             { $match: {"items.action": { $in: aggActions } }},
         
-            { $group: { _id: '$_id', items: { $push: '$items' }}}
+            { $group: { _id: '$_id', items: { $push: '$items' }}},
+
+            // {
+            //     $replaceRoot: {
+            //         newRoot: {
+            //             $mergeObjects: [
+            //                 { items: [] },
+            //                 "$$ROOT"
+            //             ]
+            //         }
+            //     }
+            // }
         
         ]);
         
@@ -65,7 +76,7 @@ module.exports = {
         
         }
         
-        return feed.items.reduce( aggregateReducer, {} );
+        return feed ? feed.items.reduce( aggregateReducer, {} ) : {};
     
     }
 

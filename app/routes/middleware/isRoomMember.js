@@ -1,4 +1,4 @@
-const roomIoLoader = req => req.roomIo = req.app.get("io").to(req.roomId);
+// const roomIoLoader = req => req.roomIo = req.app.get("io").to(`room:${req.roomId}`);
 
 module.exports = async ( req, res, next ) => {
 
@@ -12,7 +12,7 @@ module.exports = async ( req, res, next ) => {
 
         req.roomStaffMember = staffMember
 
-        roomIoLoader(req);
+        // roomIoLoader(req);
 
         next();
 

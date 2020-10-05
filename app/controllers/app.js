@@ -1,7 +1,7 @@
 const { App, Classroom } = require("../models");
 const AppType = require("../models/AppType");
 const appTypes  = require("../config/apps/registry.json");
-const ioEmit = require("./utils/ioEmit");
+// const ioEmit = require("./utils/ioEmit");
 
 module.exports = {
     async getTypes( req, res ) {
@@ -72,7 +72,7 @@ module.exports = {
 
             await App.findOneAndUpdate( { room: req.roomId, type: req.params.appTypeId }, update, { new: true } ).populate("type");
 
-            ioEmit( req, req.roomIo, `appupdate:${req.params.appTypeId}`, update );
+            // ioEmit( req, req.roomIo, `appupdate:${req.params.appTypeId}`, update );
 
             res.json({success: true});
 

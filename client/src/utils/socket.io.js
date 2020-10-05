@@ -14,9 +14,17 @@ export const useSocketConnection = () => {
         // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
         const openSocket = socketIOClient(`${window.location.origin}`);
 
+        // openSocket.on("disconnet", message => {
+        //     console.log("lost");
+        // });
+
         openSocket.on("connect", () => {
             api.setHeader( "User-Socket-Id", openSocket.id )
             dispatch( gsa( SET_SOCKET, openSocket ) );
+        });
+
+        openSocket.on("test", message => {
+            console.log(message);
         });
         
         return () => {

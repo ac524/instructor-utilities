@@ -53,7 +53,8 @@ const ActivtyFeed = ({ student }) => {
 
         const handleFeedPush = message => dispatch(getAction("add",message.payload));
 
-        socket.on( `feedpush:${feed}`, handleFeedPush );
+        socket.on( `rockfish:fish`, message => console.log("inner",message) );
+        // socket.on( `feedpush:${feed}`, handleFeedPush );
 
         return () => socket.off( `feedpush:${feed}`, handleFeedPush );
 

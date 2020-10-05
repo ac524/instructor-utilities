@@ -1,7 +1,7 @@
 const { Classroom, Feed } = require("../models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const ioEmit = require("./utils/ioEmit");
+// const ioEmit = require("./utils/ioEmit");
 
 const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
@@ -49,10 +49,10 @@ module.exports = {
 
             await feed.save();
 
-            ioEmit( req, req.roomIo, "dispatch", {
-                type: "ADD_STUDENT",
-                payload: student
-            } );
+            // ioEmit( req, req.roomIo, "dispatch", {
+            //     type: "ADD_STUDENT",
+            //     payload: student
+            // } );
 
             res.json( student );
                 
@@ -103,13 +103,13 @@ module.exports = {
 
                 res.status(404).json({ default: "Student not found." });
 
-            ioEmit( req, req.roomIo, "dispatch", {
-                type: "UPDATE_STUDENT",
-                payload: {
-                    _id: req.params.studentId,
-                    ...update
-                }
-            } );
+            // ioEmit( req, req.roomIo, "dispatch", {
+            //     type: "UPDATE_STUDENT",
+            //     payload: {
+            //         _id: req.params.studentId,
+            //         ...update
+            //     }
+            // } );
 
             res.json({ success: true });
                 

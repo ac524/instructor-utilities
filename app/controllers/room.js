@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const mail = require('../config/utils/mail');
 
 const { Classroom, Token } = require("../models");
-const ioEmit = require('./utils/ioEmit');
+// const ioEmit = require('./utils/ioEmit');
 
 const sendInvite = ( room, invite, from ) => {
 
@@ -33,17 +33,14 @@ module.exports = {
 
             const roomAgg = await room.getFeedAggregate();
 
-            // console.log( roomAgg );
-
-            // await room.populateStudentFeedAggregates();
-
-            if( req.userSocket ) req.userSocket.join( room._id );
+            // if( req.userSocket ) req.userSocket.join( `room:${room._id}` );
 
             res.json( roomAgg );
 
         } catch( err ) {
 
-            console.log(err);
+            console.log( err );
+
             res.status(500).json({default:"Something went wrong"});
 
         }
@@ -117,10 +114,10 @@ module.exports = {
 
             await sendInvite( room, invite, req.user );
 
-            ioEmit( req, req.roomIo, "dispatch", {
-                type: "ADD_INVITE",
-                payload: invite
-            } );
+            // ioEmit( req, req.roomIo, "dispatch", {
+            //     type: "ADD_INVITE",
+            //     payload: invite
+            // } );
 
             res.json( invite );
 
@@ -150,10 +147,10 @@ module.exports = {
 
             await room.save();
 
-            ioEmit( req, req.roomIo, "dispatch", {
-                type: "DELETE_INVITE",
-                payload: invite._id
-            } );
+            // ioEmit( req, req.roomIo, "dispatch", {
+            //     type: "DELETE_INVITE",
+            //     payload: invite._id
+            // } );
 
             res.json({ success: true });
 
