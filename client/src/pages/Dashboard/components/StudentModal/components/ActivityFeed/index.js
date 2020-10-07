@@ -20,20 +20,7 @@ const typeMap = {
     deelevate: Deelevate
 }
 
-const getAction = ( action, payload ) => ({action, payload});
-
 const ActivtyFeed = ({ student }) => {
-
-    // const [ items, dispatch ] = useReducer((state, { action, payload })=>{
-    //     switch(action) {
-    //         case "set":
-    //             return [ ...payload ];
-    //         case "add":
-    //             return [ ...state, payload ];
-    //         default:
-    //             return state;
-    //     }
-    // }, []);
 
     const { feed } = student;
 
@@ -41,7 +28,6 @@ const ActivtyFeed = ({ student }) => {
     const entries = useStudentFeed();
 
     // const socket = useSocket();
-
 
     const feedEntryComponentMap = item => {
 
@@ -52,8 +38,6 @@ const ActivtyFeed = ({ student }) => {
         return <Entry key={item._id} student={student} by={item.by} date={item.date} data={item.data} />
 
     }
-
-    // const pushItem = item => dispatch(getAction("add",item));
 
     // useEffect(() => {
 
@@ -81,8 +65,6 @@ const ActivtyFeed = ({ student }) => {
     //     }
 
     // },[feed]);
-
-    console.log(entries);
 
     return (
         entries &&

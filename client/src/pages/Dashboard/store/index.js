@@ -41,7 +41,8 @@ import {
      */
     EDIT_STUDENT,
     SET_STUDENT_FEED,
-    ADD_STUDENT_FEED_ITEM
+    ADD_STUDENT_FEED_ITEM,
+    ADD_STUDENT_FEED_ITEMS
 } from "./actions";
 
 const DashboardContext = createContext([
@@ -153,6 +154,10 @@ const reducer = ( state, { type, payload } ) => {
         [ADD_STUDENT_FEED_ITEM]: () => ({
             ...state,
             studentFeed: [ ...state.studentFeed, payload ]
+        }),
+        [ADD_STUDENT_FEED_ITEMS]: () => ({
+            ...state,
+            studentFeed: [ ...state.studentFeed, ...payload ]
         })
     };
 

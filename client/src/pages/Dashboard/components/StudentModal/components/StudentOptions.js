@@ -11,14 +11,17 @@ import api from "utils/api";
 import { useParams } from "react-router-dom";
 import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
+import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 
 const ElevateButton = ({feed}) => {
+
+    const handleFeedEventResponse = useHandleFeedEventResponse();
 
     const elevate = async () => {
 
         try {
 
-            await api.createElevate( feed );
+            handleFeedEventResponse( (await api.createElevate( feed )).data );
 
         } catch(err) {
 
@@ -42,11 +45,13 @@ const ElevateButton = ({feed}) => {
 
 const DeelevateButton = ({feed}) => {
 
+    const handleFeedEventResponse = useHandleFeedEventResponse();
+
     const deelevate = async () => {
 
         try {
 
-            await api.createDeelevate( feed );
+            handleFeedEventResponse( (await api.createDeelevate( feed )).data );
 
         } catch(err) {
 

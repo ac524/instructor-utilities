@@ -2,6 +2,8 @@ const { Feed, Classroom } =  require("../models");
 
 const feedEntry = require("./utils/feedEntry");
 
+const feedEventResponse = ( entries, studentUpdate ) => ({ entries, studentUpdate });
+
 module.exports = {
     async getSingle( req, res ) {
 
@@ -45,18 +47,18 @@ module.exports = {
 
         try {
 
-            res.json(
-                await feedEntry.createAndBroadcast(
-                    req,
-                    req.params.feedId,
-                    req.user._id,
-                    "comment",
-                    { comment: req.body.comment }
-                )
+            const entry = await feedEntry.createAndBroadcast(
+                req,
+                req.params.feedId,
+                req.user._id,
+                "comment",
+                { comment: req.body.comment }
             );
 
-        } catch(err) {
+            res.json( feedEventResponse( [ entry ] ) );
 
+        } catch(err) {
+            
             res.status(500).json({default:"Unable to get create comment"});
 
         }
@@ -73,14 +75,25 @@ module.exports = {
                 "elevate"
             );
 
-            await feedEntry.broadcastStudentAggUpdate(
-                req,
-                req.params.feedId
-            )
+            // await feedEntry.broadcastStudentAggUpdate(
+            //     req,
+            //     req.params.feedId
+            // )
 
-            res.json( entry );
+            const feed = await Feed.findById( req.params.feedId ).populate("room", "students");
+            const student = feed.room.students.id( feed.for );
+
+            res.json( feedEventResponse(
+                [ entry ],
+                {
+                    _id: student._id,
+                    ...(await student.getFeedAggregateData(["elevation"]))
+                }
+            ) );
 
         } catch(err) {
+
+            console.log(err);
 
             res.status(500).json({default:"Unable to elevate student"});
 
@@ -98,14 +111,25 @@ module.exports = {
                 "deelevate"
             )
 
-            await feedEntry.broadcastStudentAggUpdate(
-                req,
-                req.params.feedId
-            )
+            // await feedEntry.broadcastStudentAggUpdate(
+            //     req,
+            //     req.params.feedId
+            // )
 
-            res.json( entry );
+            const feed = await Feed.findById( req.params.feedId ).populate("room", "students");
+            const student = feed.room.students.id( feed.for );
+
+            res.json( feedEventResponse(
+                [ entry ],
+                {
+                    _id: student._id,
+                    ...(await student.getFeedAggregateData(["elevation"]))
+                }
+            ) );
 
         } catch(err) {
+
+            console.log(err);
 
             res.status(500).json({default:"Unable to de-elevate student"});
 
