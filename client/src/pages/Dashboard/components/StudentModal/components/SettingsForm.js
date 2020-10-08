@@ -19,27 +19,46 @@ const validateStudentData = createValidator({
     }
 });
 
-const getFields = ( [ state, setState ], priorityLevel, staff ) => {
+export const getStaffOptionsList = staff => [ { value: "", label: "Unassigned" }, ...staff.map(({ _id, user: { name } }) => ({ value: _id, label: name })) ];
+
+export const useStudentSettingsFormFields = ( student ) => {
+
+    const [ studentState, setStudentState ] = useState( student );
+    const staff = useStaff();
+    const [ staffOptionsList, setStaffOptionsList ] = useState([]);
+    const priorityLevel = usePriorityLevel( studentState.priorityLevel );
+
+    useEffect(() => {
+
+        setStaffOptionsList( getStaffOptionsList(staff) );
+
+    }, [ staff, setStaffOptionsList ]);
+
+    useEffect(() => {
+
+        setStudentState( student || {} );
+
+    }, [ student, setStudentState ]);
 
     const handleInputUpdate = ( { target: { name, value } } ) => {
         // console.log();
-        setState( { ...state, [name]: value } )
+        setStudentState( { ...studentState, [name]: value } )
     };
 
-    return [
+    const fields = [
         {
             label: "Student Name",
             placeholder: "Student Name",
             name: "name",
             type: "text",
-            value: state.name,
+            value: studentState.name,
             onChange: handleInputUpdate
         },
         {
             label: "Priority",
             name: "priorityLevel",
             type: "range",
-            value: state.priorityLevel,
+            value: studentState.priorityLevel,
             onChange: handleInputUpdate,
             inputProps: {
                 min: 1,
@@ -54,32 +73,17 @@ const getFields = ( [ state, setState ], priorityLevel, staff ) => {
             label: "Staff Assignment",
             name: "assignedTo",
             type: "select",
-            options: [ { value: "", label: "Unassigned" }, ...staff.map(({ _id, user: { name } }) => ({ value: _id, label: name })) ],
-            value: state.assignedTo,
+            options: staffOptionsList,
+            value: studentState.assignedTo,
             onChange: handleInputUpdate
         }
     ];
 
-}
-
-export const useStudentSettingsFormFields = ( student ) => {
-
-    const [studentState, setStudentState] = useState( student );
-    const staff = useStaff();
-    const priorityLevel = usePriorityLevel( studentState.priorityLevel );
-
-    const [ fields, setFields ] = useState([]);
-
-    useEffect(() => {
-        setStudentState( student || {} );
-    }, [ student, setStudentState ]);
-
-    useEffect(() => {
-        setFields( getFields( [studentState, setStudentState], priorityLevel, staff ) );
-    }, [studentState, setStudentState, priorityLevel, staff]);
-
     // Student form fields configuration.
-    return [ fields, studentState ];
+    return [
+        fields,
+        studentState
+    ];
     
 }
 
