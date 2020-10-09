@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
     Modal,
     Box,
     Columns,
     Heading,
-    Tag
+    Tag,
+    Button
 } from "react-bulma-components";
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
@@ -23,6 +24,7 @@ const StudentModal = () => {
     const [{ editStudent: editStudentId }] = useDashboardContext();
     const dispatch = useDashboardDispatch();
     const classroom = useClassroom();
+    const [ isBulkCreate, setIsBulkCreate ] = useState(false);
     
     const editStudent = useEditStudent();
 
@@ -30,6 +32,8 @@ const StudentModal = () => {
     const show = editStudentId !== false;
 
     const clearEditStudent = () => dispatch(gda(EDIT_STUDENT, false));
+
+    const toggleBulkCreate = () => setIsBulkCreate( !isBulkCreate );
 
     const contentProps = {};
 
@@ -49,14 +53,21 @@ const StudentModal = () => {
                                     <div className="is-flex" style={{alignItems:"center"}}>
                                         <Heading renderAs="h2" className="mb-0">{_id ? "Edit" : "New"} Student</Heading>
                                         { editStudent.elevation ? <Tag color="danger" className="ml-2"><Icon icon="level-up-alt" /></Tag> : null }
-                                        { _id && (
-                                            <span className="ml-auto">
-                                                <StudentOptions student={editStudent} labelSize="small" className="is-right" />
-                                            </span>
-                                        ) }
+                                        { _id
+                                            ? (
+                                                <span className="ml-auto">
+                                                    <StudentOptions student={editStudent} labelSize="small" className="is-right" />
+                                                </span>
+                                            )
+                                            : (
+                                                <span className="ml-auto">
+                                                    <Button size="small" onClick={toggleBulkCreate} color={isBulkCreate ? "primary" : null}>Bulk Add</Button>
+                                                </span>
+                                            )
+                                        }
                                     </div>
                                     <hr />
-                                    <SettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} />
+                                    <SettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} isBulkCreate={isBulkCreate} />
                                 </Box>
                             </Column>
                             {

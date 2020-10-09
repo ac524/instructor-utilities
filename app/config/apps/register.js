@@ -7,6 +7,9 @@ const registerAppTypes = async () => {
     const processed = [];
     const types = Object.keys( appTypes );
 
+    // console.log(appTypes);
+    // console.log(registered);
+
     // Update existing entries.
     for( let i = 0; i < registered.length; i++ ) {
 

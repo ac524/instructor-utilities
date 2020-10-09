@@ -42,7 +42,7 @@ import {
     EDIT_STUDENT,
     SET_STUDENT_FEED,
     ADD_STUDENT_FEED_ITEM,
-    ADD_STUDENT_FEED_ITEMS
+    ADD_STUDENT_FEED_ITEMS, ADD_STUDENTS
 } from "./actions";
 
 const DashboardContext = createContext([
@@ -127,6 +127,13 @@ const reducer = ( state, { type, payload } ) => {
             classroom: {
                 ...state.classroom,
                 students: [ ...state.classroom.students, payload ]
+            }
+        }),
+        [ADD_STUDENTS]: () => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                students: [ ...state.classroom.students, ...payload ]
             }
         }),
         [UPDATE_STUDENT]: () => ({

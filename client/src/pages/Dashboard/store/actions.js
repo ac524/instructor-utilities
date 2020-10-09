@@ -30,6 +30,7 @@ export const ADD_APP = "ADD_APP";
  */
 export const SET_STUDENTS = "SET_STUDENTS";
 export const ADD_STUDENT = "ADD_STUDENT";
+export const ADD_STUDENTS = "ADD_STUDENTS";
 export const UPDATE_STUDENT = "UPDATE_STUDENT";
 export const REMOVE_STUDENT = "REMOVE_STUDENT";
 

@@ -5,6 +5,7 @@ const isRoomMember = require("../middleware/isRoomMember");
 
 const {
     create,
+    createMany,
     getSingle,
     update,
     deleteSingle
@@ -15,7 +16,7 @@ const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
 
 router
     .route( "/" )
-    .post( newAuthMiddleware, create );
+    .post( newAuthMiddleware, create, createMany );
 
 router
     .route( "/:roomId/:studentId" )

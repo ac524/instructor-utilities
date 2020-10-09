@@ -6,7 +6,7 @@ import {
 
 import { getDashboardAction as gda, useStaff, useDashboardDispatch } from "pages/Dashboard/store";
 import Form, { createValidator } from "components/Form";
-import { ADD_STUDENT, UPDATE_STUDENT } from "pages/Dashboard/store/actions";
+import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actions";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
 import api from "utils/api";
 
@@ -21,7 +21,7 @@ const validateStudentData = createValidator({
 
 export const getStaffOptionsList = staff => [ { value: "", label: "Unassigned" }, ...staff.map(({ _id, user: { name } }) => ({ value: _id, label: name })) ];
 
-export const useStudentSettingsFormFields = ( student ) => {
+export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
 
     const [ studentState, setStudentState ] = useState( student );
     const staff = useStaff();
@@ -46,14 +46,27 @@ export const useStudentSettingsFormFields = ( student ) => {
     };
 
     const fields = [
-        {
-            label: "Student Name",
-            placeholder: "Student Name",
-            name: "name",
-            type: "text",
-            value: studentState.name,
-            onChange: handleInputUpdate
-        },
+        (
+            !student._id && isBulkCreate
+
+            ? {
+                label: "Student Names",
+                placeholder: "Separate students names by comma or line break (one student per line)",
+                name: "name",
+                type: "textarea",
+                value: studentState.name,
+                onChange: handleInputUpdate
+            }
+
+            : {
+                label: "Student Name",
+                placeholder: "Student Name",
+                name: "name",
+                type: "text",
+                value: studentState.name,
+                onChange: handleInputUpdate
+            }
+        ),
         {
             label: "Priority",
             name: "priorityLevel",
@@ -87,11 +100,11 @@ export const useStudentSettingsFormFields = ( student ) => {
     
 }
 
-const SettingsForm = ({ roomId, student, afterSubmit }) => {
+const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
 
     const dispatch = useDashboardDispatch();
     const [ errors, setErrors ] = useState( {} );
-    const [ fields, values ] = useStudentSettingsFormFields( student );
+    const [ fields, values ] = useStudentSettingsFormFields( student, isBulkCreate );
     const { _id } = student;
 
     const handleSubmit = async (e) => {
@@ -115,7 +128,20 @@ const SettingsForm = ({ roomId, student, afterSubmit }) => {
 
             } else {
 
-                dispatch(gda( ADD_STUDENT, (await api.createStudent( { ...data, roomId } )).data ));
+                if( isBulkCreate ) {
+
+                    const students = data.name.split(/,|\n/).map( name => name.trim() ).filter( name => Boolean(name) ).map( name => ({
+                        ...data,
+                        name
+                    }) );
+
+                    dispatch(gda( ADD_STUDENTS, (await api.createStudent( { students, roomId } )).data ));
+
+                } else {
+
+                    dispatch(gda( ADD_STUDENT, (await api.createStudent( { ...data, roomId } )).data ));
+
+                }
 
             }
 

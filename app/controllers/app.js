@@ -47,10 +47,10 @@ module.exports = {
 
             await Classroom.findByIdAndUpdate( req.roomId, { $push: { apps: appType._id } } );
 
-            req.roomIo.emit( "dispatch", {
-                type: "ADD_APP",
-                payload: appType._id
-            } );
+            // req.roomIo.emit( "dispatch", {
+            //     type: "ADD_APP",
+            //     payload: appType._id
+            // } );
 
             res.json({success: true});
 

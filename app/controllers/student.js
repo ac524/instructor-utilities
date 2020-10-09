@@ -8,46 +8,57 @@ const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudent
 const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Classroom.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
 const mapUpdateKeys = updates => Object.fromEntries(Object.entries(updates).map(([key,value])=>[`students.$.${key}`,value]));
 
+const studentFactory = async ( createdBy, roomId, data ) => {
+
+    const feedId = new ObjectId();
+    const studentId = new ObjectId();
+
+    data._id = studentId;
+    data.feed = feedId;
+
+    const update = {
+        $push: {
+            students: data
+        }
+    };
+
+    const room = await Classroom.findByIdAndUpdate( roomId, update, { new: true } ).select("students");
+
+    const student = room.students.id( studentId );
+
+    const feed = new Feed({
+        _id: feedId,
+        room: roomId,
+        for: studentId,
+        in: "students"
+    });
+
+    feed.pushItem( createdBy, "create" );
+
+    await feed.save();
+
+    return student;
+
+}
+
 /**
  * All routes require isRoomMember middleware for authentication
  */
 module.exports = {
-    async create( req, res ) {
+    async create( req, res, next ) {
+
+        if( req.body.students ) return next();
 
         try {
 
-            const feedId = new ObjectId();
-            const studentId = new ObjectId();
-
             const data = {
-                _id: studentId,
                 name: req.body.name,
                 priorityLevel: req.body.priorityLevel,
-                feed: feedId
             }
 
             if( req.body.assignedTo ) data.assignedTo = req.body.assignedTo;
 
-            const update = {
-                $push: {
-                    students: data
-                }
-            };
-
-            const room = await Classroom.findByIdAndUpdate( req.roomId, update, { new: true } ).select("students");
-
-            const student = room.students.id( studentId );
-
-            const feed = new Feed({
-                _id: feedId,
-                room: req.roomId,
-                for: studentId,
-                in: "students"
-            });
-
-            feed.pushItem( req.user._id, "create" );
-
-            await feed.save();
+            const student = await studentFactory( req.user._id, req.roomId, data );
 
             // ioEmit( req, req.roomIo, "dispatch", {
             //     type: "ADD_STUDENT",
@@ -65,10 +76,40 @@ module.exports = {
         }
 
     },
-    async getSingle( req, res ) {
+    async createMany( req, res ) {
 
         try {
 
+            const studentData = req.body.students;
+            const students = [];
+
+            for( let i = 0; i < studentData.length; i++ ) {
+
+                const data = {
+                    name: studentData[i].name,
+                    priorityLevel: studentData[i].priorityLevel,
+                }
+    
+                if( studentData[i].assignedTo ) data.assignedTo = studentData[i].assignedTo;
+    
+                students.push( await studentFactory( req.user._id, req.roomId, data ) );
+
+            }
+
+            res.json( students );
+                
+        } catch(err) {
+
+            console.log(err);
+
+            res.status(500).json({ default: "Unable to create students." });
+
+        }
+
+    },
+    async getSingle( req, res ) {
+
+        try {
 
             const student = await findStudentById( req.roomId, req.params.studentId ); // (await Classroom.findById(req.roomId).select("students")).students.id(req.params.studentId);
 
@@ -139,10 +180,10 @@ module.exports = {
 
             await Feed.findByIdAndDelete(student.feed);
 
-            req.roomIo.emit( "dispatch", {
-                type: "REMOVE_STUDENT",
-                payload: student._id
-            } );
+            // req.roomIo.emit( "dispatch", {
+            //     type: "REMOVE_STUDENT",
+            //     payload: student._id
+            // } );
 
             res.json( { success: true } );
                 
