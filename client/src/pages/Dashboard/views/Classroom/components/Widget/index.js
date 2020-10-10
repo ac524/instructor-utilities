@@ -1,14 +1,18 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 import {
     Heading,
-    Box
+    Box,
+    Button
 } from "react-bulma-components";
 
-import SelectStudent from "./Apps/SelectStudent";
+import SelectStudent from "../Apps/SelectStudent";
 import Pulse from "components/Pulse";
 import api from "utils/api";
 import { useSocket } from "utils/socket.io";
+
+import "./style.sass";
+import Icon from "components/Icon";
 
 const getAppComponent = ( app, setAppData ) => {
 
@@ -34,6 +38,10 @@ const Widget = ( { roomId, appTypeId, ...props } ) => {
     }, null );
 
     const socket = useSocket();
+
+    const [ isFullscreen, setIsFullscreen ] = useState( false );
+
+    const toggleFullscreen = () => setIsFullscreen( !isFullscreen );
 
     useEffect(() => {
 
@@ -70,6 +78,12 @@ const Widget = ( { roomId, appTypeId, ...props } ) => {
         
     }
 
+    const classes = ["app-widget"];
+
+    if(isFullscreen) classes.push("is-fullscreen");
+
+    props.className = classes.join(" ") + (props.className ? " "+props.className : "");
+
     return (
         <Box {...props}>
             {
@@ -77,7 +91,10 @@ const Widget = ( { roomId, appTypeId, ...props } ) => {
 
                 ? (
                     <div>
-                        <Heading size={4}>{app.name}</Heading>
+                        <div className="is-flex mb-4">
+                            <Heading size={4} renderAs="h2" className="m-0">{app.name}</Heading>
+                            <Button className="ml-auto" size="small" onClick={toggleFullscreen}><Icon icon={isFullscreen ? "compress-alt" : "expand-alt"} /></Button>
+                        </div>
                         { getAppComponent(app, setAppData) }
                     </div>
                 )
