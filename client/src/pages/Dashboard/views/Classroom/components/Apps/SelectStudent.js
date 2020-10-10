@@ -106,6 +106,15 @@ const SelectStudent = ( { data, setData } ) => {
 
     }
 
+    const unselectAllStudents = () => {
+
+        setData({
+            ...data,
+            selected: []
+        });
+
+    }
+
     const enableStudent = studentId => setDisabled( disabled.filter( disabledId => disabledId !== studentId ) );
 
     const disableCurrent = () => disableStudent( selectedStudent._id );
@@ -116,41 +125,47 @@ const SelectStudent = ( { data, setData } ) => {
 
     return (
         <div>
-            <div className="is-flex mb-4" style={{alignItems:"center"}}>
-                <Button onClick={selectPrevious} disabled={!selected.length}>
-                    <Icon icon={['far','arrow-alt-circle-left']} /> <span>Prev</span>
-                </Button>
-                <Button className="ml-auto" onClick={selectNext} disabled={!enabledStudentIds.length}>
-                    <span>Next</span> <Icon icon={['far','arrow-alt-circle-right']} />
-                </Button>
+            <div style={{maxWidth:"680px",margin:"0 auto"}}>
+                <div className="is-flex mb-4" style={{alignItems:"center"}}>
+                    <Button onClick={selectPrevious} disabled={!selected.length}>
+                        <Icon icon={['far','arrow-alt-circle-left']} /> <span>Prev</span>
+                    </Button>
+                    <Button className="ml-auto" onClick={selectNext} disabled={!enabledStudentIds.length}>
+                        <span>Next</span> <Icon icon={['far','arrow-alt-circle-right']} />
+                    </Button>
+                </div>
+                <Tag className="mb-4 is-light is-radiusless w-100" size="large" color="primary" style={{flexGrow:1}}>
+                    { selectedStudent ? ( selectedStudent.name ) : "No Selection" }
+                </Tag>
+                <p className="is-flex mb-4">
+                    <Button size="small" onClick={()=>setShowStudents(!showStudents)}>
+                        <span>View Student List</span>
+                        <Icon icon="angle-down" />
+                    </Button>
+                    <Button disabled={!selectedStudent} className="ml-auto" size="small" onClick={disableCurrent}>
+                        <span>Disable Current</span>
+                        <Icon icon={["far","eye-slash"]} />
+                    </Button>
+                </p>
+                <p className="is-flex">
+                    <Button size="small" onClick={unselectAllStudents}>
+                        <span>Reset Select</span>
+                    </Button>
+                    <Button className="ml-auto" size="small" onClick={disableAllStudents}>
+                        <span>Disable All</span>
+                        <Icon icon={["far","eye-slash"]} />
+                    </Button>
+                    <Button className="ml-2" size="small" onClick={enableAllStudents}>
+                        <span>Enable All</span>
+                        <Icon icon={["far","eye"]} />
+                    </Button>
+                </p>
             </div>
-            <Tag className="mb-4 is-light is-radiusless w-100" size="large" color="primary" style={{flexGrow:1}}>
-                { selectedStudent ? ( selectedStudent.name ) : "No Selection" }
-            </Tag>
-            <p className="is-flex mb-4">
-                <Button size="small" onClick={()=>setShowStudents(!showStudents)}>
-                    <span>View Student List</span>
-                    <Icon icon="angle-down" />
-                </Button>
-                <Button disabled={!selectedStudent} className="ml-auto" size="small" onClick={disableCurrent}>
-                    <span>Disable Current</span>
-                    <Icon icon={["far","eye-slash"]} />
-                </Button>
-            </p>
-            <p className="is-flex">
-                <Button className="ml-auto" size="small" onClick={disableAllStudents}>
-                    <span>Disable All</span>
-                    <Icon icon={["far","eye-slash"]} />
-                </Button>
-                <Button className="ml-2" size="small" onClick={enableAllStudents}>
-                    <span>Enable All</span>
-                    <Icon icon={["far","eye"]} />
-                </Button>
-            </p>
             {
                 showStudents
                     ? (
                         <div className="mt-4">
+                            <hr />
                             <div>
                                 <Input
                                     className="is-fullwidth"
@@ -158,6 +173,7 @@ const SelectStudent = ( { data, setData } ) => {
                                     value={search}
                                     placeholder="Search By Name"
                                     onChange={(e) => setSearch(e.target.value)}
+                                    style={{maxWidth: "300px"}}
                                 />
                             </div>
                             <Columns className="mt-4 mx-0 is-grid">
