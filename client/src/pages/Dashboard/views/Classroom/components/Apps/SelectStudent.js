@@ -4,7 +4,8 @@ import {
     Button,
     Tag,
     Columns,
-    Heading
+    Heading,
+    Form as FormCollection
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
@@ -12,17 +13,23 @@ import { useStudents } from "pages/Dashboard/store";
 
 const { Column } = Columns;
 
+const { Input } = FormCollection;
+
+const mapStudentId = ({_id}) => _id;
+
 const SelectStudent = ( { data, setData } ) => {
 
     const { selected, disabled } = data;
     const students = useStudents();
     const [ showStudents, setShowStudents ] = useState();
+    const [ search, setSearch ] = useState("");
+    const searchSanitized = search.trim().toLowerCase();
     // const [ selected, setSelected ] = useState([]);
 
     const setSelected = selected => setData({ ...data, selected });
     const setDisabled = disabled => setData({ ...data, disabled });
     
-    const enabledStudentIds = students.filter(({_id}) => !disabled.includes(_id)).map( ({_id}) => _id );
+    const enabledStudentIds = students.filter(({_id}) => !disabled.includes(_id)).map( mapStudentId );
     const selectedStudent = selected.length
 
         ? ( students.find( ({_id}) => _id === selected[selected.length-1] ) )
@@ -51,6 +58,8 @@ const SelectStudent = ( { data, setData } ) => {
 
     const selectNext = () => {
 
+        if( !enabledStudentIds.length ) return;
+
         const isListEnd = enabledStudentIds.length === selected.length;
 
         const unselected = isListEnd ? enabledStudentIds : enabledStudentIds.filter( id => !selected.includes(id) );
@@ -78,28 +87,47 @@ const SelectStudent = ( { data, setData } ) => {
 
     }
 
+    const disableAllStudents = () => {
+
+        setData({
+            ...data,
+            disabled: [ ...students.map( mapStudentId ) ],
+            selected: []
+        });
+
+    }
+
+    const enableAllStudents = () => {
+
+        setData({
+            ...data,
+            disabled: []
+        });
+
+    }
+
     const enableStudent = studentId => setDisabled( disabled.filter( disabledId => disabledId !== studentId ) );
 
     const disableCurrent = () => disableStudent( selectedStudent._id );
 
     const setIsSelected = student => ({ ...student, isSelected: selected.includes(student._id) });
 
+    const isSearchMatch = name => !searchSanitized || name.toLowerCase().includes( searchSanitized );
+
     return (
         <div>
             <div className="is-flex mb-4" style={{alignItems:"center"}}>
                 <Button onClick={selectPrevious} disabled={!selected.length}>
-                    <Icon icon={['far','arrow-alt-circle-left']} />
+                    <Icon icon={['far','arrow-alt-circle-left']} /> <span>Prev</span>
                 </Button>
-
-                <Tag className="ml-auto is-light is-radiusless" size="large" color="primary" style={{flexGrow:1}}>
-                    { selectedStudent ? ( selectedStudent.name ) : "No Selection" }
-                </Tag>
-
-                <Button className="ml-auto" onClick={selectNext}>
-                    <Icon icon={['far','arrow-alt-circle-right']} />
+                <Button className="ml-auto" onClick={selectNext} disabled={!enabledStudentIds.length}>
+                    <span>Next</span> <Icon icon={['far','arrow-alt-circle-right']} />
                 </Button>
             </div>
-            <p className="is-flex">
+            <Tag className="mb-4 is-light is-radiusless w-100" size="large" color="primary" style={{flexGrow:1}}>
+                { selectedStudent ? ( selectedStudent.name ) : "No Selection" }
+            </Tag>
+            <p className="is-flex mb-4">
                 <Button size="small" onClick={()=>setShowStudents(!showStudents)}>
                     <span>View Student List</span>
                     <Icon icon="angle-down" />
@@ -109,12 +137,31 @@ const SelectStudent = ( { data, setData } ) => {
                     <Icon icon={["far","eye-slash"]} />
                 </Button>
             </p>
+            <p className="is-flex">
+                <Button className="ml-auto" size="small" onClick={disableAllStudents}>
+                    <span>Disable All</span>
+                    <Icon icon={["far","eye-slash"]} />
+                </Button>
+                <Button className="ml-2" size="small" onClick={enableAllStudents}>
+                    <span>Enable All</span>
+                    <Icon icon={["far","eye"]} />
+                </Button>
+            </p>
             {
                 showStudents
                     ? (
-                        <div>
+                        <div className="mt-4">
+                            <div>
+                                <Input
+                                    className="is-fullwidth"
+                                    type="text"
+                                    value={search}
+                                    placeholder="Search By Name"
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                            </div>
                             <Columns className="mt-4 mx-0 is-grid">
-                                {students.filter(({_id}) => !disabled.includes(_id)).map( setIsSelected ).map( student => (
+                                {students.filter(({_id, name}) => !disabled.includes(_id) && isSearchMatch(name)).map( setIsSelected ).map( student => (
                                     <Column key={student._id} size="half" className={"is-flex" + (student.isSelected ? " has-background-success-light" : "")} style={{alignItems:"center"}}>
                                         <Button className="mr-2 is-small" onClick={()=>toggleSelect(student._id)}>
                                             <Icon icon={student.isSelected ? "check" : ["far","square"]} />
@@ -132,7 +179,7 @@ const SelectStudent = ( { data, setData } ) => {
                                     <div>
                                         <Heading renderAs="h3" size={5} className="my-4">Disabled</Heading>
                                         <Columns className="mt-4 mx-0 is-grid">
-                                            {students.filter(({_id}) => disabled.includes(_id)).map( student => (
+                                            {students.filter(({_id, name}) => disabled.includes(_id)  && isSearchMatch(name)).map( student => (
                                                 <Column key={student._id} size="half" className="is-flex" style={{alignItems:"center"}}>
                                                     {student.name}
                                                     <Button className="ml-auto is-small" onClick={()=>enableStudent(student._id)}>
