@@ -126,17 +126,20 @@ const SelectStudent = ( { data, setData } ) => {
     return (
         <div>
             <div style={{maxWidth:"680px",margin:"0 auto"}}>
-                <div className="is-flex mb-4" style={{alignItems:"center"}}>
+                <p className="is-flex mb-4" style={{alignItems:"center"}}>
                     <Button onClick={selectPrevious} disabled={!selected.length}>
                         <Icon icon={['far','arrow-alt-circle-left']} /> <span>Prev</span>
                     </Button>
                     <Button className="ml-auto" onClick={selectNext} disabled={!enabledStudentIds.length}>
                         <span>Next</span> <Icon icon={['far','arrow-alt-circle-right']} />
                     </Button>
-                </div>
+                </p>
                 <Tag className="mb-4 is-light is-radiusless w-100" size="large" color="primary" style={{flexGrow:1}}>
                     { selectedStudent ? ( selectedStudent.name ) : "No Selection" }
                 </Tag>
+                <p className="is-flex mb-4" style={{alignItems:"center"}}>
+                    {selected.length} out of {enabledStudentIds.length} selected
+                </p>
                 <p className="is-flex mb-4">
                     <Button size="small" onClick={()=>setShowStudents(!showStudents)}>
                         <span>View Student List</span>
