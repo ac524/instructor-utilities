@@ -30,9 +30,18 @@ const SelectStudent = ( { data, setData } ) => {
     const setDisabled = disabled => setData({ ...data, disabled });
     
     const enabledStudentIds = students.filter(({_id}) => !disabled.includes(_id)).map( mapStudentId );
+
+    const isComplete = selected.length === enabledStudentIds.length;
+
     const selectedStudent = selected.length
 
         ? ( students.find( ({_id}) => _id === selected[selected.length-1] ) )
+
+        : false;
+
+    const prevStudent = selected.length > 1
+
+        ? ( students.find( ({_id}) => _id === selected[selected.length-2] ) )
 
         : false;
 
@@ -126,20 +135,23 @@ const SelectStudent = ( { data, setData } ) => {
     return (
         <div>
             <div style={{maxWidth:"680px",margin:"0 auto"}}>
-                <p className="is-flex mb-4" style={{alignItems:"center"}}>
-                    <Button onClick={selectPrevious} disabled={!selected.length}>
-                        <Icon icon={['far','arrow-alt-circle-left']} /> <span>Prev</span>
-                    </Button>
-                    <Button className="ml-auto" onClick={selectNext} disabled={!enabledStudentIds.length}>
-                        <span>Next</span> <Icon icon={['far','arrow-alt-circle-right']} />
-                    </Button>
-                </p>
+                <div className="is-flex mb-4">
+                    <p>
+                        <Button className="mb-2" onClick={selectPrevious} disabled={!selected.length}>
+                            <Icon icon={['far','arrow-alt-circle-left']} /> <span>Prev</span>
+                        </Button>
+                        { prevStudent && <span className="is-block has-text-grey" style={{whiteSpace:"nowrap",fontSize:".9em"}}><strong>Prev:</strong> {prevStudent.name}</span> }
+                    </p>
+                    <p className="ml-auto has-text-right">
+                        <Button className="mb-2 is-light has-border-1" color={ isComplete ? "success" : "primary" } onClick={selectNext} disabled={!enabledStudentIds.length}>
+                            <span>{ isComplete ? "Restart" : "Next" }</span> <Icon icon={['far','arrow-alt-circle-right']} />
+                        </Button>
+                        <span className="is-block has-text-grey" style={{whiteSpace:"nowrap",fontSize:".9em"}}>{selected.length} out of {enabledStudentIds.length} selected</span>
+                    </p>
+                </div>
                 <Tag className="mb-4 is-light is-radiusless w-100" size="large" color="primary" style={{flexGrow:1}}>
                     { selectedStudent ? ( selectedStudent.name ) : "No Selection" }
                 </Tag>
-                <p className="is-flex mb-4" style={{alignItems:"center"}}>
-                    {selected.length} out of {enabledStudentIds.length} selected
-                </p>
                 <p className="is-flex mb-4">
                     <Button size="small" onClick={()=>setShowStudents(!showStudents)}>
                         <span>View Student List</span>
@@ -151,7 +163,7 @@ const SelectStudent = ( { data, setData } ) => {
                     </Button>
                 </p>
                 <p className="is-flex">
-                    <Button size="small" onClick={unselectAllStudents}>
+                    <Button size="small" onClick={unselectAllStudents} disabled={!selected.length}>
                         <span>Reset Select</span>
                     </Button>
                     <Button className="ml-auto" size="small" onClick={disableAllStudents}>
