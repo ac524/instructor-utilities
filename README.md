@@ -18,22 +18,11 @@ This application consists of tools and utilities built to assist teachers instru
 
 * `npm install` - Install dependencies.
 * `npm run envsetup` - Generate a local .env file with the needed configuration.
-* `sequelize db:create` - Create the application database.
-
-### Development Build
-
-* `npm run watch` - Watch changes to both public resource and server application dependencies.
-* `npm run watch:build` - Watch public resource dependencies.
-* `npm run watch:server` - Watch server application dependencies.
-
-### Production Build
-
-* `npm run production` - Build production resources and launch server.
+* `npm start` - Launch local development server.
 
 ### Demo Seed Data
 
-* `sequelize db:seed:all` - Seed the application database with demo data
-* `sequelize db:seed:undo:all` - Remove all application data
+* `npm run seed` - Seed the application database with demo data
 
 ## Usage
 
@@ -41,9 +30,9 @@ The application's primary function is to house lists of students that an instruc
 
 Prominent features include:
 
-* Adding new lists and list items
-* Randomly cycle through list items using the "Next" and "Prev" buttons
-* Temporarily disable certain list items using the "Disable Current" button or clicking the eye icon next to a list item (useful when a student is absent)
+* Creating Classrooms
+* Inviting TAs
+* Adding students, assigning students to TAs, adding student comments
 * Exporting and importing lists
 
 ## Credits
