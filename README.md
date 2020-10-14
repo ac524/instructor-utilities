@@ -26,14 +26,14 @@ This application consists of tools and utilities built to assist teachers instru
 
 ## Usage
 
-The application's primary function is to house lists of students that an instructor can randomly select from. 
-
 Prominent features include:
 
 * Creating Classrooms
 * Inviting TAs
-* Adding students, assigning students to TAs, adding student comments
-* Exporting and importing lists
+* Adding students
+* Assigning students to TAs
+* Adding student comments
+* Elevating students up the staff heirachy
 
 ## Credits
 
