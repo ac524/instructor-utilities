@@ -43,13 +43,3 @@ Students from the UW Coding Boot Camp: Billy Hao, Christopher Marti, Niv Swamy a
 ## License
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-
-## Tests
-
-Run "npm run test" to run the tests present in the test directory.
-
-## Questions
-
-![GitHub Profile Picture](https://github.com/ac524.png)
-
-Email Anthony at <ac524.brown@gmail.com>
