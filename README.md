@@ -11,8 +11,6 @@ This application consists of tools and utilities built to assist teachers instru
 * [Usage](#usage)
 * [Credits](#credits)
 * [License](#license)
-* [Tests](#tests)
-* [Questions](#questions)
 
 ## Installation
 
