@@ -60,6 +60,20 @@ module.exports = {
 
     try {
 
+      let classroom;
+      const hasCode = Boolean(req.body.code);
+
+      if( hasCode ) {
+      
+        // Create the User's classroom
+        classroom = await Classroom.findOne({
+          code: req.body.code
+        });
+
+        if( !classroom )  return res.status(400).json({ code: "Code not found" });
+        
+      }
+
       const existingUser = await User.findOne({ email: req.body.email });
 
       if( existingUser )
@@ -70,15 +84,11 @@ module.exports = {
       const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: await passwordHash( req.body.password )
+        password: await passwordHash( req.body.password ),
+        isVerified: hasCode
       });
 
       await user.save();
-
-      // Create the User's classroom
-      const classroom = new Classroom({
-        name: req.body.roomname
-      });
 
       await classroom.save();
 
@@ -91,7 +101,7 @@ module.exports = {
         user: user._id
       } } });
 
-      await sendUserVerifyEmail( user );
+      if( !hasCode ) await sendUserVerifyEmail( user );
 
       res.json( { success: true } );
 

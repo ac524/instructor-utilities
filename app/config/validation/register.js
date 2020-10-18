@@ -49,6 +49,15 @@ const checks = {
       errors.roomname = "Classroom name is required";
     }
 
+  },
+  code: ( data, errors ) => {
+
+    data.code = !isEmpty(data.code) ? data.code : "";
+
+    if (Validator.isEmpty(data.code)) {
+      errors.code = "A registration code is required";
+    }
+
   }
 }
 

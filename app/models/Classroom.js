@@ -71,6 +71,7 @@ const ClassroomSchema = new Schema({
   staff: [StaffSchema],
   students: [StudentSchema],
   invites: [InvitesSchema],
+  code: String,
   apps: [{
     type: Schema.Types.ObjectId,
     ref:"App",
