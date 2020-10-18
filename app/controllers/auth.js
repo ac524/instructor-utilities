@@ -67,7 +67,7 @@ module.exports = {
       
         // Create the User's classroom
         classroom = await Classroom.findOne({
-          code: req.body.code
+          registerCode: req.body.code
         });
 
         if( !classroom )  return res.status(400).json({ code: "Code not found" });

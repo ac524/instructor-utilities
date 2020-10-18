@@ -14,8 +14,8 @@ const TokenSchema = new Schema({
         type: Date,
         required: true,
         default: Date.now,
-        // Expire in 12 hours
-        expires: 43200
+        // Expire in 3 days
+        expires: 259200
     }
 });
 
