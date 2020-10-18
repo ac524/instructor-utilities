@@ -90,6 +90,15 @@ module.exports = {
 
       await user.save();
 
+      if( !classroom ) {
+
+        // Create the User's classroom
+        classroom = new Classroom({
+          name: req.body.roomname
+        });
+
+      }
+
       await classroom.save();
 
       // Add the classroom id to the user
