@@ -36,7 +36,7 @@ const createRoomWithCode = async ( code ) => {
         const message = `Your registration code is:`;
         const wrapper = `${"-".repeat(token.token.length + 2 + message.length)}`;
     
-        console.log(wrapper);
+        console.log("\n"+wrapper);
         console.log( message, "\x1b[32m", token.token, "\x1b[0m" );
         console.log(wrapper);
 
