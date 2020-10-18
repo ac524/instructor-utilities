@@ -10,6 +10,7 @@ const RegisterForm = () => {
     const login = useLogin();
     const history = useHistory();
 
+    const [ code, setCode ] = useState("");
     const [ name, setName ] = useState("");
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -18,6 +19,13 @@ const RegisterForm = () => {
     const [ errors, setErrors ] = useState({});
 
     const fields = [
+        {
+            label: "Registration Code",
+            onChange: (e) => setCode(e.target.value),
+            value: code,
+            type:"text",
+            name: "code"
+        },
         {
             label: "Classroom Name",
             onChange: (e) => setRoomName(e.target.value),
@@ -60,7 +68,7 @@ const RegisterForm = () => {
 
         try {
 
-            const [ data, errors, hasErrors ] = validateRegistrationData({ name, email, password, password2, roomname });
+            const [ data, errors, hasErrors ] = validateRegistrationData({ code, name, email, password, password2, roomname });
 
             if( hasErrors ) {
                 setErrors(errors);
