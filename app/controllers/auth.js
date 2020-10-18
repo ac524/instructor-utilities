@@ -12,8 +12,7 @@ const validateLoginInput = require("../config/validation/login");
 const jwtSign = util.promisify( jwt.sign );
 
 // Load User model
-const { User, Token } = require("../models");
-const Classroom = require("../models/Classroom");
+const { User, Token, Classroom } = require("../models");
 
 const sendUserVerifyEmail = async (user) => {
 
@@ -66,11 +65,17 @@ module.exports = {
       if( hasCode ) {
       
         // Create the User's classroom
-        classroom = await Classroom.findOne({
-          registerCode: req.body.code
+        const token = await Token.findOne({
+          token: req.body.code
         });
 
-        if( !classroom )  return res.status(400).json({ code: "Code not found" });
+        if( !token )  return res.status(404).json({ code: "Code not found" });
+
+        classroom = await Classroom.findOne({
+          registerCode: token._id
+        });
+
+        if( !classroom )  return res.status(400).json({ code: "Your room is no longer available" });
         
       }
 
@@ -90,13 +95,22 @@ module.exports = {
 
       await user.save();
 
-      if( !classroom ) {
+      if( classroom ) {
+
+        classroom.name = req.body.roomname;
+
+      } else {
 
         // Create the User's classroom
         classroom = new Classroom({
           name: req.body.roomname
         });
 
+      }
+
+      if( classroom.registerCode ) {
+        await Token.findByIdAndDelete(classroom.registerCode);
+        classroom.registerCode = undefined;
       }
 
       await classroom.save();
