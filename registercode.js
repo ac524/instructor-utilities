@@ -12,6 +12,19 @@ const Token = require("./app/models/Token");
 
 const [ , , code ] = process.argv;
 
+const copyToClip = (toCopy, message) => new Promise(resolve => {
+    ncp.copy( toCopy, () => {
+        
+        if( message ) {
+            console.log( "!\x1b[32m", message, "\x1b[0m" );
+            console.log(" ");
+        }
+
+        resolve();
+
+    } );
+});
+
 const createRoomWithCode = async ( code ) => {
 
     try {
@@ -42,14 +55,9 @@ const createRoomWithCode = async ( code ) => {
 
         console.log(" ");
 
-        ncp.copy( token.token, function() {
-            
-            console.log( "!\x1b[32m", "Code copied to clipboard", "\x1b[0m" );
-            console.log(" ");
-    
-            process.exit(0);
+        await copyToClip( token.token, "Code copied to clipboard" );
 
-        } );
+        process.exit(0);
 
     } catch(err) {
 
