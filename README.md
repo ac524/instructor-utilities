@@ -25,6 +25,7 @@ This application consists of tools and utilities built to assist teachers instru
 ### Demo Seed Data
 
 * `npm run seed` - Seed the application database with demo data
+* `npm run seed:reset` - Clear all collections
 
 ## Usage
 
