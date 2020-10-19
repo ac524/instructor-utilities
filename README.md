@@ -18,9 +18,14 @@ This application consists of tools and utilities built to assist teachers instru
 * `npm run envsetup` - Generate a local .env file with the needed configuration.
 * `npm start` - Launch local development server.
 
+## Registration Codes
+
+* `node regisitercode MY-CODE-NAME` - Create a new registration code for signup. Code is auto generated if not provided. Provided values will be formatted into UPPERCASE format.
+
 ### Demo Seed Data
 
 * `npm run seed` - Seed the application database with demo data
+* `npm run seed:reset` - Clear all collections
 
 ## Usage
 

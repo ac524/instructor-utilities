@@ -8,6 +8,8 @@ import {
     Tag
 } from "react-bulma-components";
 
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
 import Icon from "components/Icon";
 import api from "utils/api";
 import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
@@ -35,6 +37,29 @@ export const PendingInvitesModalButton = ({ open }) => {
             <span className="icon">{invites.length}</span>
             <span>Pending Invites</span>
         </Button>
+    );
+
+}
+
+export const CopyLinkButton = ( {token} ) => {
+
+    const [ isCopied, setIsCopied ] = useState(false);
+
+    const notify = () => {
+
+        setIsCopied(true);
+
+        setTimeout(()=>setIsCopied(false),2500);
+
+    }
+
+    return (
+        <CopyToClipboard text={`http://localhost:3000/invite/${token}`} onCopy={notify}>
+            <Button size="small" className="ml-2 is-icon-only-mobile" color={isCopied ? "success" : null}>
+                <Icon icon={isCopied ? "check" : "link"} />
+                <span>{isCopied ? "Copied" : "Link"}</span>
+            </Button>
+        </CopyToClipboard>
     );
 
 }
@@ -74,7 +99,8 @@ const PendingInvitesModal = ( { show, onClose } ) => {
                             <span className="has-overflow-ellipsis mw-60">{invite.email}</span>
                             <span className="ml-auto">
                                 {invite.token ? <Tag color="warning">Pending</Tag> : <Tag color="danger">Expired</Tag>}
-                                <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button>
+                                <CopyLinkButton token={invite.token.token} />
+                                {/* <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button> */}
                                 <Button size="small" className="ml-2 is-icon-only-mobile" onClick={()=>deleteInvite(invite._id)}><Icon icon="ban" /><span>Revoke</span></Button>
                             </span>
                         </Panel.Block>

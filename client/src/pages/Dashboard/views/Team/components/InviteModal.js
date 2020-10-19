@@ -43,7 +43,7 @@ export const InviteModalButton = ({ icon = "plus-circle", open, children }) => {
 
 }
 
-const InviteModal = ( { show, onClose } ) => {
+const InviteModal = ( { show, onClose, onInviteCreated } ) => {
 
     const dispatch = useDashboardDispatch();
     const { _id } = useClassroom();
@@ -80,7 +80,9 @@ const InviteModal = ( { show, onClose } ) => {
 
             dispatch(gda(ADD_INVITE, invite));
 
-            onClose();
+            onInviteCreated && onInviteCreated();
+
+            onClose && onClose();
 
         } catch(err) {
 

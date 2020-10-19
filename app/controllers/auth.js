@@ -12,8 +12,7 @@ const validateLoginInput = require("../config/validation/login");
 const jwtSign = util.promisify( jwt.sign );
 
 // Load User model
-const { User, Token } = require("../models");
-const Classroom = require("../models/Classroom");
+const { User, Token, Classroom } = require("../models");
 
 const sendUserVerifyEmail = async (user) => {
 
@@ -60,6 +59,26 @@ module.exports = {
 
     try {
 
+      let classroom;
+      const hasCode = Boolean(req.body.code);
+
+      if( hasCode ) {
+      
+        // Create the User's classroom
+        const token = await Token.findOne({
+          token: req.body.code
+        });
+
+        if( !token )  return res.status(404).json({ code: "Code not found" });
+
+        classroom = await Classroom.findOne({
+          registerCode: token._id
+        });
+
+        if( !classroom )  return res.status(400).json({ code: "Your room is no longer available" });
+        
+      }
+
       const existingUser = await User.findOne({ email: req.body.email });
 
       if( existingUser )
@@ -70,15 +89,29 @@ module.exports = {
       const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: await passwordHash( req.body.password )
+        password: await passwordHash( req.body.password ),
+        isVerified: !mail.isEnabled
       });
 
       await user.save();
 
-      // Create the User's classroom
-      const classroom = new Classroom({
-        name: req.body.roomname
-      });
+      if( classroom ) {
+
+        classroom.name = req.body.roomname;
+
+      } else {
+
+        // Create the User's classroom
+        classroom = new Classroom({
+          name: req.body.roomname
+        });
+
+      }
+
+      if( classroom.registerCode ) {
+        await Token.findByIdAndDelete(classroom.registerCode);
+        classroom.registerCode = undefined;
+      }
 
       await classroom.save();
 
@@ -91,7 +124,7 @@ module.exports = {
         user: user._id
       } } });
 
-      await sendUserVerifyEmail( user );
+      if( mail.isEnabled ) await sendUserVerifyEmail( user );
 
       res.json( { success: true } );
 

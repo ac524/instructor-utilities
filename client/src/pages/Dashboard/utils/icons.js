@@ -25,7 +25,8 @@ import {
     faLevelUpAlt,
     faLevelDownAlt,
     faExpandAlt,
-    faCompressAlt
+    faCompressAlt,
+    faLink
     // faWeight
     // faSortAmountDownAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -65,6 +66,7 @@ export default () => library.add(
     faLevelDownAlt,
     faExpandAlt,
     faCompressAlt,
+    faLink,
 
     // Regular Icons
     faArrowAltCircleLeft,

@@ -179,6 +179,7 @@ export const validateRegistrationData = createValidator({
     validators: {
         name: ({ name }) => Boolean(name) || "Your name is required",
         email: ({ email }) => Boolean(email) || "Email is required",
+        code: ({ code }) => Boolean(code) || "Registration code is required",
         password: ({ password, password2 }) => {
 
             const errors = [];
