@@ -90,7 +90,7 @@ module.exports = {
         name: req.body.name,
         email: req.body.email,
         password: await passwordHash( req.body.password ),
-        isVerified: hasCode
+        isVerified: !mail.isEnabled
       });
 
       await user.save();
@@ -124,7 +124,7 @@ module.exports = {
         user: user._id
       } } });
 
-      if( !hasCode ) await sendUserVerifyEmail( user );
+      if( mail.isEnabled ) await sendUserVerifyEmail( user );
 
       res.json( { success: true } );
 
