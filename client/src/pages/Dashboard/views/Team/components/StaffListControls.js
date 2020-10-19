@@ -10,13 +10,17 @@ const StaffListControls = () => {
     const invite = useInviteModalState();
     const pendingInvites = usePendingInvitesModalState();
 
+    const onInviteCreated = () => {
+        pendingInvites.open();
+    }
+
     return (
         <div className="staff-list-ctrls">
             <div className="is-flex mb-5">
                 <InviteModalButton open={invite.open} />
                 { room.invites.length ? <PendingInvitesModalButton open={pendingInvites.open} /> : null }
             </div>
-            <InviteModal show={invite.isActive} onClose={invite.close} />
+            <InviteModal show={invite.isActive} onClose={invite.close} onInviteCreated={onInviteCreated} />
             { room.invites.length ? <PendingInvitesModal show={pendingInvites.isActive} onClose={pendingInvites.close} /> : null }
         </div>
     );
