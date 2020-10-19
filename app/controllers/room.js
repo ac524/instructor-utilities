@@ -112,7 +112,7 @@ module.exports = {
 
             const invite = room.invites[ room.invites.length - 1 ];
 
-            await sendInvite( room, invite, req.user );
+            if( mail.isEnabled ) await sendInvite( room, invite, req.user );
 
             // ioEmit( req, req.roomIo, "dispatch", {
             //     type: "ADD_INVITE",
