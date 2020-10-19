@@ -68,7 +68,7 @@ module.exports = {
 
         try {
 
-            const { errors, isValid } = validateRegisterInput(req.body, ["email","roomname"]);
+            const { errors, isValid } = validateRegisterInput(req.body, ["email","roomname","code"]);
 
             // Check validation
             if (!isValid)
