@@ -1,4 +1,5 @@
 const socketIo = require("socket.io");
+const jwt = require("jsonwebtoken");
 
 // const socketioJwt = require("socketio-jwt");
 
@@ -10,7 +11,9 @@ module.exports = (server, app) => {
 
     const io = socketIo.listen(server);
 
-    io.on("connect", socket => {
+    io.on("connect", async (socket,a,b) => {
+
+        // console.log(socket,a,b);
 
         // socket.on( "leave", room => {
         //     console.log('leave room', room);
