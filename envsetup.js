@@ -5,17 +5,17 @@ const util = require("util");
 const writeFileAsync = util.promisify( fs.writeFile );
 
 const setupQuestions = [
-    {
-        message: "What is your localhost MySQL username?",
-        type: "input",
-        name: "DEV_DB_USER",
-        default: "root"
-    },
-    {
-        message: "What is your localhost MySQL password?",
-        type: "input",
-        name: "DEV_DB_PASS"
-    },
+    // {
+    //     message: "What is your localhost MongoDB username?",
+    //     type: "input",
+    //     name: "DEV_DB_USER",
+    //     default: "root"
+    // },
+    // {
+    //     message: "What is your localhost MySQL password?",
+    //     type: "input",
+    //     name: "DEV_DB_PASS"
+    // },
     {
         message: "Please provide a unique string as your JWT secret.",
         type: "input",
