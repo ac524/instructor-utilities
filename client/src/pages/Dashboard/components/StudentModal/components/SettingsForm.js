@@ -9,6 +9,7 @@ import Form, { createValidator } from "components/Form";
 import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actions";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
 import api from "utils/api";
+import { useSocket } from "utils/socket.io";
 
 const validateStudentData = createValidator({
     filters: {
@@ -106,6 +107,7 @@ const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
     const [ errors, setErrors ] = useState( {} );
     const [ fields, values ] = useStudentSettingsFormFields( student, isBulkCreate );
     const { _id } = student;
+    const socket = useSocket();
 
     const handleSubmit = async (e) => {
 
@@ -122,9 +124,12 @@ const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
 
             if( _id ) {
 
-                dispatch(gda( UPDATE_STUDENT, { _id, ...data } ));
+                const dispatchData = gda( UPDATE_STUDENT, { _id, ...data } );
+                dispatch(dispatchData);
 
                 await api.updateStudent( roomId, _id, data );
+
+                socket.emit( `${roomId}:dispatch`, dispatchData );
 
             } else {
 
@@ -134,12 +139,16 @@ const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
                         ...data,
                         name
                     }) );
-
-                    dispatch(gda( ADD_STUDENTS, (await api.createStudent( { students, roomId } )).data ));
+                    
+                    const dispatchData = gda( ADD_STUDENTS, (await api.createStudent( { students, roomId } )).data );
+                    dispatch(dispatchData);
+                    socket.emit( `${roomId}:dispatch`, dispatchData );
 
                 } else {
 
-                    dispatch(gda( ADD_STUDENT, (await api.createStudent( { ...data, roomId } )).data ));
+                    const dispatchData = gda( ADD_STUDENT, (await api.createStudent( { ...data, roomId } )).data );
+                    dispatch(dispatchData);
+                    socket.emit( `${roomId}:dispatch`, dispatchData );
 
                 }
 

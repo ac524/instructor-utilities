@@ -31,9 +31,9 @@ export const useSocketConnection = () => {
             dispatch( gsa( SET_SOCKET, openSocket ) );
         });
 
-        openSocket.on("test", message => {
-            console.log(message);
-        });
+        // openSocket.on("test", message => {
+        //     console.log(message);
+        // });
         
         return () => {
             openSocket.disconnect();
