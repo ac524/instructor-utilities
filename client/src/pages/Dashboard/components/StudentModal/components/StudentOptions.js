@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
+import { useSocket } from "utils/socket.io";
 
 const ElevateButton = ({feed}) => {
 
@@ -77,6 +78,7 @@ const RemoveButton = ({studentId}) => {
 
     const dispatch = useDashboardDispatch();
     const { roomId } = useParams();
+    const socket = useSocket();
 
     const remove = async () => {
 
@@ -85,7 +87,10 @@ const RemoveButton = ({studentId}) => {
             await api.removeStudent( roomId, studentId );
 
             dispatch(gda( EDIT_STUDENT, false ));
-            dispatch(gda( REMOVE_STUDENT, studentId ));
+
+            const removeDispatch = gda( REMOVE_STUDENT, studentId );
+            dispatch( removeDispatch );
+            socket.emit( `${roomId}:dispatch`, removeDispatch );
 
         } catch(err) {
 
