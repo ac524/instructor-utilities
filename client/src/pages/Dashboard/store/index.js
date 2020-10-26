@@ -15,6 +15,7 @@ import {
      * STAFF ACTIONS
      */
     ADD_STAFF,
+    REMOVE_STAFF,
 
     /**
      * INVITE ACTIONS
@@ -79,6 +80,13 @@ const reducer = ( state, { type, payload } ) => {
             classroom: {
                 ...state.classroom,
                 staff: [ ...state.classroom.staff, payload ]
+            }
+        }),
+        [REMOVE_STAFF]:() => ({
+            ...state,
+            classroom: {
+                ...state.classroom,
+                staff: state.classroom.staff.filter( member => member._id !== payload )
             }
         }),
 

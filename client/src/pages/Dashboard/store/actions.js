@@ -12,6 +12,7 @@ export const SET_CLASSROOM = "SET_CLASSROOM";
  * STAFF ACTIONS
  */
 export const ADD_STAFF = "ADD_STAFF";
+export const REMOVE_STAFF = "REMOVE_STAFF";
 
 /**
  * INVITE ACTIONS
