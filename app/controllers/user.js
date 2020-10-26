@@ -70,8 +70,6 @@ module.exports = {
 
             const staffUserIds = req.classroom.staff.map(({user})=>user);
 
-            console.log( staffUserIds );
-
             await User.updateMany({ _id: { $in: staffUserIds } }, { $pull: { classrooms: req.roomId } });
 
             res.json({success:true});
