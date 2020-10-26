@@ -46,8 +46,6 @@ module.exports = {
 
         } catch(err) {
 
-            console.log( err );
-
             res.status(500).json({ default: "Unable to get user's rooms." });
 
         }
