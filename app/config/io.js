@@ -90,14 +90,16 @@ module.exports = (server, app) => {
 
         socket.on("leave:room", roomId => {
 
-            socket.leave( `room:${roomId}` );
+            const socketRoom = `room:${roomId}`;
 
-            if(dispatchLib.has( roomId )) socket.off(`${roomId}:dispatch`, dispatchLib.get( socketRoom ) );
+            socket.leave( socketRoom );
+
+            if(dispatchLib.has( socketRoom )) socket.off(`${roomId}:dispatch`, dispatchLib.get( socketRoom ) );
 
         });
 
     });
 
-    app.set( 'io', io );
+    app.set( "cr.io", io );
 
 };
