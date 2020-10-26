@@ -114,11 +114,6 @@ module.exports = {
 
             if( mail.isEnabled ) await sendInvite( room, invite, req.user );
 
-            // ioEmit( req, req.roomIo, "dispatch", {
-            //     type: "ADD_INVITE",
-            //     payload: invite
-            // } );
-
             res.json( invite );
 
         } catch( err ) {
