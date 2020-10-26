@@ -6,7 +6,7 @@ import {
 
 import { getDashboardAction as gda, useStaff, useDashboardDispatch } from "pages/Dashboard/store";
 import Form, { createValidator } from "components/Form";
-import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actions";
+import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
 import api from "utils/api";
 import { useSocket } from "utils/socket.io";

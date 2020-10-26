@@ -10,7 +10,7 @@ import {
 } from "react-bulma-components";
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 import SettingsForm from "./components/SettingsForm";
 import ActivtyFeed from "./components/ActivityFeed";
 import StudentOptions from "./components/StudentOptions";

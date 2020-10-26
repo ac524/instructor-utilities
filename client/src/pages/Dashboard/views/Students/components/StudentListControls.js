@@ -7,7 +7,7 @@ import {
 
 import Icon from "components/Icon";
 import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 import Dropdown from "components/Dropdown";
 import { useStudentGroupings } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";

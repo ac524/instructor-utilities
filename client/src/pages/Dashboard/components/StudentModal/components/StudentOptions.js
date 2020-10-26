@@ -10,7 +10,7 @@ import Icon from "components/Icon";
 import api from "utils/api";
 import { useParams } from "react-router-dom";
 import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
-import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 import { useSocket } from "utils/socket.io";
 

@@ -13,7 +13,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Icon from "components/Icon";
 import api from "utils/api";
 import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
-import { DELETE_INVITE } from "pages/Dashboard/store/actions";
+import { DELETE_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
 
 export const usePendingInvitesModalState = () => {
