@@ -14,6 +14,7 @@ import Icon from "components/Icon";
 import api from "utils/api";
 import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { DELETE_INVITE } from "pages/Dashboard/store/actions";
+import { useSocket } from "utils/socket.io";
 
 export const usePendingInvitesModalState = () => {
 
@@ -68,6 +69,7 @@ const PendingInvitesModal = ( { show, onClose } ) => {
 
     const dispatch = useDashboardDispatch();
     const { _id, invites } = useClassroom();
+    const socket = useSocket();
 
     const deleteInvite = async ( inviteId ) => {
 
@@ -75,7 +77,9 @@ const PendingInvitesModal = ( { show, onClose } ) => {
 
             await api.deleteInvite( _id, inviteId );
 
-            dispatch(gda(DELETE_INVITE, inviteId));
+            const dispatchData = gda(DELETE_INVITE, inviteId);
+            dispatch(dispatchData);
+            socket.emit( `${_id}:dispatch`, dispatchData );
 
         } catch(err) {
 
