@@ -2,7 +2,6 @@ const crypto = require('crypto');
 const mail = require('../config/utils/mail');
 
 const { Classroom, Token } = require("../models");
-// const ioEmit = require('./utils/ioEmit');
 
 const sendInvite = ( room, invite, from ) => {
 
@@ -114,11 +113,6 @@ module.exports = {
 
             if( mail.isEnabled ) await sendInvite( room, invite, req.user );
 
-            // ioEmit( req, req.roomIo, "dispatch", {
-            //     type: "ADD_INVITE",
-            //     payload: invite
-            // } );
-
             res.json( invite );
 
         } catch( err ) {
@@ -146,11 +140,6 @@ module.exports = {
             invite.remove();
 
             await room.save();
-
-            // ioEmit( req, req.roomIo, "dispatch", {
-            //     type: "DELETE_INVITE",
-            //     payload: invite._id
-            // } );
 
             res.json({ success: true });
 

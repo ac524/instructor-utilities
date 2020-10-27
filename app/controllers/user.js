@@ -1,4 +1,5 @@
 const { User, Classroom } = require("../models");
+const ioEmit = require("./utils/ioEmit");
 
 module.exports = {
     async update( req, res ) {
@@ -36,17 +37,19 @@ module.exports = {
 
             if( req.roomStaffMember.role === "instructor") return res.status(401).send({ default: "Instructors cannot leave rooms." });
 
+            const memberId = req.roomStaffMember._id;
+
             await req.roomStaffMember.remove();
 
             await req.classroom.save();
 
             await req.user.update({ $pull: { classrooms: req.roomId } });
 
+            ioEmit( req, "dispatch", { type: "REMOVE_STAFF", payload: memberId }, `room:${req.roomId}` );
+
             res.json({success:true});
 
         } catch(err) {
-
-            console.log( err );
 
             res.status(500).json({ default: "Unable to get user's rooms." });
 
@@ -66,8 +69,6 @@ module.exports = {
             if( req.roomStaffMember.role !== "instructor") return res.status(401).send({ default: "Only instructors can archive a room." });
 
             const staffUserIds = req.classroom.staff.map(({user})=>user);
-
-            console.log( staffUserIds );
 
             await User.updateMany({ _id: { $in: staffUserIds } }, { $pull: { classrooms: req.roomId } });
 

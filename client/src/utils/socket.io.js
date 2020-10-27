@@ -12,7 +12,15 @@ export const useSocketConnection = () => {
     useEffect(() => {
 
         // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
-        const openSocket = socketIOClient(`${window.location.origin}`);
+        const openSocket = socketIOClient(`${window.location.origin}`, {
+            transportOptions: {
+              polling: {
+                extraHeaders: {
+                  'Authorization': localStorage.getItem("jwtToken")
+                }
+              }
+            }
+          });
 
         // openSocket.on("disconnet", message => {
         //     console.log("lost");
@@ -23,9 +31,9 @@ export const useSocketConnection = () => {
             dispatch( gsa( SET_SOCKET, openSocket ) );
         });
 
-        openSocket.on("test", message => {
-            console.log(message);
-        });
+        // openSocket.on("test", message => {
+        //     console.log(message);
+        // });
         
         return () => {
             openSocket.disconnect();

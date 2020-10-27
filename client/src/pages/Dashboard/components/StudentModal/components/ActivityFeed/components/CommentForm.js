@@ -32,7 +32,7 @@ const useCommentFormFields = () => {
 
 const CommentForm = ({ feedId }) => {
 
-    const handleFeedEventResponse = useHandleFeedEventResponse();
+    const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
     const [ fields, values, setValues ] = useCommentFormFields();
     const [ errors, setErrors ] = useState({});
 

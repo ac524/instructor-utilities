@@ -1,8 +1,6 @@
 const { Classroom, Feed } = require("../models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-// const ioEmit = require("./utils/ioEmit");
-
 const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
 const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Classroom.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
@@ -59,11 +57,6 @@ module.exports = {
             if( req.body.assignedTo ) data.assignedTo = req.body.assignedTo;
 
             const student = await studentFactory( req.user._id, req.roomId, data );
-
-            // ioEmit( req, req.roomIo, "dispatch", {
-            //     type: "ADD_STUDENT",
-            //     payload: student
-            // } );
 
             res.json( student );
                 
@@ -144,14 +137,6 @@ module.exports = {
 
                 res.status(404).json({ default: "Student not found." });
 
-            // ioEmit( req, req.roomIo, "dispatch", {
-            //     type: "UPDATE_STUDENT",
-            //     payload: {
-            //         _id: req.params.studentId,
-            //         ...update
-            //     }
-            // } );
-
             res.json({ success: true });
                 
         } catch(err) {
@@ -179,11 +164,6 @@ module.exports = {
             await room.save();
 
             await Feed.findByIdAndDelete(student.feed);
-
-            // req.roomIo.emit( "dispatch", {
-            //     type: "REMOVE_STUDENT",
-            //     payload: student._id
-            // } );
 
             res.json( { success: true } );
                 

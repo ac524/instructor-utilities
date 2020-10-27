@@ -19,7 +19,7 @@ import { useAuthorizedUser } from "utils/auth";
 import { useUserRoomsInfo } from "utils/user";
 import { Link } from "react-router-dom";
 import { useDashboardDispatch, getDashboardAction as gda } from "../../store"
-import { SET_MANAGE_APPS } from "../../store/actions";
+import { SET_MANAGE_APPS } from "../../store/actionsNames";
 
 const Classroom = () => {
 

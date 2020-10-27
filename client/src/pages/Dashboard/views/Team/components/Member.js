@@ -13,7 +13,7 @@ import { useAssignedStudents, useElevatedStudents, useDashboardDispatch, getDash
 import { useStudentSort } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actions";
+import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 
 const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-graduate", title="Students" } ) => {
 

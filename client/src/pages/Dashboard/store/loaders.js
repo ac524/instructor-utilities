@@ -1,9 +1,9 @@
 import { getDashboardAction as gda } from "./";
 import { useDashboardDispatch } from "./getters";
 import { useEffect } from "react";
-import { SET_CLASSROOM, SET_STUDENT_FEED } from "./actions";
-import api from "../../../utils/api";
-import { useReadyStep } from "../../../utils/ready";
+import { ADD_STUDENT_FEED_ITEMS, SET_CLASSROOM, SET_STUDENT_FEED } from "./actionsNames";
+import api from "utils/api";
+import { useReadyStep } from "utils/ready";
 import { useSocket } from "utils/socket.io";
 
 export const useClassroomLoader = ( roomId ) => {
@@ -59,16 +59,23 @@ export const useClassroomLoader = ( roomId ) => {
 export const useStudentFeedLoader = ( feedId ) => {
 
     const dispatch = useDashboardDispatch();
+    const socket = useSocket();
 
     useEffect(() => {
 
         if( !feedId ) return dispatch(gda( SET_STUDENT_FEED, null ));
 
-        const getItems = async () => dispatch(gda( SET_STUDENT_FEED, (await api.getFeedItems(feedId)).data ));
+        const addItems = ( message ) => dispatch( gda( ADD_STUDENT_FEED_ITEMS, message ) );
+
+        const connectFeed = async () => {
+            dispatch(gda( SET_STUDENT_FEED, (await api.getFeedItems(feedId)).data ))
+            socket.emit( "join:feed", feedId );
+            socket.on("feedpush", addItems);
+        };
 
         try {
 
-            getItems();
+            connectFeed();
 
         } catch(err) {
 
@@ -76,6 +83,13 @@ export const useStudentFeedLoader = ( feedId ) => {
 
         }
 
-    },[ feedId, dispatch ]);
+        return () => {
+
+            socket.emit( "leave:feed", feedId );
+            socket.off("feedpush", addItems);
+
+        }
+
+    },[ feedId, dispatch, socket ]);
 
 }

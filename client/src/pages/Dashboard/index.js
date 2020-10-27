@@ -36,22 +36,20 @@ export const DashboardContainer = () => {
         
         if( !socket ) return;
 
-        const dispatchData = ( message ) => {
+        socket.emit( "join:room", roomId );
 
-            // console.log(message);
-
-            // // Ignore update message from current user.
-            if( !message.force && (!message.from || socket.id === message.from) ) return;
-
-            dispatch( message.payload );
-
-        }
+        const dispatchData = ( message ) => dispatch( message );
 
         socket.on("dispatch", dispatchData);
 
-        return () => socket.off("dispatch", dispatchData);
+        return () => {
 
-    }, [socket, dispatch]);
+            socket.emit( "leave:room", roomId );
+            socket.off("dispatch", dispatchData);
+
+        }
+
+    }, [roomId, socket, dispatch]);
 
     
     return isRoomLoaded

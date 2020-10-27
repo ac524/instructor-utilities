@@ -47,10 +47,7 @@ const Widget = ( { roomId, appTypeId, ...props } ) => {
 
         const handleAppUpdateMessage = ( message ) => {
 
-            // // Ignore update message from current user.
-            if( !message.from || socket.id === message.from ) return;
-
-            dispatch( { type: "UPDATE_APP", payload: message.payload } );
+            dispatch( { type: "UPDATE_APP", payload: message } );
 
         }
 

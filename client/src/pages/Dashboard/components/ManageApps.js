@@ -10,7 +10,7 @@ import {
 import Icon from "components/Icon";
 import api from "utils/api";
 import { useClassroom, useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
-import { SET_MANAGE_APPS } from "pages/Dashboard/store/actions";
+import { SET_MANAGE_APPS } from "pages/Dashboard/store/actionsNames";
 
 
 const { Column } = Columns;
