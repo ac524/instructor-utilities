@@ -16,7 +16,7 @@ import { useSocket } from "utils/socket.io";
 
 const ElevateButton = ({feed}) => {
 
-    const handleFeedEventResponse = useHandleFeedEventResponse();
+    const handleFeedEventResponse = useHandleFeedEventResponse(feed);
 
     const elevate = async () => {
 
@@ -46,7 +46,7 @@ const ElevateButton = ({feed}) => {
 
 const DeelevateButton = ({feed}) => {
 
-    const handleFeedEventResponse = useHandleFeedEventResponse();
+    const handleFeedEventResponse = useHandleFeedEventResponse(feed);
 
     const deelevate = async () => {
 

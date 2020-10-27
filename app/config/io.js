@@ -1,6 +1,6 @@
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
-const { Classroom } = require("../models");
+const { Classroom, Feed } = require("../models");
 
 const authorizeSocket = ({ handshake }) => {
 
@@ -32,6 +32,8 @@ const isStaffMember = async ( userId, roomId ) => {
 
 }
 
+const isFeedMember = async ( userId, feedId ) => isStaffMember( userId, (await Feed.findById( feedId ).select( "room" )).room );
+
 class SocketDispatchLibrary {
     
     library = {};
@@ -41,8 +43,8 @@ class SocketDispatchLibrary {
         this.socket = socket;
     }
 
-    generate(room) {
-        this.library[room] = dispatch => this.socket.to(room).emit('dispatch', dispatch);
+    generate(room,action) {
+        this.library[room] = dispatch => this.socket.to(room).emit(action, dispatch);
         return this;
     }
 
@@ -80,7 +82,7 @@ module.exports = (server, app) => {
                 
                 socket.join( socketRoom );
 
-                if(!dispatchLib.has( socketRoom )) dispatchLib.generate( socketRoom );
+                if(!dispatchLib.has( socketRoom )) dispatchLib.generate( socketRoom, "dispatch" );
 
                 socket.on(`${roomId}:dispatch`, dispatchLib.get( socketRoom ) );
 
@@ -95,6 +97,32 @@ module.exports = (server, app) => {
             socket.leave( socketRoom );
 
             if(dispatchLib.has( socketRoom )) socket.off(`${roomId}:dispatch`, dispatchLib.get( socketRoom ) );
+
+        });
+
+        socket.on("join:feed", async feedId => {
+            
+            if( socketUserId && await isFeedMember( socketUserId, feedId ) ) {
+
+                const feedRoom = `feed:${feedId}`;
+                
+                socket.join( feedRoom );
+
+                if(!dispatchLib.has( feedRoom )) dispatchLib.generate( feedRoom, "feedpush" );
+
+                socket.on(`${feedId}:push`, dispatchLib.get( feedRoom ) );
+
+            }
+          
+        });
+
+        socket.on("leave:feed", feedId => {
+
+            const feedRoom = `feed:${feedId}`;
+
+            socket.leave( feedRoom );
+
+            if(dispatchLib.has( feedRoom )) socket.off(`${feedId}:push`, dispatchLib.get( feedRoom ) );
 
         });
 
