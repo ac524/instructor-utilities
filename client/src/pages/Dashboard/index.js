@@ -40,12 +40,12 @@ export const DashboardContainer = () => {
 
         const dispatchData = ( message ) => dispatch( message );
 
-        socket.on("dispatch", dispatchData);
+        socket.on("room:dispatch", dispatchData);
 
         return () => {
 
             socket.emit( "leave:room", roomId );
-            socket.off("dispatch", dispatchData);
+            socket.off("room:dispatch", dispatchData);
 
         }
 

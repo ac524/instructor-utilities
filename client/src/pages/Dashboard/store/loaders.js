@@ -70,7 +70,7 @@ export const useStudentFeedLoader = ( feedId ) => {
         const connectFeed = async () => {
             dispatch(gda( SET_STUDENT_FEED, (await api.getFeedItems(feedId)).data ))
             socket.emit( "join:feed", feedId );
-            socket.on("feedpush", addItems);
+            socket.on("feed:push", addItems);
         };
 
         try {
@@ -86,7 +86,7 @@ export const useStudentFeedLoader = ( feedId ) => {
         return () => {
 
             socket.emit( "leave:feed", feedId );
-            socket.off("feedpush", addItems);
+            socket.off("feed:push", addItems);
 
         }
 

@@ -58,75 +58,84 @@ class SocketDispatchLibrary {
 
 }
 
+const privateChannels = {
+    room: {
+        authJoin : async ( userId, roomId ) => userId && await isStaffMember( userId, roomId ),
+        action: "dispatch"
+    },
+    feed: {
+        authJoin : async ( userId, feedId ) => userId && await isFeedMember( userId, feedId ),
+        action: "push"
+    }
+};
+
+const configureSocket = async socket => {
+
+    const dispatchLib = new SocketDispatchLibrary(socket);
+
+    let socketUserId = authorizeSocket(socket);
+
+    socket.on("authorize", bearerToken => {
+
+        socketUserId = getUserFromVerify(bearerToken);
+
+    });
+
+    /**
+     * Create authorized join methods for connecting to private channel actions and room message feeds.
+     */
+
+    const keys = Object.keys( privateChannels );
+
+    for(let i = 0; i < keys.length; i++) {
+
+        const key = keys[i];
+        const channelConfig = privateChannels[key];
+
+        const connectItemActions = async itemId => {
+            
+            // Authorize the join if a method is provided
+            if( !channelConfig.authJoin || await channelConfig.authJoin( socketUserId, itemId ) ) {
+                
+                const roomName = `${key}:${itemId}`;
+                
+                socket.join( roomName );
+
+                if(!dispatchLib.has( roomName )) dispatchLib.generate( roomName, `${key}:${channelConfig.action}` );
+
+                // Connect the socket to the private messaging channel.
+                socket.on(`${itemId}:${channelConfig.action}`, dispatchLib.get( roomName ) );
+
+            }
+          
+        }
+
+        // Join room action
+        socket.on(`join:${key}`, connectItemActions);
+
+        const disconnectItemActions = itemId => {
+
+            const roomName = `${key}:${itemId}`;
+
+            socket.leave( roomName );
+
+            // Disconnect the socket from the private messaging channel.
+            if(dispatchLib.has( roomName )) socket.off(`${itemId}:${channelConfig.action}`, dispatchLib.get( roomName ) );
+
+        }
+
+        // Leave room action
+        socket.on(`leave:${key}`, disconnectItemActions);
+
+    }
+
+}
+
 module.exports = (server, app) => {
 
     const io = socketIo.listen(server);
 
-    io.on("connect", socket => {
-
-        const dispatchLib = new SocketDispatchLibrary(socket);
-
-        let socketUserId = authorizeSocket(socket);
-
-        socket.on("authorize", bearerToken => {
-
-            socketUserId = getUserFromVerify(bearerToken);
-
-        });
-
-        socket.on("join:room", async roomId => {
-            
-            if( socketUserId && await isStaffMember( socketUserId, roomId ) ) {
-
-                const socketRoom = `room:${roomId}`;
-                
-                socket.join( socketRoom );
-
-                if(!dispatchLib.has( socketRoom )) dispatchLib.generate( socketRoom, "dispatch" );
-
-                socket.on(`${roomId}:dispatch`, dispatchLib.get( socketRoom ) );
-
-            }
-          
-        });
-
-        socket.on("leave:room", roomId => {
-
-            const socketRoom = `room:${roomId}`;
-
-            socket.leave( socketRoom );
-
-            if(dispatchLib.has( socketRoom )) socket.off(`${roomId}:dispatch`, dispatchLib.get( socketRoom ) );
-
-        });
-
-        socket.on("join:feed", async feedId => {
-            
-            if( socketUserId && await isFeedMember( socketUserId, feedId ) ) {
-
-                const feedRoom = `feed:${feedId}`;
-                
-                socket.join( feedRoom );
-
-                if(!dispatchLib.has( feedRoom )) dispatchLib.generate( feedRoom, "feedpush" );
-
-                socket.on(`${feedId}:push`, dispatchLib.get( feedRoom ) );
-
-            }
-          
-        });
-
-        socket.on("leave:feed", feedId => {
-
-            const feedRoom = `feed:${feedId}`;
-
-            socket.leave( feedRoom );
-
-            if(dispatchLib.has( feedRoom )) socket.off(`${feedId}:push`, dispatchLib.get( feedRoom ) );
-
-        });
-
-    });
+    io.on("connect", configureSocket);
 
     app.set( "cr.io", io );
 
