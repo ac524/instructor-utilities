@@ -4,7 +4,7 @@ import {
     Button
 } from "react-bulma-components";
 
-import { getDashboardAction as gda, useStaff, useDashboardDispatch } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useStaff, useDashboardDispatch, useStaffByRole } from "pages/Dashboard/store";
 import Form, { createValidator } from "components/Form";
 import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { usePriorityLevel } from "pages/Dashboard/utils/student";
@@ -25,15 +25,15 @@ export const getStaffOptionsList = staff => [ { value: "", label: "Unassigned" }
 export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
 
     const [ studentState, setStudentState ] = useState( student );
-    const staff = useStaff();
+    const { ta } = useStaffByRole();
     const [ staffOptionsList, setStaffOptionsList ] = useState([]);
     const priorityLevel = usePriorityLevel( studentState.priorityLevel );
 
     useEffect(() => {
 
-        setStaffOptionsList( getStaffOptionsList(staff) );
+        setStaffOptionsList( getStaffOptionsList(ta) );
 
-    }, [ staff, setStaffOptionsList ]);
+    }, [ ta, setStaffOptionsList ]);
 
     useEffect(() => {
 
