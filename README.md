@@ -1,5 +1,5 @@
 # Instructor Utilities
-Live project: https://instructor-utilities.herokuapp.com/
+Live project: https://cr-sm.herokuapp.com/
 
 ## Description
 
