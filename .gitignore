@@ -1,5 +1,6 @@
 # build directories
-public/*
+client/build
+# public/*
 
 # .DS_Store
 .DS_Store

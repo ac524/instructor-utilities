@@ -1,0 +1,35 @@
+$feed-border: 1px solid hsl(0,0,90%)
+$feed-border-light: 1px solid hsl(0,0,94%)
+
+.feed
+    font-size: .95rem
+
+.feed-entry
+    display: flex
+    padding: .75rem 0
+
+    + .feed-entry:not(.is-block-entry)
+        border-top: $feed-border-light
+
+    &.is-block-entry
+        + .feed-entry
+            border-top: none
+
+    .fill
+        flex-grow: 1
+
+    .start
+        width: 40px
+        margin-right: .75rem
+
+    .end
+        margin-left: auto
+
+    .box
+        color: inherit
+        border: $feed-border
+        box-shadow: none
+
+        .date
+            text-align: right
+            margin-bottom: .75rem

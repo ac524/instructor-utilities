@@ -1,15 +1,19 @@
 // Import express and create a new server.
+const http = require('http');
 const express = require("express");
+const passport = require("passport");
+
+const PORT = process.env.PORT || 3001;
 
 const app = express();
+const server = http.createServer(app);
 
 // Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Install Passport middleware for user authentication and sessions.
-const session = require("express-session");
-const passport = require("./passport");
+require("./io")(server, app);
+
 const compression = require("compression");
 // TODO Research usage of this compression. Does it work for client side requests?
 // const msgpack = require("express-msgpack");
@@ -19,32 +23,23 @@ app.use(compression());
 // msgpack compression for json.
 // app.use(msgpack());
 
-app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
-app.use(passport.session());
-
-
-// Create and install a Handlebars view engine with Express.
-const exphbs = require("express-handlebars");
-const exphbsSections = require("express-handlebars-sections");
-
-const hbs = exphbs.create({ defaultLayout: "main" });
-exphbsSections(hbs);
-app.engine("handlebars", hbs.engine );
-app.set("view engine", "handlebars");
+// Passport config
+passport.use( require("./jwtstrategy") );
 
 // Use the /public directory for static file loading.
 app.use(express.static("public"));
+app.use(express.static("client/build"));
 
-// Register API Controllers.
-const isAuthenticatedController = require("./middleware/isAuthenticatedController");
-const { controllers, isAuthControllers } = require("../controllers");
-app.use( "/api", controllers, isAuthenticatedController, isAuthControllers );
+// Register routes
+// const setUserSocket = require("../routes/middleware/setUserSocket");
+app.use(
+    // setUserSocket,
+    require("../routes")
+);
 
-// Global middleware for routes registered after this.
-app.use( require("./middleware/provideUserToViews.js"), require("./middleware/provideEnvToViews.js") );
-
-// Register HTML routes last.
-app.use( ...require("../routes") );
+server.listen(PORT, () => {
+    console.log(`App listening on Port: ${PORT}`);
+});
 
 module.exports = app;

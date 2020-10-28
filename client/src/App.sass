@@ -1,0 +1,253 @@
+@import "_env"
+
+@import "~bulma/sass/base/_all"
+@import "~bulma/sass/elements/_all"
+@import "~bulma/sass/form/_all"
+@import "~bulma/sass/components/_all"
+@import "~bulma/sass/grid/_all"
+@import "~bulma/sass/helpers/_all"
+@import "~bulma/sass/layout/_all"
+@import "~bulma-slider/src/sass"    
+
+.has-text-nowrap
+    white-space: nowrap
+
+// This exist in the github, but not for installed even though versions match.
+@each $property, $shortcut in $spacing-shortcuts
+  @each $name, $value in $spacing-values
+    // All directions
+    .#{$shortcut}-#{$name}
+      #{$property}: $value !important
+
+.mt-auto
+    margin-top: auto 
+
+.mr-auto
+    margin-right: auto
+
+.mb-auto
+    margin-bottom: auto
+
+.ml-auto
+    margin-left: auto
+
+.mx-auto
+    margin-left: auto
+    margin-right: auto
+
+.my-auto
+    margin-top: auto
+    margin-bottom: auto
+
+@for $i from 1 through 10
+  $width: ($i * 10)
+  .w-#{$width}
+    width: percentage($width/100)
+  .mw-#{$width}
+    max-width: percentage($width/100)
+
+.is-grid
+    border-top: 1px solid #b5b5b5
+    border-left: 1px solid #b5b5b5
+
+    > *,
+    > .button
+        height: auto
+        border-radius: 0
+        border-top: none
+        border-left: none
+        border-right: 1px solid #b5b5b5
+        border-bottom: 1px solid #b5b5b5
+
+@for $i from 1 through 3
+    .has-border-#{$i}
+        border-width: $i + 0px
+    button.has-border-#{$i}
+        border-color: inherit !important
+        
+
+.is-circle
+    border-radius: 290486px !important
+
+.has-text-inherit
+    color: inherit
+
+.has-shadow-light,
+.has-img-shadow-light img
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02) !important
+
+.has-shadow,
+.has-img-shadow img
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.2), 0 0px 0 1px rgba(10, 10, 10, 0.02) !important
+
+
+.has-filled-content,
+.has-filled-content
+    display: flex !important
+    flex-direction: column
+
+    > *
+        flex-grow: 1
+
+.has-background-clear
+    background-color: transparent !important
+
+.columns
+    &.is-gapless
+        .column:not(:first-child)
+            > .box
+                border-top-left-radius: 0
+                border-bottom-left-radius: 0
+        .column:not(:last-child)
+            > .box
+                border-top-right-radius: 0
+                border-bottom-right-radius: 0
+
+.button
+    transition: background-color .3s ease, color .3s ease, border-color .3s ease
+
+@media screen and (max-width: 768px)
+    .button.is-icon-only-mobile
+        .icon
+            margin-right: calc(-0.5em - 1px) !important
+
+            + *
+                display: none !important
+
+.card
+    @each $name, $pair in $colors
+        $color: nth($pair, 1)
+        &.is-#{$name}
+            border-top: 4px solid $color
+
+.tag
+    &.is-small
+        font-size: .5rem
+
+.dropdown
+    .title
+        text-align: left
+        padding: 0.375rem 1rem
+        margin-bottom: 0
+    &.is-over-btn
+        &.is-up .dropdown-menu
+            bottom: 0
+
+.table
+    &.is-vcentered
+        td
+            vertical-align: middle
+
+.has-flex-rows
+    &.is-bordered
+        border: 1px solid $border
+        border-bottom:  none
+        .is-flex
+            border-bottom:  1px solid $border
+
+    &.is-hover
+        .is-flex:hover
+            background-color: $scheme-main-bis
+
+.title
+    .icon:first-child
+        margin-right: 0.5rem
+    @each $name, $pair in $colors
+        $color: nth($pair, 1)
+        &.is-#{$name}
+            padding-top: .5em
+            border-top: 4px solid $color
+            // If light and dark colors are provided
+            // @if length($pair) >= 4
+            //     $color-light: nth($pair, 3)
+            //     &.is-light
+            //         border-top-color: $color-light
+
+.is-flat
+    .field:not(:last-child)
+        margin-bottom: 1.25rem
+    .label
+        margin-bottom: 0
+        font-size: .85rem
+        line-height: 1em
+    .input
+        padding-left: 0
+        padding-right: 0
+        background: transparent
+        border-top: none
+        border-right: none
+        border-bottom-width: 2px
+        border-left: none
+        border-radius: 0px
+        box-shadow: none !important
+
+.has-overflow-ellipsis
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+
+.panel
+    .title
+        margin: 0
+        padding-top: .5em
+        padding-bottom: .5em
+        padding-left: 0.75rem
+        padding-right: 0.75rem
+    .title:first-child
+        border-top-left-radius: $panel-heading-radius
+        border-top-right-radius: $panel-heading-radius
+        // border-bottom: 1px solid #ededed
+    a.panel-block
+        transition: border-left-color .5s
+        border-left-width: 4px
+        border-left-style: solid
+        &:not(.is-active)
+            border-left-color: $light
+    &.is-radiusless
+        .title,
+        .panel-block
+            border-radius: 0 !important
+
+.modal
+    &.is-full
+        width: 100%
+        
+.modal-content
+    max-width: 90%
+
+input[type="range"]
+	&.slider
+        &:not([orient="vertical"])
+            &.has-output,
+            &.has-output-tooltip
+                + output
+                    font-weight: bold
+                    font-size: 1rem
+                    line-height: 1.25rem
+
+//         @each $name, $pair in $colors
+//             $color: nth($pair, 1)
+//             $color-invert: nth($pair, 2)
+//             &.is-#{$name}
+//                 // If light and dark colors are provided
+//                 @if length($pair) >= 4
+//                     $color-light: bulmaDarken(nth($pair, 3), 30%)
+//                     $color-dark: nth($pair, 4)
+//                     &.is-light
+//                         &::-moz-range-track
+//                             background: $color-light !important
+//                         &::-webkit-slider-runnable-track
+//                             background: $color-light !important
+//                         &::-ms-track
+//                             background: $color-light !important
+
+//                         &::-ms-fill-lower
+//                             background: $color-light
+//                         &::-ms-fill-upper
+//                             background: $color-light
+
+//                         &.has-output,
+//                         .has-output-tooltip
+//                             + output
+//                                 background-color: $color-light
+//                                 color: $color-invert

@@ -1,13 +1,10 @@
 require("dotenv").config();
 
-const { sequelize } = require("./models");
-const app = require("./config/express");
+// MongoDB
+require("./config/mongoose");
 
-const PORT = process.env.PORT ||3000;
+// Classroom app registry
+require("./config/apps/register")();
 
-const force = false;
-sequelize.sync({ force }).then( () => {
-  app.listen(PORT, () => {
-    console.log(`App listening on Port: ${PORT}`);
-  });
-});
+// Express server configuration
+require("./config/express");

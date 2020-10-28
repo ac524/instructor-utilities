@@ -1,43 +1,34 @@
-// Requiring bcrypt for password hashing. Using the bcryptjs version as the regular bcrypt module sometimes causes errors on Windows machines
-var bcrypt = require("bcryptjs");
-// Creating our User model
-module.exports = function(sequelize, DataTypes) {
-  const User = sequelize.define("User", {
-    // The email cannot be null, and must be a proper email before creation
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true
-      }
-    },
-    // The password cannot be null
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+// Create Schema
+const UserSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  classrooms: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Classroom"
     }
-  });
-  // Creating a custom method for our User model. This will check if an unhashed password entered by the user can be compared to the hashed password stored in our database
-  User.prototype.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
-  };
-  // Hooks are automatic methods that run during various phases of the User Model lifecycle
-  // In this case, before a User is created, we will automatically hash their password
-  User.addHook("beforeCreate", function(user) {
-    user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-  });
+  ],
+  date: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-  User.associate = ({ List, ListMeta }) => {
-    User.hasMany(List, {
-      onDelete: "cascade"
-    });
-
-    // User.belongsToMany(List, { through: ListMeta });
-    User.hasMany( ListMeta, {
-      onDelete: "cascade"
-    } );
-  };
-
-  return User;
-};
+module.exports = mongoose.model("User", UserSchema);
