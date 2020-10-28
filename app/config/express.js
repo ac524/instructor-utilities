@@ -29,6 +29,7 @@ passport.use( require("./jwtstrategy") );
 
 // Use the /public directory for static file loading.
 app.use(express.static("public"));
+app.use(express.static("client/build"));
 
 // Register routes
 // const setUserSocket = require("../routes/middleware/setUserSocket");
