@@ -4,7 +4,10 @@ require("dotenv").config();
 require("./app/config/mongoose");
 
 const crypto = require("crypto");
-const ncp = require("copy-paste");
+
+// Removed for now for security
+// TODO explore other solutions for copy to clipboard
+// const ncp = require("copy-paste");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 const { Classroom } = require("./app/models");
@@ -12,18 +15,18 @@ const Token = require("./app/models/Token");
 
 const [ , , code ] = process.argv;
 
-const copyToClip = (toCopy, message) => new Promise(resolve => {
-    ncp.copy( toCopy, () => {
+// const copyToClip = (toCopy, message) => new Promise(resolve => {
+//     ncp.copy( toCopy, () => {
         
-        if( message ) {
-            console.log( "!\x1b[32m", message, "\x1b[0m" );
-            console.log(" ");
-        }
+//         if( message ) {
+//             console.log( "!\x1b[32m", message, "\x1b[0m" );
+//             console.log(" ");
+//         }
 
-        resolve();
+//         resolve();
 
-    } );
-});
+//     } );
+// });
 
 const createRoomWithCode = async ( code ) => {
 
@@ -55,7 +58,7 @@ const createRoomWithCode = async ( code ) => {
 
         console.log(" ");
 
-        await copyToClip( token.token, "Code copied to clipboard" );
+        // await copyToClip( token.token, "Code copied to clipboard" );
 
         process.exit(0);
 
