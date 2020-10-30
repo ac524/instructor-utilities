@@ -50,4 +50,4 @@ const registerAppTypes = async () => {
 
 }
 
-module.exports = registerAppTypes;
+export default registerAppTypes

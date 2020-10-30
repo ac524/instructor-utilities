@@ -4,7 +4,7 @@ require("dotenv").config();
 require("./config/mongoose");
 
 // Classroom app registry
-require("./config/apps/register")();
+require("./config/apps/register").default();
 
 // Express server configuration
 require("./config/express");
