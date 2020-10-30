@@ -31,7 +31,7 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
 
     useEffect(() => {
 
-        setStaffOptionsList( getStaffOptionsList(ta) );
+        setStaffOptionsList( getStaffOptionsList(ta || []) );
 
     }, [ ta, setStaffOptionsList ]);
 
