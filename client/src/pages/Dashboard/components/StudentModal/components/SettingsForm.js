@@ -69,7 +69,7 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
             }
         ),
         {
-            label: "Priority",
+            label: "Priority (At Risk Factor)",
             name: "priorityLevel",
             type: "range",
             value: studentState.priorityLevel,
