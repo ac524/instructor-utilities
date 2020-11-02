@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const isAuthenticated = require("./middleware/isAuthenticated");
+const setInvite = require("./middleware/setInvite");
 
 const {
     accept,
-    setInvite,
     emailCheck,
-    registerInvite
+    register
 } = require("../controllers/invite");
 
 router
@@ -18,6 +18,6 @@ router
 
 router
     .route('/:token/register')
-    .post( setInvite, registerInvite );
+    .post( setInvite, register );
 
 module.exports = router;
