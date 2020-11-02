@@ -44,13 +44,13 @@ class API {
 
     async createInvite( roomId, data ) {
 
-        return this.axios.post( `/api/rooms/${roomId}/invites`, data );
+        return this.axios.post( `/api/invites/${roomId}`, data );
 
     }
 
     async deleteInvite( roomId, inviteId ) {
 
-        return this.axios.delete( `/api/rooms/${roomId}/invites/${inviteId}` );
+        return this.axios.delete( `/api/invites/${roomId}/${inviteId}` );
 
     }
 
