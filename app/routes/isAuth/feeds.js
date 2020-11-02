@@ -6,9 +6,7 @@ const isRoomMember = require("../middleware/isRoomMember");
 const {
     getSingle,
     getSingleItems,
-    createComment,
-    createElevate,
-    createDeelevate
+    entryTypes
 } = require("../../controllers/feed");
 
 router
@@ -19,16 +17,12 @@ router
     .route( "/:feedId/items" )
     .get( setRoom.fromFeed, isRoomMember, getSingleItems );
 
-router
-    .route( "/:feedId/comments" )
-    .post( setRoom.fromFeed, isRoomMember, createComment );
+entryTypes.forEach( entryType => {
 
-router
-    .route( "/:feedId/elevate" )
-    .post( setRoom.fromFeed, isRoomMember, createElevate );
+    router
+        .route( `/:feedId/${entryType.key}` )
+        .post( setRoom.fromFeed, isRoomMember, entryType.getCreateRoute() );
 
-router
-    .route( "/:feedId/deelevate" )
-    .post( setRoom.fromFeed, isRoomMember, createDeelevate );
+} );
 
 module.exports = router;
