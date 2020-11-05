@@ -45,4 +45,4 @@ Students from the UW Coding Boot Camp: Billy Hao, Christopher Marti, Niv Swamy a
 
 ## License
 
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
