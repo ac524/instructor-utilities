@@ -1,12 +1,22 @@
 const { User, Classroom } = require("../models");
 const ioEmit = require("./utils/ioEmit");
 const passwordHash = require('../config/utils/passwordHash');
+const validateRegisterInput = require("../config/validation/register");
 
 
 module.exports = {
     async update(req, res) {
         try {
 
+            const bodyKeys = Object.keys( req.body );
+            const excludeFilters = ["name", "email", "password", "roomname", "code"].filter( filter => !bodyKeys.includes(filter) );
+            const { errors, isValid } = validateRegisterInput( req.body, excludeFilters );
+
+            // Check validation
+            if (!isValid)
+
+                return res.status(400).json( errors );
+            
             const updateList = [];
 
             // TODO - Email updates should not be automatic, instead there needs to be a verification process for the new email.

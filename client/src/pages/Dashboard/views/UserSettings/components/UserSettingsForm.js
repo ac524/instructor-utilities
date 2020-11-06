@@ -17,7 +17,9 @@ const validateUserSettingsData = validateUserData.extendNew({
                 // TODO stronger password validation for both client and server.
                 if (password.length < 6) errors.push(["password", "Password must be at least 6 characters"]);
 
-                if (password2 && (password2 != password)) errors.push(["password2", "Confirm password must match"]);
+                if( !password2 ) errors.push(["password2", "Confirm password is required"])
+
+                else if ( password2 != password ) errors.push(["password2", "Confirm password must match"]);
             };
 
             if (errors.length) return Object.fromEntries(errors);
@@ -90,7 +92,13 @@ const UserSettingsForm = () => {
 
         e.preventDefault();
 
-        const updateList = Object.entries(values).filter(([key, value]) => value !== user[key]);
+        const updateList = Object.entries(values).filter(([key, value]) => {
+
+            if( !value && ["password","password2"].includes( key ) ) return false;
+
+            return value !== user[key];
+
+        });
 
         if (updateList.length) {
 
