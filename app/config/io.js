@@ -73,13 +73,12 @@ const configureSocket = async socket => {
 
     const dispatchLib = new SocketDispatchLibrary(socket);
 
+    // Connection header authorization
     let socketUserId = authorizeSocket(socket);
 
-    socket.on("authorize", bearerToken => {
-
-        socketUserId = getUserFromVerify(bearerToken);
-
-    });
+    // Messaging authorization
+    socket.on("authorize", bearerToken => socketUserId = getUserFromVerify(bearerToken));
+    socket.on("unauthorize", () => socketUserId = false);
 
     /**
      * Create authorized join methods for connecting to private channel actions and room message feeds.

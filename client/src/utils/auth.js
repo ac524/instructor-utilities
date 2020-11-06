@@ -144,6 +144,7 @@ export const useIsUserVerified = () => {
 export const useLogin = () => {
 
     const [ ,dispatch ] = useStoreContext();
+    const socket = useSocket();
 
     return async ( credential ) => {
     
@@ -152,6 +153,8 @@ export const useLogin = () => {
         const token = setAuthToken( tokenString );
 
         dispatch(gsa( LOGIN_USER, { token, user } ));
+
+        socket.emit( "authorize", tokenString );
 
         return token;
         
@@ -162,12 +165,15 @@ export const useLogin = () => {
 export const useLogout = () => {
 
     const [ ,dispatch ] = useStoreContext();
+    const socket = useSocket();
     const history = useHistory();
 
     return () => {
 
         setAuthToken( false );
         dispatch(gsa(LOGOUT_USER));
+
+        socket.emit( "unauthorize" );
 
         history.push("/");
 
