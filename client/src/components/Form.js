@@ -6,61 +6,78 @@ import { ErrorProvider, Error, useInputErrorColor } from "./Errors";
 
 const { Field, Control, Label, Input, Select, Textarea } = FormCollection;
 
-export const createValidator = ({ filters = {}, validators = {} }) => ( rawData ) => {
+export const createValidator = ({ filters = {}, validators = {} }) => {
 
-    const filterMap = ([ key, rawValue ]) => {
-        return [
-            key,
-            filters[key] ? filters[key](rawValue) : rawValue
-        ];
-    }
+    const validator = ( rawData ) => {
 
-    const data = Object.fromEntries(Object.entries( rawData ).map( filterMap ));
+        const filterMap = ([ key, rawValue ]) => {
+            return [
+                key,
+                filters[key] ? filters[key](rawValue) : rawValue
+            ];
+        }
 
-    const validationReducer = ( errors, key ) => {
+        const data = Object.fromEntries(Object.entries( rawData ).map( filterMap ));
 
-        if( !validators[key] ) return errors;
+        const validationReducer = ( errors, key ) => {
 
-        try {
-            
-            // If there is no validator for the key, return.
             if( !validators[key] ) return errors;
 
-            // Get the validation return.
-            const fieldValidation = validators[key]( data, errors );
+            try {
+                
+                // If there is no validator for the key, return.
+                if( !validators[key] ) return errors;
 
-            // If given an object, append them it as new errors.
-            if( fieldValidation !== null && (typeof fieldValidation === 'object') ) return { ...errors, ...fieldValidation };
+                // Get the validation return.
+                const fieldValidation = validators[key]( data, errors );
 
-            // If given false, append a default error.
-            if( false === fieldValidation ) return { ...errors, [key]: "Invalid" };
+                // If given an object, append them it as new errors.
+                if( fieldValidation !== null && (typeof fieldValidation === 'object') ) return { ...errors, ...fieldValidation };
 
-            // If given true or other false values, assume the validation passed and return.
-            if( fieldValidation === true || !fieldValidation ) return errors;
+                // If given false, append a default error.
+                if( false === fieldValidation ) return { ...errors, [key]: "Invalid" };
 
-            // Othewise, append the validation return.
-            return { ...errors, [key]: fieldValidation };
+                // If given true or other false values, assume the validation passed and return.
+                if( fieldValidation === true || !fieldValidation ) return errors;
 
-        } catch(err) {
+                // Othewise, append the validation return.
+                return { ...errors, [key]: fieldValidation };
 
-            // Set err message as validation return.
-            return { ...errors, [key]: err.message };
+            } catch(err) {
+
+                // Set err message as validation return.
+                return { ...errors, [key]: err.message };
+
+            }
 
         }
 
+        const errors = [ ...Object.keys( data ), "default" ].reduce( validationReducer, {} );
+
+        return [
+            // Filtered data
+            data,
+            // Errors object
+            errors,
+            // Has Errors boolean
+            Boolean(Object.keys(errors).length)
+        ];
+
     }
 
-    const errors = [ ...Object.keys( data ), "default" ].reduce( validationReducer, {} );
+    // Allows new instances to be created with this validator's options as a base.
+    validator.extendNew = ( extOptions ) => createValidator( {
+        filters: {
+            ...filters,
+            ...(extOptions.filters || {})
+        },
+        validators: {
+            ...validators,
+            ...(extOptions.validators || {})
+        }
+    } );
 
-    return [
-        // Filtered data
-        data,
-        // Errors object
-        errors,
-        // Has Errors boolean
-        Boolean(Object.keys(errors).length)
-    ];
-
+    return validator;
 }
 
 export const validateAll = ( rawData, ...validators ) => {

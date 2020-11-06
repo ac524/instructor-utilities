@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import api from "utils/api";
-import { useLogin, validateRegistrationData } from "utils/auth";
-import Form from "components/Form";
+import { useLogin, validateUserData, validateRegistrationData } from "utils/auth";
+import Form, { validateAll } from "components/Form";
 import { useHistory } from "react-router-dom";
 
 const RegisterForm = () => {
@@ -68,7 +68,7 @@ const RegisterForm = () => {
 
         try {
 
-            const [ data, errors, hasErrors ] = validateRegistrationData({ code, name, email, password, password2, roomname });
+            const [ data, errors, hasErrors ] = validateAll( { code, name, email, password, password2, roomname }, validateUserData, validateRegistrationData );
 
             if( hasErrors ) {
                 setErrors(errors);

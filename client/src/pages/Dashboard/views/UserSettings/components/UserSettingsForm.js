@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import Form, { createValidator } from "components/Form";
-import { useAuthorizedUser } from "utils/auth";
+import Form from "components/Form";
+import { useAuthorizedUser, validateUserData } from "utils/auth";
 import api from "utils/api";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { UPDATE_USER } from "store/actions";
 
-const validateUserSettingsData = createValidator({
+const validateUserSettingsData = validateUserData.extendNew({
     validators: {
-        name: ({ name }) => Boolean(name) || "Your name is required",
-        email: ({ email }) => Boolean(email) || "Email is required",
         password: ({ password, password2 }) => {
 
             const errors = [];
@@ -23,7 +21,7 @@ const validateUserSettingsData = createValidator({
             };
 
             if (errors.length) return Object.fromEntries(errors);
-        },
+        }
     }
 });
 
