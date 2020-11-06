@@ -1,7 +1,8 @@
 # Instructor Utilities
 
-Live: https://cr-sm.herokuapp.com/
-Staging (for weekly builds): https://cr-sm-staging.herokuapp.com/
+**Live:** https://cr-sm.herokuapp.com/
+
+**Staging (for weekly builds):** https://cr-sm-staging.herokuapp.com/
 
 ## Description
 
