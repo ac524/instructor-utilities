@@ -63,6 +63,30 @@ export const createValidator = ({ filters = {}, validators = {} }) => ( rawData 
 
 }
 
+export const validateAll = ( rawData, ...validators ) => {
+
+    const validatorsReducer = ( validationState, validator ) => {
+
+        const nextValidationState = validator( validationState[0] );
+
+        return [
+            // Updated data from next step
+            nextValidationState[0],
+            // Merge errors from current and the next
+            { ...validationState[1], ...nextValidationState[1] },
+            // Has errors if either is true
+            validationState[2] || nextValidationState[2]
+        ]
+
+    }
+
+    // Allow validators to be passed in as a list or as additional function arguments.
+    const toProcess = Array.isArray(validators[0]) ? validators[0] : validators;
+
+    return toProcess.slice( 1 ).reduce( validatorsReducer, toProcess[0]( rawData ) );
+
+}
+
 export const RangeInput = ( { id, name, value, color, light, size, ...props } ) => {
 
     if( !id ) id = `slider-${name}`;
