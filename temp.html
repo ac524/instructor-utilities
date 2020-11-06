@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div style="max-width:800px">
+    <h1>Click the different parts of the button's to see different results in the console</h1>
+    <p>When you click the red part of the button (The part inside the &lt;span&gt; tag) you will see `event.target` log the &lt;span&gt; instead of the &lt;button&gt;. In contrast, the line of code using `this` will always log the element matching the `.event-btn` selector in the event listener configuration.</p>
+    <div id="btn-container">
+        <button class="event-btn" style="padding: 20px">A button <span 
+        style="background:red;color:#FFF">with child elements</span></button>
+        <button class="event-btn" style="padding: 20px">Another button <span 
+        style="background:red;color:#FFF">with child elements</span></button>
+    </div>
+    <h2>Code</h2>
+    <pre>
+    <code>
+    $("#btn-container").on("click", ".event-btn", function(event) {
+
+        // `event.target` will refer to the clicked element, so if the child <span> is clicked, then `event.target` will be the span.
+        console.log("event.target = ", event.target);
+
+        // `this` will always refer to the element matching the sub selector in our "on click" definition. So for this code, it will be the element that matches the ".event-btn" selector.
+        console.log("this = ", this);
+
+    })
+    </code>
+    </pre>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $("#btn-container").on("click", ".event-btn", function(event) {
+
+        // `event.target` will refer to the clicked element, so if the child <span> is clicked, then `event.target` will be the span.
+        console.log("event.target = ", event.target);
+
+        // `this` will always refer to the element matching the sub selector in our "on click" definition. So for this code, it will be the element that matches the ".event-btn" selector.
+        console.log("this = ", this);
+        
+    })
+</script>
+</body>
+</html>
