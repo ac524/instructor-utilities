@@ -27,7 +27,6 @@ const validateUserSettingsData = validateUserData.extendNew({
 
 export const useUserSettingFields = () => {
 
-    const [fields, setFields] = useState([]);
     const [state, setState] = useState({});
 
     const user = useAuthorizedUser();
@@ -45,40 +44,36 @@ export const useUserSettingFields = () => {
 
     }, [user, setState]);
 
-    useEffect(() => {
+    const onChange = e => setState({ ...state, [e.target.name]: e.target.value });
 
-        const onChange = e => setState({ ...state, [e.target.name]: e.target.value });
-
-        setFields([
-            {
-                label: "Name",
-                onChange,
-                value: state.name,
-                name: "name"
-            },
-            {
-                label: "Email",
-                onChange,
-                value: state.email,
-                name: "email"
-            },
-            {
-                label: "Password",
-                onChange,
-                value: state.password,
-                type: "password",
-                name: "password"
-            },
-            {
-                label: "Confirm Password",
-                onChange,
-                value: state.password2,
-                type: "password",
-                name: "password2"
-            }
-        ])
-
-    }, [state, setState, setFields]);
+    const fields = [
+        {
+            label: "Name",
+            onChange,
+            value: state.name,
+            name: "name"
+        },
+        {
+            label: "Email",
+            onChange,
+            value: state.email,
+            name: "email"
+        },
+        {
+            label: "Password",
+            onChange,
+            value: state.password,
+            type: "password",
+            name: "password"
+        },
+        {
+            label: "Confirm Password",
+            onChange,
+            value: state.password2,
+            type: "password",
+            name: "password2"
+        }
+    ]
 
     return [fields, state];
 
