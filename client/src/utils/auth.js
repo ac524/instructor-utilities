@@ -181,11 +181,10 @@ export const useLogout = () => {
     
 }
 
-export const validateRegistrationData = createValidator({
+export const validateUserData = createValidator({
     validators: {
         name: ({ name }) => Boolean(name) || "Your name is required",
         email: ({ email }) => Boolean(email) || "Email is required",
-        code: ({ code }) => Boolean(code) || "Registration code is required",
         password: ({ password, password2 }) => {
 
             const errors = [];
@@ -210,6 +209,12 @@ export const validateRegistrationData = createValidator({
             if( errors.length ) return Object.fromEntries( errors );
 
         },
+    }
+});
+
+export const validateRegistrationData = createValidator({
+    validators: {
+        code: ({ code }) => Boolean(code) || "Registration code is required",
         roomname: ({ roomname }) => Boolean(roomname) || "Room name is required",
     }
 });
