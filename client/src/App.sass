@@ -40,11 +40,13 @@
     margin-bottom: auto
 
 @for $i from 1 through 10
-  $width: ($i * 10)
-  .w-#{$width}
-    width: percentage($width/100)
-  .mw-#{$width}
-    max-width: percentage($width/100)
+  $size: ($i * 10)
+  .h-#{$size}
+    height: percentage($size/100)
+  .w-#{$size}
+    width: percentage($size/100)
+  .mw-#{$size}
+    max-width: percentage($size/100)
 
 .is-grid
     border-top: 1px solid #b5b5b5

@@ -1,7 +1,10 @@
 import Pulse from "components/Pulse";
 import { useStudentFeed, useStudentFeedLoader } from "pages/Dashboard/store";
-import React from "react";
-import CommentForm from "./components/CommentForm";
+import React, { useEffect, useRef } from "react";
+
+import {
+    Box
+} from "react-bulma-components";
 
 import {
     Comment,
@@ -19,9 +22,10 @@ const typeMap = {
     deelevate: Deelevate
 }
 
-const ActivtyFeed = ({ student }) => {
+const ActivtyFeed = ({ student, className = "", style = {}, ...props }) => {
 
     const { feed } = student;
+    const feedRef = useRef();
 
     useStudentFeedLoader(feed);
     const entries = useStudentFeed();
@@ -36,17 +40,24 @@ const ActivtyFeed = ({ student }) => {
 
     }
 
+    useEffect(()=>{
+
+        if(!feedRef.current) return;
+
+        feedRef.current.scrollTop = feedRef.current.scrollHeight;
+
+    },[feedRef, entries]);
+
     return (
         entries
         ? (
-            <div className="feed has-filled-content">
+            <div ref={feedRef} className={`${className} box feed`} style={{ ...style, overflowY: "scroll" }} {...props}>
                 <div className="feed-entries">
                     {entries.map( feedEntryComponentMap )}
                 </div>
-                <CommentForm feedId={feed} />
             </div>
         )
-        : <div className="is-flex" style={{alignItems:"center"}}><Pulse /></div>
+        : <div className={`${className} box is-flex`} style={{...style, alignItems:"center"}}><Pulse /></div>
     );
 
 }
