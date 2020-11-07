@@ -1,3 +1,4 @@
+import Pulse from "components/Pulse";
 import { useStudentFeed, useStudentFeedLoader } from "pages/Dashboard/store";
 import React from "react";
 import CommentForm from "./components/CommentForm";
@@ -36,13 +37,16 @@ const ActivtyFeed = ({ student }) => {
     }
 
     return (
-        entries &&
-        <div className="feed has-filled-content">
-            <div className="feed-entries">
-                {entries.map( feedEntryComponentMap )}
+        entries
+        ? (
+            <div className="feed has-filled-content">
+                <div className="feed-entries">
+                    {entries.map( feedEntryComponentMap )}
+                </div>
+                <CommentForm feedId={feed} />
             </div>
-            <CommentForm feedId={feed} />
-        </div>
+        )
+        : <div className="is-flex" style={{alignItems:"center"}}><Pulse /></div>
     );
 
 }
