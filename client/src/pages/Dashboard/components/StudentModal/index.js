@@ -16,6 +16,7 @@ import ActivtyFeed from "./components/ActivityFeed";
 import StudentOptions from "./components/StudentOptions";
 import Icon from "components/Icon";
 import Fade from "animations/Fade";
+import CommentForm from "./components/ActivityFeed/components/CommentForm";
 
 const { Column } = Columns;
 
@@ -47,7 +48,7 @@ const StudentModal = () => {
             <Modal onClose={clearEditStudent} show={show} closeOnBlur={true}>
                 <Fade style={{width:"100%"}} show={show} duration=".5s">
                     <Modal.Content {...contentProps}>
-                        <Columns gapless>
+                        <Columns gapless className="h-100">
                             <Column className="has-filled-content">
                                 <Box className="py-5 is-shadowless">
                                     <div className="is-flex" style={{alignItems:"center"}}>
@@ -72,9 +73,10 @@ const StudentModal = () => {
                             </Column>
                             {
                                 _id && (
-                                    <Column className="has-filled-content">
-                                        <Box className="p-6 is-shadowless has-background-white-bis has-text-grey has-filled-content">
-                                            <ActivtyFeed student={editStudent} />
+                                    <Column className="has-filled-content h-100">
+                                        <ActivtyFeed className="p-6 is-shadowless has-background-white-bis has-text-grey m-0" student={editStudent} style={{borderBottomRightRadius:0}} />
+                                        <Box className="px-6 py-3 is-shadowless has-background-white-bis has-text-grey m-0" style={{flexGrow:0,borderTop:"2px solid #dfdfdf",borderTopRightRadius:0}}>
+                                            <CommentForm feedId={editStudent.feed} />
                                         </Box>
                                     </Column>
                                 )
