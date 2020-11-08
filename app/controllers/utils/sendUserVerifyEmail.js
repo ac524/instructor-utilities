@@ -2,6 +2,7 @@ const mail = require('../../config/utils/mail');
 const crypto = require('crypto');
 
 const { Token } = require("../../models");
+const homeUrl = require("../../config/options")( "publicUrl" );
 
 const sendUserVerifyEmail = async (user) => {
 
@@ -17,7 +18,7 @@ const sendUserVerifyEmail = async (user) => {
       "welcome",
       {
         name: "Anthony Brown",
-        verificationLink: `http://localhost:3000/validate-email/${token.token}`
+        verificationLink: `${homeUrl}/validate-email/${token.token}`
       },
       {
         to: user.email,

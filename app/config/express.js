@@ -2,8 +2,9 @@
 const http = require('http');
 const express = require("express");
 const passport = require("passport");
+const getOption = require("../config/options");
 
-const PORT = process.env.PORT || 3001;
+const PORT = getOption( "port" );
 
 const app = express();
 const server = http.createServer(app);
