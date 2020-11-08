@@ -55,7 +55,7 @@ export const CopyLinkButton = ( {token} ) => {
     }
 
     return (
-        <CopyToClipboard text={`http://localhost:3000/invite/${token}`} onCopy={notify}>
+        <CopyToClipboard text={`${window.location.origin}/invite/${token}`} onCopy={notify}>
             <Button size="small" className="ml-2 is-icon-only-mobile" color={isCopied ? "success" : null}>
                 <Icon icon={isCopied ? "check" : "link"} />
                 <span>{isCopied ? "Copied" : "Link"}</span>
