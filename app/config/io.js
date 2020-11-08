@@ -1,6 +1,8 @@
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
 const { Classroom, Feed } = require("../models");
+const secret = require("./options")( "secret" );
+
 
 const authorizeSocket = ({ handshake }) => {
 
@@ -13,7 +15,7 @@ const authorizeSocket = ({ handshake }) => {
 const getUserFromVerify = token => {
     try {
 
-        return jwt.verify( token.substr(7), process.env.JWT_SECRET ).id;
+        return jwt.verify( token.substr(7), secret ).id;
 
     } catch {
 

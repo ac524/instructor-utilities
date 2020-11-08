@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const mongoDbUri = require("./options")( "mongodb" );
 
 mongoose
   .connect(
-    process.env.MONGODB_URI || "mongodb://localhost/instructorutilities",
+    mongoDbUri,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,

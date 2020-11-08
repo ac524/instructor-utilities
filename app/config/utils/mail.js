@@ -3,13 +3,14 @@ const mjml2html = require("mjml");
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
+const emailConfig = require("../options")( "email" );
 
 const readFileAsync = util.promisify( fs.readFile );
 
 class Mail {
 
     isEnabled = false;
-    from = process.env.SENDGRID_FROM;
+    from = emailConfig.from;
     viewDir = "app/views/email/";
 
     defaultData = {
@@ -18,8 +19,8 @@ class Mail {
 
     constructor() {
 
-        if( process.env.SENDGRID_API_KEY ) {
-            sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        if( emailConfig.sgApiKey ) {
+            sgMail.setApiKey(emailConfig.sgApiKey);
             this.isEnabled = true;
         }
 

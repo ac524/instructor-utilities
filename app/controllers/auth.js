@@ -1,14 +1,17 @@
+const util = require("util");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const secret = require("../config/options")( "secret" );
 
-const util = require("util");
 
 // Load input validation
 const validateLoginInput = require("../config/validation/login");
-const jwtSign = util.promisify( jwt.sign );
 
 // Load User model
 const { User } = require("../models");
+
+
+const jwtSign = util.promisify( jwt.sign );
 
 module.exports = {
   authenticated(req, res) {
@@ -52,7 +55,7 @@ module.exports = {
 
       const token = await jwtSign(
         payload,
-        process.env.JWT_SECRET,
+        secret,
         {
           expiresIn: 31556926 // 1 year in seconds
         }
