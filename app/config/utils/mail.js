@@ -3,7 +3,9 @@ const mjml2html = require("mjml");
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
-const emailConfig = require("../options")( "email" );
+const getOption = require("../options");
+const emailConfig = getOption( "email" );
+const homeUrl = getOption( "publicUrl" );
 
 const readFileAsync = util.promisify( fs.readFile );
 
@@ -14,7 +16,7 @@ class Mail {
     viewDir = "app/views/email/";
 
     defaultData = {
-        homeUrl: "http://localhost:3000"
+        homeUrl
     }
 
     constructor() {
