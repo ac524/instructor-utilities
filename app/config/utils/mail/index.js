@@ -1,35 +1,43 @@
-const sgMail = require('@sendgrid/mail');
 const mjml2html = require("mjml");
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
-const getOption = require("../options");
-const emailConfig = getOption( "email" );
+const getOption = require("../../options");
+const { strategy, ...emailConfig } = getOption( "email" );
 const homeUrl = getOption( "publicUrl" );
 
 const readFileAsync = util.promisify( fs.readFile );
 
+const disabledSend = () => new Promise((resolve) => resolve(false));
+
 class Mail {
 
-    isEnabled = false;
-    from = emailConfig.from;
+    strategy;
     viewDir = "app/views/email/";
 
     defaultData = {
         homeUrl
     }
 
-    constructor() {
+    constructor( strategy, config ) {
 
-        if( emailConfig.sgApiKey ) {
-            sgMail.setApiKey(emailConfig.sgApiKey);
-            this.isEnabled = true;
+        switch( strategy ) {
+            case "sendgrid":
+                const SendGridStrategy = require("./strategies/SendGridStrategy");
+                this.strategy = new SendGridStrategy( config );
+                break;
+            case "smtp":
+                const SmtpStrategy = require("./strategies/SmtpStrategy");
+                this.strategy = new SmtpStrategy( config );
+                break;
         }
 
     }
 
-    disabledSend() {
-        return new Promise((resolve) => resolve(false));
+    get isEnabled() {
+
+        return this.strategy && this.strategy.isConfigured;
+        
     }
 
     async getView( view, data = {} ) {
@@ -46,27 +54,25 @@ class Mail {
 
     async send( view, data, options ) {
 
-        if(!this.isEnabled) return this.disabledSend();
+        if( !this.isEnabled ) return disabledSend();
 
         try {
 
-            return sgMail.send({
-                from: this.from,
-                html: await this.getView( view, data ),
-                ...options
+            return this.strategy.send({
+                ...options,
+                html: await this.getView( view, data )
             });
 
         } catch(err) {
 
             // TODO Error handling/logging
             console.log(err);
-            return this.disabledSend();
+            return disabledSend();
 
         }
-
 
     }
 
 }
 
-module.exports = new Mail();
+module.exports = new Mail( strategy, emailConfig );
