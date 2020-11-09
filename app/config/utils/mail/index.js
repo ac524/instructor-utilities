@@ -35,7 +35,9 @@ class Mail {
     }
 
     get isEnabled() {
+
         return this.strategy && this.strategy.isConfigured;
+        
     }
 
     async getView( view, data = {} ) {

@@ -1,16 +1,15 @@
-const options = require("../../../options");
+const nodemailer = require("nodemailer");
 const Strategy = require("./Strategy");
 
 class SmtpStrategy extends Strategy {
 
-    transport;
+    transporter;
 
     host;
     port;
     secure = false;
     pool = false;
     auth;
-
 
     constructor( { smtp, ...options } ) {
 
@@ -50,7 +49,16 @@ class SmtpStrategy extends Strategy {
 
         const transportOptions = [ "pool", "host", "port", "secure", "auth" ].reduce( optionsReducer, {} );
 
-        this.transport = nodemailer.createTransport( transportOptions );
+        this.transporter = nodemailer.createTransport( transportOptions );
+
+    }
+
+    async send( options ) {
+
+        return await this.transporter.sendMail({
+            from: this.from,
+            ...options
+        })
 
     }
 

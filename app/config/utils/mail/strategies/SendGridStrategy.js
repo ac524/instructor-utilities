@@ -23,11 +23,10 @@ class SendGridStrategy extends Strategy {
 
     }
 
-    send( { from, html, ...options } ) {
+    send( { from, ...options } ) {
 
         return sgMail.send({
-            from: from || this.from,
-            html,
+            from: this.from,
             ...options
         });
 
