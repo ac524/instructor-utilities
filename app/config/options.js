@@ -7,6 +7,7 @@ const options = {
         strategy: process.env.EMAIL_STRATEGY,
         from: process.env.EMAIL_FROM,
         smtp: {
+            url: process.env.SMTP_URL,
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT && parseInt(process.env.SMTP_PORT),
             pool: process.env.SMTP_POOL && process.env.SMTP_POOL === "true",
