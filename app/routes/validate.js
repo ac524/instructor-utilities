@@ -6,7 +6,7 @@ const {
     resend
 } = require("../controllers/emailValidation");
 
-router.post( "/resend", isAuthenticated, validate );
-router.post( "/:token", resend );
+router.post( "/resend", isAuthenticated, resend );
+router.post( "/:token", validate );
 
 module.exports = router;
