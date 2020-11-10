@@ -68,6 +68,10 @@ const privateChannels = {
     feed: {
         authJoin : async ( userId, feedId ) => userId && await isFeedMember( userId, feedId ),
         action: "push"
+    },
+    user: {
+        authJoin : async ( userId, userId2 ) => userId && userId === userId2,
+        action: "update"
     }
 };
 
