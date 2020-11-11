@@ -34,9 +34,12 @@ const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-gr
                 <span>{title}</span>
                 <SortSelectDropdown className="ml-auto is-right" state={[ sort, setSort ]} />
             </Heading>
-            {students.sort( studentSort ).map( ({_id, name, priorityLevel, elevation}) => (
+            {students.sort( studentSort ).map( ({_id, name, priorityLevel, elevation, recentComments}) => (
                 <Panel.Block key={_id}>
                     <span>{name}</span>
+                    <div>
+                        {recentComments?recentComments[0].data.comment:"No Comments"}
+                    </div>
                     <Tag.Group gapless className="ml-auto mb-0">
                         <StudentPriorityTag level={priorityLevel} className="mb-0"/>
                         { elevation ? <Tag color="danger" className="mb-0"><Icon icon="level-up-alt" /></Tag> : null }

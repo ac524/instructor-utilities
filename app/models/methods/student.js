@@ -6,6 +6,12 @@ const feedAggregates = [
       includes: ["elevate", "deelevate"],
       start: 0,
       reducer: ( elevation, entry ) => elevation + (entry.action === "elevate" ? 1 : -1)
+    },
+    {
+        key: "recentComments",
+        includes: ["comment"],
+        start: [],
+        reducer: ( comments, entry ) => [ entry, ...comments.slice(0,2) ]
     }
 ];
 
