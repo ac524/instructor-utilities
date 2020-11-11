@@ -46,7 +46,9 @@ class SocketDispatchLibrary {
     }
 
     generate(room,action) {
-        this.library[room] = dispatch => this.socket.to(room).emit(action, dispatch);
+        this.library[room] = dispatch => {
+            this.socket.to(room).emit(action, dispatch);
+        }
         return this;
     }
 

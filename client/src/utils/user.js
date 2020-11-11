@@ -15,19 +15,50 @@ export const useUserSocketUpdates = () => {
 
         if( !user || !socket ) return;
 
-        console.log(user);
+        const updateUser = data => dispatch( gsa( UPDATE_USER, data ) );
 
         socket.emit( "join:user", user._id );
-        socket.on( "user:update", data => dispatch( gsa( UPDATE_USER, data ) ) );
+        socket.on( "user:update", updateUser );
 
         return () => {
 
             socket.emit( "leave:user", user._id );
-            socket.off( "user:update", addItems );
+            socket.off( "user:update", updateUser );
 
         }
 
     },[ user, dispatch, socket ]);
+
+}
+
+const makeHandleUserUpdate = ( dispatch, socket, user ) => {
+
+    if( !user ) return () => {};
+
+    return ( update ) => {
+
+        dispatch( gsa( UPDATE_USER, update ) );
+        socket.emit( `${user._id}:update`, update );
+
+    }
+
+}
+
+export const useHandleUserUpdate = () => {
+
+    const dispatch = useStoreDispatch();
+    const socket = useSocket();
+    const user = useAuthorizedUser();
+
+    const [ handleUserUpdate, setHandleUserUpdate ] = useState(() => makeHandleUserUpdate(dispatch,socket,user));
+
+    useEffect(() => {
+
+        setHandleUserUpdate(() => makeHandleUserUpdate(dispatch,socket,user));
+
+    }, [dispatch,socket,user]);
+
+    return handleUserUpdate;
 
 }
 
