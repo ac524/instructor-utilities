@@ -56,7 +56,7 @@ class API {
 
     async acceptInvite( token ) {
 
-        return this.axios.post( `/api/invites/${token}` );
+        return this.axios.post( `/api/invites/${token}/accept` );
 
     }
 
