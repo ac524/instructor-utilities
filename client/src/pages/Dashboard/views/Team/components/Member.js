@@ -38,29 +38,29 @@ const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-gr
                 <span>{title}</span>
                 <SortSelectDropdown className="ml-auto is-right" state={[ sort, setSort ]} />
             </Heading>
-            <div class="px-3">
+            <div className="px-3 mt-3">
                 {students.sort( studentSort ).map( ({_id, name, priorityLevel, elevation, recentComments}) => (
                     <div className="columns" style={{borderTop:"1px solid #efefef"}} key={_id}>
-                        <div className="column">
+                        <div className="column is-flex-grow-2 is-align-items-center">
                             {name}
                         </div>
-                        <div className="column is-comment">
+                        <div className="column is-flex-grow-3 is-align-items-center is-comment">
                             {
                                 (recentComments && recentComments.length)
 
                                 ? (
-                                    <div>
-                                        <p className="is-size-7">
+                                    <div className="is-size-7">
+                                        <p>
                                             Last comment from <strong><UserName user={recentComments[0].by} /></strong> on <Date className="ml-auto" date={recentComments[0].date} />
                                         </p>
-                                        <p>{recentComments[0].data.comment}</p>
+                                        <p style={{padding:".5rem",background:"#F6F6F6",borderRadius:"3 px"}}>{recentComments[0].data.comment}</p>
                                     </div>
                                 )
 
-                                : null
+                                : <span className="is-size-7">No comments</span>
                             }
                         </div>
-                        <div className="column is-flex is-narrow">
+                        <div className="is-align-items-center column is-flex is-narrow">
                             <Tag.Group gapless className="ml-auto mb-0">
                                 <StudentPriorityTag level={priorityLevel} className="mb-0"/>
                                 { elevation ? <Tag color="danger" className="mb-0"><Icon icon="level-up-alt" /></Tag> : null }

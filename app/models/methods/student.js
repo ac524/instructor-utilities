@@ -1,17 +1,34 @@
 const Feed = require("../Feed");
+const User = require("../User");
 
 const feedAggregates = [
     {
-      key: "elevation",
-      includes: ["elevate", "deelevate"],
-      start: 0,
-      reducer: ( elevation, entry ) => elevation + (entry.action === "elevate" ? 1 : -1)
+        key: "elevation",
+        includes: ["elevate", "deelevate"],
+        start: 0,
+        reducer: ( elevation, entry ) => elevation + (entry.action === "elevate" ? 1 : -1)
     },
     {
         key: "recentComments",
         includes: ["comment"],
         start: [],
-        reducer: ( comments, entry ) => [ entry, ...comments.slice(0,2) ]
+        reducer: ( comments, entry ) => [ entry, ...comments.slice(0,2) ],
+        finally: async ( rawComments ) => {
+
+            const comments = [];
+
+            for( let i=0; i < rawComments.length; i++ ) {
+
+                comments.push({
+                    ...rawComments[i],
+                    by: await User.findById( rawComments[i].by ).select("name")
+                });
+
+            }
+
+            return comments;
+
+        }
     }
 ];
 
@@ -30,12 +47,10 @@ module.exports = {
 
     getFeedAggregateData: async function( include ) {
 
+        const aggregates = feedAggregates.filter( feedAggregatesFilter(include) );
+
         const aggActions = [
-            ...new Set(
-                feedAggregates
-                    .filter( feedAggregatesFilter(include) )
-                    .reduce( (actions, { includes }) => [ ...actions, ...includes ], [] )
-            )
+            ...new Set( aggregates.reduce( (actions, { includes }) => [ ...actions, ...includes ], [] ) )
         ];
         
         const [ feed ] = await Feed.aggregate([
@@ -63,7 +78,7 @@ module.exports = {
         
         const aggregateReducer = ( data, entry ) => {
             
-            return feedAggregates.reduce(
+            return aggregates.reduce(
                 ( data, agg ) => {
             
                     if( !agg.includes.includes( entry.action ) ) return data;
@@ -81,8 +96,20 @@ module.exports = {
             )
         
         }
+
+        const data = feed ? feed.items.reduce( aggregateReducer, {} ) : {};
+
+        console.log(data);
+
+        for( let i=0; i < aggregates.length; i++ ) {
+
+            if( !aggregates[i].finally || !data.hasOwnProperty(aggregates[i].key) ) continue;
+
+            data[aggregates[i].key] = await aggregates[i].finally( data[aggregates[i].key] );
+
+        }
         
-        return feed ? feed.items.reduce( aggregateReducer, {} ) : {};
+        return data;
     
     }
 
