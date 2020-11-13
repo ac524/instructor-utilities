@@ -22,7 +22,7 @@ router
     .delete( isAuthenticated, setRoom.fromParam, isRoomMember, remove );
 
 router
-    .route('/:token')
+    .route('/:token/accept')
     .post( isAuthenticated, setInvite, accept );
 
 router
