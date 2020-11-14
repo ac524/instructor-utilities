@@ -29,8 +29,6 @@ const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-gr
 
     if(color) headingClasses.push(`is-${color}`);
 
-    console.log(students);
-
     return (
         <Panel className="has-background-white is-shadowless" renderAs="div">
             <Heading className={headingClasses.join(" ")} renderAs="h2" size={4} style={{alignItems:"center"}}>

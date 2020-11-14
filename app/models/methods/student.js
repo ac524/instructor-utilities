@@ -99,8 +99,6 @@ module.exports = {
 
         const data = feed ? feed.items.reduce( aggregateReducer, {} ) : {};
 
-        console.log(data);
-
         for( let i=0; i < aggregates.length; i++ ) {
 
             if( !aggregates[i].finally || !data.hasOwnProperty(aggregates[i].key) ) continue;

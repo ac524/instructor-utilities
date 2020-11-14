@@ -1,3 +1,4 @@
+const { Feed } =  require("../../../../models");
 const EntryType = require("./EntryType");
 
 class CommentEntryType extends EntryType {
@@ -5,6 +6,21 @@ class CommentEntryType extends EntryType {
     getRequestData( req ) {
 
         return { comment: req.body.comment };
+
+    }
+
+    async onCreateResHandler( entries, req ) {
+
+        const feed = await Feed.findById( req.params.feedId ).populate("room", "students");
+        const student = feed.room.students.id( feed.for );
+        
+        return [
+            entries,
+            {
+                _id: student._id,
+                ...(await student.getFeedAggregateData(["recentComments"]))
+            }
+        ];
 
     }
 
