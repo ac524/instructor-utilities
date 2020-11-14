@@ -6,6 +6,7 @@ const { Token, Classroom, User } = require("../models");
 const validateRegisterInput = require("../config/validation/register");
 const passwordHash = require("../config/utils/passwordHash");
 const ioEmit = require("./utils/ioEmit");
+const homeUrl = require("../config/options")( "publicUrl" );
 
 const addStaff = async (roomId, member) => {
 
@@ -26,7 +27,7 @@ const sendInvite = ( room, invite, from ) => {
         {
             name: from.name,
             roomName: room.name,
-            inviteLink: `http://localhost:3000/invite/${invite.token.token}`
+            inviteLink: `${homeUrl}/invite/${invite.token.token}`
         },
         {
             to: invite.email,

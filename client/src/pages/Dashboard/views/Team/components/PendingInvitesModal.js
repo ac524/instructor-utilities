@@ -55,7 +55,7 @@ export const CopyLinkButton = ( {token} ) => {
     }
 
     return (
-        <CopyToClipboard text={`http://localhost:3000/invite/${token}`} onCopy={notify}>
+        <CopyToClipboard text={`${window.location.origin}/invite/${token}`} onCopy={notify}>
             <Button size="small" className="ml-2 is-icon-only-mobile" color={isCopied ? "success" : null}>
                 <Icon icon={isCopied ? "check" : "link"} />
                 <span>{isCopied ? "Copied" : "Link"}</span>
@@ -103,7 +103,7 @@ const PendingInvitesModal = ( { show, onClose } ) => {
                             <span className="has-overflow-ellipsis mw-60">{invite.email}</span>
                             <span className="ml-auto">
                                 {invite.token ? <Tag color="warning">Pending</Tag> : <Tag color="danger">Expired</Tag>}
-                                <CopyLinkButton token={invite.token.token} />
+                                {invite.token && <CopyLinkButton token={invite.token.token} />}
                                 {/* <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button> */}
                                 <Button size="small" className="ml-2 is-icon-only-mobile" onClick={()=>deleteInvite(invite._id)}><Icon icon="ban" /><span>Revoke</span></Button>
                             </span>

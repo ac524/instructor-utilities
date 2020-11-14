@@ -11,7 +11,6 @@ export const useSocketConnection = () => {
 
     useEffect(() => {
 
-        // const socket = socketIOClient(`http://localhost:3000/${roomId}?token=${localStorage.jwtToken}`);
         const openSocket = socketIOClient(`${window.location.origin}`, {
             transportOptions: {
               polling: {

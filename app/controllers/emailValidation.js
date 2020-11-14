@@ -1,4 +1,5 @@
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
+// const ioEmit = require("./utils/ioEmit");
 
 const { User, Token } = require("../models");
 
@@ -24,7 +25,7 @@ module.exports = {
         }
 
     },
-    async validate          (req, res) {
+    async validate (req, res) {
 
         try {
 
@@ -36,12 +37,17 @@ module.exports = {
 
             await User.findByIdAndUpdate( token.relation, update );
 
-            req.app.get("io").to( token.relation ).emit("updateUser", update);
+            // OLD STRAT
+            // req.app.get("io").to( token.relation ).emit("updateUser", update);
+
+            // TODO Replace with
+            // ioEmit( req, "dispatch", addStaffDispatch, `user:${roomId}` );
         
             res.json({ success: true });
 
-        } catch {
+        } catch(err) {
 
+            console.log(err);
             return res.status(500).json({default: "Something went wrong"});
 
         }
