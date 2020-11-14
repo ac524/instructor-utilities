@@ -1,20 +1,21 @@
 import React from "react";
+import { DateTime } from "luxon";
 
-// const dateFormat = new Intl.DateTimeFormat("en-US", {
-//     year: "numeric",
-//     month: "long",
-//     day: "2-digit"
-// });
+const formats = {
+    toRelative: dateTime => dateTime.toRelative(),
+    default: (dateTime, format) => dateTime.toFormat(format)
+}
 
-const Date = ( { date, className, ...props } ) => {
+const Date = ( { date, format = "toRelative", className, ...props } ) => {
 
     const classes = [ "date" ];
     if( className ) classes.push( className );
 
+    const dateTime = DateTime.fromISO(date);
+
     return (
         <span className={classes.join(" ")} {...props}>
-            {/*dateFormat.format(date)*/}
-            {date}
+            { formats[format] ? formats[format](dateTime) : formats.default(dateTime, format) }
         </span>
     )
 
