@@ -49,7 +49,7 @@ const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-gr
                                 ? (
                                     <div className="is-size-7">
                                         <p>
-                                            Last comment from <strong><UserName user={recentComments[0].by} /></strong> on <Date className="ml-auto" date={recentComments[0].date} />
+                                            Last comment from <strong><UserName user={recentComments[0].by} /></strong> <Date className="ml-auto" date={recentComments[0].date} />
                                         </p>
                                         <p style={{padding:".5rem",background:"#F6F6F6",borderRadius:"3 px"}}>{recentComments[0].data.comment}</p>
                                     </div>
