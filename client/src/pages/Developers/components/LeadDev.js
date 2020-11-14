@@ -26,8 +26,6 @@ const LeadDev = ({ login, contributions }) => {
 
             const { data } = await githubApi.getUser(login);
 
-            console.log( data );
-
             setProfile( data );
 
             completeStep();

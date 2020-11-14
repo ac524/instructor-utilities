@@ -1,8 +1,9 @@
 import React from "react";
 
-import Date from "../components/Date";
+import Date from "components/Date";
+import UserName from "components/UserName";
+
 import FeedEntry from "../components/FeedEntry";
-import UserName from "../components/UserName";
 
 const Created = ( { by, date } ) => {
 
