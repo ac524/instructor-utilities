@@ -67,11 +67,15 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
                 light: true,
                 size: "large"
             },
-            onMap: field => ({
+            /**
+             * Allows updates to be applied to input configurations using the live input value.
+             */
+            onMap: ({value,inputProps,...field}) => ({
                 ...field,
+                value,
                 inputProps: {
-                    ...field.inputProps,
-                    color: getPriorityLevel( field.value ).color,
+                    ...inputProps,
+                    color: getPriorityLevel( value ).color,
                 }
             })
         },
