@@ -31,7 +31,7 @@ export const studentGroupings = [
     }
 ]
 
-export const usePriorityLevel = (level) => priorityLevels.find( priorityLevel => !priorityLevel.test || priorityLevel.test(level) );
+export const getPriorityLevel = (level) => priorityLevels.find( priorityLevel => !priorityLevel.test || priorityLevel.test(level) );
 
 export const useStudentGroupings = () => {
 

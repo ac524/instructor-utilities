@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Form as FormCollection, Button } from "react-bulma-components";
 
@@ -106,15 +106,21 @@ export const validateAll = ( rawData, ...validators ) => {
 
 const fieldDefaultValuesReducer = ( values, { name, value } ) => ({
     ...values,
-    [name]: undefined === value ? value : ""
+    [name]: undefined === value ? "" : value
 });
 
-export const useFormFields = fieldsConfig => {
+export const useFormFields = (fieldsConfig, valueSource) => {
 
     const [ values, setValues ] = useState( fieldsConfig.reduce(fieldDefaultValuesReducer,{}) );
 
+    useEffect(() => {
+
+        setValues( fieldsConfig.reduce(fieldDefaultValuesReducer,{}) );
+
+    }, [ valueSource ]);
+
     return [
-        fieldsConfig.map( ({name,...field}) => ({
+        fieldsConfig.map( ({name, onMap=field=>field, ...field}) => onMap({
             ...field,
             name,
             value: values[name],
@@ -191,6 +197,7 @@ export const FormField = ( { label, type = "text", name, placeholder, value, onC
 
 const Form = ( {
     fields,
+    fieldValueSource,
     validation,
     button,
     buttonText = "Submit",
@@ -201,7 +208,7 @@ const Form = ( {
     ...props
 } ) => {
 
-    const [formFields, fieldValues] = useFormFields( fields );
+    const [formFields, fieldValues] = useFormFields( fields, fieldValueSource );
 
     const [ errors, setErrors ] = useState({});
 
