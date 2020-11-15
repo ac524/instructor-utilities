@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Form as FormCollection, Button } from "react-bulma-components";
 
@@ -104,6 +104,27 @@ export const validateAll = ( rawData, ...validators ) => {
 
 }
 
+const fieldDefaultValuesReducer = ( values, { name, value } ) => ({
+    ...values,
+    [name]: undefined === value ? value : ""
+});
+
+export const useFormFields = fieldsConfig => {
+
+    const [ values, setValues ] = useState( fieldsConfig.reduce(fieldDefaultValuesReducer,{}) );
+
+    return [
+        fieldsConfig.map( ({name,...field}) => ({
+            ...field,
+            name,
+            value: values[name],
+            onChange: e => setValues({ ...values, [name]: e.target.value })
+        }) ),
+        values
+    ];
+
+}
+
 export const RangeInput = ( { id, name, value, color, light, size, ...props } ) => {
 
     if( !id ) id = `slider-${name}`;
@@ -142,13 +163,13 @@ export const FormInput = ( { type = "text", options = [], ...props } ) => {
 
 }
 
-export const FormField = ( { label, type = "text", name, state, placeholder, value, onChange, options, inputColor, inputProps={}, ...props } ) => {
+export const FormField = ( { label, type = "text", name, placeholder, value, onChange, options, inputColor, inputProps={}, ...props } ) => {
 
     const fieldInputProps = {
         name,
         type,
-        value: state ? state[0] : value,
-        onChange: onChange || (state ? e=>state[1](e.target.value) : null),
+        value,
+        onChange: onChange || null,
         ...inputProps
     };
 
@@ -170,27 +191,53 @@ export const FormField = ( { label, type = "text", name, state, placeholder, val
 
 const Form = ( {
     fields,
-    stateValues={},
-    errors = {},
+    validation,
     button,
     buttonText = "Submit",
     moreButtons = [],
     flat,
     className,
+    onSubmit,
     ...props
 } ) => {
+
+    const [formFields, fieldValues] = useFormFields( fields );
+
+    const [ errors, setErrors ] = useState({});
+
+    const handleSubmit = e => {
+
+        e.preventDefault();
+
+        if( !validation ) {
+            onSubmit && onSubmit( fieldValues, setErrors );
+            return;
+        }
+
+        const [ data, inputErrors, hasErrors ] = Array.isArray(validation) ? validateAll( fieldValues, validation ) : validation( fieldValues );
+
+        if( hasErrors ) {
+            setErrors( inputErrors );
+            return;
+        }
+
+        setErrors({});
+
+        onSubmit && onSubmit( data, setErrors );
+
+    }
 
     const inputErrorColor = useInputErrorColor( errors );
 
     const classes = className ? [className] : [];
 
-    if(flat) classes.push("is-flat")
+    if(flat) classes.push("is-flat");
 
     return (
-        <form className={classes.join(" ")} {...props}>
+        <form className={classes.join(" ")} onSubmit={handleSubmit} {...props}>
             <ErrorProvider value={errors}>
                 <Error name="default" type="message" />
-                { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} state={stateValues[field.name]} { ...field } /> ) }
+                { formFields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
             </ErrorProvider>
             {flat ? null : <hr />}
             <div className="is-flex">
@@ -198,7 +245,7 @@ const Form = ( {
                 { moreButtons }
             </div>
         </form>
-    )
+    );
 
 }
 
