@@ -4,7 +4,7 @@ import {
     Button
 } from "react-bulma-components";
 
-import { getDashboardAction as gda, useStaff, useDashboardDispatch, useStaffByRole } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useDashboardDispatch, useStaffByRole } from "pages/Dashboard/store";
 import Form, { createValidator } from "components/Form";
 import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
@@ -84,7 +84,7 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
             name: "assignedTo",
             type: "select",
             options: staffOptionsList,
-            value: studentValue.assignedTo
+            value: studentValue.assignedTo || ""
         }
     ];
 

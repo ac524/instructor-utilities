@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Form as FormCollection, Button } from "react-bulma-components";
 
@@ -213,10 +213,12 @@ const Form = ( {
     const [ isProcessing, setIsProcessing ] = useState(false);
     const [ errors, setErrors ] = useState({});
 
+    const formRef = useRef();
+
     const submitData = async data => {
         setIsProcessing( true );
         onSubmit && await onSubmit( data, setErrors );
-        setIsProcessing( false );
+        if( formRef.current ) setIsProcessing( false );
     }
 
     const handleSubmit = e => {
@@ -250,7 +252,7 @@ const Form = ( {
     if(flat) classes.push("is-flat");
 
     return (
-        <form className={classes.join(" ")} onSubmit={handleSubmit} {...props}>
+        <form ref={formRef} className={classes.join(" ")} onSubmit={handleSubmit} {...props}>
             <ErrorProvider value={errors}>
                 <Error name="default" type="message" />
                 { formFields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
