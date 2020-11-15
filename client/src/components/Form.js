@@ -210,14 +210,23 @@ const Form = ( {
 
     const [formFields, fieldValues] = useFormFields( fields, fieldValueSource );
 
+    const [ isProcessing, setIsProcessing ] = useState(false);
     const [ errors, setErrors ] = useState({});
+
+    const submitData = async data => {
+        setIsProcessing( true );
+        onSubmit && await onSubmit( data, setErrors );
+        setIsProcessing( false );
+    }
 
     const handleSubmit = e => {
 
         e.preventDefault();
 
+        if( isProcessing ) return;
+
         if( !validation ) {
-            onSubmit && onSubmit( fieldValues, setErrors );
+            submitData( fieldValues );
             return;
         }
 
@@ -230,7 +239,7 @@ const Form = ( {
 
         setErrors({});
 
-        onSubmit && onSubmit( data, setErrors );
+        submitData( data );
 
     }
 
@@ -248,7 +257,7 @@ const Form = ( {
             </ErrorProvider>
             {flat ? null : <hr />}
             <div className="is-flex">
-                { button ? button : <Button color="primary">{ buttonText }</Button> }
+                { button ? button : <Button color="primary" loading={isProcessing}>{ buttonText }</Button> }
                 { moreButtons }
             </div>
         </form>
