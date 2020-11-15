@@ -32,57 +32,18 @@ const columnSizes = {
 
 const RegstrationContent = ({ token, email }) => {
 
-    const [ name, setName ] = useState("");
-    const [ password, setPassword ] = useState("");
-    const [ password2, setPassword2 ] = useState("");
-    const [ errors, setErrors ] = useState({});
     const login = useLogin();
 
-    const fields = [
-        {
-            label: "Name",
-            placeholder: "Your name",
-            name: "name",
-            type: "text",
-            value: name,
-            onChange: e => setName(e.target.value)
-        },
-        {
-            label: "Password",
-            placeholder: "Password",
-            onChange: e => setPassword(e.target.value),
-            value: password,
-            type:"password",
-            name: "password"
-        },
-        {
-            label: "Confirm Password",
-            placeholder: "Password",
-            onChange: e => setPassword2(e.target.value),
-            value: password2,
-            type:"password",
-            name: "password2"
-        }
-    ];
-
-    const handleSubmit = async e => {
-
-        e.preventDefault();
+    const handleSubmit = async ( data, setErrors ) => {
 
         try {
 
-            const [ data, errors, hasErrors ] = validateRegistrationData({ name, password, password2 });
-
-            if( hasErrors ) {
-                setErrors(errors);
-                return
-            }
-
-            if(Object.keys(errors).length) setErrors({});
-
             await api.registerInvite( token, data );
 
-            await login( { email, password } );
+            await login( {
+                email: email,
+                password: data.password
+            } );
 
         } catch(err) {
 
@@ -102,7 +63,32 @@ const RegstrationContent = ({ token, email }) => {
                 <Box>
                     <Heading renderAs="h2" className="has-text-dark">Create an account</Heading>
                     <hr />
-                    <Form flat fields={fields} errors={errors} buttonText="Join Classroom" onSubmit={handleSubmit} />
+                    <Form
+                        flat
+                        fields={[
+                            {
+                                label: "Name",
+                                placeholder: "Your name",
+                                name: "name",
+                                type: "text",
+                            },
+                            {
+                                label: "Password",
+                                placeholder: "Password",
+                                type:"password",
+                                name: "password"
+                            },
+                            {
+                                label: "Confirm Password",
+                                placeholder: "Password",
+                                type:"password",
+                                name: "password2"
+                            }
+                        ]}
+                        validation={validateRegistrationData}
+                        onSubmit={handleSubmit}
+                        buttonText="Join Classroom"
+                    />
                 </Box>
             </Column>
         </Columns>

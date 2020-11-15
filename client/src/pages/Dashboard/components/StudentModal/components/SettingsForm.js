@@ -4,10 +4,10 @@ import {
     Button
 } from "react-bulma-components";
 
-import { getDashboardAction as gda, useStaff, useDashboardDispatch, useStaffByRole } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useDashboardDispatch, useStaffByRole } from "pages/Dashboard/store";
 import Form, { createValidator } from "components/Form";
 import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
-import { usePriorityLevel } from "pages/Dashboard/utils/student";
+import { getPriorityLevel } from "pages/Dashboard/utils/student";
 import api from "utils/api";
 import { useSocket } from "utils/socket.io";
 
@@ -24,10 +24,8 @@ export const getStaffOptionsList = staff => [ { value: "", label: "Unassigned" }
 
 export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
 
-    const [ studentState, setStudentState ] = useState( student );
     const { ta } = useStaffByRole();
     const [ staffOptionsList, setStaffOptionsList ] = useState([]);
-    const priorityLevel = usePriorityLevel( studentState.priorityLevel );
 
     useEffect(() => {
 
@@ -35,16 +33,7 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
 
     }, [ ta, setStaffOptionsList ]);
 
-    useEffect(() => {
-
-        setStudentState( student || {} );
-
-    }, [ student, setStudentState ]);
-
-    const handleInputUpdate = ( { target: { name, value } } ) => {
-        // console.log();
-        setStudentState( { ...studentState, [name]: value } )
-    };
+    const studentValue = student || {};
 
     const fields = [
         (
@@ -55,8 +44,7 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
                 placeholder: "Separate students names by comma or line break (one student per line)",
                 name: "name",
                 type: "textarea",
-                value: studentState.name,
-                onChange: handleInputUpdate
+                value: studentValue.name,
             }
 
             : {
@@ -64,67 +52,62 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
                 placeholder: "Student Name",
                 name: "name",
                 type: "text",
-                value: studentState.name,
-                onChange: handleInputUpdate
+                value: studentValue.name,
             }
         ),
         {
             label: "Priority (At Risk Factor)",
             name: "priorityLevel",
             type: "range",
-            value: studentState.priorityLevel,
-            onChange: handleInputUpdate,
+            value: studentValue.priorityLevel,
             inputProps: {
                 min: 1,
                 max: 10,
                 step: 1,
-                color: priorityLevel ? priorityLevel.color : null,
                 light: true,
                 size: "large"
-            }
+            },
+            /**
+             * Allows updates to be applied to input configurations using the live input value.
+             */
+            onMap: ({value,inputProps,...field}) => ({
+                ...field,
+                value,
+                inputProps: {
+                    ...inputProps,
+                    color: getPriorityLevel( value ).color,
+                }
+            })
         },
         {
             label: "Staff Assignment",
             name: "assignedTo",
             type: "select",
             options: staffOptionsList,
-            value: studentState.assignedTo,
-            onChange: handleInputUpdate
+            value: studentValue.assignedTo || ""
         }
     ];
 
     // Student form fields configuration.
-    return [
-        fields,
-        studentState
-    ];
+    return fields;
     
 }
 
 const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
 
     const dispatch = useDashboardDispatch();
-    const [ errors, setErrors ] = useState( {} );
-    const [ fields, values ] = useStudentSettingsFormFields( student, isBulkCreate );
+    const fields = useStudentSettingsFormFields( student, isBulkCreate );
     const { _id } = student;
     const socket = useSocket();
 
-    const handleSubmit = async (e) => {
-
-        e.preventDefault();
-
-        const [ data, errors, hasErrors ] = validateStudentData(values);
-
-        if( hasErrors ) {
-            setErrors( errors );
-            return
-        }
+    const handleSubmit = async (data, setErrors) => {
 
         try {
 
             if( _id ) {
 
                 const dispatchData = gda( UPDATE_STUDENT, { _id, ...data } );
+
                 dispatch(dispatchData);
 
                 await api.updateStudent( roomId, _id, data );
@@ -166,7 +149,13 @@ const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
 
     const button = <Button color="primary" className="is-light has-shadow-light">{(_id ? "Save" : "Create") + " Student"}</Button>;
 
-    return <Form fields={fields} onSubmit={handleSubmit} button={button} errors={errors} />;
+    return <Form
+            fields={fields}
+            fieldValueSource={student._id}
+            validation={validateStudentData}
+            onSubmit={handleSubmit}
+            button={button}
+            />;
 
 }
 

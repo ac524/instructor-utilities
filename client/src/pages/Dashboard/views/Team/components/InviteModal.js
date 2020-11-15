@@ -47,36 +47,15 @@ export const InviteModalButton = ({ icon = "plus-circle", open, children }) => {
 const InviteModal = ( { show, onClose, onInviteCreated } ) => {
 
     const dispatch = useDashboardDispatch();
-    const { _id } = useClassroom();
-    const [ email, setEmail ] = useState("");
-    const [ errors, setErrors ] = useState({});
     const socket = useSocket();
 
-    const fields = [
-        {
-            label: "Email",
-            placeholder: "Provide an email to invite",
-            name: "email",
-            type: "text",
-            value: email,
-            onChange: e => setEmail(e.target.value)
-        }
-    ];
+    const { _id } = useClassroom();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async ( data, setErrors ) => {
 
-        e.preventDefault();
+        console.log(data);
 
         try {
-
-            const [ data, errors, hasErrors ] = validateInviteData({ email });
-
-            if(hasErrors) {
-                setErrors(errors);
-                return
-            }
-
-            if(Object.keys(errors).length) setErrors({});
 
             const { data: invite } = await api.createInvite( _id, data );
 
@@ -91,7 +70,7 @@ const InviteModal = ( { show, onClose, onInviteCreated } ) => {
         } catch(err) {
 
             if( err.response && err.response.data ) setErrors(err.response.data);
-            console.log(err);
+            // console.log(err);
 
         }
 
@@ -107,7 +86,20 @@ const InviteModal = ( { show, onClose, onInviteCreated } ) => {
                 <Box className="py-5">
                     <Heading renderAs="h2">Invite TA</Heading>
                     <hr />
-                    <Form flat fields={fields} onSubmit={handleSubmit} errors={errors} buttonText="Send Invite" />
+                    <Form
+                        flat
+                        fields={[
+                            {
+                                label: "Email",
+                                placeholder: "Provide an email to invite",
+                                name: "email",
+                                type: "text",
+                            }
+                        ]}
+                        onSubmit={handleSubmit}
+                        validation={validateInviteData}
+                        buttonText="Send Invite"
+                    />
                 </Box>
             </Modal.Content>
         </Modal>
