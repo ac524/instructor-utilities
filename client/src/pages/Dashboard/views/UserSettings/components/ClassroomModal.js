@@ -19,43 +19,6 @@ const validateClassroomData = createValidator({
     }
 });
 
-export const useClassroomFields = (room) => {
-
-    const [ fields, setFields ] = useState([]);
-    const [ state, setState ] = useState({});
-
-    useEffect(() => {
-
-        if(!room) {
-            setState({});
-            return;
-        }
-
-        setState({
-            name: room.name
-        }); 
-
-    }, [room, setState]);
-
-    useEffect(() => {
-
-        const onChange = e => setState({ ...state, [e.target.name]: e.target.value });
-
-        setFields([
-            {
-                label: "Name",
-                onChange,
-                value: state.name,
-                name: "name"
-            }
-        ])
-
-    }, [state, setState, setFields]);
-
-    return [ fields, state ];
-
-}
-
 export const useClassroomModalLoader = (roomId) => {
 
     const [ room, setRoom ] = useState();
@@ -98,30 +61,19 @@ export const useClassroomModalLoader = (roomId) => {
 
 export const ClassroomForm = ({ room, afterUpdate }) => {
 
-    const [ fields, values ] = useClassroomFields( room );
-    const [ errors, setErrors ] = useState();
     const dispatch = useStoreDispatch();
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (data, setErrors) => {
 
-        e.preventDefault();
-
-        const updateList = Object.entries(values).filter( ([key,value]) => value !== room[key] );
+        const updateList = Object.entries(data).filter( ([key,value]) => value !== room[key] );
 
         if( updateList.length ) {
 
             const updates = Object.fromEntries( updateList );
 
-            const [data, errors, hasErrors] = validateClassroomData( updates );
-
-            if(hasErrors) {
-                setErrors(errors);
-                return
-            }
-
             try {
 
-                await api.updateClassroom( room._id, data );
+                await api.updateClassroom( room._id, updates );
                 dispatch(gsa( REFRESH_USER_ROOMS ))
                 if( afterUpdate ) afterUpdate();
 
@@ -135,7 +87,23 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
 
     }
 
-    return room ? <Form flat fields={fields} onSubmit={handleSubmit} errors={errors} /> : <Pulse />;
+    return room
+    
+        ? <Form
+            flat
+            fields={[
+                {
+                    label: "Name",
+                    name: "name",
+                    value: room.name
+                }
+            ]}
+            fieldValueSource={room}
+            validation={validateClassroomData}
+            onSubmit={handleSubmit}
+            />
+
+        : <Pulse />;
 
 }
 

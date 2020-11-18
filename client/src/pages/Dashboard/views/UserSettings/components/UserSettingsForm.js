@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import Form from "components/Form";
 import { useAuthorizedUser, validateUserData } from "utils/auth";
@@ -27,72 +27,14 @@ const validateUserSettingsData = validateUserData.extendNew({
     }
 });
 
-export const useUserSettingFields = () => {
-
-    const [state, setState] = useState({});
-
-    const user = useAuthorizedUser();
-
-    useEffect(() => {
-
-        if (!user) return;
-
-        setState({
-            name: user.name,
-            email: user.email,
-            password: "",
-            password2: ""
-        });
-
-    }, [user, setState]);
-
-    const onChange = e => setState({ ...state, [e.target.name]: e.target.value });
-
-    const fields = [
-        {
-            label: "Name",
-            onChange,
-            value: state.name,
-            name: "name"
-        },
-        {
-            label: "Email",
-            onChange,
-            value: state.email,
-            name: "email"
-        },
-        {
-            label: "Password",
-            onChange,
-            value: state.password,
-            type: "password",
-            name: "password"
-        },
-        {
-            label: "Confirm Password",
-            onChange,
-            value: state.password2,
-            type: "password",
-            name: "password2"
-        }
-    ]
-
-    return [fields, state];
-
-}
-
 const UserSettingsForm = () => {
 
     const dispatch = useStoreDispatch();
     const user = useAuthorizedUser();
-    const [fields, values] = useUserSettingFields();
-    const [errors, setErrors] = useState();
 
-    const handleSubmit = async e => {
+    const handleSubmit = async ( data, setErrors ) => {
 
-        e.preventDefault();
-
-        const updateList = Object.entries(values).filter(([key, value]) => {
+        const updateList = Object.entries(data).filter(([key, value]) => {
 
             if( !value && ["password","password2"].includes( key ) ) return false;
 
@@ -104,30 +46,50 @@ const UserSettingsForm = () => {
 
             const updates = Object.fromEntries(updateList);
 
-            const [data, errors, hasErrors] = validateUserSettingsData(updates);
-
-            if (hasErrors) {
-                setErrors(errors);
-                return;
-            }
-
-            dispatch(gsa(UPDATE_USER, data));
+            dispatch(gsa(UPDATE_USER, updates));
 
             try {
 
-                await api.updateUser(data);
-
-                //Clearing the errors this feels a little hacky but it's seems to behave reasonably well.
-                setErrors();
+                await api.updateUser(updates);
 
             } catch (err) {
 
                 if (err.response) setErrors(err.response.data);
             }
+
         }
+
     }
 
-    return <Form flat fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Save" />;
+    return <Form
+            flat
+            fields={[
+                {
+                    label: "Name",
+                    value: user.name,
+                    name: "name"
+                },
+                {
+                    label: "Email",
+                    value: user.email,
+                    name: "email"
+                },
+                {
+                    label: "Password",
+                    type: "password",
+                    name: "password"
+                },
+                {
+                    label: "Confirm Password",
+                    type: "password",
+                    name: "password2"
+                }
+            ]}
+            fieldValueSource={user}
+            validation={validateUserSettingsData}
+            onSubmit={handleSubmit}
+            buttonText="Save"
+        />;
 
 }
 
