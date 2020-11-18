@@ -1,5 +1,6 @@
 const mapRequestData = (req, include) => ({
     ...req.params,
+    // Extract target keys from the request object
     ...["body", "user", ...include].reduce( (data, key) => ({ ...data, [key]: req[key] }), {} )
 });
 
