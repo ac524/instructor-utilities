@@ -5,20 +5,20 @@ const isRoomMember = require("../middleware/isRoomMember");
 
 const {
     create,
-    createMany,
     getSingle,
     update,
     deleteSingle
 } = require("../../controllers/student");
 
 const crh = require("../middleware/createControllerHandler");
+const setDefaultError = require("../middleware/setDefaultError");
 
 const newAuthMiddleware = [ setRoom.fromBody, isRoomMember ];
 const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
 
 router
     .route( "/" )
-    .post( newAuthMiddleware, crh( create ), createMany );
+    .post( newAuthMiddleware, setDefaultError("Unable to create student"), crh( create ) );
 
 router
     .route( "/:roomId/:studentId" )
