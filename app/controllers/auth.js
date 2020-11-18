@@ -3,72 +3,67 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secret = require("../config/options")( "secret" );
 
-
 // Load input validation
 const validateLoginInput = require("../config/validation/login");
 
 // Load User model
 const { User } = require("../models");
-
+const { RouteError } = require("../config/errors/RouteError");
 
 const jwtSign = util.promisify( jwt.sign );
 
-module.exports = {
-  authenticated(req, res) {
+const authenticated = ({ user }) => user;
 
-    res.json( req.user );
+const login = async ({ body }) => {
 
-  },
-  async login(req, res) {
+  // Form validation
+  const { errors, isValid } = validateLoginInput( body );
 
-    // Form validation
-    const { errors, isValid } = validateLoginInput(req.body);
+  // Check validation
+  if (!isValid)
 
-    // Check validation
-    if (!isValid)
+    throw new RouteError( 400, "Invalid request.", errors );
 
-      return res.status(400).json(errors);
+  const email = body.email;
+  const password = body.password;
 
-    const email = req.body.email;
-    const password = req.body.password;
+  // Find user by email
+  const user = await User.findOne({ email })
 
-    try {
-      // Find user by email
-      const user = await User.findOne({ email })
-      
-      if (!user)
+  if (!user)
 
-        return res.status(404).json({ default: "Email or password is invalid" });
+    throw new RouteError( 400, "Email or password is invalid." );
 
-      const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare( password, user.password );
 
-      if( !isMatch )
+  if( !isMatch )
 
-        res.status(400).json({ default: "Email or password is invalid" });
+    throw new RouteError( 400, "Email or password is invalid." );
 
-      // User matched
-      // Create JWT Payload
-      const payload = {
-        id: user.id,
-        name: user.name
-      };
+  // User matched
+  // Create JWT Payload
+  const payload = {
+    id: user.id,
+    name: user.name
+  };
 
-      const token = await jwtSign(
-        payload,
-        secret,
-        {
-          expiresIn: 31556926 // 1 year in seconds
-        }
-      );
-
-      res.json({ success: true, token: "Bearer " + token, user: user });
-
-        
-    } catch( err ) {
-
-      res.status(500).json({ default: "Something went wrong" });
-
+  const token = await jwtSign(
+    payload,
+    secret,
+    {
+      expiresIn: 31556926 // 1 year in seconds
     }
+  );
 
+  return {
+    success: true,
+    token: "Bearer " + token,
+    user
   }
+
+}
+
+module.exports = {
+  authenticated,
+  login
 }
