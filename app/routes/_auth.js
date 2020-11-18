@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const isAuthenticated = require("./middleware/isAuthenticated");
 
-const crh = require("./middleware/createControllerHandler");
+const cch = require("./middleware/createControllerHandler");
 const sde = require("./middleware/setDefaultError");
 
 const {
@@ -9,8 +9,8 @@ const {
     authenticated
 } = require("../controllers/auth");
 
-router.post( "/authenticated", isAuthenticated, crh( authenticated ) );
+router.post( "/authenticated", isAuthenticated, cch( authenticated ) );
 
-router.post( "/login", sde("An error occured while trying to login."), crh( login ) );
+router.post( "/login", sde("An error occured while trying to login."), cch( login ) );
 
 module.exports = router;
