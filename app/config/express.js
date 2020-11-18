@@ -46,8 +46,11 @@ app.use((err, req, res, next) => {
         case "ValidationError":
             // TODO Build in Mongo DB Validation Error handler
         default:
-            handleRouteError(new RouteError(500, req.defaultError || "Somthing went wrong"), res);
-            
+            const defaultError = new RouteError(500, req.defaultError || "Somthing went wrong");
+
+            defaultError.sourceErr = err;
+
+            handleRouteError( defaultError, res );
     }
 
 });

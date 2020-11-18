@@ -42,7 +42,7 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
 }
 
-const create = async ( { body, user, roomId } ) => {
+const create = async ( { user, roomId, body } ) => {
 
     // Is this a request to make many students?
     if( body.students ) return await createMany( { body, user, roomId } );
@@ -64,7 +64,7 @@ const create = async ( { body, user, roomId } ) => {
 
 }
 
-const createMany = async ( { body, user, roomId } ) => {
+const createMany = async ( { user, roomId, body } ) => {
 
     const studentData = body.students;
     const students = [];

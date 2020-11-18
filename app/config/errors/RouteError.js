@@ -1,4 +1,11 @@
+const isProd = require("../options")("isProd");
+
 class RouteError extends Error {
+
+    statusCode;
+    message;
+    data;
+    sourceErr;
 
     constructor(statusCode, message, data) {
 
@@ -18,7 +25,14 @@ class RouteError extends Error {
 
 }
 
+/**
+ * @param {RouteError} err 
+ * @param {*} res 
+ */
 const handleRouteError = (err, res) => {
+
+    // Log for non production environments.
+    if( !isProd ) console.log( err.sourceErr || err );
 
     const { statusCode, response } = err;
 

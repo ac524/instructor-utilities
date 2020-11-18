@@ -1,15 +1,13 @@
-const mapRequestData = ({ params, body, roomId, user }) => ({
-    ...params,
-    body,
-    roomId,
-    user
+const mapRequestData = (req, include) => ({
+    ...req.params,
+    ...["body", "user", ...include].reduce( (data, key) => ({ ...data, [key]: req[key] }), {} )
 });
 
-const createControllerHandler = ( controller ) => async ( req, res, next ) => {
+const createControllerHandler = ( controller, { include = [] } = {} ) => async ( req, res, next ) => {
 
     try {
 
-        res.json( (await controller( mapRequestData( req ), req )) || { success: true } );
+        res.json( (await controller( mapRequestData( req, include ), req )) || { success: true } );
 
     } catch( err ) {
 

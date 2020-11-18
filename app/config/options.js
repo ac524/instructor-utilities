@@ -1,4 +1,5 @@
 const options = {
+    isProd: process.env.NODE_ENV === "production",
     port: process.env.PORT || 3001,
     secret: process.env.JWT_SECRET || "more security please?",
     mongodb: process.env.MONGODB_URI || "mongodb://localhost/instructorutilities",

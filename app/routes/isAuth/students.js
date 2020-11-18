@@ -18,7 +18,7 @@ const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
 
 router
     .route( "/" )
-    .post( newAuthMiddleware, sde("Unable to create student."), crh( create ) );
+    .post( newAuthMiddleware, sde("Unable to create student."), crh( create, { include: ["roomId"] } ) );
 
 router
     .route( "/:roomId/:studentId" )
