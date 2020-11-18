@@ -7,96 +7,87 @@ const validateRegisterInput = require("../config/validation/register");
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
 const { User, Token, Classroom } = require("../models");
+const { RouteError } = require('../config/errors/RouteError');
 
-module.exports = {
-  async register(req, res) {
+const register = async ({ body }) => {
 
-    // Form validation
-    const { errors, isValid } = validateRegisterInput(req.body);
+  // Form validation
+  const { errors, isValid } = validateRegisterInput(body);
 
-    // Check validation
-    if (!isValid)
+  // Check validation
+  if (!isValid)
 
-      return res.status(400).json(errors);
+    throw new RouteError( 400, "Invalid registration request.", errors );
 
-    try {
+  let classroom;
+  const hasCode = Boolean(body.code);
 
-      let classroom;
-      const hasCode = Boolean(req.body.code);
+  if( hasCode ) {
+  
+    // Create the User's classroom
+    const token = await Token.findOne({
+      token: body.code
+    });
 
-      if( hasCode ) {
-      
-        // Create the User's classroom
-        const token = await Token.findOne({
-          token: req.body.code
-        });
+    if( !token )  throw new RouteError( 404, "Unknown registration code.", { code: "Code not found" } );
 
-        if( !token )  return res.status(404).json({ code: "Code not found" });
+    classroom = await Classroom.findOne({
+      registerCode: token._id
+    });
 
-        classroom = await Classroom.findOne({
-          registerCode: token._id
-        });
+    if( !classroom ) throw new RouteError( 400, "Registration code claimed.", { code: "Your room is no longer available" } );
+    
+  }
 
-        if( !classroom )  return res.status(400).json({ code: "Your room is no longer available" });
-        
-      }
+  const existingUser = await User.findOne({ email: body.email });
 
-      const existingUser = await User.findOne({ email: req.body.email });
+  if( existingUser )
 
-      if( existingUser )
+    throw new RouteError( 400, "Cannot create user.", { email: "Email already exists." } );
 
-        return res.status(400).json({ email: "Email already exists" });
+  // Create the User
+  const user = new User({
+    name: body.name,
+    email: body.email,
+    password: await passwordHash( body.password ),
+    isVerified: !mail.isEnabled
+  });
 
-      // Create the User
-      const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: await passwordHash( req.body.password ),
-        isVerified: !mail.isEnabled
-      });
+  await user.save();
 
-      await user.save();
+  if( classroom ) {
 
-      if( classroom ) {
+    classroom.name = body.roomname;
 
-        classroom.name = req.body.roomname;
+  } else {
 
-      } else {
-
-        // Create the User's classroom
-        classroom = new Classroom({
-          name: req.body.roomname
-        });
-
-      }
-
-      if( classroom.registerCode ) {
-        await Token.findByIdAndDelete(classroom.registerCode);
-        classroom.registerCode = undefined;
-      }
-
-      await classroom.save();
-
-      // Add the classroom id to the user
-      await user.update({ $push: { classrooms: classroom._id } });
-
-      // Add the staff member to the classroom
-      await classroom.update({ $push: { staff: {
-        role: "instructor",
-        user: user._id
-      } } });
-
-      if( mail.isEnabled ) await sendUserVerifyEmail( user );
-
-      res.json( { success: true } );
-
-    } catch( err ) {
-
-      // console.log( err );
-
-      res.status(500).json({ default: "Something went wrong" });
-
-    }
+    // Create the User's classroom
+    classroom = new Classroom({
+      name: body.roomname
+    });
 
   }
+
+  if( classroom.registerCode ) {
+    await Token.findByIdAndDelete(classroom.registerCode);
+    classroom.registerCode = undefined;
+  }
+
+  await classroom.save();
+
+  // Add the classroom id to the user
+  await user.update({ $push: { classrooms: classroom._id } });
+
+  // Add the staff member to the classroom
+  await classroom.update({ $push: { staff: {
+    role: "instructor",
+    user: user._id
+  } } });
+
+  if( mail.isEnabled ) await sendUserVerifyEmail( user );
+
+}
+
+module.exports = {
+  register
 }
