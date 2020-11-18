@@ -26,9 +26,9 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
     const feed = new Feed({
         _id: feedId,
-        // room: roomId,
-        // for: studentId,
-        // in: "students"
+        room: roomId,
+        for: studentId,
+        in: "students"
     });
 
     feed.pushItem( createdBy, "create" );
