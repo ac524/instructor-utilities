@@ -13,12 +13,13 @@ const studentFactory = async ( createdBy, roomId, data ) => {
     const feedId = new ObjectId();
     const studentId = new ObjectId();
 
-    data._id = studentId;
-    data.feed = feedId;
-
     const update = {
         $push: {
-            students: data
+            students: {
+                ...data,
+                _id: studentId,
+                feed: feedId
+            }
         }
     };
 
