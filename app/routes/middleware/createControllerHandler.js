@@ -9,7 +9,7 @@ const createControllerHandler = ( controller ) => async ( req, res, next ) => {
 
     try {
 
-        res.json( await controller( mapRequestData( req ), req ) );
+        res.json( (await controller( mapRequestData( req ), req )) || { success: true } );
 
     } catch( err ) {
 

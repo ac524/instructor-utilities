@@ -1,4 +1,6 @@
+const { RouteError } = require("../config/errors/RouteError");
 const { Classroom, Feed } = require("../models");
+
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
@@ -83,86 +85,60 @@ const createMany = async ( { body, user, roomId } ) => {
 
 }
 
+const getSingle = async ( { roomId, studentId } )  => {
+
+    const student = await findStudentById( roomId, studentId ); // (await Classroom.findById(req.roomId).select("students")).students.id(req.params.studentId);
+
+    if( !student )
+
+        throw new RouteError( 404, "Student not found." );
+
+    return student;
+
+}
+
+const update = async ( { roomId, studentId, body } ) => {
+
+    const update = ["name","priorityLevel","assignedTo"].reduce((update, name) => {
+
+        if( !body.hasOwnProperty(name) ) return update;
+
+        return { ...update, [name]: body[name] };
+
+    }, {});
+    
+    const student = await findStudentByIdAndUpdate( roomId, studentId, mapUpdateKeys(update) );
+
+    if( !student )
+
+        throw new RouteError( 404, "Student not found." );
+
+}
+
+const deleteSingle = async ( { roomId, studentId } )  => {
+
+    const room = await getRoomWithStudents( roomId );
+    const student = room.students.id( studentId );
+
+    if( !student )
+
+        throw new RouteError( 404, "Student not found." );
+
+    student.remove();
+
+    await room.save();
+
+    await Feed.findByIdAndDelete(student.feed);
+
+}
+
 /**
  * All routes require isRoomMember middleware for authentication
  */
 module.exports = {
     create,
     createMany,
-    async getSingle( req, res ) {
-
-        try {
-
-            const student = await findStudentById( req.roomId, req.params.studentId ); // (await Classroom.findById(req.roomId).select("students")).students.id(req.params.studentId);
-
-            if( !student )
-
-                res.status(404).json({ default: "Student not found." });
-
-            res.json( student );
-                
-        } catch(err) {
-
-            res.status(500).json({ default: "Unable to get student." });
-
-        }
-
-    },
-    async update( req, res ) {
-
-        try {
-
-            const update = ["name","priorityLevel","assignedTo"].reduce((update, name) => {
-
-                if( !req.body.hasOwnProperty(name) ) return update;
-
-                return { ...update, [name]: req.body[name] };
-
-            }, {});
-            
-            const student = await findStudentByIdAndUpdate( req.roomId, req.params.studentId, mapUpdateKeys(update) );
-
-            if( !student )
-
-                res.status(404).json({ default: "Student not found." });
-
-            res.json({ success: true });
-                
-        } catch(err) {
-
-            console.log(err);
-
-            res.status(500).json({ default: "Unable to update student." });
-
-        }
-
-    },
-    async deleteSingle( req, res ) {
-
-        try {
-
-            const room = await getRoomWithStudents(req.roomId);
-            const student = room.students.id(req.params.studentId);
-
-            if( !student )
-
-                res.status(404).json({ default: "Student not found." });
-
-            student.remove();
-
-            await room.save();
-
-            await Feed.findByIdAndDelete(student.feed);
-
-            res.json( { success: true } );
-                
-        } catch(err) {
-
-            console.log(err);
-
-            res.status(500).json({ default: "Unable to delete student." });
-
-        }
-
-    }
+    getSingle,
+    update,
+    deleteSingle
 }
