@@ -39,34 +39,33 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
 }
 
+const create = async ( { body, user, roomId } ) => {
+
+    // Is this a request to make many students?
+    if( body.students ) return createMany();
+
+    const {
+        name,
+        priorityLevel,
+        assignedTo
+    } = body;
+
+    const data = {
+        name,
+        priorityLevel
+    }
+
+    if( assignedTo ) data.assignedTo = assignedTo;
+
+    return await studentFactory( user._id, roomId, data );
+
+}
+
 /**
  * All routes require isRoomMember middleware for authentication
  */
 module.exports = {
-    async create( req, res, next ) {
-
-        if( req.body.students ) return next();
-
-        try {
-
-            const data = {
-                name: req.body.name,
-                priorityLevel: req.body.priorityLevel,
-            }
-
-            if( req.body.assignedTo ) data.assignedTo = req.body.assignedTo;
-
-            const student = await studentFactory( req.user._id, req.roomId, data );
-
-            res.json( student );
-                
-        } catch(err) {
-
-            next( err );
-
-        }
-
-    },
+    create,
     async createMany( req, res ) {
 
         try {
