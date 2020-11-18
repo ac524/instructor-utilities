@@ -9,6 +9,8 @@ const PORT = getOption( "port" );
 const app = express();
 const server = http.createServer(app);
 
+const { RouteError, handleRouteError } = require("./errors/RouteError");
+
 // Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -32,12 +34,23 @@ passport.use( require("./jwtstrategy") );
 app.use(express.static("public"));
 app.use(express.static("client/build"));
 
-// Register routes
-// const setUserSocket = require("../routes/middleware/setUserSocket");
-app.use(
-    // setUserSocket,
-    require("../routes")
-);
+app.use( require("../routes") );
+
+app.use((err, req, res, next) => {
+
+    switch( err.constructor.name ) {
+
+        case "RouteError":
+            handleRouteError(err, res);
+            return;
+        case "ValidationError":
+            // TODO Build in Mongo DB Validation Error handler
+        default:
+            handleRouteError(new RouteError(500, req.defaultError || "Somthing went wrong"), res);
+            
+    }
+
+});
 
 server.listen(PORT, () => {
     console.log(`App listening on Port: ${PORT}`);
