@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
     Button,
@@ -97,44 +97,8 @@ export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = ""
     const login = useLogin();
     const history = useHistory();
 
-    // Form state.
-    const [ email, setEmail ] = useState( emailStart );
-    const [ password, setPassword ] = useState( "" );
-    const [ errors, setErrors ] = useState({});
-
-    // Login form fields configuration.
-    const fields = [
-        {
-            label: "Email",
-            placeholder: "Login Email",
-            name: "email",
-            type: "email",
-            value: email,
-            onChange: (e) => setEmail(e.target.value)
-        },
-        {
-            label: "Password",
-            placeholder: "Login Password",
-            name: "password",
-            type: "password",
-            value: password,
-            onChange: (e) => setPassword(e.target.value)
-        }
-    ];
-
     // Handle login submission.
-    const handleSubmit = async (e) => {
-
-        e.preventDefault();
-
-        const [ data, errors, hasErrors ] = validateLoginData({ email, password });
-
-        if( hasErrors ) {
-            setErrors( errors );
-            return;
-        }
-
-        setErrors({});
+    const handleSubmit = async ( data, setErrors ) => {
 
         try {
 
@@ -152,6 +116,25 @@ export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = ""
         
     };
 
-    return <Form flat fields={fields} errors={errors} onSubmit={handleSubmit} buttonText="Login" />;
+    return <Form
+            flat
+            fields={[
+                {
+                    label: "Email",
+                    placeholder: "Login Email",
+                    type: "email",
+                    name: "email",
+                },
+                {
+                    label: "Password",
+                    placeholder: "Login Password",
+                    type: "password",
+                    name: "password",
+                }
+            ]}
+            validation={validateLoginData}
+            onSubmit={handleSubmit}
+            buttonText="Login"
+            />;
 
 };

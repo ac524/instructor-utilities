@@ -11,7 +11,7 @@ import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useClassroom, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actionsNames";
-import { usePriorityLevel } from "pages/Dashboard/utils/student";
+import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
 import "./style.sass";
 
@@ -47,7 +47,7 @@ export const StudentMenu = ({ _id, name }) => {
 
 export const StudentPriorityTag = ( { level, className, ...props } ) => {
 
-    const priorityLevel = usePriorityLevel( level );
+    const priorityLevel = getPriorityLevel( level );
 
     const classes = className ? [className] : [];
     classes.push("is-light");

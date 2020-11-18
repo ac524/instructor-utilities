@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Form as FormCollection, Button } from "react-bulma-components";
 
@@ -104,6 +104,33 @@ export const validateAll = ( rawData, ...validators ) => {
 
 }
 
+const fieldDefaultValuesReducer = ( values, { name, value } ) => ({
+    ...values,
+    [name]: undefined === value ? "" : value
+});
+
+export const useFormFields = (fieldsConfig, valueSource) => {
+
+    const [ values, setValues ] = useState( fieldsConfig.reduce(fieldDefaultValuesReducer,{}) );
+
+    useEffect(() => {
+
+        setValues( fieldsConfig.reduce(fieldDefaultValuesReducer,{}) );
+
+    }, [ valueSource ]);
+
+    return [
+        fieldsConfig.map( ({name, onMap=field=>field, ...field}) => onMap({
+            ...field,
+            name,
+            value: values[name],
+            onChange: e => setValues({ ...values, [name]: e.target.value })
+        }) ),
+        values
+    ];
+
+}
+
 export const RangeInput = ( { id, name, value, color, light, size, ...props } ) => {
 
     if( !id ) id = `slider-${name}`;
@@ -142,13 +169,13 @@ export const FormInput = ( { type = "text", options = [], ...props } ) => {
 
 }
 
-export const FormField = ( { label, type = "text", name, state, placeholder, value, onChange, options, inputColor, inputProps={}, ...props } ) => {
+export const FormField = ( { label, type = "text", name, placeholder, value, onChange, options, inputColor, inputProps={}, ...props } ) => {
 
     const fieldInputProps = {
         name,
         type,
-        value: state ? state[0] : value,
-        onChange: onChange || (state ? e=>state[1](e.target.value) : null),
+        value,
+        onChange: onChange || null,
         ...inputProps
     };
 
@@ -170,35 +197,73 @@ export const FormField = ( { label, type = "text", name, state, placeholder, val
 
 const Form = ( {
     fields,
-    stateValues={},
-    errors = {},
+    fieldValueSource,
+    validation,
     button,
     buttonText = "Submit",
     moreButtons = [],
     flat,
     className,
+    onSubmit,
     ...props
 } ) => {
+
+    const [formFields, fieldValues] = useFormFields( fields, fieldValueSource );
+
+    const [ isProcessing, setIsProcessing ] = useState(false);
+    const [ errors, setErrors ] = useState({});
+
+    const formRef = useRef();
+
+    const submitData = async data => {
+        setIsProcessing( true );
+        onSubmit && await onSubmit( data, setErrors );
+        if( formRef.current ) setIsProcessing( false );
+    }
+
+    const handleSubmit = e => {
+
+        e.preventDefault();
+
+        if( isProcessing ) return;
+
+        if( !validation ) {
+            submitData( fieldValues );
+            return;
+        }
+
+        const [ data, inputErrors, hasErrors ] = Array.isArray(validation) ? validateAll( fieldValues, validation ) : validation( fieldValues );
+
+        if( hasErrors ) {
+            setErrors( inputErrors );
+            return;
+        }
+
+        setErrors({});
+
+        submitData( data );
+
+    }
 
     const inputErrorColor = useInputErrorColor( errors );
 
     const classes = className ? [className] : [];
 
-    if(flat) classes.push("is-flat")
+    if(flat) classes.push("is-flat");
 
     return (
-        <form className={classes.join(" ")} {...props}>
+        <form ref={formRef} className={classes.join(" ")} onSubmit={handleSubmit} {...props}>
             <ErrorProvider value={errors}>
                 <Error name="default" type="message" />
-                { fields.map( field => <FormField key={field.name} inputColor={inputErrorColor} state={stateValues[field.name]} { ...field } /> ) }
+                { formFields.map( field => <FormField key={field.name} inputColor={inputErrorColor} { ...field } /> ) }
             </ErrorProvider>
             {flat ? null : <hr />}
             <div className="is-flex">
-                { button ? button : <Button color="primary">{ buttonText }</Button> }
+                { button ? button : <Button color="primary" loading={isProcessing}>{ buttonText }</Button> }
                 { moreButtons }
             </div>
         </form>
-    )
+    );
 
 }
 
