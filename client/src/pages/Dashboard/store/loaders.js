@@ -14,15 +14,13 @@ export const useClassroomLoader = ( roomId ) => {
 
     useEffect(() => {
 
-        if( !roomId ) return;
+        if( !roomId || !socket ) return;
         
         const loadClassroom = async () => {
 
             try {
 
                 const { data } = await api.getClassroom( roomId );
-
-                // console.log( data );
 
                 dispatch(gda(SET_CLASSROOM, data));
 

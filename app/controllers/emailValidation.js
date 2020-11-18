@@ -1,5 +1,5 @@
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
-// const ioEmit = require("./utils/ioEmit");
+const ioEmit = require("./utils/ioEmit");
 
 const { User, Token } = require("../models");
 
@@ -41,7 +41,7 @@ module.exports = {
             // req.app.get("io").to( token.relation ).emit("updateUser", update);
 
             // TODO Replace with
-            // ioEmit( req, "dispatch", addStaffDispatch, `user:${roomId}` );
+            ioEmit( req, "user:update", { isVerified:true }, `user:${token.relation}` );
         
             res.json({ success: true });
 

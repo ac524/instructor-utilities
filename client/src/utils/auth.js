@@ -152,9 +152,9 @@ export const useLogin = () => {
 
         const token = setAuthToken( tokenString );
 
-        dispatch(gsa( LOGIN_USER, { token, user } ));
-
         socket.emit( "authorize", tokenString );
+
+        dispatch(gsa( LOGIN_USER, { token, user } ));
 
         return token;
         

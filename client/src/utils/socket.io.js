@@ -51,23 +51,3 @@ export const useSocket = () => {
     return socket;
 
 }
-
-export const useAuthSubscription = () => {
-
-    const dispatch = useStoreDispatch();
-    const socket = useSocket();
-    const isAuth = useIsAuthenticated();
-
-    useEffect(() => {
-
-        if( !socket || !isAuth ) return;
-
-        const updateUser = data => dispatch( gsa( UPDATE_USER, data ) );
-
-        socket.on("updateUser", updateUser);
-
-        return () => socket.off("updateUser", updateUser);
-
-    }, [socket, isAuth, dispatch])
-
-}

@@ -7,8 +7,9 @@ import Routes from "./components/Routes";
 import { useAuthTokenStore } from "./utils/auth";
 import { useIsReady, useReadyStep } from "./utils/ready";
 import loadGlobalIcons from "./utils/icons";
-import { useAuthSubscription, useSocketConnection } from "./utils/socket.io";
+import { useSocketConnection } from "./utils/socket.io";
 import Fade from "./animations/Fade";
+import { useUserSocketUpdates } from "utils/user";
 
 loadGlobalIcons();
 
@@ -22,7 +23,7 @@ const App = () => {
 
     const isAuthCheckDone = useAuthTokenStore();
 
-    useAuthSubscription();
+    useUserSocketUpdates();
 
     useEffect(() => {
 
