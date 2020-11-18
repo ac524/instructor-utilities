@@ -42,7 +42,7 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 const create = async ( { body, user, roomId } ) => {
 
     // Is this a request to make many students?
-    if( body.students ) return createMany();
+    if( body.students ) return await createMany( { body, user, roomId } );
 
     const {
         name,
@@ -61,42 +61,34 @@ const create = async ( { body, user, roomId } ) => {
 
 }
 
+const createMany = async ( { body, user, roomId } ) => {
+
+    const studentData = body.students;
+    const students = [];
+
+    for( let i = 0; i < studentData.length; i++ ) {
+
+        const data = {
+            name: studentData[i].name,
+            priorityLevel: studentData[i].priorityLevel,
+        }
+
+        if( studentData[i].assignedTo ) data.assignedTo = studentData[i].assignedTo;
+
+        students.push( await studentFactory( user._id, roomId, data ) );
+
+    }
+
+    return students;
+
+}
+
 /**
  * All routes require isRoomMember middleware for authentication
  */
 module.exports = {
     create,
-    async createMany( req, res ) {
-
-        try {
-
-            const studentData = req.body.students;
-            const students = [];
-
-            for( let i = 0; i < studentData.length; i++ ) {
-
-                const data = {
-                    name: studentData[i].name,
-                    priorityLevel: studentData[i].priorityLevel,
-                }
-    
-                if( studentData[i].assignedTo ) data.assignedTo = studentData[i].assignedTo;
-    
-                students.push( await studentFactory( req.user._id, req.roomId, data ) );
-
-            }
-
-            res.json( students );
-                
-        } catch(err) {
-
-            console.log(err);
-
-            res.status(500).json({ default: "Unable to create students." });
-
-        }
-
-    },
+    createMany,
     async getSingle( req, res ) {
 
         try {
