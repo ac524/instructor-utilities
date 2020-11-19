@@ -12,6 +12,8 @@ const { RouteError } = require("../config/errors/RouteError");
 
 const jwtSign = util.promisify( jwt.sign );
 
+/** CONTROLLER METHODS **/
+
 const authenticated = ({ user }) => user;
 
 const login = async ({ body }) => {
