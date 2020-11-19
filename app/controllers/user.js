@@ -57,7 +57,7 @@ module.exports = {
 
             await req.user.update({ $pull: { classrooms: req.roomId } });
 
-            ioEmit(req, "dispatch", { type: "REMOVE_STAFF", payload: memberId }, `room:${req.roomId}`);
+            ioEmit( "dispatch", { type: "REMOVE_STAFF", payload: memberId }, `room:${req.roomId}` );
 
             res.json({ success: true });
 

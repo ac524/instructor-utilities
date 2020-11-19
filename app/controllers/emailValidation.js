@@ -16,7 +16,7 @@ const resend = async ({ body }) => {
 
 }
 
-const validate = async ({ token }, req) => {
+const validate = async ({ token }) => {
 
     const tokenRecord = await Token.findOne({ token });
 
@@ -26,7 +26,7 @@ const validate = async ({ token }, req) => {
 
     await User.findByIdAndUpdate( tokenRecord.relation, update );
 
-    ioEmit( req, "user:update", { isVerified:true }, `user:${tokenRecord.relation}` );
+    ioEmit( "user:update", { isVerified:true }, `user:${tokenRecord.relation}` );
 
 }
 

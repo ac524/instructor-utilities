@@ -72,7 +72,7 @@ module.exports = {
 
             await App.findOneAndUpdate( { room: req.roomId, type: req.params.appTypeId }, update, { new: true } ).populate("type");
 
-            ioEmit( req, `appupdate:${req.params.appTypeId}`, update, `room:${req.roomId}` );
+            ioEmit( `appupdate:${req.params.appTypeId}`, update, `room:${req.roomId}` );
 
             res.json({success: true});
 

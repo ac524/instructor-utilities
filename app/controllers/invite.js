@@ -202,7 +202,7 @@ module.exports = {
             await req.user.update({ $push: { classrooms: roomId } });
 
             const addStaffDispatch = { type: "ADD_STAFF", payload: staff };
-            ioEmit( req, "dispatch", addStaffDispatch, `room:${roomId}` );
+            ioEmit( "dispatch", addStaffDispatch, `room:${roomId}` );
 
             await req.userInviteToken.remove();
 
@@ -211,7 +211,7 @@ module.exports = {
             await req.userInviteRoom.save();
 
             const deleteInviteDispatch = { type: "DELETE_INVITE", payload: req.userInvite._id };
-            ioEmit( req, "dispatch", deleteInviteDispatch, `room:${roomId}` );
+            ioEmit( "dispatch", deleteInviteDispatch, `room:${roomId}` );
 
             res.json( { success: true, roomId: roomId } );
 

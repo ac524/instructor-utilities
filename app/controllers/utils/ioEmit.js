@@ -1,9 +1,10 @@
-module.exports = (req, action, message, room) => {
+const { io } = require("../../config/express");
 
-    // Get the global io.
-    const io = req.app.get("cr.io");
+const ioEmit = ( action, message, room ) => {
 
     // Emit to the room if provided, else broadcast to all.
     (room ? io.to(room) : io).emit( action, message );
     
-}
+};
+
+module.exports = ioEmit;

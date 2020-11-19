@@ -146,4 +146,6 @@ module.exports = (server, app) => {
 
     app.set( "cr.io", io );
 
+    return io;
+
 };
