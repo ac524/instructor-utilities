@@ -3,9 +3,9 @@ const EntryType = require("./EntryType");
 
 class CommentEntryType extends EntryType {
 
-    getRequestData( req ) {
+    getBodyData( { comment } ) {
 
-        return { comment: req.body.comment };
+        return { comment };
 
     }
 
