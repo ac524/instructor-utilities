@@ -9,6 +9,8 @@ const ioEmit = require("./utils/ioEmit");
 const { RouteError } = require('../config/errors/RouteError');
 const homeUrl = require("../config/options")( "publicUrl" );
 
+/** HELPER METHODS **/
+
 const addStaff = async (roomId, member) => {
 
     const { staff } =
@@ -37,6 +39,8 @@ const sendInvite = ( room, invite, from ) => {
     );
 
 }
+
+/** CONTROLLER METHODS **/
 
 const create = async ({ roomId, user, body })  => {
 
