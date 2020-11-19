@@ -9,6 +9,8 @@ const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 const { User, Token, Classroom } = require("../models");
 const { RouteError } = require('../config/errors/RouteError');
 
+/** CONTROLLER METHODS **/
+
 const register = async ({ body }) => {
 
   // Form validation

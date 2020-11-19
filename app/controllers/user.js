@@ -6,6 +6,8 @@ const { User, Classroom } = require("../models");
 
 const ioEmit = require("./utils/ioEmit");
 
+/** CONTROLLER METHODS **/
+
 const update = async ({ user, body }) => {
 
     const bodyKeys = Object.keys( body );
@@ -68,11 +70,10 @@ const archiveRoom = async ({ roomId, classroom, roomStaffMember }) => {
 
 }
 
-const getRoomsShort = async ({ user }) => {
-    return await Classroom
+const getRoomsShort = async ({ user }) =>
+    await Classroom
         .find({ _id: { $in: user.classrooms } })
         .select("name staff.role staff.user");
-}
 
 module.exports = {
     update,

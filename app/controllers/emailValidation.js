@@ -4,6 +4,8 @@ const ioEmit = require("./utils/ioEmit");
 const { User, Token } = require("../models");
 const { RouteError } = require("../config/errors/RouteError");
 
+/** CONTROLLER METHODS **/
+
 const resend = async ({ body }) => {
 
     const { email } = body;

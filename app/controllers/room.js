@@ -1,6 +1,8 @@
 const { RouteError } = require("../config/errors/RouteError");
 const { Classroom } = require("../models");
 
+/** CONTROLLER METHODS **/
+
 const getSingle = async ({ roomId }) => {
 
         const room =

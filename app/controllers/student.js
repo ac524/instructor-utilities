@@ -8,6 +8,8 @@ const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudent
 const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Classroom.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
 const mapUpdateKeys = updates => Object.fromEntries(Object.entries(updates).map(([key,value])=>[`students.$.${key}`,value]));
 
+/** HELPER METHODS **/
+
 const studentFactory = async ( createdBy, roomId, data ) => {
 
     const feedId = new ObjectId();
@@ -41,6 +43,8 @@ const studentFactory = async ( createdBy, roomId, data ) => {
     return student;
 
 }
+
+/** CONTROLLER METHODS **/
 
 const create = async ( { user, roomId, body } ) => {
 
