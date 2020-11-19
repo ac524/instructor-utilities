@@ -4,7 +4,7 @@ const setRoom = require("../middleware/setRoom");
 const isRoomMember = require("../middleware/isRoomMember");
 
 const cch = require("../middleware/createControllerHandler");
-const sde = require("../middleware/setDefaultError");
+// const sde = require("../middleware/setDefaultError");
 
 const {
     getSingle,
