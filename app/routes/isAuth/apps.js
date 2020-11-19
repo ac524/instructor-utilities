@@ -10,20 +10,23 @@ const {
     update
 } = require("../../controllers/app");
 
+const cch = require("../middleware/createControllerHandler");
+// const sde = require("../middleware/setDefaultError");
+
 router
     .route( "/" )
-    .post( setRoom.fromBody, isRoomMember, create )
+    .post( setRoom.fromBody, isRoomMember, cch( create ) );
     // .get( setRoom.fromParam, isRoomMember, getSingle )
     // .patch( setRoom.fromParam, isRoomMember, update );
 
 router
     .route( "/types" )
-    .get( getTypes );
+    .get( cch( getTypes ) );
 
 
 router
     .route( "/:appTypeId/:roomId" )
-    .post( setRoom.fromParam, isRoomMember, getSingle )
-    .patch( setRoom.fromParam, isRoomMember, update )
+    .post( setRoom.fromParam, isRoomMember, cch( getSingle ) )
+    .patch( setRoom.fromParam, isRoomMember, cch( update ) )
 
 module.exports = router;

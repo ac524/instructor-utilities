@@ -7,4 +7,8 @@ require("./config/mongoose");
 require("./config/apps/register")();
 
 // Express server configuration
-require("./config/express");
+const { addRoutes, listen } = require("./config/express");
+
+addRoutes();
+
+listen();

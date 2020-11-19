@@ -5,23 +5,25 @@ const isRoomMember = require("../middleware/isRoomMember");
 
 const {
     create,
-    createMany,
     getSingle,
     update,
     deleteSingle
 } = require("../../controllers/student");
+
+const cch = require("../middleware/createControllerHandler");
+const sde = require("../middleware/setDefaultError");
 
 const newAuthMiddleware = [ setRoom.fromBody, isRoomMember ];
 const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
 
 router
     .route( "/" )
-    .post( newAuthMiddleware, create, createMany );
+    .post( newAuthMiddleware, sde("Unable to create student."), cch( create, { include: ["roomId"] } ) );
 
 router
     .route( "/:roomId/:studentId" )
-    .get( existingAuthMiddleware, getSingle )
-    .patch( existingAuthMiddleware, update )
-    .delete( existingAuthMiddleware, deleteSingle );
+    .get( existingAuthMiddleware, sde("Unable to get student."), cch( getSingle ) )
+    .patch( existingAuthMiddleware, sde("Unable to update student."), cch( update ) )
+    .delete( existingAuthMiddleware, sde("Unable to delete student."), cch( deleteSingle ) );
 
 module.exports = router;
