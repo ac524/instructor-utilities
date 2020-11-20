@@ -41,7 +41,7 @@ router
     .post(
         isAuthenticated,
         setInvite,
-        cch( accept, { include: ["userInvite", "userInviteRoom", "userInviteToken"] } )
+        cch( accept )
     );
 
 router
@@ -49,7 +49,7 @@ router
     .get(
         setInvite,
         sde("An error occured checking the email's status."),
-        cch( emailCheck, { include: ["userInvite"] } )
+        cch( emailCheck )
     );
 
 router
@@ -57,7 +57,7 @@ router
     .post(
         setInvite,
         sde("An error occured during registration."),
-        cch( register, { include: ["userInvite"] } )
+        cch( register )
     );
 
 module.exports = router;

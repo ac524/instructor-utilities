@@ -1,14 +1,17 @@
 const mapRequestData = (req, include) => ({
+    // Add all route parameters as keys.
     ...req.params,
-    // Extract target keys from the request object
-    ...["body", "user", ...include].reduce( (data, key) => ({ ...data, [key]: req[key] }), {} )
+    // Extract target keys from the request object.
+    ...["body", "user", ...include].reduce( (data, key) => ({ ...data, [key]: req[key] }), {} ),
+    // Add all data points pushed to the `crdata` Map.
+    ...[...req.crdata].reduce( (data, [key, value]) => ({ ...data, [key]: value }), {} )
 });
 
 const createControllerHandler = ( controller, { include = [] } = {} ) => async ( req, res, next ) => {
 
     try {
 
-        res.json( (await controller( mapRequestData( req, include ), req )) || { success: true } );
+        res.json( (await controller( mapRequestData( req, include ) )) || { success: true } );
 
     } catch( err ) {
 

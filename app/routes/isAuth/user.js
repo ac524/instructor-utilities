@@ -19,11 +19,11 @@ router
 
 router
     .route("/rooms/:roomId/leave")
-    .delete( setRoom.fromParam, isRoomMember, sde("An error occured trying to leave the room."), cch( leaveRoom, { include: [ "classroom", "roomStaffMember" ] } ) );
+    .delete( setRoom.fromParam, isRoomMember, sde("An error occured trying to leave the room."), cch( leaveRoom ) );
 
 router
     .route("/rooms/:roomId/archive")
-    .delete( setRoom.fromParam, isRoomMember, sde("An error occured trying to archive the room."), cch( archiveRoom, { include: [ "classroom", "roomStaffMember" ] } ) );
+    .delete( setRoom.fromParam, isRoomMember, sde("An error occured trying to archive the room."), cch( archiveRoom ) );
 
 router
     .route("/rooms/short")
