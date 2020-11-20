@@ -6,7 +6,7 @@ const { Token, Classroom, User } = require("../models");
 const validateRegisterInput = require("../config/validation/register");
 const passwordHash = require("../config/utils/passwordHash");
 const ioEmit = require("./utils/ioEmit");
-const { RouteError } = require('../config/errors/RouteError');
+const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 const homeUrl = require("../config/options")( "publicUrl" );
 
 /** HELPER METHODS **/
@@ -51,12 +51,12 @@ const create = async ({ roomId, user, body })  => {
     // Check if the email is already registered to a staff member.
     if( roomEmails.staff.map( ({user}) => user.email ).includes( email ) )
 
-        throw new RouteError( 400, "Unable to create invite.", { email: "This email is already registered to a staff member." } );
+        throw new InvalidDataError( "Unable to create invite.", { email: "This email is already registered to a staff member." } );
 
     // Check if the email is already registered to an invite.
     if( roomEmails.invites && roomEmails.invites.map( ({email}) => email ).includes( email ) )
 
-        throw new RouteError( 400, "Unable to create invite.", { email: "This email already has an invite." } );
+        throw new InvalidDataError( "Unable to create invite.", { email: "This email already has an invite." } );
 
     const token = new Token({
         relation: roomId,
@@ -97,7 +97,7 @@ const remove = async ({ roomId, inviteId }) => {
 
     const invite = room.invites.id( inviteId );
 
-    if( !invite ) throw new RouteError( 404, "Invite not found." );
+    if( !invite ) throw new NotFoundError( "Invite not found." );
 
     await Token.findByIdAndDelete( invite.token );
 
@@ -132,7 +132,7 @@ const register = async ({ userInvite, body }) => {
     // Check validation
     if (!isValid)
 
-        throw new RouteError( 400, "Invalid registration.", errors );
+        throw new InvalidDataError( "Invalid registration.", errors );
 
     const { email } = userInvite;
 
@@ -140,7 +140,7 @@ const register = async ({ userInvite, body }) => {
 
     if( existingUser )
 
-        throw new RouteError( 400, "Invalid registration.", { email: "Email already exists" } );
+        throw new InvalidDataError( "Invalid registration.", { email: "Email already exists" } );
 
     // Create the User
     const user = new User({
@@ -163,7 +163,7 @@ const accept = async ({ userInviteRoom, userInviteToken, userInvite, user }) => 
 
     if( user.email !== userInvite.email )
 
-        throw new RouteError( 401, "Please log into the correct account." );
+        throw new InvalidUserError( "Please log into the correct account." );
 
     // Add the staff member to the classroom
     const staff = await addStaff( roomId, {

@@ -1,4 +1,4 @@
-const { RouteError } = require("../config/errors/RouteError");
+const { InvalidUserError } = require("../config/errors");
 const { Classroom } = require("../models");
 
 /** CONTROLLER METHODS **/
@@ -16,7 +16,7 @@ const getSingle = async ({ roomId }) => {
 
 const update = async ({ roomId, roomStaffMember, body }) => {
 
-    if( roomStaffMember.role !== "instructor" ) throw new RouteError( 401, "You must be an instructor to update the class." );
+    if( roomStaffMember.role !== "instructor" ) throw new InvalidUserError( "You must be an instructor to update the class." );
 
     const updateList = [];
 

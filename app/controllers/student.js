@@ -1,4 +1,4 @@
-const { RouteError } = require("../config/errors/RouteError");
+const { NotFoundError } = require("../config/errors");
 const { Classroom, Feed } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;
@@ -96,7 +96,7 @@ const getSingle = async ( { roomId, studentId } )  => {
 
     if( !student )
 
-        throw new RouteError( 404, "Student not found." );
+        throw new NotFoundError( "Student not found." );
 
     return student;
 
@@ -116,7 +116,7 @@ const update = async ( { roomId, studentId, body } ) => {
 
     if( !student )
 
-        throw new RouteError( 404, "Student not found." );
+        throw new NotFoundError( "Student not found." );
 
 }
 
@@ -127,7 +127,7 @@ const deleteSingle = async ( { roomId, studentId } )  => {
 
     if( !student )
 
-        throw new RouteError( 404, "Student not found." );
+        throw new NotFoundError( "Student not found." );
 
     student.remove();
 

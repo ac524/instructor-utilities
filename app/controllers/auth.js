@@ -8,7 +8,7 @@ const validateLoginInput = require("../config/validation/login");
 
 // Load User model
 const { User } = require("../models");
-const { RouteError } = require("../config/errors/RouteError");
+const { InvalidDataError } = require("../config/errors");
 
 const jwtSign = util.promisify( jwt.sign );
 
@@ -24,7 +24,7 @@ const login = async ({ body }) => {
   // Check validation
   if (!isValid)
 
-    throw new RouteError( 400, "Invalid request.", errors );
+    throw new InvalidDataError( "Invalid request.", errors );
 
   const email = body.email;
   const password = body.password;
@@ -34,13 +34,13 @@ const login = async ({ body }) => {
 
   if (!user)
 
-    throw new RouteError( 400, "Email or password is invalid." );
+    throw new InvalidDataError( "Email or password is invalid." );
 
   const isMatch = await bcrypt.compare( password, user.password );
 
   if( !isMatch )
 
-    throw new RouteError( 400, "Email or password is invalid." );
+    throw new InvalidDataError( "Email or password is invalid." );
 
   // User matched
   // Create JWT Payload
