@@ -110,9 +110,9 @@ const remove = async ({ roomId, inviteId }) => {
 /**
  * Checks if an invite's email has a user.
  */
-const emailCheck = async ({ userInvite }) => {
+const emailCheck = async ({ invite }) => {
 
-    const { email } = userInvite;
+    const { email } = invite;
     const user = await User.findOne({ email });
 
     return {
@@ -125,7 +125,7 @@ const emailCheck = async ({ userInvite }) => {
 /**
  * Register a User through an invite.
  */
-const register = async ({ userInvite, body }) => {
+const register = async ({ invite, body }) => {
 
     const { errors, isValid } = validateRegisterInput(body, ["email","roomname","code"]);
 
@@ -134,7 +134,7 @@ const register = async ({ userInvite, body }) => {
 
         throw new InvalidDataError( "Invalid registration.", errors );
 
-    const { email } = userInvite;
+    const { email } = invite;
 
     const existingUser = await User.findOne({ email });
 
@@ -157,11 +157,11 @@ const register = async ({ userInvite, body }) => {
 /**
  * Accept the invitation to join a room.
  */
-const accept = async ({ userInviteRoom, userInviteToken, userInvite, user }) => {
+const accept = async ({ inviteToken, inviteRoom, invite, user }) => {
 
-    const roomId = userInviteRoom._id;
+    const roomId = inviteRoom._id;
 
-    if( user.email !== userInvite.email )
+    if( user.email !== invite.email )
 
         throw new InvalidUserError( "Please log into the correct account." );
 
@@ -177,13 +177,13 @@ const accept = async ({ userInviteRoom, userInviteToken, userInvite, user }) => 
     const addStaffDispatch = { type: "ADD_STAFF", payload: staff };
     ioEmit( "dispatch", addStaffDispatch, `room:${roomId}` );
 
-    await userInviteToken.remove();
+    await inviteToken.remove();
 
-    userInvite.remove();
+    invite.remove();
 
-    await userInviteRoom.save();
+    await inviteRoom.save();
 
-    const deleteInviteDispatch = { type: "DELETE_INVITE", payload: userInvite._id };
+    const deleteInviteDispatch = { type: "DELETE_INVITE", payload: invite._id };
     ioEmit( "dispatch", deleteInviteDispatch, `room:${roomId}` );
 
     return { success: true, roomId: roomId };
