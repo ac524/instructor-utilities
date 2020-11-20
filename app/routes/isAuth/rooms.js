@@ -14,6 +14,6 @@ const {
 router
     .route( "/:roomId" )
     .get( setRoom.fromParam, isRoomMember, cch( getSingle ) )
-    .patch( setRoom.fromParam, isRoomMember, cch( update, { include: ["roomStaffMember"] } ) );
+    .patch( setRoom.fromParam, isRoomMember, cch( update ) );
 
 module.exports = router;

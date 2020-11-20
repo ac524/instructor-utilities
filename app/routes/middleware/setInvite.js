@@ -5,23 +5,23 @@ const setInvite = async ( req, res, next ) => {
 
     try {
 
-        const userInviteToken = await Token.findOne({ token: req.params.token });
+        const inviteToken = await Token.findOne({ token: req.params.token });
 
         // req.userInviteToken = await Token.findOne({ token: req.params.token });
 
-        if( !userInviteToken ) throw new NotFoundError( "This invitation is no longer available" );
+        if( !inviteToken ) throw new NotFoundError( "This invitation is no longer available" );
 
-        const userInviteRoom = await Classroom.findById( userInviteToken.relation );
+        const inviteRoom = await Classroom.findById( inviteToken.relation );
 
-        if( !userInviteRoom )  throw new InvalidDataError( "This invitation is not longer valid" );
+        if( !inviteRoom )  throw new InvalidDataError( "This invitation is not longer valid" );
 
-        const userInvite = req.userInviteRoom.invites.find( invite => invite.token.equals( req.userInviteToken._id ) );
+        const invite = inviteRoom.invites.find( invite => invite.token.equals( inviteToken._id ) );
 
-        if( !userInvite ) throw new InvalidDataError( "This invitation is not longer valid" );
+        if( !invite ) throw new InvalidDataError( "This invitation is not longer valid" );
 
-        req.crdata.set( "inviteToken", userInviteToken );
-        req.crdata.set( "inviteRoom", userInviteRoom );
-        req.crdata.set( "invite", userInvite );
+        req.crdata.set( "inviteToken", inviteToken );
+        req.crdata.set( "inviteRoom", inviteRoom );
+        req.crdata.set( "invite", invite );
 
         next();
 

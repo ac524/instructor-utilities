@@ -39,13 +39,14 @@ const update = async ({ user, body }) => {
  * - Removes the staff entry
  * - Removes the staff reference from the classroom.
  */
-const leaveRoom = async ({ roomId, user, classroom, roomStaffMember }) => {
+const leaveRoom = async ({ roomId, user, classroom, staffMember }) => {
 
-    if ( roomStaffMember.role === "instructor" ) return res.status(401).send({ default: "Instructors cannot leave rooms." });
+    // TODO role authentication should be moved to validation middleware.
+    if ( staffMember.role === "instructor" ) throw new InvalidUserError( "Instructors cannot leave rooms." );
 
-    const memberId = roomStaffMember._id;
+    const memberId = staffMember._id;
 
-    await roomStaffMember.remove();
+    await staffMember.remove();
 
     await classroom.save();
 
@@ -60,9 +61,10 @@ const leaveRoom = async ({ roomId, user, classroom, roomStaffMember }) => {
  * and staff are left intact,so they can later be brought back if needed.
  * - Removes the classroom ID from all known associated users.
  */
-const archiveRoom = async ({ roomId, classroom, roomStaffMember }) => {
+const archiveRoom = async ({ roomId, classroom, staffMember }) => {
 
-    if ( roomStaffMember.role !== "instructor" ) throw new InvalidUserError( "Only instructors can archive a room." );
+    // TODO role authentication should be moved to validation middleware.
+    if ( staffMember.role !== "instructor" ) throw new InvalidUserError( "Only instructors can archive a room." );
 
     const staffUserIds = classroom.staff.map(({ user }) => user);
 

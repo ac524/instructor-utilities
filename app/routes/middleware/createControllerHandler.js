@@ -1,14 +1,9 @@
-/**
- * @param {Map} dataMap 
- */
-const crdataAgg = dataMap => {
-
-}
-
 const mapRequestData = (req, include) => ({
+    // Add all route parameters as keys.
     ...req.params,
-    // Extract target keys from the request object
+    // Extract target keys from the request object.
     ...["body", "user", ...include].reduce( (data, key) => ({ ...data, [key]: req[key] }), {} ),
+    // Add all data points pushed to the `crdata` Map.
     ...[...req.crdata].reduce( (data, [key, value]) => ({ ...data, [key]: value }), {} )
 });
 
