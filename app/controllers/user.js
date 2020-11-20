@@ -1,6 +1,6 @@
 const passwordHash = require('../config/utils/passwordHash');
 const validateRegisterInput = require("../config/validation/register");
-const { RouteError } = require("../config/errors");
+const { InvalidDataError, InvalidUserError } = require("../config/errors");
 
 const { User, Classroom } = require("../models");
 
@@ -17,7 +17,7 @@ const update = async ({ user, body }) => {
     // Check validation
     if (!isValid)
 
-        throw new RouteError( 400, "Invalid update request.", errors );
+        throw new InvalidDataError( "Invalid update request.", errors );
     
     const updateList = [];
 
@@ -62,7 +62,7 @@ const leaveRoom = async ({ roomId, user, classroom, roomStaffMember }) => {
  */
 const archiveRoom = async ({ roomId, classroom, roomStaffMember }) => {
 
-    if ( roomStaffMember.role !== "instructor" ) throw new RouteError( 401, "Only instructors can archive a room." );
+    if ( roomStaffMember.role !== "instructor" ) throw new InvalidUserError( "Only instructors can archive a room." );
 
     const staffUserIds = classroom.staff.map(({ user }) => user);
 

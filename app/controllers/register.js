@@ -7,7 +7,7 @@ const validateRegisterInput = require("../config/validation/register");
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
 const { User, Token, Classroom } = require("../models");
-const { RouteError } = require('../config/errors');
+const { InvalidDataError, NotFoundError } = require('../config/errors');
 
 /** CONTROLLER METHODS **/
 
@@ -19,7 +19,7 @@ const register = async ({ body }) => {
   // Check validation
   if (!isValid)
 
-    throw new RouteError( 400, "Invalid registration request.", errors );
+    throw new InvalidDataError( "Invalid registration request.", errors );
 
   let classroom;
   const hasCode = Boolean(body.code);
@@ -31,13 +31,13 @@ const register = async ({ body }) => {
       token: body.code
     });
 
-    if( !token )  throw new RouteError( 404, "Unknown registration code.", { code: "Code not found" } );
+    if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
     classroom = await Classroom.findOne({
       registerCode: token._id
     });
 
-    if( !classroom ) throw new RouteError( 400, "Registration code claimed.", { code: "Your room is no longer available" } );
+    if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
     
   }
 
@@ -45,7 +45,7 @@ const register = async ({ body }) => {
 
   if( existingUser )
 
-    throw new RouteError( 400, "Cannot create user.", { email: "Email already exists." } );
+    throw new InvalidDataError( "Cannot create user.", { email: "Email already exists." } );
 
   // Create the User
   const user = new User({

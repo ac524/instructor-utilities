@@ -2,7 +2,7 @@ const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 const ioEmit = require("./utils/ioEmit");
 
 const { User, Token } = require("../models");
-const { RouteError } = require("../config/errors");
+const { NotFoundError } = require("../config/errors");
 
 /** CONTROLLER METHODS **/
 
@@ -12,7 +12,7 @@ const resend = async ({ body }) => {
 
     const user = await User.findOne({ email });
 
-    if( !user ) throw new RouteError( 404, "Email not found." );
+    if( !user ) throw new NotFoundError( "Email not found." );
 
     await sendUserVerifyEmail( user );
 
@@ -22,7 +22,7 @@ const validate = async ({ token }) => {
 
     const tokenRecord = await Token.findOne({ token });
 
-    if( !tokenRecord ) throw new RouteError( 404, "Token not found." );
+    if( !tokenRecord ) throw new NotFoundError( "Token not found." );
 
     const update = { isVerified: true };
 
