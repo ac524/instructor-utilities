@@ -1,4 +1,4 @@
-const { RouteError } = require("../config/errors/RouteError");
+const { RouteError } = require("../config/errors");
 const { Classroom, Feed } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;

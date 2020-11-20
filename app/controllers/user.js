@@ -1,6 +1,6 @@
 const passwordHash = require('../config/utils/passwordHash');
 const validateRegisterInput = require("../config/validation/register");
-const { RouteError } = require("../config/errors/RouteError");
+const { RouteError } = require("../config/errors");
 
 const { User, Classroom } = require("../models");
 

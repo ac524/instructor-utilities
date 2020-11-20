@@ -3,7 +3,7 @@ const http = require('http');
 const express = require("express");
 const passport = require("passport");
 const getOption = require("../config/options");
-const { RouteError, handleRouteError } = require("./errors/RouteError");
+const routeErrorMiddleware = require("./errors/routeErrorMiddleware");
 
 const PORT = getOption( "port" );
 
@@ -38,24 +38,7 @@ const addRoutes = () => {
 
     app.use( require("../routes") );
 
-    app.use((err, req, res, next) => {
-    
-        switch( err.constructor.name ) {
-    
-            case "RouteError":
-                handleRouteError(err, res);
-                return;
-            case "ValidationError":
-                // TODO Build in Mongo DB Validation Error handler
-            default:
-                const defaultError = new RouteError(500, req.defaultError || "Somthing went wrong");
-    
-                defaultError.sourceErr = err;
-    
-                handleRouteError( defaultError, res );
-        }
-    
-    });
+    app.use( routeErrorMiddleware );
 
 }
 

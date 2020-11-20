@@ -6,7 +6,7 @@ const { Token, Classroom, User } = require("../models");
 const validateRegisterInput = require("../config/validation/register");
 const passwordHash = require("../config/utils/passwordHash");
 const ioEmit = require("./utils/ioEmit");
-const { RouteError } = require('../config/errors/RouteError');
+const { RouteError } = require('../config/errors');
 const homeUrl = require("../config/options")( "publicUrl" );
 
 /** HELPER METHODS **/

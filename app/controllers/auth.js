@@ -8,7 +8,7 @@ const validateLoginInput = require("../config/validation/login");
 
 // Load User model
 const { User } = require("../models");
-const { RouteError } = require("../config/errors/RouteError");
+const { RouteError } = require("../config/errors");
 
 const jwtSign = util.promisify( jwt.sign );
 

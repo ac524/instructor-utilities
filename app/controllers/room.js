@@ -1,4 +1,4 @@
-const { RouteError } = require("../config/errors/RouteError");
+const { RouteError } = require("../config/errors");
 const { Classroom } = require("../models");
 
 /** CONTROLLER METHODS **/

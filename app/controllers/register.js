@@ -7,7 +7,7 @@ const validateRegisterInput = require("../config/validation/register");
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
 const { User, Token, Classroom } = require("../models");
-const { RouteError } = require('../config/errors/RouteError');
+const { RouteError } = require('../config/errors');
 
 /** CONTROLLER METHODS **/
 
