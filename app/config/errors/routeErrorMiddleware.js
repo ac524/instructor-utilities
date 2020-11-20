@@ -47,7 +47,7 @@ const routeErrorMiddleware = (err, req, res, next) => {
         (
             "RouteError" === err.constructor.name
 
-                // Use the `err` as is if it is a already a RouteError.
+                // Use the `err` as is if it is already a RouteError.
                 ? err
 
                 : (
