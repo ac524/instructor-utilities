@@ -6,6 +6,11 @@ const { NotFoundError } = require("../config/errors");
 
 /** CONTROLLER METHODS **/
 
+/**
+ * @param {object} param0 
+ * @param {object} param0.body
+ * @param {string} param0.body.email
+ */
 const resend = async ({ body }) => {
 
     const { email } = body;
