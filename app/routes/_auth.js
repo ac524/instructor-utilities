@@ -1,8 +1,6 @@
 const router = require("express").Router();
-const isAuthenticated = require("./middleware/isAuthenticated");
 
-const cch = require("./middleware/createControllerHandler");
-const sde = require("./middleware/setDefaultError");
+const addRoutePath = require("./utils/addRoutePath");
 
 const {
     login,
@@ -15,13 +13,20 @@ const loginCtlrConfig = {
     keyMap: { body: "credentials" }
 };
 
-router.post(
-    "/login",
-    sde("An error occured while trying to login."),
-    loginValidation.postHandler(),
-    cch( login, loginCtlrConfig )
-);
+addRoutePath( router, "/login", {
+    post: {
+        defaultError: "login",
+        middleware: loginValidation.postHandler(),
+        ctrl: [ login, loginCtlrConfig ]
+    }
+} );
 
-router.post( "/authenticated", isAuthenticated, cch( authenticated ) );
+addRoutePath( router, "/authenticated", {
+    post: {
+        defaultError: "get the authenticated user",
+        auth: true,
+        ctrl: authenticated
+    }
+} );
 
 module.exports = router;

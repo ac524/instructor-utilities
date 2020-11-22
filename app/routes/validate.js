@@ -1,19 +1,28 @@
 const router = require("express").Router();
-const isAuthenticated = require("./middleware/isAuthenticated");
-
-const cch = require("./middleware/createControllerHandler");
-const sde = require("./middleware/setDefaultError");
 
 const {
     validate,
     resend
 } = require("../controllers/emailValidation");
+const addRoutePath = require("./utils/addRoutePath");
 
 const resendCtlrConfig = {
     keyMap: { body: "config" }
 };
 
-router.post( "/resend", isAuthenticated, sde("An error occured resending the email."), cch( resend, resendCtlrConfig ) );
-router.post( "/:token", sde("An error occured validating the email."), cch( validate ) );
+addRoutePath( router, "/resend", {
+    post: {
+        auth: true,
+        defaultError: "resend the email",
+        ctrl: [ resend, resendCtlrConfig ]
+    }
+} );
+
+addRoutePath( router, "/:token", {
+    post: {
+        defaultError: "validate the email",
+        ctrl: validate
+    }
+} );
 
 module.exports = router;

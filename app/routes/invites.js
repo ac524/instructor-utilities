@@ -1,14 +1,9 @@
 const router = require("express").Router();
-const isAuthenticated = require("./middleware/isAuthenticated");
 const setInvite = require("./middleware/setInvite");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const registerValidation = require("../validation/registerValidation");
-
-const cch = require("./middleware/createControllerHandler");
-const sde = require("./middleware/setDefaultError");
-const gpv = require("./middleware/globalParamsValidation");
+const addRoutePath = require("./utils/addRoutePath");
 
 const {
     create,
@@ -18,59 +13,59 @@ const {
     register
 } = require("../controllers/invite");
 
+const registerValidation = require("../validation/registerValidation");
+
 const inviteCtlrConfig = {
     keyMap: { body: "inviteData" }
 };
 
-router
-    .route('/:roomId')
-    .post(
-        gpv,
-        isAuthenticated,
-        setRoom.fromParam,
-        isRoomMember,
-        sde("An error occured trying to create the invite."),
-        cch( create, inviteCtlrConfig )
-    );
+addRoutePath( router, "/:roomId", {
+    post: {
+        paramCheck: true,
+        auth: true,
+        defaultError: "create the invite",
+        middleware: [ setRoom.fromParam, isRoomMember ],
+        ctrl: [ create, inviteCtlrConfig ]
+    }
+} );
 
-router
-    .route('/:roomId/:inviteId')
-    .delete(
-        gpv,
-        isAuthenticated,
-        setRoom.fromParam,
-        isRoomMember,
-        sde("An error occured trying to delete the invite."),
-        cch( remove )
-    );
+addRoutePath( router, "/:roomId/:inviteId", {
+    delete: {
+        paramCheck: true,
+        auth: true,
+        defaultError: "delete the invite",
+        middleware: [ setRoom.fromParam, isRoomMember ],
+        ctrl: remove
+    }
+} );
 
-router
-    .route('/:token/accept')
-    .post(
-        isAuthenticated,
-        setInvite,
-        cch( accept )
-    );
+addRoutePath( router, "/:token/accept", {
+    post: {
+        auth: true,
+        defaultError: "accept the invite",
+        middleware: [ setInvite, ],
+        ctrl: accept
+    }
+} );
 
-router
-    .route('/:token/email')
-    .get(
-        setInvite,
-        sde("An error occured checking the email's status."),
-        cch( emailCheck )
-    );
+addRoutePath( router, "/:token/email", {
+    get: {
+        defaultError: "check the email's status",
+        middleware: setInvite,
+        ctrl: emailCheck
+    }
+});
 
 const inviteRegCtlrConfig = {
     keyMap: { body: "registerData" }
 };
 
-router
-    .route('/:token/register')
-    .post(
-        setInvite,
-        registerValidation.postHandler(["name","password"]),
-        sde("An error occured during registration."),
-        cch( register, inviteRegCtlrConfig )
-    );
+addRoutePath( router, "/:token/register", {
+    post: {
+        defaultError: "complete the registration",
+        middleware: [ setInvite, registerValidation.postHandler(["name","password"]) ],
+        ctrl: [ register, inviteRegCtlrConfig ]
+    }
+});
 
 module.exports = router;

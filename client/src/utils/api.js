@@ -140,7 +140,7 @@ class API {
 
     async getApp( roomId, type ) {
 
-        return this.axios.post( `/api/apps/${type}/${roomId}` );
+        return this.axios.get( `/api/apps/${type}/${roomId}` );
 
     }
 
