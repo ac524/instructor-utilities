@@ -13,10 +13,11 @@ const {
     leaveRoom,
     archiveRoom
 } = require("../../controllers/user");
+const userValidation = require("../../validation/userValidation");
 
 router
     .route("/")
-    .patch( sde("An error occured trying to update the user."), cch( update ) );
+    .patch( userValidation.patchHandler(), sde("An error occured trying to update the user."), cch( update ) );
 
 router
     .route("/rooms/:roomId/leave")

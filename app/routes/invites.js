@@ -4,6 +4,8 @@ const setInvite = require("./middleware/setInvite");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
+const registerValidation = require("../validation/registerValidation");
+
 const cch = require("./middleware/createControllerHandler");
 const sde = require("./middleware/setDefaultError");
 const gpv = require("./middleware/globalParamsValidation");
@@ -59,6 +61,7 @@ router
     .route('/:token/register')
     .post(
         setInvite,
+        registerValidation.postHandler(["name","password"]),
         sde("An error occured during registration."),
         cch( register )
     );

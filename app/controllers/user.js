@@ -1,6 +1,5 @@
 const passwordHash = require('../config/utils/passwordHash');
-const validateRegisterInput = require("../config/validation/register");
-const { InvalidDataError, InvalidUserError } = require("../config/errors");
+const { InvalidUserError } = require("../config/errors");
 
 const { User, Classroom } = require("../models");
 
@@ -9,15 +8,6 @@ const ioEmit = require("./utils/ioEmit");
 /** CONTROLLER METHODS **/
 
 const update = async ({ user, body }) => {
-
-    const bodyKeys = Object.keys( body );
-    const excludeFilters = ["name", "email", "password", "roomname", "code"].filter( filter => !bodyKeys.includes(filter) );
-    const { errors, isValid } = validateRegisterInput( body, excludeFilters );
-
-    // Check validation
-    if (!isValid)
-
-        throw new InvalidDataError( "Invalid update request.", errors );
     
     const updateList = [];
 

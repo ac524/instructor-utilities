@@ -3,7 +3,6 @@ const mail = require('../config/utils/mail');
 
 const { Token, Classroom, User } = require("../models");
 
-const validateRegisterInput = require("../config/validation/register");
 const passwordHash = require("../config/utils/passwordHash");
 const ioEmit = require("./utils/ioEmit");
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
@@ -126,13 +125,6 @@ const emailCheck = async ({ invite }) => {
  * Register a User through an invite.
  */
 const register = async ({ invite, body }) => {
-
-    const { errors, isValid } = validateRegisterInput(body, ["email","roomname","code"]);
-
-    // Check validation
-    if (!isValid)
-
-        throw new InvalidDataError( "Invalid registration.", errors );
 
     const { email } = invite;
 

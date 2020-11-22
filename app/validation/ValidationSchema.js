@@ -23,6 +23,10 @@ const createBodyValidation = (name, check) => ( req, res, next ) => {
 
 }
 
+const mapIncludes = schema => ( include, key ) => ({ ...include, [key]: schema[key] });
+
+const selectSchema = (schema, include) => include.reduce( mapIncludes(schema), {} );
+
 class ValidationSchema {
 
     /**
@@ -36,12 +40,12 @@ class ValidationSchema {
 
     }
 
-    postHandler() {
-        return createBodyValidation( this.name, vStrict( this.schema ) )
+    postHandler( include ) {
+        return createBodyValidation( this.name, vStrict( include ? selectSchema( this.schema, include ) : this.schema ) )
     }
 
-    patchHandler() {
-        return createBodyValidation( this.name, vLoose( this.schema ) )
+    patchHandler( include ) {
+        return createBodyValidation( this.name, vLoose( include ? selectSchema( this.schema, include ) : this.schema ) )
     }
 
 }
