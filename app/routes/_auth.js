@@ -9,8 +9,15 @@ const {
     authenticated
 } = require("../controllers/auth");
 
-router.post( "/authenticated", isAuthenticated, cch( authenticated ) );
+const loginValidation = require("../validation/loginValidation");
 
-router.post( "/login", sde("An error occured while trying to login."), cch( login ) );
+router.post(
+    "/login",
+    sde("An error occured while trying to login."),
+    loginValidation.postHandler(),
+    cch( login )
+);
+
+router.post( "/authenticated", isAuthenticated, cch( authenticated ) );
 
 module.exports = router;

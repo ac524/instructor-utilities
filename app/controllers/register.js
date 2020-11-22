@@ -3,7 +3,6 @@ const mail = require('../config/utils/mail');
 const passwordHash = require("../config/utils/passwordHash");
 
 // Load input validation
-const validateRegisterInput = require("../config/validation/register");
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
 const { User, Token, Classroom } = require("../models");
@@ -12,14 +11,6 @@ const { InvalidDataError, NotFoundError } = require('../config/errors');
 /** CONTROLLER METHODS **/
 
 const register = async ({ body }) => {
-
-  // Form validation
-  const { errors, isValid } = validateRegisterInput(body);
-
-  // Check validation
-  if (!isValid)
-
-    throw new InvalidDataError( "Invalid registration request.", errors );
 
   let classroom;
   const hasCode = Boolean(body.code);

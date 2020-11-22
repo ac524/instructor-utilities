@@ -12,6 +12,7 @@ const {
 
 const cch = require("../middleware/createControllerHandler");
 // const sde = require("../middleware/setDefaultError");
+const gpv = require("../middleware/globalParamsValidation");
 
 router
     .route( "/" )
@@ -26,7 +27,7 @@ router
 
 router
     .route( "/:appTypeId/:roomId" )
-    .post( setRoom.fromParam, isRoomMember, cch( getSingle ) )
-    .patch( setRoom.fromParam, isRoomMember, cch( update ) )
+    .post( gpv, setRoom.fromParam, isRoomMember, cch( getSingle ) )
+    .patch( gpv, setRoom.fromParam, isRoomMember, cch( update ) )
 
 module.exports = router;
