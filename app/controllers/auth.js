@@ -3,72 +3,57 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secret = require("../config/options")( "secret" );
 
-
-// Load input validation
-const validateLoginInput = require("../config/validation/login");
-
 // Load User model
 const { User } = require("../models");
-
+const { InvalidDataError } = require("../config/errors");
 
 const jwtSign = util.promisify( jwt.sign );
 
-module.exports = {
-  authenticated(req, res) {
+/** CONTROLLER METHODS **/
 
-    res.json( req.user );
+const authenticated = ({ user }) => user;
 
-  },
-  async login(req, res) {
+const login = async ({ body }) => {
 
-    // Form validation
-    const { errors, isValid } = validateLoginInput(req.body);
+  const { email, password } = body;
 
-    // Check validation
-    if (!isValid)
+  // Find user by email
+  const user = await User.findOne({ email });
 
-      return res.status(400).json(errors);
+  if (!user)
 
-    const email = req.body.email;
-    const password = req.body.password;
+    throw new InvalidDataError( "Email or password is invalid." );
 
-    try {
-      // Find user by email
-      const user = await User.findOne({ email })
-      
-      if (!user)
+  const isMatch = await bcrypt.compare( password, user.password );
 
-        return res.status(404).json({ default: "Email or password is invalid" });
+  if( !isMatch )
 
-      const isMatch = await bcrypt.compare(password, user.password);
+    throw new InvalidDataError( "Email or password is invalid." );
 
-      if( !isMatch )
+  // User matched
+  // Create JWT Payload
+  const payload = {
+    id: user.id,
+    name: user.name
+  };
 
-        res.status(400).json({ default: "Email or password is invalid" });
-
-      // User matched
-      // Create JWT Payload
-      const payload = {
-        id: user.id,
-        name: user.name
-      };
-
-      const token = await jwtSign(
-        payload,
-        secret,
-        {
-          expiresIn: 31556926 // 1 year in seconds
-        }
-      );
-
-      res.json({ success: true, token: "Bearer " + token, user: user });
-
-        
-    } catch( err ) {
-
-      res.status(500).json({ default: "Something went wrong" });
-
+  const token = await jwtSign(
+    payload,
+    secret,
+    {
+      expiresIn: 31556926 // 1 year in seconds
     }
+  );
 
+  return {
+    success: true,
+    token: "Bearer " + token,
+    user
   }
+
+}
+
+module.exports = {
+  authenticated,
+  login
 }

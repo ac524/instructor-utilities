@@ -1,45 +1,59 @@
 const { Classroom, Feed } = require("../../models");
+const { NotFoundError } = require("../../config/errors");
 
-const setClassroom = async (req, res, next) => {
+const setClassroom = async (req, next) => {
+
     try {
 
-        req.classroom = await Classroom.findById( req.roomId ).select("staff");
+        const roomId = req.crdata.get("roomId");
+        const classroom = await Classroom.findById( roomId ).select("staff");
 
-        // console.log(req.classroom);
+        if( !classroom ) throw new NotFoundError("Classroom not found");
 
-        if( !req.classroom ) return res.status(404).json({ default: "Classroom not found" });
+        req.crdata.set( "classroom", classroom );
 
         next();
 
     } catch(err) {
 
-        res.status(500).json({ default: "Could not load classroom" });
+        next(err);
 
     }
+
 }
 
 module.exports = {
     async fromBody(req, res, next) {
 
-        req.roomId = req.body.roomId;
+        req.crdata.set( "roomId", req.body.roomId );
 
-        await setClassroom(req, res, next);
+        await setClassroom(req, next);
 
     },
     async fromParam(req, res, next) {
 
-        req.roomId = req.params.roomId;
+        req.crdata.set( "roomId", req.params.roomId );
 
-        await setClassroom(req, res, next);
+        await setClassroom(req, next);
 
     },
     async fromFeed(req, res, next) {
 
-        const feed = await Feed.findById( req.params.feedId ).select( "room" );
+        try {
 
-        req.roomId = feed.room;
+            const feed = await Feed.findById( req.params.feedId ).select( "room" );
 
-        await setClassroom(req, res, next);
+            if( !feed ) throw new NotFoundError( "Target feed not found." );
+
+            req.crdata.set( "roomId", feed.room );
+
+        } catch( err ) {
+            
+            next(err);
+
+        }
+
+        await setClassroom(req, next);
 
     }
 }

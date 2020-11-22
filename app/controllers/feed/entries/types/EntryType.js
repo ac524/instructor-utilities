@@ -30,37 +30,29 @@ class EntryType {
 
     }
 
-    getRequestData( req ) {
+    getBodyData( body ) {
         return;
     }
 
-    onCreateResHandler( entries, req ) {
+    async onCreateResHandler( entries, req ) {
         
         return [ entries ];
 
     }
 
     getCreateRoute() {
-        return async ( req, res ) => {
-            
-            try {
+        return async ( options ) => {
 
-                const entry = await create(
-                    req.params.feedId,
-                    req.user._id,
-                    this.key,
-                    this.getRequestData( req )
-                );
+            const { feedId, user, body } = options;
+        
+            const entry = await create(
+                feedId,
+                user._id,
+                this.key,
+                this.getBodyData( body )
+            );
 
-                res.json( feedEventResponse( ...( await this.onCreateResHandler( [ entry ], req ) ) ) );
-
-            } catch(err) {
-
-                console.log(err);
-    
-                res.status(500).json({ default: `Unable to ${this.key} student` });
-    
-            }
+            return feedEventResponse( ...( await this.onCreateResHandler( [ entry ], options ) ) );
 
         }
     }

@@ -3,6 +3,10 @@ const router = require("express").Router();
 const setRoom = require("../middleware/setRoom");
 const isRoomMember = require("../middleware/isRoomMember");
 
+const cch = require("../middleware/createControllerHandler");
+const sde = require("../middleware/setDefaultError");
+const gpv = require("../middleware/globalParamsValidation");
+
 const {
     getSingle,
     getSingleItems,
@@ -11,17 +15,17 @@ const {
 
 router
     .route( "/:feedId" )
-    .get( setRoom.fromFeed, isRoomMember, getSingle );
+    .get( gpv, setRoom.fromFeed, isRoomMember, sde("Unable to get feed."), cch( getSingle ) );
 
 router
     .route( "/:feedId/items" )
-    .get( setRoom.fromFeed, isRoomMember, getSingleItems );
+    .get( gpv, setRoom.fromFeed, isRoomMember, sde("Unable to get feed items."), cch( getSingleItems ) );
 
 entryTypes.forEach( entryType => {
 
     router
         .route( `/:feedId/${entryType.key}` )
-        .post( setRoom.fromFeed, isRoomMember, entryType.getCreateRoute() );
+        .post( gpv, setRoom.fromFeed, isRoomMember, cch( entryType.getCreateRoute() ) );
 
 } );
 

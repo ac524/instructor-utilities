@@ -3,100 +3,84 @@ const mail = require('../config/utils/mail');
 const passwordHash = require("../config/utils/passwordHash");
 
 // Load input validation
-const validateRegisterInput = require("../config/validation/register");
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
 const { User, Token, Classroom } = require("../models");
+const { InvalidDataError, NotFoundError } = require('../config/errors');
 
-module.exports = {
-  async register(req, res) {
+/** CONTROLLER METHODS **/
 
-    // Form validation
-    const { errors, isValid } = validateRegisterInput(req.body);
+const register = async ({ body }) => {
 
-    // Check validation
-    if (!isValid)
+  let classroom;
+  const hasCode = Boolean(body.code);
 
-      return res.status(400).json(errors);
+  if( hasCode ) {
+  
+    // Create the User's classroom
+    const token = await Token.findOne({
+      token: body.code
+    });
 
-    try {
+    if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
-      let classroom;
-      const hasCode = Boolean(req.body.code);
+    classroom = await Classroom.findOne({
+      registerCode: token._id
+    });
 
-      if( hasCode ) {
-      
-        // Create the User's classroom
-        const token = await Token.findOne({
-          token: req.body.code
-        });
+    if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
+    
+  }
 
-        if( !token )  return res.status(404).json({ code: "Code not found" });
+  const existingUser = await User.findOne({ email: body.email });
 
-        classroom = await Classroom.findOne({
-          registerCode: token._id
-        });
+  if( existingUser )
 
-        if( !classroom )  return res.status(400).json({ code: "Your room is no longer available" });
-        
-      }
+    throw new InvalidDataError( "Cannot create user.", { email: "Email already exists." } );
 
-      const existingUser = await User.findOne({ email: req.body.email });
+  // Create the User
+  const user = new User({
+    name: body.name,
+    email: body.email,
+    password: await passwordHash( body.password ),
+    isVerified: !mail.isEnabled
+  });
 
-      if( existingUser )
+  await user.save();
 
-        return res.status(400).json({ email: "Email already exists" });
+  if( classroom ) {
 
-      // Create the User
-      const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: await passwordHash( req.body.password ),
-        isVerified: !mail.isEnabled
-      });
+    classroom.name = body.roomname;
 
-      await user.save();
+  } else {
 
-      if( classroom ) {
-
-        classroom.name = req.body.roomname;
-
-      } else {
-
-        // Create the User's classroom
-        classroom = new Classroom({
-          name: req.body.roomname
-        });
-
-      }
-
-      if( classroom.registerCode ) {
-        await Token.findByIdAndDelete(classroom.registerCode);
-        classroom.registerCode = undefined;
-      }
-
-      await classroom.save();
-
-      // Add the classroom id to the user
-      await user.update({ $push: { classrooms: classroom._id } });
-
-      // Add the staff member to the classroom
-      await classroom.update({ $push: { staff: {
-        role: "instructor",
-        user: user._id
-      } } });
-
-      if( mail.isEnabled ) await sendUserVerifyEmail( user );
-
-      res.json( { success: true } );
-
-    } catch( err ) {
-
-      // console.log( err );
-
-      res.status(500).json({ default: "Something went wrong" });
-
-    }
+    // Create the User's classroom
+    classroom = new Classroom({
+      name: body.roomname
+    });
 
   }
+
+  if( classroom.registerCode ) {
+    await Token.findByIdAndDelete(classroom.registerCode);
+    classroom.registerCode = undefined;
+  }
+
+  await classroom.save();
+
+  // Add the classroom id to the user
+  await user.update({ $push: { classrooms: classroom._id } });
+
+  // Add the staff member to the classroom
+  await classroom.update({ $push: { staff: {
+    role: "instructor",
+    user: user._id
+  } } });
+
+  if( mail.isEnabled ) await sendUserVerifyEmail( user );
+
+}
+
+module.exports = {
+  register
 }

@@ -46,7 +46,9 @@ class SocketDispatchLibrary {
     }
 
     generate(room,action) {
-        this.library[room] = dispatch => this.socket.to(room).emit(action, dispatch);
+        this.library[room] = dispatch => {
+            this.socket.to(room).emit(action, dispatch);
+        }
         return this;
     }
 
@@ -68,6 +70,10 @@ const privateChannels = {
     feed: {
         authJoin : async ( userId, feedId ) => userId && await isFeedMember( userId, feedId ),
         action: "push"
+    },
+    user: {
+        authJoin : async ( userId, userId2 ) => userId && userId === userId2,
+        action: "update"
     }
 };
 
@@ -138,6 +144,6 @@ module.exports = (server, app) => {
 
     io.on("connect", configureSocket);
 
-    app.set( "cr.io", io );
+    return io;
 
 };

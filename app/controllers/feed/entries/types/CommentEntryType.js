@@ -3,15 +3,15 @@ const EntryType = require("./EntryType");
 
 class CommentEntryType extends EntryType {
 
-    getRequestData( req ) {
+    getBodyData( { comment } ) {
 
-        return { comment: req.body.comment };
+        return { comment };
 
     }
 
-    async onCreateResHandler( entries, req ) {
+    async onCreateResHandler( entries, { feedId } ) {
 
-        const feed = await Feed.findById( req.params.feedId ).populate("room", "students");
+        const feed = await Feed.findById( feedId ).populate("room", "students");
         const student = feed.room.students.id( feed.for );
         
         return [
