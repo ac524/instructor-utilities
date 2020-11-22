@@ -8,12 +8,12 @@ const { NotFoundError } = require("../config/errors");
 
 /**
  * @param {object} param0 
- * @param {object} param0.body
- * @param {string} param0.body.email
+ * @param {object} param0.config
+ * @param {string} param0.config.email
  */
-const resend = async ({ body }) => {
+const resend = async ({ config }) => {
 
-    const { email } = body;
+    const { email } = config;
 
     const user = await User.findOne({ email });
 

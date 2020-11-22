@@ -13,9 +13,9 @@ const jwtSign = util.promisify( jwt.sign );
 
 const authenticated = ({ user }) => user;
 
-const login = async ({ body }) => {
+const login = async ({ credentials }) => {
 
-  const { email, password } = body;
+  const { email, password } = credentials;
 
   // Find user by email
   const user = await User.findOne({ email });

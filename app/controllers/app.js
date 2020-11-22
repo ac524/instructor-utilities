@@ -9,12 +9,12 @@ const getTypes = async () => await AppType.find({ isDisabled: false });
 
 const getSingle = async ({ appTypeId, roomId }) => await App.findOne({ room: roomId, type: appTypeId }).populate("type");
 
-const create = async ({ body }) => {
+const create = async ({ appData }) => {
 
     const {
         type,
         roomId,
-    } = body;
+    } = appData;
 
     const appType = await AppType.findById( type );
 
@@ -33,11 +33,11 @@ const create = async ({ body }) => {
 
 }
 
-const update = async ({ appTypeId, roomId, body }) => {
+const update = async ({ appTypeId, roomId, appData }) => {
 
     const update = {};
 
-    [ "name", "data" ].forEach( prop => !body.hasOwnProperty(prop) || (update[prop] = body[prop]) );
+    [ "name", "data" ].forEach( prop => !appData.hasOwnProperty(prop) || (update[prop] = appData[prop]) );
 
     await App.findOneAndUpdate( { room: roomId, type: appTypeId }, update, { new: true } ).populate("type");
 

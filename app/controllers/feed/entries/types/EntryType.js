@@ -30,11 +30,7 @@ class EntryType {
 
     }
 
-    getBodyData( body ) {
-        return;
-    }
-
-    async onCreateResHandler( entries, req ) {
+    async onCreateResHandler( entries, options ) {
         
         return [ entries ];
 
@@ -43,13 +39,13 @@ class EntryType {
     getCreateRoute() {
         return async ( options ) => {
 
-            const { feedId, user, body } = options;
+            const { feedId, user, entryData } = options;
         
             const entry = await create(
                 feedId,
                 user._id,
                 this.key,
-                this.getBodyData( body )
+                entryData
             );
 
             return feedEventResponse( ...( await this.onCreateResHandler( [ entry ], options ) ) );

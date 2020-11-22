@@ -41,11 +41,11 @@ const sendInvite = ( room, invite, from ) => {
 
 /** CONTROLLER METHODS **/
 
-const create = async ({ roomId, user, body })  => {
+const create = async ({ roomId, user, inviteData })  => {
 
     const roomEmails = await Classroom.findById(roomId).populate('staff.user',"email").select("invites.email");
 
-    const { email } = body;
+    const { email } = inviteData;
 
     // Check if the email is already registered to a staff member.
     if( roomEmails.staff.map( ({user}) => user.email ).includes( email ) )
@@ -124,7 +124,7 @@ const emailCheck = async ({ invite }) => {
 /**
  * Register a User through an invite.
  */
-const register = async ({ invite, body }) => {
+const register = async ({ invite, registerData }) => {
 
     const { email } = invite;
 
@@ -134,11 +134,13 @@ const register = async ({ invite, body }) => {
 
         throw new InvalidDataError( "Invalid registration.", { email: "Email already exists" } );
 
+    const { name, password } = registerData;
+
     // Create the User
     const user = new User({
-        name: body.name,
+        name,
         email,
-        password: await passwordHash( body.password ),
+        password: await passwordHash( password ),
         isVerified: true
     });
 

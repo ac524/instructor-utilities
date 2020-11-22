@@ -9,7 +9,11 @@ const {
     resend
 } = require("../controllers/emailValidation");
 
-router.post( "/resend", isAuthenticated, sde("An error occured resending the email."), cch( resend ) );
+const resendCtlrConfig = {
+    keyMap: { body: "config" }
+};
+
+router.post( "/resend", isAuthenticated, sde("An error occured resending the email."), cch( resend, resendCtlrConfig ) );
 router.post( "/:token", sde("An error occured validating the email."), cch( validate ) );
 
 module.exports = router;

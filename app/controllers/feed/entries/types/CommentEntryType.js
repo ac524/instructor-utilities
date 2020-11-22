@@ -3,12 +3,6 @@ const EntryType = require("./EntryType");
 
 class CommentEntryType extends EntryType {
 
-    getBodyData( { comment } ) {
-
-        return { comment };
-
-    }
-
     async onCreateResHandler( entries, { feedId } ) {
 
         const feed = await Feed.findById( feedId ).populate("room", "students");

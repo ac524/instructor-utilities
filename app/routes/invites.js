@@ -18,6 +18,9 @@ const {
     register
 } = require("../controllers/invite");
 
+const inviteCtlrConfig = {
+    keyMap: { body: "inviteData" }
+};
 
 router
     .route('/:roomId')
@@ -27,7 +30,7 @@ router
         setRoom.fromParam,
         isRoomMember,
         sde("An error occured trying to create the invite."),
-        cch( create )
+        cch( create, inviteCtlrConfig )
     );
 
 router
@@ -57,13 +60,17 @@ router
         cch( emailCheck )
     );
 
+const inviteRegCtlrConfig = {
+    keyMap: { body: "registerData" }
+};
+
 router
     .route('/:token/register')
     .post(
         setInvite,
         registerValidation.postHandler(["name","password"]),
         sde("An error occured during registration."),
-        cch( register )
+        cch( register, inviteRegCtlrConfig )
     );
 
 module.exports = router;

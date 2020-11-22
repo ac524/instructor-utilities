@@ -10,16 +10,18 @@ const { InvalidDataError, NotFoundError } = require('../config/errors');
 
 /** CONTROLLER METHODS **/
 
-const register = async ({ body }) => {
+const register = async ({ registerData }) => {
 
   let classroom;
-  const hasCode = Boolean(body.code);
 
-  if( hasCode ) {
+  // TODO Code verification and class room association should be moved to middleware so classroom can be passed directily into the controller.
+  const { code } = registerData;
+
+  if( code ) {
   
     // Create the User's classroom
     const token = await Token.findOne({
-      token: body.code
+      token: code
     });
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
@@ -32,31 +34,37 @@ const register = async ({ body }) => {
     
   }
 
-  const existingUser = await User.findOne({ email: body.email });
+  const { email } = registerData;
+
+  const existingUser = await User.findOne({ email });
 
   if( existingUser )
 
     throw new InvalidDataError( "Cannot create user.", { email: "Email already exists." } );
 
+  const { name, password } = registerData;
+
   // Create the User
   const user = new User({
-    name: body.name,
-    email: body.email,
-    password: await passwordHash( body.password ),
+    name,
+    email,
+    password: await passwordHash( password ),
     isVerified: !mail.isEnabled
   });
 
   await user.save();
 
+  const { roomname } = registerData;
+
   if( classroom ) {
 
-    classroom.name = body.roomname;
+    classroom.name = roomname;
 
   } else {
 
     // Create the User's classroom
     classroom = new Classroom({
-      name: body.roomname
+      name: roomname
     });
 
   }

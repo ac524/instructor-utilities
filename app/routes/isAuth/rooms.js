@@ -12,9 +12,13 @@ const {
     update
 } = require("../../controllers/room");
 
+const roomCtlrConfig = {
+    keyMap: { body: "roomData" }
+};
+
 router
     .route( "/:roomId" )
     .get( gpv, setRoom.fromParam, isRoomMember, cch( getSingle ) )
-    .patch( gpv, setRoom.fromParam, isRoomMember, cch( update ) );
+    .patch( gpv, setRoom.fromParam, isRoomMember, cch( update, roomCtlrConfig ) );
 
 module.exports = router;

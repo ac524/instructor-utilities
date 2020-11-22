@@ -14,7 +14,7 @@ const getSingle = async ({ roomId }) => {
 
 }
 
-const update = async ({ roomId, staffMember, body }) => {
+const update = async ({ roomId, staffMember, roomData }) => {
 
     // TODO role authentication should be done in validation middleware.
     if( staffMember.role !== "instructor" ) throw new InvalidUserError( "You must be an instructor to update the class." );
@@ -24,7 +24,7 @@ const update = async ({ roomId, staffMember, body }) => {
     // TODO - Email updates should not be automatic, instead there needs to be a verification process for the new email.
 
     ["name"].forEach( key => {
-        if( body.hasOwnProperty(key) ) updateList.push( [ key, body[key] ] );
+        if( roomData.hasOwnProperty(key) ) updateList.push( [ key, roomData[key] ] );
     });
 
     if( updateList.length )

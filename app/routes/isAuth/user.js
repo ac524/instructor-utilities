@@ -3,6 +3,8 @@ const router = require("express").Router();
 const setRoom = require("../middleware/setRoom");
 const isRoomMember = require("../middleware/isRoomMember");
 
+const userValidation = require("../../validation/userValidation");
+
 const cch = require("../middleware/createControllerHandler");
 const sde = require("../middleware/setDefaultError");
 const gpv = require("../middleware/globalParamsValidation");
@@ -13,11 +15,14 @@ const {
     leaveRoom,
     archiveRoom
 } = require("../../controllers/user");
-const userValidation = require("../../validation/userValidation");
+
+const userCtlrConfig = {
+    keyMap: { body: "userData" }
+};
 
 router
     .route("/")
-    .patch( userValidation.patchHandler(), sde("An error occured trying to update the user."), cch( update ) );
+    .patch( userValidation.patchHandler(), sde("An error occured trying to update the user."), cch( update, userCtlrConfig ) );
 
 router
     .route("/rooms/:roomId/leave")

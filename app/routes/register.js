@@ -9,6 +9,10 @@ const {
     register
 } = require("../controllers/register");
 
-router.post( "/", registerValidation.postHandler(), sde("An error occured during registration."), cch( register ) );
+const registerCtlrConfig = {
+    keyMap: { body: "registerData" }
+};
+
+router.post( "/", registerValidation.postHandler(), sde("An error occured during registration."), cch( register, registerCtlrConfig ) );
 
 module.exports = router;

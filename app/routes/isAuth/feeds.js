@@ -21,11 +21,15 @@ router
     .route( "/:feedId/items" )
     .get( gpv, setRoom.fromFeed, isRoomMember, sde("Unable to get feed items."), cch( getSingleItems ) );
 
+const entryCtlrConfig = {
+    keyMap: { body: "entryData" }
+};
+
 entryTypes.forEach( entryType => {
 
     router
         .route( `/:feedId/${entryType.key}` )
-        .post( gpv, setRoom.fromFeed, isRoomMember, cch( entryType.getCreateRoute() ) );
+        .post( gpv, setRoom.fromFeed, isRoomMember, cch( entryType.getCreateRoute(), entryCtlrConfig ) );
 
 } );
 
