@@ -5,6 +5,7 @@ const isRoomMember = require("../middleware/isRoomMember");
 
 const cch = require("../middleware/createControllerHandler");
 const sde = require("../middleware/setDefaultError");
+const gpv = require("../middleware/globalParamsValidation");
 
 const {
     update,
@@ -19,11 +20,11 @@ router
 
 router
     .route("/rooms/:roomId/leave")
-    .delete( setRoom.fromParam, isRoomMember, sde("An error occured trying to leave the room."), cch( leaveRoom ) );
+    .delete( gpv, setRoom.fromParam, isRoomMember, sde("An error occured trying to leave the room."), cch( leaveRoom ) );
 
 router
     .route("/rooms/:roomId/archive")
-    .delete( setRoom.fromParam, isRoomMember, sde("An error occured trying to archive the room."), cch( archiveRoom ) );
+    .delete( gpv, setRoom.fromParam, isRoomMember, sde("An error occured trying to archive the room."), cch( archiveRoom ) );
 
 router
     .route("/rooms/short")

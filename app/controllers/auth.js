@@ -3,9 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secret = require("../config/options")( "secret" );
 
-// Load input validation
-const validateLoginInput = require("../config/validation/login");
-
 // Load User model
 const { User } = require("../models");
 const { InvalidDataError } = require("../config/errors");
@@ -18,19 +15,10 @@ const authenticated = ({ user }) => user;
 
 const login = async ({ body }) => {
 
-  // Form validation
-  const { errors, isValid } = validateLoginInput( body );
-
-  // Check validation
-  if (!isValid)
-
-    throw new InvalidDataError( "Invalid request.", errors );
-
-  const email = body.email;
-  const password = body.password;
+  const { email, password } = body;
 
   // Find user by email
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email });
 
   if (!user)
 

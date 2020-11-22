@@ -12,6 +12,7 @@ const {
 
 const cch = require("../middleware/createControllerHandler");
 const sde = require("../middleware/setDefaultError");
+const gpv = require("../middleware/globalParamsValidation");
 
 const newAuthMiddleware = [ setRoom.fromBody, isRoomMember ];
 const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
@@ -22,8 +23,8 @@ router
 
 router
     .route( "/:roomId/:studentId" )
-    .get( existingAuthMiddleware, sde("Unable to get student."), cch( getSingle ) )
-    .patch( existingAuthMiddleware, sde("Unable to update student."), cch( update ) )
-    .delete( existingAuthMiddleware, sde("Unable to delete student."), cch( deleteSingle ) );
+    .get( gpv, existingAuthMiddleware, sde("Unable to get student."), cch( getSingle ) )
+    .patch( gpv, existingAuthMiddleware, sde("Unable to update student."), cch( update ) )
+    .delete( gpv, existingAuthMiddleware, sde("Unable to delete student."), cch( deleteSingle ) );
 
 module.exports = router;

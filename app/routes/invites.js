@@ -6,6 +6,7 @@ const isRoomMember = require("./middleware/isRoomMember");
 
 const cch = require("./middleware/createControllerHandler");
 const sde = require("./middleware/setDefaultError");
+const gpv = require("./middleware/globalParamsValidation");
 
 const {
     create,
@@ -19,6 +20,7 @@ const {
 router
     .route('/:roomId')
     .post(
+        gpv,
         isAuthenticated,
         setRoom.fromParam,
         isRoomMember,
@@ -29,6 +31,7 @@ router
 router
     .route('/:roomId/:inviteId')
     .delete(
+        gpv,
         isAuthenticated,
         setRoom.fromParam,
         isRoomMember,
