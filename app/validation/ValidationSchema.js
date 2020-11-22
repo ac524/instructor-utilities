@@ -29,6 +29,9 @@ const selectSchema = (schema, include) => include.reduce( mapIncludes(schema), {
 
 class ValidationSchema {
 
+    strictCheck;
+    looseCheck;
+
     /**
      * @param {string} name 
      * @param {object} schema 
@@ -40,12 +43,32 @@ class ValidationSchema {
 
     }
 
+    getStrict( include ) {
+
+        if( !include )
+
+            return this.strictCheck || ( this.strictCheck = vStrict( this.schema ) );
+        
+        return vStrict( selectSchema( this.schema, include ) );
+
+    }
+
+    getLoose( include ) {
+
+        if( !include )
+
+            return this.looseCheck || ( this.looseCheck = vLoose( this.schema ) );
+        
+        return vLoose( selectSchema( this.schema, include ) );
+
+    }
+
     postHandler( include ) {
-        return createBodyValidation( this.name, vStrict( include ? selectSchema( this.schema, include ) : this.schema ) )
+        return createBodyValidation( this.name, this.getStrict( include ) )
     }
 
     patchHandler( include ) {
-        return createBodyValidation( this.name, vLoose( include ? selectSchema( this.schema, include ) : this.schema ) )
+        return createBodyValidation( this.name, this.getLoose( include ) )
     }
 
 }
