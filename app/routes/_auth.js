@@ -15,7 +15,7 @@ const loginCtlrConfig = {
 
 addRoutePath( router, "/login", {
     post: {
-        defaultError: "An error occured while trying to login.",
+        defaultError: "login",
         middleware: loginValidation.postHandler(),
         ctrl: [ login, loginCtlrConfig ]
     }
@@ -23,7 +23,7 @@ addRoutePath( router, "/login", {
 
 addRoutePath( router, "/authenticated", {
     post: {
-        defaultError: "An error occured trying to get the authenticated user.",
+        defaultError: "get the authenticated user",
         auth: true,
         ctrl: authenticated
     }
