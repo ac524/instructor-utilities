@@ -46,16 +46,16 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
 /** CONTROLLER METHODS **/
 
-const create = async ( { user, roomId, body } ) => {
+const create = async ( { user, roomId, studentData } ) => {
 
     // Is this a request to make many students?
-    if( body.students ) return await createMany( { body, user, roomId } );
+    if( studentData.students ) return await createMany( { studentData: studentData.students, user, roomId } );
 
     const {
         name,
         priorityLevel,
         assignedTo
-    } = body;
+    } = studentData;
 
     const data = {
         name,
@@ -68,19 +68,18 @@ const create = async ( { user, roomId, body } ) => {
 
 }
 
-const createMany = async ( { user, roomId, body } ) => {
+const createMany = async ( { user, roomId, studentData } ) => {
 
-    const studentData = body.students;
     const students = [];
 
-    for( let i = 0; i < studentData.length; i++ ) {
+    for( const { name, priorityLevel, assignedTo } of studentData ) {
 
         const data = {
-            name: studentData[i].name,
-            priorityLevel: studentData[i].priorityLevel,
+            name,
+            priorityLevel,
         }
 
-        if( studentData[i].assignedTo ) data.assignedTo = studentData[i].assignedTo;
+        if( assignedTo ) data.assignedTo = assignedTo;
 
         students.push( await studentFactory( user._id, roomId, data ) );
 
@@ -102,13 +101,14 @@ const getSingle = async ( { roomId, studentId } )  => {
 
 }
 
-const update = async ( { roomId, studentId, body } ) => {
+const update = async ( { roomId, studentId, studentData } ) => {
 
+    // Filters the data down to desired data. This should be eliminated or moved outside the controller.
     const update = ["name","priorityLevel","assignedTo"].reduce((update, name) => {
 
-        if( !body.hasOwnProperty(name) ) return update;
+        if( !studentData.hasOwnProperty(name) ) return update;
 
-        return { ...update, [name]: body[name] };
+        return { ...update, [name]: studentData[name] };
 
     }, {});
     
