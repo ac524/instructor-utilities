@@ -39,8 +39,17 @@ class ValidationSchema {
     constructor( name, schema ) {
 
         this.name = name;
-        this.schema = schema;
+        this.schema = {
+            $$strict: "remove",
+            ...schema
+        };
 
+    }
+
+    clone(include) {
+
+        return new ValidationSchema( selectSchema(this.schema, include) );
+        
     }
 
     getStrict( include ) {

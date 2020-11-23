@@ -27,7 +27,7 @@ module.exports = createRouter([
         patch: {
             auth: true,
             defaultError: "update the user",
-            middleware: userValidation.patchHandler(),
+            validation: userValidation,
             ctrl: [ update, userCtlrConfig ]
         }
     }],

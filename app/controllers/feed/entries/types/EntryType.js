@@ -24,6 +24,8 @@ const feedEventResponse = ( entries, studentUpdate ) => ({ entries, studentUpdat
 
 class EntryType {
 
+    validation;
+
     constructor( key ) {
 
         this.key = key;
@@ -36,7 +38,23 @@ class EntryType {
 
     }
 
-    getCreateRoute() {
+    getRouteConfig() {
+
+        const entryCtlrConfig = {
+            keyMap: { body: "entryData" }
+        };
+
+        return [`/:feedId/${this.key}`, {
+            post: {
+                defaultError: `add the feed ${this.key} entry`,
+                validation: this.validation,
+                ctrl: [ this.getController(), entryCtlrConfig ]
+            }
+        }];
+
+    }
+
+    getController() {
         return async ( options ) => {
 
             const { feedId, user, entryData } = options;

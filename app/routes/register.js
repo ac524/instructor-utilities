@@ -16,7 +16,7 @@ module.exports = createRouter([
     ["/", {
         post: {
             defaultError: "complete the registration",
-            middleware: [ registerValidation.postHandler() ],
+            validation: registerValidation,
             ctrl: [ register, registerCtlrConfig ]
         }
     }]

@@ -7,19 +7,11 @@ const ioEmit = require("./utils/ioEmit");
 
 /** CONTROLLER METHODS **/
 
-const update = async ({ user, userData }) => {
-    
-    const updateList = [];
+const update = async ({ user, userData: { password, ...userData } }) => {
 
-    // TODO - Email updates should not be automatic, instead there needs to be a verification process for the new email.
+    if( password ) userData.password = await passwordHash( userData.password );
 
-    ["name", "email"].forEach(key => {
-        if ( userData.hasOwnProperty(key) ) updateList.push([key, userData[key]]);
-    });
-
-    if (userData.password) updateList.push(["password", await passwordHash(userData.password)]);
-
-    if (updateList.length) await user.update(Object.fromEntries(updateList));
+    if (updateList.length) await user.update( userData );
 
 }
 

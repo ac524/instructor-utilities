@@ -3,7 +3,8 @@ const createRouter = require("./utils/createRouter");
 const {
     validate,
     resend
-} = require("../controllers/emailValidation");
+} = require("../controllers/validateEmail");
+const resendValidation = require("../validation/resendValidation");
 
 const resendCtlrConfig = {
     keyMap: { body: "config" }
@@ -15,6 +16,7 @@ module.exports = createRouter([
         post: {
             auth: true,
             defaultError: "resend the email",
+            validation: resendValidation,
             ctrl: [ resend, resendCtlrConfig ]
         }
     }],
