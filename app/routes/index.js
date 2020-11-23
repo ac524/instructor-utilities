@@ -9,7 +9,7 @@ const parentRouter = Router();
 
 // Filter function for filtering out unwanted files from fs.readdirSync.
 const filterFiles = file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-const getPrefix = file => file[0] === "_" ? "" : "/" + file.substr( 0, file.length-3 );
+const getPrefix = file => file[0] === "_" ? "" : "/" + file.substr(0, file.length-3).replace(/[A-Z]/g, upper => `-${upper.toLowerCase()}`);
 
 const routes = Router();
 

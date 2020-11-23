@@ -208,13 +208,13 @@ class API {
 
     async validate( token ) {
 
-        return this.axios.post(`/api/validate/${token}`);
+        return this.axios.post(`/api/validate-email/${token}`);
 
     }
 
     async resendValidation( data ) {
 
-        return this.axios.post("/api/validate/resend", data);
+        return this.axios.post("/api/validate-email/resend", data);
 
     }
 
