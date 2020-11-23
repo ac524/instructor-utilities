@@ -3,6 +3,8 @@ const createRouter = require("./utils/createRouter");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
+const studentValidation = require("../validation/studentValidation");
+
 const {
     create,
     getSingle,
@@ -10,8 +12,8 @@ const {
     deleteSingle
 } = require("../controllers/student");
 
-const newAuthMiddleware = [ setRoom.fromBody, isRoomMember ];
-const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
+const newStudentMiddleware = [ setRoom.fromBody, isRoomMember ];
+const existingStudentMiddleware = [ setRoom.fromParam, isRoomMember ];
 
 const studentCtlrConfig = {
     keyMap: { body: "studentData" }
@@ -23,7 +25,8 @@ module.exports = createRouter([
         post: {
             auth: true,
             defaultError: "create the student",
-            middleware: newAuthMiddleware,
+            validation: studentValidation,
+            middleware: newStudentMiddleware,
             ctrl: [ create, studentCtlrConfig ]
         }
     }],
@@ -35,6 +38,7 @@ module.exports = createRouter([
         },
         patch: {
             defaultError: "update the student",
+            validation: studentValidation,
             ctrl: [ update, studentCtlrConfig ]
         },
         delete: {
@@ -44,7 +48,7 @@ module.exports = createRouter([
      }, {
         auth: true,
         paramCheck: true,
-        middleware: existingAuthMiddleware
+        middleware: existingStudentMiddleware
     }]
 
 ]);
