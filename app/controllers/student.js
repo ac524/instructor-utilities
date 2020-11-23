@@ -102,17 +102,8 @@ const getSingle = async ( { roomId, studentId } )  => {
 }
 
 const update = async ( { roomId, studentId, studentData } ) => {
-
-    // Filters the data down to desired data. This should be eliminated or moved outside the controller.
-    const update = ["name","priorityLevel","assignedTo"].reduce((update, name) => {
-
-        if( !studentData.hasOwnProperty(name) ) return update;
-
-        return { ...update, [name]: studentData[name] };
-
-    }, {});
     
-    const student = await findStudentByIdAndUpdate( roomId, studentId, mapUpdateKeys(update) );
+    const student = await findStudentByIdAndUpdate( roomId, studentId, mapUpdateKeys(studentData) );
 
     if( !student )
 
