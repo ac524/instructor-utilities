@@ -39,11 +39,6 @@ const CommentForm = ({ feedId }) => {
                         placeholder: "Add a comment...",
                         name: "comment",
                         type: "textarea"
-                    },
-                    {
-                        placeholder: "or else!",
-                        name: "dontadd",
-                        type: "text"
                     }
                 ]}
                 validation={validateInviteData}
