@@ -35,12 +35,4 @@ const addRequest = ( route, type, config ) => {
 
 }
 
-const addRoutePath = ( router, path, requestTypes, sharedConfig = {} ) => {
-
-    const route = router.route( path );
-
-    Object.entries( requestTypes ).forEach( ([type, config]) => addRequest( route, type, { ...sharedConfig, ...config } ) );
-
-};
-
-module.exports = addRoutePath;
+module.exports = addRequest;

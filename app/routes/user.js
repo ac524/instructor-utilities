@@ -1,11 +1,9 @@
-const router = require("express").Router();
-
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
 const userValidation = require("../validation/userValidation");
 
-const addRoutePath = require("./utils/addRoutePath");
+const createRouter = require("./utils/createRouter");
 
 const {
     update,
@@ -18,42 +16,44 @@ const userCtlrConfig = {
     keyMap: { body: "userData" }
 };
 
-addRoutePath( router, "/", {
-    patch: {
-        auth: true,
-        defaultError: "update the user",
-        middleware: userValidation.patchHandler(),
-        ctrl: [ update, userCtlrConfig ]
-    }
-} );
-
 const sharedRoomActionsConfig = {
     paramCheck: true,
     middleware: [ setRoom.fromParam, isRoomMember ]
 }
 
-addRoutePath( router, "/rooms/:roomId/leave", {
-    delete: {
-        auth: true,
-        defaultError: "leave the room",
-        ctrl: leaveRoom
-    }
-}, sharedRoomActionsConfig );
+module.exports = createRouter([
 
-addRoutePath( router, "/rooms/:roomId/leave", {
-    delete: {
-        auth: true,
-        defaultError: "archive the room",
-        ctrl: archiveRoom
-    }
-}, sharedRoomActionsConfig );
+    ["/", {
+        patch: {
+            auth: true,
+            defaultError: "update the user",
+            middleware: userValidation.patchHandler(),
+            ctrl: [ update, userCtlrConfig ]
+        }
+    }],
 
-addRoutePath( router, "/rooms/short", {
-    get: {
-        auth: true,
-        defaultError: "get short room details",
-        ctrl: getRoomsShort
-    }
-});
+    ["/rooms/:roomId/leave", {
+        delete: {
+            auth: true,
+            defaultError: "leave the room",
+            ctrl: leaveRoom
+        }
+    }, sharedRoomActionsConfig],
 
-module.exports = router;
+    ["/rooms/:roomId/archive", {
+        delete: {
+            auth: true,
+            defaultError: "archive the room",
+            ctrl: archiveRoom
+        }
+    }, sharedRoomActionsConfig],
+
+    ["/rooms/short", {
+        get: {
+            auth: true,
+            defaultError: "get short room details",
+            ctrl: getRoomsShort
+        }
+    }]
+
+]);

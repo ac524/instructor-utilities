@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const createRouter = require("./utils/createRouter");
 
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
@@ -10,8 +10,6 @@ const {
     deleteSingle
 } = require("../controllers/student");
 
-const addRoutePath = require("./utils/addRoutePath");
-
 const newAuthMiddleware = [ setRoom.fromBody, isRoomMember ];
 const existingAuthMiddleware = [ setRoom.fromParam, isRoomMember ];
 
@@ -19,32 +17,34 @@ const studentCtlrConfig = {
     keyMap: { body: "studentData" }
 }
 
-addRoutePath( router, "/", {
-    post: {
+module.exports = createRouter([
+
+    ["/", {
+        post: {
+            auth: true,
+            defaultError: "create the student",
+            middleware: newAuthMiddleware,
+            ctrl: [ create, studentCtlrConfig ]
+        }
+    }],
+
+    ["/:roomId/:studentId", {
+        get: {
+            defaultError: "get the student",
+            ctrl: getSingle
+        },
+        patch: {
+            defaultError: "update the student",
+            ctrl: [ update, studentCtlrConfig ]
+        },
+        delete: {
+            defaultError: "delete the student",
+            ctrl: deleteSingle
+        }
+     }, {
         auth: true,
-        defaultError: "create the student",
-        middleware: newAuthMiddleware,
-        ctrl: [ create, studentCtlrConfig ]
-    }
-} );
+        paramCheck: true,
+        middleware: existingAuthMiddleware
+    }]
 
-addRoutePath( router, "/:roomId/:studentId", {
-    get: {
-        defaultError: "get the student",
-        ctrl: getSingle
-    },
-    patch: {
-        defaultError: "update the student",
-        ctrl: [ update, studentCtlrConfig ]
-    },
-    delete: {
-        defaultError: "delete the student",
-        ctrl: deleteSingle
-    }
- }, {
-    auth: true,
-    paramCheck: true,
-    middleware: existingAuthMiddleware
-} );
-
-module.exports = router;
+]);

@@ -1,6 +1,4 @@
-const router = require("express").Router();
-
-const addRoutePath = require("./utils/addRoutePath");
+const createRouter = require("./utils/createRouter");
 
 const {
     login,
@@ -13,20 +11,22 @@ const loginCtlrConfig = {
     keyMap: { body: "credentials" }
 };
 
-addRoutePath( router, "/login", {
-    post: {
-        defaultError: "login",
-        middleware: loginValidation.postHandler(),
-        ctrl: [ login, loginCtlrConfig ]
-    }
-} );
+module.exports = createRouter([
 
-addRoutePath( router, "/authenticated", {
-    post: {
-        defaultError: "get the authenticated user",
-        auth: true,
-        ctrl: authenticated
-    }
-} );
+    ["/login", {
+        post: {
+            defaultError: "login",
+            middleware: loginValidation.postHandler(),
+            ctrl: [ login, loginCtlrConfig ]
+        }
+    }],
 
-module.exports = router;
+    ["/authenticated", {
+        post: {
+            defaultError: "get the authenticated user",
+            auth: true,
+            ctrl: authenticated
+        }
+    }]
+
+]);
