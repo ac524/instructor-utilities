@@ -15,10 +15,6 @@ const sharedConfig = {
     middleware: [ setRoom.fromFeed, isRoomMember ]
 }
 
-const entryCtlrConfig = {
-    keyMap: { body: "entryData" }
-};
-
 module.exports = createRouter([
 
     ["/:feedId", {
@@ -36,12 +32,7 @@ module.exports = createRouter([
     }, sharedConfig],
 
     ...entryTypes.map( entryType => (
-        [`/:feedId/${entryType.key}`, {
-            post: {
-                defaultError: `add the feed ${entryType.key} entry`,
-                ctrl: [ entryType.getCreateRoute(), entryCtlrConfig ]
-            }
-        }, sharedConfig]
+        [ ...entryType.getRouteConfig(), sharedConfig ]
     ) )
 
 ]);

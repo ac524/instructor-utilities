@@ -1,7 +1,10 @@
 const { Feed } =  require("../../../../models");
+const commentValidation = require("../../../../validation/commentValidation");
 const EntryType = require("./EntryType");
 
 class CommentEntryType extends EntryType {
+
+    validation = commentValidation;
 
     async onCreateResHandler( entries, { feedId } ) {
 
