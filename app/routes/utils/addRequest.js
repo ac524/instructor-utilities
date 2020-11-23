@@ -3,16 +3,27 @@ const setDefaultError = require("../middleware/setDefaultError");
 const globalParamsValidation = require("../middleware/globalParamsValidation");
 const isAuthenticated = require("../middleware/isAuthenticated");
 const isVerified = require("../middleware/isVerified");
+const ValidationSchema = require("../../validation/ValidationSchema");
 
+/**
+ * @param {*} route 
+ * @param {*} type 
+ * @param {object} config 
+ * @param {boolean} config.paramCheck
+ * @param {boolean} config.auth
+ * @param {string} config.defaultError
+ * @param {ValidationSchema} config.validation
+ */
 const addRequest = ( route, type, config ) => {
 
     const handlers = [];
-
+    
     const {
         paramCheck,
         auth,
         defaultError,
         middleware,
+        validation,
         ctrl
     } = config;
 
@@ -24,6 +35,17 @@ const addRequest = ( route, type, config ) => {
 
     // Add authentication.
     if( auth ) handlers.push( [ isAuthenticated, isVerified ] );
+
+    if( validation ) {
+        switch( type ) {
+            case "post":
+                handlers.push( validation.postHandler() );
+                break;
+            case "patch":
+                handlers.push( validation.patchHandler() );
+                break;
+        }
+    }
 
     // Add additional middleware.
     if( middleware ) handlers.push( middleware );

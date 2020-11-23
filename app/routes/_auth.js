@@ -16,7 +16,7 @@ module.exports = createRouter([
     ["/login", {
         post: {
             defaultError: "login",
-            middleware: loginValidation.postHandler(),
+            validation: loginValidation,
             ctrl: [ login, loginCtlrConfig ]
         }
     }],

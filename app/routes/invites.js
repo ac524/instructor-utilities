@@ -63,7 +63,8 @@ module.exports = createRouter([
     ["/:token/register", {
         post: {
             defaultError: "complete the registration",
-            middleware: [ setInvite, registerValidation.postHandler(["name","password"]) ],
+            validation: registerValidation,
+            middleware: [ setInvite ],
             ctrl: [ register, inviteRegCtlrConfig ]
         }
     }],
