@@ -39,7 +39,10 @@ class ValidationSchema {
     constructor( name, schema ) {
 
         this.name = name;
-        this.schema = schema;
+        this.schema = {
+            $$strict: "remove",
+            ...schema
+        };
 
     }
 
