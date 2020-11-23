@@ -3,6 +3,8 @@ const createRouter = require("./utils/createRouter");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
+const roomValidation = require("../validation/roomValidation");
+
 const {
     getSingle,
     update
@@ -21,6 +23,7 @@ module.exports = createRouter([
         },
         patch: {
             defaultError: "update the room",
+            validation: roomValidation,
             ctrl: [ update, roomCtlrConfig ]
         }
     }, {

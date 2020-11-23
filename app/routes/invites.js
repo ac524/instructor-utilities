@@ -1,7 +1,10 @@
 const createRouter = require("./utils/createRouter");
+
 const setInvite = require("./middleware/setInvite");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
+
+const userValidation = require("../validation/userValidation");
 
 const {
     create,
@@ -10,8 +13,7 @@ const {
     emailCheck,
     register
 } = require("../controllers/invite");
-
-const registerValidation = require("../validation/registerValidation");
+const inviteValidation = require("../validation/inviteValidation");
 
 const inviteCtlrConfig = {
     keyMap: { body: "inviteData" }
@@ -28,6 +30,7 @@ module.exports = createRouter([
             paramCheck: true,
             auth: true,
             defaultError: "create the invite",
+            validation: inviteValidation,
             middleware: [ setRoom.fromParam, isRoomMember ],
             ctrl: [ create, inviteCtlrConfig ]
         }
@@ -63,7 +66,7 @@ module.exports = createRouter([
     ["/:token/register", {
         post: {
             defaultError: "complete the registration",
-            validation: registerValidation,
+            validation: userValidation.clone(["name","password"]),
             middleware: [ setInvite ],
             ctrl: [ register, inviteRegCtlrConfig ]
         }

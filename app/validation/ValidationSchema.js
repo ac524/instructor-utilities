@@ -46,6 +46,12 @@ class ValidationSchema {
 
     }
 
+    clone(include) {
+
+        return new ValidationSchema( selectSchema(this.schema, include) );
+        
+    }
+
     getStrict( include ) {
 
         if( !include )
