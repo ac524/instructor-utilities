@@ -1,9 +1,7 @@
-const router = require("express").Router();
+const createRouter = require("./utils/createRouter");
 
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
-
-const addRoutePath = require("./utils/addRoutePath");
 
 const {
     getSingle,
@@ -17,33 +15,33 @@ const sharedConfig = {
     middleware: [ setRoom.fromFeed, isRoomMember ]
 }
 
-addRoutePath( router, "/:feedId", {
-    get: {
-        defaultError: "get the feed",
-        ctrl: getSingle
-    }
-}, sharedConfig );
-
-addRoutePath( router, "/:feedId/items", {
-    get: {
-        defaultError: "get the feed items",
-        ctrl: getSingleItems
-    }
-}, sharedConfig );
-
 const entryCtlrConfig = {
     keyMap: { body: "entryData" }
 };
 
-entryTypes.forEach( entryType => {
+module.exports = createRouter([
 
-    addRoutePath( router, `/:feedId/${entryType.key}`, {
-        post: {
-            defaultError: `add the feed ${entryType.key} entry`,
-            ctrl: [ entryType.getCreateRoute(), entryCtlrConfig ]
+    ["/:feedId", {
+        get: {
+            defaultError: "get the feed",
+            ctrl: getSingle
         }
-    }, sharedConfig );
+    }, sharedConfig],
 
-} );
+    ["/:feedId/items", {
+        get: {
+            defaultError: "get the feed items",
+            ctrl: getSingleItems
+        }
+    }, sharedConfig],
 
-module.exports = router;
+    ...entryTypes.map( entryType => (
+        [`/:feedId/${entryType.key}`, {
+            post: {
+                defaultError: `add the feed ${entryType.key} entry`,
+                ctrl: [ entryType.getCreateRoute(), entryCtlrConfig ]
+            }
+        }, sharedConfig]
+    ) )
+
+]);

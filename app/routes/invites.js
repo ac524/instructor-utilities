@@ -1,9 +1,7 @@
-const router = require("express").Router();
+const createRouter = require("./utils/createRouter");
 const setInvite = require("./middleware/setInvite");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
-
-const addRoutePath = require("./utils/addRoutePath");
 
 const {
     create,
@@ -19,53 +17,55 @@ const inviteCtlrConfig = {
     keyMap: { body: "inviteData" }
 };
 
-addRoutePath( router, "/:roomId", {
-    post: {
-        paramCheck: true,
-        auth: true,
-        defaultError: "create the invite",
-        middleware: [ setRoom.fromParam, isRoomMember ],
-        ctrl: [ create, inviteCtlrConfig ]
-    }
-} );
-
-addRoutePath( router, "/:roomId/:inviteId", {
-    delete: {
-        paramCheck: true,
-        auth: true,
-        defaultError: "delete the invite",
-        middleware: [ setRoom.fromParam, isRoomMember ],
-        ctrl: remove
-    }
-} );
-
-addRoutePath( router, "/:token/accept", {
-    post: {
-        auth: true,
-        defaultError: "accept the invite",
-        middleware: [ setInvite, ],
-        ctrl: accept
-    }
-} );
-
-addRoutePath( router, "/:token/email", {
-    get: {
-        defaultError: "check the email's status",
-        middleware: setInvite,
-        ctrl: emailCheck
-    }
-});
-
 const inviteRegCtlrConfig = {
     keyMap: { body: "registerData" }
 };
 
-addRoutePath( router, "/:token/register", {
-    post: {
-        defaultError: "complete the registration",
-        middleware: [ setInvite, registerValidation.postHandler(["name","password"]) ],
-        ctrl: [ register, inviteRegCtlrConfig ]
-    }
-});
+module.exports = createRouter([
 
-module.exports = router;
+    ["/:roomId", {
+        post: {
+            paramCheck: true,
+            auth: true,
+            defaultError: "create the invite",
+            middleware: [ setRoom.fromParam, isRoomMember ],
+            ctrl: [ create, inviteCtlrConfig ]
+        }
+    }],
+
+    ["/:roomId/:inviteId", {
+        delete: {
+            paramCheck: true,
+            auth: true,
+            defaultError: "delete the invite",
+            middleware: [ setRoom.fromParam, isRoomMember ],
+            ctrl: remove
+        }
+    }],
+
+    ["/:token/accept", {
+        post: {
+            auth: true,
+            defaultError: "accept the invite",
+            middleware: [ setInvite, ],
+            ctrl: accept
+        }
+    }],
+
+    ["/:token/email", {
+        get: {
+            defaultError: "check the email's status",
+            middleware: setInvite,
+            ctrl: emailCheck
+        }
+    }],
+
+    ["/:token/register", {
+        post: {
+            defaultError: "complete the registration",
+            middleware: [ setInvite, registerValidation.postHandler(["name","password"]) ],
+            ctrl: [ register, inviteRegCtlrConfig ]
+        }
+    }],
+
+]);

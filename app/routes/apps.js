@@ -1,9 +1,7 @@
-const router = require("express").Router();
+const createRouter = require("./utils/createRouter");
 
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
-
-const addRoutePath = require("./utils/addRoutePath");
 
 const {
     getTypes,
@@ -18,34 +16,36 @@ const appCtlrConfig = {
 
 const sharedConfig = { auth: true };
 
-addRoutePath( router, "/", {
-    post: {
-        defaultError: "create the app",
-        middleware: [ setRoom.fromBody, isRoomMember ],
-        ctrl: [ create, appCtlrConfig ]
-    }
-}, sharedConfig );
+module.exports = createRouter([
 
-addRoutePath( router, "/types", {
-    get: {
-        defaultError: "get app types",
-        ctrl: getTypes
-    }
-}, sharedConfig );
+    ["/", {
+        post: {
+            defaultError: "create the app",
+            middleware: [ setRoom.fromBody, isRoomMember ],
+            ctrl: [ create, appCtlrConfig ]
+        }
+    }, sharedConfig],
 
-addRoutePath( router, "/:appTypeId/:roomId", {
-    get: {
-        defaultError: "get the app",
-        ctrl: getSingle
-    },
-    patch: {
-        defaultError: "update the app",
-        ctrl: [update, appCtlrConfig]
-    }
-}, {
-    ...sharedConfig,
-    paramCheck: true,
-    middleware: [ setRoom.fromParam, isRoomMember ]
-} );
+    ["/types", {
+        get: {
+            defaultError: "get app types",
+            ctrl: getTypes
+        }
+    }, sharedConfig],
 
-module.exports = router;
+    ["/:appTypeId/:roomId", {
+        get: {
+            defaultError: "get the app",
+            ctrl: getSingle
+        },
+        patch: {
+            defaultError: "update the app",
+            ctrl: [update, appCtlrConfig]
+        }
+    }, {
+        ...sharedConfig,
+        paramCheck: true,
+        middleware: [ setRoom.fromParam, isRoomMember ]
+    }]
+
+]);
