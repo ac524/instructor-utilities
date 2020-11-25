@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const staffMethods = require("./methods/staff");
 const studentMethods = require("./methods/student");
 const classroomMethods = require("./methods/classroom");
 
@@ -31,6 +32,8 @@ const StaffSchema = new Schema({
     default: Date.now
   }
 });
+
+StaffSchema.methods.isAllowedTo = staffMethods.isAllowedTo;
 
 // Create Schema
 const StudentSchema = new Schema({

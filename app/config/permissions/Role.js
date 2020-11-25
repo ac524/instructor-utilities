@@ -1,7 +1,7 @@
 const permissions = require("./");
 
 const makePermEntry = permission => [ permission, 1 ];
-const permExists = permission => permission in permissions;
+const permExists = permission => permissions.hasOwnProperty(permission);
 
 class Role {
 
@@ -20,7 +20,9 @@ class Role {
     }
 
     can( permission ) {
+
         return this.permissions.has( permission );
+
     }
 
 }
