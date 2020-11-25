@@ -144,6 +144,6 @@ module.exports = (server, app) => {
 
     io.on("connect", configureSocket);
 
-    app.set( "cr.io", io );
+    return io;
 
 };

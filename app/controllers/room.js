@@ -1,55 +1,31 @@
+const { InvalidUserError } = require("../config/errors");
 const { Classroom } = require("../models");
 
+/** CONTROLLER METHODS **/
+
+const getSingle = async ({ roomId }) => {
+
+        const room =
+            await Classroom.findById( roomId )
+                .populate("staff.user", "name email date")
+                .populate("invites.token");
+
+        return await room.getFeedAggregate();
+
+}
+
+const update = async ({ roomId, staffMember, roomData }) => {
+
+    // TODO role authentication should be done in validation middleware.
+    if( staffMember.role !== "instructor" ) throw new InvalidUserError( "You must be an instructor to update the class." );
+
+    if( updateList.length )
+
+        await Classroom.findByIdAndUpdate( roomId, roomData );
+
+}
+
 module.exports = {
-    async getSingle( req, res ) {
-
-        try {
-
-            const room =
-                await Classroom.findById( req.roomId )
-                    .populate("staff.user", "name email date")
-                    .populate("invites.token");
-
-            const roomAgg = await room.getFeedAggregate();
-
-            // if( req.userSocket ) req.userSocket.join( `room:${room._id}` );
-
-            res.json( roomAgg );
-
-        } catch( err ) {
-
-            console.log( err );
-
-            res.status(500).json({default:"Something went wrong"});
-
-        }
-
-    },
-    async update( req, res ) {
-
-        try {
-
-            if( req.roomStaffMember.role !== "instructor" ) return res.status(401).json({default:"You must be an instructor to update the class."});
-
-            const updateList = [];
-
-            // TODO - Email updates should not be automatic, instead there needs to be a verification process for the new email.
-
-            ["name"].forEach( key => {
-                if( req.body.hasOwnProperty(key) ) updateList.push( [ key,req.body[key] ] );
-            });
-
-            if( updateList.length )
-
-                await Classroom.findByIdAndUpdate( req.roomId, Object.fromEntries( updateList ) );
-
-            res.json({success:true});
-
-        } catch( err ) {
-
-            res.status(500).json({default:"Something went wrong"});
-
-        }
-
-    }
+    getSingle,
+    update
 }

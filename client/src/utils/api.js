@@ -140,7 +140,7 @@ class API {
 
     async getApp( roomId, type ) {
 
-        return this.axios.post( `/api/apps/${type}/${roomId}` );
+        return this.axios.get( `/api/apps/${type}/${roomId}` );
 
     }
 
@@ -208,13 +208,13 @@ class API {
 
     async validate( token ) {
 
-        return this.axios.post(`/api/validate/${token}`);
+        return this.axios.post(`/api/validate-email/${token}`);
 
     }
 
     async resendValidation( data ) {
 
-        return this.axios.post("/api/validate/resend", data);
+        return this.axios.post("/api/validate-email/resend", data);
 
     }
 

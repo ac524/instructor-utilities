@@ -24,43 +24,49 @@ const feedEventResponse = ( entries, studentUpdate ) => ({ entries, studentUpdat
 
 class EntryType {
 
+    validation;
+
     constructor( key ) {
 
         this.key = key;
 
     }
 
-    getRequestData( req ) {
-        return;
-    }
-
-    onCreateResHandler( entries, req ) {
+    async onCreateResHandler( entries, options ) {
         
         return [ entries ];
 
     }
 
-    getCreateRoute() {
-        return async ( req, res ) => {
-            
-            try {
+    getRouteConfig() {
 
-                const entry = await create(
-                    req.params.feedId,
-                    req.user._id,
-                    this.key,
-                    this.getRequestData( req )
-                );
+        const entryCtlrConfig = {
+            keyMap: { body: "entryData" }
+        };
 
-                res.json( feedEventResponse( ...( await this.onCreateResHandler( [ entry ], req ) ) ) );
-
-            } catch(err) {
-
-                console.log(err);
-    
-                res.status(500).json({ default: `Unable to ${this.key} student` });
-    
+        return [`/:feedId/${this.key}`, {
+            post: {
+                defaultError: `add the feed ${this.key} entry`,
+                validation: this.validation,
+                ctrl: [ this.getController(), entryCtlrConfig ]
             }
+        }];
+
+    }
+
+    getController() {
+        return async ( options ) => {
+
+            const { feedId, user, entryData } = options;
+        
+            const entry = await create(
+                feedId,
+                user._id,
+                this.key,
+                entryData
+            );
+
+            return feedEventResponse( ...( await this.onCreateResHandler( [ entry ], options ) ) );
 
         }
     }

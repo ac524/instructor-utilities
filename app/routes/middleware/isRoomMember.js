@@ -1,24 +1,21 @@
-// const roomIoLoader = req => req.roomIo = req.app.get("io").to(`room:${req.roomId}`);
+const { InvalidUserError } = require("../../config/errors");
 
 module.exports = async ( req, res, next ) => {
 
     try {
 
-        const staffMember = req.classroom.staff.find( member => member.user.equals(req.user._id) );
+        const { staff } = req.crdata.get("classroom");
+        const staffMember = staff.find( member => member.user.equals(req.user._id) );
 
-        if( !staffMember )
-        
-            return res.status(401).json({ default: "You are not a member of this class" });
+        if( !staffMember ) throw new InvalidUserError( "You are not a member of this class" );
 
-        req.roomStaffMember = staffMember
-
-        // roomIoLoader(req);
+        req.crdata.set("staffMember", staffMember);
 
         next();
 
     } catch( err ) {
 
-        res.status(500).json({ default: "Illegal Opperation" });
+        next( err );
 
     }
 

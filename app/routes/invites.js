@@ -1,8 +1,10 @@
-const router = require("express").Router();
-const isAuthenticated = require("./middleware/isAuthenticated");
+const createRouter = require("./utils/createRouter");
+
 const setInvite = require("./middleware/setInvite");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
+
+const userValidation = require("../validation/userValidation");
 
 const {
     create,
@@ -11,26 +13,63 @@ const {
     emailCheck,
     register
 } = require("../controllers/invite");
+const inviteValidation = require("../validation/inviteValidation");
 
+const inviteCtlrConfig = {
+    keyMap: { body: "inviteData" }
+};
 
-router
-    .route('/:roomId')
-    .post( isAuthenticated, setRoom.fromParam, isRoomMember, create );
+const inviteRegCtlrConfig = {
+    keyMap: { body: "registerData" }
+};
 
-router
-    .route('/:roomId/:inviteId')
-    .delete( isAuthenticated, setRoom.fromParam, isRoomMember, remove );
+module.exports = createRouter([
 
-router
-    .route('/:token/accept')
-    .post( isAuthenticated, setInvite, accept );
+    ["/:roomId", {
+        post: {
+            paramCheck: true,
+            auth: true,
+            defaultError: "create the invite",
+            validation: inviteValidation,
+            middleware: [ setRoom.fromParam, isRoomMember ],
+            ctrl: [ create, inviteCtlrConfig ]
+        }
+    }],
 
-router
-    .route('/:token/email')
-    .get( setInvite, emailCheck );
+    ["/:roomId/:inviteId", {
+        delete: {
+            paramCheck: true,
+            auth: true,
+            defaultError: "delete the invite",
+            middleware: [ setRoom.fromParam, isRoomMember ],
+            ctrl: remove
+        }
+    }],
 
-router
-    .route('/:token/register')
-    .post( setInvite, register );
+    ["/:token/accept", {
+        post: {
+            auth: true,
+            defaultError: "accept the invite",
+            middleware: [ setInvite, ],
+            ctrl: accept
+        }
+    }],
 
-module.exports = router;
+    ["/:token/email", {
+        get: {
+            defaultError: "check the email's status",
+            middleware: setInvite,
+            ctrl: emailCheck
+        }
+    }],
+
+    ["/:token/register", {
+        post: {
+            defaultError: "complete the registration",
+            validation: userValidation.clone(["name","password"]),
+            middleware: [ setInvite ],
+            ctrl: [ register, inviteRegCtlrConfig ]
+        }
+    }],
+
+]);

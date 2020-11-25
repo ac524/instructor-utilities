@@ -1,28 +1,33 @@
 const { Token, Classroom } = require("../../models");
+const { InvalidDataError, NotFoundError } = require("../../config/errors");
 
 const setInvite = async ( req, res, next ) => {
 
     try {
 
-        req.userInviteToken = await Token.findOne({ token: req.params.token });
+        const inviteToken = await Token.findOne({ token: req.params.token });
 
-        if( !req.userInviteToken ) return res.status(404).json({default: "This invitation is no longer available"});
+        // req.userInviteToken = await Token.findOne({ token: req.params.token });
 
-        req.userInviteRoom = await Classroom.findById( req.userInviteToken.relation );
+        if( !inviteToken ) throw new NotFoundError( "This invitation is no longer available" );
 
-        if( !req.userInviteRoom ) return res.status(400).json({default: "This invitation is not longer valid"});
+        const inviteRoom = await Classroom.findById( inviteToken.relation );
 
-        req.userInvite = req.userInviteRoom.invites.find( invite => invite.token.equals( req.userInviteToken._id ) );
+        if( !inviteRoom )  throw new InvalidDataError( "This invitation is not longer valid" );
 
-        if( !req.userInvite ) return res.status(400).json({default: "This invitation is not longer valid"});
+        const invite = inviteRoom.invites.find( invite => invite.token.equals( inviteToken._id ) );
+
+        if( !invite ) throw new InvalidDataError( "This invitation is not longer valid" );
+
+        req.crdata.set( "inviteToken", inviteToken );
+        req.crdata.set( "inviteRoom", inviteRoom );
+        req.crdata.set( "invite", invite );
 
         next();
 
     } catch(err) {
 
-        console.log(err);
-
-        res.status(500).json({ default: "Unable to process invitation" });
+        next( err );
 
     }
 

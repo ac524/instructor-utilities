@@ -1,13 +1,32 @@
-const router = require("express").Router();
-const isAuthenticated = require("./middleware/isAuthenticated");
+const createRouter = require("./utils/createRouter");
 
 const {
     login,
     authenticated
 } = require("../controllers/auth");
 
-router.post( "/authenticated", isAuthenticated, authenticated );
+const loginValidation = require("../validation/loginValidation");
 
-router.post( "/login", login );
+const loginCtlrConfig = {
+    keyMap: { body: "credentials" }
+};
 
-module.exports = router;
+module.exports = createRouter([
+
+    ["/login", {
+        post: {
+            defaultError: "login",
+            validation: loginValidation,
+            ctrl: [ login, loginCtlrConfig ]
+        }
+    }],
+
+    ["/authenticated", {
+        post: {
+            defaultError: "get the authenticated user",
+            auth: true,
+            ctrl: authenticated
+        }
+    }]
+
+]);

@@ -3,17 +3,19 @@ const http = require('http');
 const express = require("express");
 const passport = require("passport");
 const getOption = require("../config/options");
+const routeErrorMiddleware = require("./errors/routeErrorMiddleware");
 
 const PORT = getOption( "port" );
 
 const app = express();
 const server = http.createServer(app);
 
+
 // Include data parsing middleware.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-require("./io")(server, app);
+const io = require("./io")(server, app);
 
 const compression = require("compression");
 // TODO Research usage of this compression. Does it work for client side requests?
@@ -32,15 +34,25 @@ passport.use( require("./jwtstrategy") );
 app.use(express.static("public"));
 app.use(express.static("client/build"));
 
-// Register routes
-// const setUserSocket = require("../routes/middleware/setUserSocket");
-app.use(
-    // setUserSocket,
-    require("../routes")
-);
+const addRoutes = () => {
 
-server.listen(PORT, () => {
-    console.log(`App listening on Port: ${PORT}`);
-});
+    app.use( require("../routes") );
 
-module.exports = app;
+    app.use( routeErrorMiddleware );
+
+}
+
+const listen = () => {
+
+    server.listen(PORT, () => {
+        console.log(`App listening on Port: ${PORT}`);
+    });    
+
+}
+
+module.exports = {
+    addRoutes,
+    listen,
+    app,
+    io
+};

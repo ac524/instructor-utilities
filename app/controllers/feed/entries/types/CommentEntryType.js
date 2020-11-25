@@ -1,17 +1,14 @@
 const { Feed } =  require("../../../../models");
+const commentValidation = require("../../../../validation/commentValidation");
 const EntryType = require("./EntryType");
 
 class CommentEntryType extends EntryType {
 
-    getRequestData( req ) {
+    validation = commentValidation;
 
-        return { comment: req.body.comment };
+    async onCreateResHandler( entries, { feedId } ) {
 
-    }
-
-    async onCreateResHandler( entries, req ) {
-
-        const feed = await Feed.findById( req.params.feedId ).populate("room", "students");
+        const feed = await Feed.findById( feedId ).populate("room", "students");
         const student = feed.room.students.id( feed.for );
         
         return [

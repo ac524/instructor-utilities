@@ -1,87 +1,53 @@
 const { App, Classroom } = require("../models");
 const AppType = require("../models/AppType");
 const appTypes  = require("../config/apps/registry.json");
-const ioEmit = require("./utils/ioEmit");
+// const ioEmit = require("./utils/ioEmit");
+
+/** CONTROLLER METHODS **/
+
+const getTypes = async () => await AppType.find({ isDisabled: false });
+
+const getSingle = async ({ appTypeId, roomId }) => await App.findOne({ room: roomId, type: appTypeId }).populate("type");
+
+const create = async ({ appData }) => {
+
+    const {
+        type,
+        roomId,
+    } = appData;
+
+    const appType = await AppType.findById( type );
+
+    const newApp = new App({
+        room: roomId,
+        type,
+        name: appTypes[ appType.type ].name,
+        data: appTypes[ appType.type ].default
+    });
+
+    await newApp.save();
+
+    await Classroom.findByIdAndUpdate( roomId, { $push: { apps: appType._id } } );
+
+    // ioEmit( "dispatch", { type: "ADD_APP", payload: appType._id }, `room:${roomId}` );
+
+}
+
+const update = async ({ appTypeId, roomId, appData }) => {
+
+    const update = {};
+
+    [ "name", "data" ].forEach( prop => !appData.hasOwnProperty(prop) || (update[prop] = appData[prop]) );
+
+    await App.findOneAndUpdate( { room: roomId, type: appTypeId }, update, { new: true } ).populate("type");
+
+    // ioEmit( `appupdate:${appTypeId}`, update, `room:${roomId}` );
+
+}
 
 module.exports = {
-    async getTypes( req, res ) {
-
-        try {
-
-            res.json( await AppType.find({ isDisabled: false }) );
-
-        } catch( err ) {
-
-            res.status(500).json({default:"Something went wrong"});
-
-        }
-
-    },
-    async getSingle( req, res ) {
-
-        try {
-
-            res.json( await App.findOne({ room: req.roomId, type: req.params.appTypeId }).populate("type") );
-
-        } catch( err ) {
-
-            res.status(500).json({default:"Something went wrong"});
-
-        }
-
-    },
-    async create( req, res ) {
-
-        try {
-
-            const appType = await AppType.findById( req.body.type );
-
-            const newApp = new App({
-                room: req.roomId,
-                type: req.body.type,
-                name: appTypes[ appType.type ].name,
-                data: appTypes[ appType.type ].default
-            });
-
-            await newApp.save();
-
-            await Classroom.findByIdAndUpdate( req.roomId, { $push: { apps: appType._id } } );
-
-            // req.roomIo.emit( "dispatch", {
-            //     type: "ADD_APP",
-            //     payload: appType._id
-            // } );
-
-            res.json({success: true});
-
-        } catch( err ) {
-
-            console.log(err);
-            res.status(500).json({default:"Something went wrong"});
-
-        }
-
-    },
-    async update( req, res ) {
-
-        try {
-
-            const update = {};
-
-            [ "name", "data" ].forEach( prop => !req.body.hasOwnProperty(prop) || (update[prop] = req.body[prop]) );
-
-            await App.findOneAndUpdate( { room: req.roomId, type: req.params.appTypeId }, update, { new: true } ).populate("type");
-
-            ioEmit( req, `appupdate:${req.params.appTypeId}`, update, `room:${req.roomId}` );
-
-            res.json({success: true});
-
-        } catch( err ) {
-
-            console.log(err);
-            res.status(500).json({default:"Something went wrong"});
-
-        }
-
-    }
+    getTypes,
+    getSingle,
+    create,
+    update
 }
