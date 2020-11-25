@@ -11,6 +11,10 @@ const jwtSign = util.promisify( jwt.sign );
 
 /** CONTROLLER METHODS **/
 
+/**
+ * @param {object} param0 
+ * @param {User} param0.user
+ */
 const authenticated = ({ user }) => user;
 
 const login = async ({ credentials }) => {
