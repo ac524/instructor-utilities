@@ -5,7 +5,7 @@ const {
     LEAVE_ROOM
 } = require("../");
 
-const taRole = new Role( "instructor", "Instructor", [
+const taRole = new Role( "ta", "TA", [
     VIEW_ROOM,
     LEAVE_ROOM
 ] );

@@ -1,4 +1,5 @@
 const createControllerHandler = require("../middleware/createControllerHandler");
+const createCheckPermission = require("../middleware/createCheckPermission");
 const setDefaultError = require("../middleware/setDefaultError");
 const globalParamsValidation = require("../middleware/globalParamsValidation");
 const isAuthenticated = require("../middleware/isAuthenticated");
@@ -12,6 +13,7 @@ const ValidationSchema = require("../../validation/ValidationSchema");
  * @param {boolean} config.paramCheck
  * @param {boolean} config.auth
  * @param {string} config.defaultError
+ * @param {array} config.permission
  * @param {ValidationSchema} config.validation
  */
 const addRequest = ( route, type, config ) => {
@@ -24,6 +26,7 @@ const addRequest = ( route, type, config ) => {
         defaultError,
         middleware,
         validation,
+        permission,
         ctrl
     } = config;
 
@@ -49,6 +52,8 @@ const addRequest = ( route, type, config ) => {
 
     // Add additional middleware.
     if( middleware ) handlers.push( middleware );
+
+    if( permission ) handlers.push( createCheckPermission( ...permission ) );
 
     // Add the Controller handler.
     handlers.push( Array.isArray(ctrl) ? createControllerHandler( ...ctrl ) : createControllerHandler( ctrl ) );

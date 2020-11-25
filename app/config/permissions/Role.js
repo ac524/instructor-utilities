@@ -21,6 +21,8 @@ class Role {
 
     can( permission ) {
 
+        console.log( this, this.permissions );
+
         return this.permissions.has( permission );
 
     }

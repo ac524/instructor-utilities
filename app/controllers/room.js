@@ -14,14 +14,9 @@ const getSingle = async ({ roomId }) => {
 
 }
 
-const update = async ({ roomId, staffMember, roomData }) => {
+const update = async ({ roomId, roomData }) => {
 
-    // TODO role authentication should be done in validation middleware.
-    if( staffMember.role !== "instructor" ) throw new InvalidUserError( "You must be an instructor to update the class." );
-
-    if( updateList.length )
-
-        await Classroom.findByIdAndUpdate( roomId, roomData );
+    await Classroom.findByIdAndUpdate( roomId, roomData );
 
 }
 
