@@ -23,9 +23,6 @@ const update = async ({ user, userData: { password, ...userData } }) => {
  */
 const leaveRoom = async ({ roomId, user, classroom, staffMember }) => {
 
-    // TODO role authentication should be moved to validation middleware.
-    if ( staffMember.role === "instructor" ) throw new InvalidUserError( "Instructors cannot leave rooms." );
-
     const memberId = staffMember._id;
 
     await staffMember.remove();
@@ -43,10 +40,7 @@ const leaveRoom = async ({ roomId, user, classroom, staffMember }) => {
  * and staff are left intact,so they can later be brought back if needed.
  * - Removes the classroom ID from all known associated users.
  */
-const archiveRoom = async ({ roomId, classroom, staffMember }) => {
-
-    // TODO role authentication should be moved to validation middleware.
-    if ( staffMember.role !== "instructor" ) throw new InvalidUserError( "Only instructors can archive a room." );
+const archiveRoom = async ({ roomId, classroom }) => {
 
     const staffUserIds = classroom.staff.map(({ user }) => user);
 
