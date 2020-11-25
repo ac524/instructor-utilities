@@ -1,13 +1,18 @@
 const Role = require("../Role");
 
-const {
-    VIEW_ROOM,
-    LEAVE_ROOM
-} = require("../");
+const perms = require("../");
 
 const taRole = new Role( "ta", "TA", [
-    VIEW_ROOM,
-    LEAVE_ROOM
+
+    /** ROOM **/
+    perms.VIEW_ROOM,
+    perms.LEAVE_ROOM,
+
+    /** STUDENT **/
+    perms.CREATE_STUDENT,
+    perms.VIEW_STUDENT,
+    perms.UPDATE_STUDENT
+
 ] );
 
 module.exports = taRole;

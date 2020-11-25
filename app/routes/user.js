@@ -5,7 +5,7 @@ const userValidation = require("../validation/userValidation");
 
 const createRouter = require("./utils/createRouter");
 
-const { LEAVE_ROOM } = require("../config/permissions");
+const { LEAVE_ROOM, ARCHIVE_ROOM } = require("../config/permissions");
 
 const {
     update,
