@@ -21,13 +21,13 @@ const update = async ({ user, userData: { password, ...userData } }) => {
  * - Removes the staff entry
  * - Removes the staff reference from the classroom.
  */
-const leaveRoom = async ({ roomId, user, classroom, staffMember }) => {
+const leaveRoom = async ({ roomId, user, room, staffMember }) => {
 
     const memberId = staffMember._id;
 
     await staffMember.remove();
 
-    await classroom.save();
+    await room.save();
 
     await user.update({ $pull: { classrooms: roomId } });
 
@@ -40,9 +40,9 @@ const leaveRoom = async ({ roomId, user, classroom, staffMember }) => {
  * and staff are left intact,so they can later be brought back if needed.
  * - Removes the classroom ID from all known associated users.
  */
-const archiveRoom = async ({ roomId, classroom }) => {
+const archiveRoom = async ({ roomId, room }) => {
 
-    const staffUserIds = classroom.staff.map(({ user }) => user);
+    const staffUserIds = room.staff.map(({ user }) => user);
 
     await User.updateMany({ _id: { $in: staffUserIds } }, { $pull: { classrooms: roomId } });
 
