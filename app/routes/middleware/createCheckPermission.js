@@ -1,13 +1,14 @@
 const { InvalidDataError } = require("../../config/errors");
 
-const createCheckPermission = (target, permission) => ( req, res, next ) => {
+const createCheckPermission = permission => ( req, res, next ) => {
 
-    if( ! req.crdata.has( target ) )
+    const member = req.crdata.get( "member" );
+
+    if( ! member )
     
-        return next( new InvalidDataError( `Exected a ${target} to validate permissions, but got none.` ) );
+        return next( new InvalidDataError( "Exected a member to validate permissions, but got none." ) );
 
-    // TODO This is built expecting the "staffMember" target. May need more work to safely account for other options.
-    if( !req.crdata.get( target ).isAllowedTo( permission ) )
+    if( ! member.isAllowedTo( permission ) )
 
         return next( new InvalidDataError( `You are not allowed to ${permission}.` ) );
 

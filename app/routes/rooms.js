@@ -26,7 +26,7 @@ module.exports = createRouter([
         patch: {
             defaultError: "update the room",
             validation: roomValidation,
-            permission: ["staffMember", UPDATE_ROOM],
+            permission: UPDATE_ROOM,
             ctrl: [ update, roomCtlrConfig ]
         }
     }, {

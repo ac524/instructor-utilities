@@ -38,7 +38,7 @@ module.exports = createRouter([
         delete: {
             auth: true,
             defaultError: "leave the room",
-            permission: ["staffMember", LEAVE_ROOM],
+            permission: LEAVE_ROOM,
             ctrl: leaveRoom
         }
     }, sharedRoomActionsConfig],
@@ -47,7 +47,7 @@ module.exports = createRouter([
         delete: {
             auth: true,
             defaultError: "archive the room",
-            permission: ["staffMember", ARCHIVE_ROOM],
+            permission: ARCHIVE_ROOM,
             ctrl: archiveRoom
         }
     }, sharedRoomActionsConfig],

@@ -53,7 +53,7 @@ const addRequest = ( route, type, config ) => {
     // Add additional middleware.
     if( middleware ) handlers.push( middleware );
 
-    if( permission ) handlers.push( createCheckPermission( ...permission ) );
+    if( permission ) handlers.push( createCheckPermission( permission ) );
 
     // Add the Controller handler.
     handlers.push( Array.isArray(ctrl) ? createControllerHandler( ...ctrl ) : createControllerHandler( ctrl ) );

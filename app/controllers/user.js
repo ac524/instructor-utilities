@@ -21,11 +21,11 @@ const update = async ({ user, userData: { password, ...userData } }) => {
  * - Removes the staff entry
  * - Removes the staff reference from the classroom.
  */
-const leaveRoom = async ({ roomId, user, room, staffMember }) => {
+const leaveRoom = async ({ roomId, user, room, member }) => {
 
-    const memberId = staffMember._id;
+    const memberId = member._id;
 
-    await staffMember.remove();
+    await member.remove();
 
     await room.save();
 
