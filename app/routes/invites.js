@@ -66,7 +66,7 @@ module.exports = createRouter([
     ["/:token/register", {
         post: {
             defaultError: "complete the registration",
-            validation: userValidation.clone(["name","password"]),
+            validation: userValidation.clone("invite", ["name","password"]),
             middleware: [ setInvite ],
             ctrl: [ register, inviteRegCtlrConfig ]
         }
