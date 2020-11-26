@@ -1,4 +1,23 @@
+const {
+    RoomSet,
+    StudentSet,
+    InviteSet,
+    FeedSet,
+    FeedCommentSet,
+    FeedElevateSet,
+    FeedDeelevateSet
+} = require("./sets");
+
 module.exports = {
+
+    room: new RoomSet(),
+    student: new StudentSet(),
+    invite: new InviteSet(),
+    feed: new FeedSet(),
+    feedComment: new FeedCommentSet(),
+    feedElevate: new FeedElevateSet(),
+    feedDeelevate: new FeedDeelevateSet(),
+
     /**
      * ROOM PERMISSIONS
      */

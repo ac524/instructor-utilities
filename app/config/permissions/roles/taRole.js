@@ -5,24 +5,24 @@ const perms = require("../");
 const taRole = new Role( "ta", "TA", [
 
     /** ROOM **/
-    perms.VIEW_ROOM,
-    perms.LEAVE_ROOM,
+    perms.room.view,
+    perms.room.leave,
 
     /** STUDENT **/
-    perms.VIEW_STUDENT,
-    perms.UPDATE_STUDENT,
+    perms.student.view,
+    perms.student.update,
 
     /** FEED PERMISSIONS **/
-    perms.VIEW_FEED,
+    perms.feed.view,
 
-    /** COMMENT PERMISSIONS **/
-    perms.CREATE_FEED_COMMENT,
+    /** FEED COMMENT PERMISSIONS **/
+    perms.feedComment.create,
 
-    /** COMMENT PERMISSIONS **/
-    perms.CREATE_FEED_ELEVATE,
+    /** FEED ELEVATE PERMISSIONS **/
+    perms.feedElevate.create,
 
-    /** COMMENT PERMISSIONS **/
-    perms.CREATE_FEED_DEELEVATE
+    /** FEED DEELEVATE PERMISSIONS **/
+    perms.feedDeelevate.create
 
 ] );
 
