@@ -6,6 +6,8 @@ const isRoomMember = require("./middleware/isRoomMember");
 
 const userValidation = require("../validation/userValidation");
 
+const { CREATE_INVITE, DELETE_INVITE } = require("../config/permissions");
+
 const {
     create,
     remove,
@@ -31,6 +33,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "create the invite",
             validation: inviteValidation,
+            permission: CREATE_INVITE,
             middleware: [ setRoom.fromParam, isRoomMember ],
             ctrl: [ create, inviteCtlrConfig ]
         }
@@ -41,6 +44,7 @@ module.exports = createRouter([
             paramCheck: true,
             auth: true,
             defaultError: "delete the invite",
+            permission: DELETE_INVITE,
             middleware: [ setRoom.fromParam, isRoomMember ],
             ctrl: remove
         }

@@ -8,6 +8,7 @@ const {
     getSingleItems,
     entryTypes
 } = require("../controllers/feed");
+const { VIEW_FEED } = require("../config/permissions");
 
 const sharedConfig = {
     paramCheck: true,
@@ -20,6 +21,7 @@ module.exports = createRouter([
     ["/:feedId", {
         get: {
             defaultError: "get the feed",
+            permission: VIEW_FEED,
             ctrl: getSingle
         }
     }, sharedConfig],
@@ -27,6 +29,7 @@ module.exports = createRouter([
     ["/:feedId/items", {
         get: {
             defaultError: "get the feed items",
+            permission: VIEW_FEED,
             ctrl: getSingleItems
         }
     }, sharedConfig],

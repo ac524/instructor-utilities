@@ -26,9 +26,10 @@ class EntryType {
 
     validation;
 
-    constructor( key ) {
+    constructor( key, permissions = {} ) {
 
         this.key = key;
+        this.permissions = permissions;
 
     }
 
@@ -48,6 +49,7 @@ class EntryType {
             post: {
                 defaultError: `add the feed ${this.key} entry`,
                 validation: this.validation,
+                permission: this.permissions.post,
                 ctrl: [ this.getController(), entryCtlrConfig ]
             }
         }];

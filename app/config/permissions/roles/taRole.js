@@ -9,9 +9,20 @@ const taRole = new Role( "ta", "TA", [
     perms.LEAVE_ROOM,
 
     /** STUDENT **/
-    perms.CREATE_STUDENT,
     perms.VIEW_STUDENT,
-    perms.UPDATE_STUDENT
+    perms.UPDATE_STUDENT,
+
+    /** FEED PERMISSIONS **/
+    perms.VIEW_FEED,
+
+    /** COMMENT PERMISSIONS **/
+    perms.CREATE_FEED_COMMENT,
+
+    /** COMMENT PERMISSIONS **/
+    perms.CREATE_FEED_ELEVATE,
+
+    /** COMMENT PERMISSIONS **/
+    perms.CREATE_FEED_DEELEVATE
 
 ] );
 

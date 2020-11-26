@@ -13,7 +13,24 @@ const instructorRole = new Role( "instructor", "Instructor", [
     perms.CREATE_STUDENT,
     perms.VIEW_STUDENT,
     perms.UPDATE_STUDENT,
-    perms.DELETE_STUDENT
+    perms.DELETE_STUDENT,
+
+    /** INVITES **/
+    perms.CREATE_INVITE,
+    perms.VIEW_INVITE,
+    perms.DELETE_INVITE,
+
+    /** FEED PERMISSIONS **/
+    perms.VIEW_FEED,
+
+    /** COMMENT PERMISSIONS **/
+    perms.CREATE_FEED_COMMENT,
+
+    /** COMMENT PERMISSIONS **/
+    perms.CREATE_FEED_ELEVATE,
+
+    /** COMMENT PERMISSIONS **/
+    perms.CREATE_FEED_DEELEVATE
 
 ] );
 

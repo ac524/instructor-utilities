@@ -5,7 +5,7 @@ const isRoomMember = require("./middleware/isRoomMember");
 
 const roomValidation = require("../validation/roomValidation");
 
-const { UPDATE_ROOM } = require("../config/permissions");
+const { UPDATE_ROOM, VIEW_ROOM } = require("../config/permissions");
 
 const {
     getSingle,
@@ -21,6 +21,7 @@ module.exports = createRouter([
     ["/:roomId", {
         get: {
             defaultError: "get the room",
+            permission: VIEW_ROOM,
             ctrl: getSingle
         },
         patch: {
