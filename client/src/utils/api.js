@@ -32,6 +32,12 @@ class API {
 
     }
 
+    async getClassroomPerms( roomId ) {
+
+        return this.axios.get( `/api/rooms/${roomId}/permissions` );
+
+    }
+
     async updateClassroom( roomId, data ) {
 
         return this.axios.patch( `/api/rooms/${roomId}`, data );

@@ -13,6 +13,7 @@ import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 import { useSocket } from "utils/socket.io";
+import RequirePerm from "../../RequirePerm";
 
 const ElevateButton = ({feed}) => {
 
@@ -112,10 +113,12 @@ const RemoveButton = ({studentId}) => {
 
 const StudentOptions = ({ student, ...props }) => {
 
+    const RemoveStudentButton = () => <RemoveButton studentId={student._id} />;
+
     return (
         <Dropdown label={<Icon icon="ellipsis-h" />} ariaLabel={`Open options for ${student.name}`} {...props}>
             { student.elevation ? <DeelevateButton feed={student.feed} /> : <ElevateButton feed={student.feed} /> }
-            <RemoveButton studentId={student._id} />
+            <RequirePerm item="student" action="delete" component={RemoveStudentButton} />
         </Dropdown>
     );
 

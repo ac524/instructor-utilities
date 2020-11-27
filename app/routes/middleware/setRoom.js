@@ -10,7 +10,7 @@ const setClassroom = async (req, next) => {
 
         if( !classroom ) throw new NotFoundError("Classroom not found");
 
-        req.crdata.set( "classroom", classroom );
+        req.crdata.set( "room", classroom );
 
         next();
 

@@ -23,6 +23,14 @@ export const useClassroom = () => {
 
 }
 
+export const usePermissions = () => {
+
+    const [ { permissions } ] = useDashboardContext();
+
+    return permissions;
+
+}
+
 /**
  * STAFF GETTERS
  */

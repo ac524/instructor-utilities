@@ -14,18 +14,24 @@ const getSingle = async ({ roomId }) => {
 
 }
 
-const update = async ({ roomId, staffMember, roomData }) => {
+/**
+ * @param {object} param0 
+ * @param {object} param0.member - MemberSchema object
+ */
+const getPermissions = async ({ member }) => {
 
-    // TODO role authentication should be done in validation middleware.
-    if( staffMember.role !== "instructor" ) throw new InvalidUserError( "You must be an instructor to update the class." );
+    return member.getPermissionList();
 
-    if( updateList.length )
+}
 
-        await Classroom.findByIdAndUpdate( roomId, roomData );
+const update = async ({ roomId, roomData }) => {
+
+    await Classroom.findByIdAndUpdate( roomId, roomData );
 
 }
 
 module.exports = {
     getSingle,
+    getPermissions,
     update
 }

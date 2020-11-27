@@ -11,6 +11,7 @@ import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 import Dropdown from "components/Dropdown";
 import { useStudentGroupings } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
+import RequirePerm from "pages/Dashboard/components/RequirePerm";
 
 const { Input } = FormCollection;
 
@@ -24,12 +25,18 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
     }) );
     const groupLabel = <Icon icon="columns" />
 
-    return (
-        <div className="is-flex mb-5">
+    const AddStudentButton = () => {
+        return (
             <Button className="is-icon-only-mobile" onClick={() => dispatch(gda(EDIT_STUDENT, null))}>
                 <Icon icon="plus-circle" />
                 <span>Add Student</span>
             </Button>
+        );
+    }
+
+    return (
+        <div className="is-flex mb-5">
+            <RequirePerm item="student" action="create" component={AddStudentButton} />
             <Input
                 className="ml-auto"
                 type="text"

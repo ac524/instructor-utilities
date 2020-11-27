@@ -3,7 +3,7 @@ const createRouter = require("./utils/createRouter");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const appValidation = require("../validation/appValidation");
+const { app: appVal } = require("../validation")
 
 const {
     getTypes,
@@ -23,7 +23,7 @@ module.exports = createRouter([
     ["/", {
         post: {
             defaultError: "create the app",
-            validation: appValidation,
+            validation: appVal,
             middleware: [ setRoom.fromBody, isRoomMember ],
             ctrl: [ create, appCtlrConfig ]
         }

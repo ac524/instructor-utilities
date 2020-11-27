@@ -1,6 +1,6 @@
 const createRouter = require("./utils/createRouter");
 
-const registerValidation = require("../validation/registerValidation");
+const { register: registerVal } = require("../validation");
 
 const {
     register
@@ -16,7 +16,7 @@ module.exports = createRouter([
     ["/", {
         post: {
             defaultError: "complete the registration",
-            validation: registerValidation,
+            validation: registerVal,
             ctrl: [ register, registerCtlrConfig ]
         }
     }]

@@ -19,6 +19,8 @@ class InvalidUserError extends CrsmError { };
 
 class NotFoundError extends CrsmError { };
 
+class InvalidConfig extends CrsmError { };
+
 class RouteError extends CrsmError {
 
     statusCode;
@@ -50,6 +52,7 @@ class RouteError extends CrsmError {
 
 
 module.exports = {
+    InvalidConfig,
     InvalidDataError,
     InvalidUserError,
     NotFoundError,

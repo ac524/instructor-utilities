@@ -1,9 +1,11 @@
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const userValidation = require("../validation/userValidation");
+const { user: userVal } = require("../validation");
 
 const createRouter = require("./utils/createRouter");
+
+const { room: roomPerm } = require("../config/permissions");
 
 const {
     update,
@@ -27,7 +29,7 @@ module.exports = createRouter([
         patch: {
             auth: true,
             defaultError: "update the user",
-            validation: userValidation,
+            validation: userVal,
             ctrl: [ update, userCtlrConfig ]
         }
     }],
@@ -36,6 +38,7 @@ module.exports = createRouter([
         delete: {
             auth: true,
             defaultError: "leave the room",
+            permission: roomPerm.leave,
             ctrl: leaveRoom
         }
     }, sharedRoomActionsConfig],
@@ -44,6 +47,7 @@ module.exports = createRouter([
         delete: {
             auth: true,
             defaultError: "archive the room",
+            permission: roomPerm.archive,
             ctrl: archiveRoom
         }
     }, sharedRoomActionsConfig],

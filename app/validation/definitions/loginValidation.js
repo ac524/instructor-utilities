@@ -1,4 +1,4 @@
-const ValidationSchema = require("./ValidationSchema");
+const ValidationSchema = require("../ValidationSchema");
 
 const loginValidation = new ValidationSchema("login", {
     email: { type: "email" },

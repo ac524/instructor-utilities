@@ -1,4 +1,4 @@
-const ValidationSchema = require("./ValidationSchema");
+const ValidationSchema = require("../ValidationSchema");
 
 const appValidation = new ValidationSchema("app", {
     type: { type: "string", empty: false },

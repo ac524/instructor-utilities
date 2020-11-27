@@ -1,5 +1,5 @@
 const userValidation = require("./userValidation");
-const ValidationSchema = require("./ValidationSchema");
+const ValidationSchema = require("../ValidationSchema");
 
 const registerValidation = new ValidationSchema("registration", {
     ...userValidation.schema,
