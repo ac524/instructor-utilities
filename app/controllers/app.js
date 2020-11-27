@@ -1,4 +1,4 @@
-const { App, Classroom } = require("../models");
+const { App, Room } = require("../models");
 const AppType = require("../models/AppType");
 const appTypes  = require("../config/apps/registry.json");
 // const ioEmit = require("./utils/ioEmit");
@@ -27,7 +27,7 @@ const create = async ({ appData }) => {
 
     await newApp.save();
 
-    await Classroom.findByIdAndUpdate( roomId, { $push: { apps: appType._id } } );
+    await Room.findByIdAndUpdate( roomId, { $push: { apps: appType._id } } );
 
     // ioEmit( "dispatch", { type: "ADD_APP", payload: appType._id }, `room:${roomId}` );
 

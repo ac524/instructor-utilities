@@ -1,7 +1,6 @@
 const passwordHash = require('../config/utils/passwordHash');
-const { InvalidUserError } = require("../config/errors");
 
-const { User, Classroom } = require("../models");
+const { User, Room } = require("../models");
 
 const ioEmit = require("./utils/ioEmit");
 
@@ -49,7 +48,7 @@ const archiveRoom = async ({ roomId, room }) => {
 }
 
 const getRoomsShort = async ({ user }) =>
-    await Classroom
+    await Room
         .find({ _id: { $in: user.classrooms } })
         .select("name staff.role staff.user");
 

@@ -1,4 +1,4 @@
-const { Token, Classroom } = require("../../models");
+const { Token, Room } = require("../../models");
 const { InvalidDataError, NotFoundError } = require("../../config/errors");
 
 const setInvite = async ( req, res, next ) => {
@@ -11,7 +11,7 @@ const setInvite = async ( req, res, next ) => {
 
         if( !inviteToken ) throw new NotFoundError( "This invitation is no longer available" );
 
-        const inviteRoom = await Classroom.findById( inviteToken.relation );
+        const inviteRoom = await Room.findById( inviteToken.relation );
 
         if( !inviteRoom )  throw new InvalidDataError( "This invitation is not longer valid" );
 

@@ -1,11 +1,11 @@
 const { NotFoundError } = require("../config/errors");
-const { Classroom, Feed } = require("../models");
+const { Room, Feed } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
+const getRoomWithStudents = roomId => Room.findById(roomId).select("students");
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
-const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Classroom.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
+const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Room.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
 const mapUpdateKeys = updates => Object.fromEntries(Object.entries(updates).map(([key,value])=>[`students.$.${key}`,value]));
 
 /** HELPER METHODS **/
@@ -25,7 +25,7 @@ const studentFactory = async ( createdBy, roomId, data ) => {
         }
     };
 
-    const room = await Classroom.findByIdAndUpdate( roomId, update, { new: true } ).select("students");
+    const room = await Room.findByIdAndUpdate( roomId, update, { new: true } ).select("students");
 
     const student = room.students.id( studentId );
 
@@ -91,7 +91,7 @@ const createMany = async ( { user, roomId, studentData } ) => {
 
 const getSingle = async ( { roomId, studentId } )  => {
 
-    const student = await findStudentById( roomId, studentId ); // (await Classroom.findById(req.roomId).select("students")).students.id(req.params.studentId);
+    const student = await findStudentById( roomId, studentId );
 
     if( !student )
 
