@@ -1,3 +1,4 @@
+const PermissionSet = require("../../../../config/permissions/PermissionSet");
 const { Feed } = require("../../../../models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -26,10 +27,14 @@ class EntryType {
 
     validation;
 
-    constructor( key, permissions = {} ) {
+    /**
+     * @param {string} key 
+     * @param {PermissionSet} permission 
+     */
+    constructor( key, permission ) {
 
         this.key = key;
-        this.permissions = permissions;
+        this.permission = permission;
 
     }
 
@@ -49,7 +54,7 @@ class EntryType {
             post: {
                 defaultError: `add the feed ${this.key} entry`,
                 validation: this.validation,
-                permission: this.permissions.post,
+                permission: this.permission,
                 ctrl: [ this.getController(), entryCtlrConfig ]
             }
         }];

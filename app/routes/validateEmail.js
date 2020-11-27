@@ -1,6 +1,6 @@
 const createRouter = require("./utils/createRouter");
 
-const resendValidation = require("../validation/resendValidation");
+const { resend: resendVal } = require("../validation");
 
 const {
     validate,
@@ -17,7 +17,7 @@ module.exports = createRouter([
         post: {
             auth: true,
             defaultError: "resend the email",
-            validation: resendValidation,
+            validation: resendVal,
             ctrl: [ resend, resendCtlrConfig ]
         }
     }],

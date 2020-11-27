@@ -1,4 +1,4 @@
-const { CREATE_FEED_COMMENT, CREATE_FEED_ELEVATE, CREATE_FEED_DEELEVATE } = require("../../../config/permissions");
+const perms = require("../../../config/permissions");
 
 const {
     CommentEntryType,
@@ -6,7 +6,7 @@ const {
 } = require("./types");
 
 module.exports = [
-    new CommentEntryType( "comment", { post: CREATE_FEED_COMMENT } ),
-    new ElevationEntryType( "elevate", { post: CREATE_FEED_ELEVATE } ),
-    new ElevationEntryType( "deelevate", { post: CREATE_FEED_DEELEVATE } )
+    new CommentEntryType( "comment", perms.feedComment ),
+    new ElevationEntryType( "elevate", perms.feedElevate ),
+    new ElevationEntryType( "deelevate", perms.feedDeelevate )
 ]

@@ -1,7 +1,7 @@
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const userValidation = require("../validation/userValidation");
+const { user: userVal } = require("../validation");
 
 const createRouter = require("./utils/createRouter");
 
@@ -29,7 +29,7 @@ module.exports = createRouter([
         patch: {
             auth: true,
             defaultError: "update the user",
-            validation: userValidation,
+            validation: userVal,
             ctrl: [ update, userCtlrConfig ]
         }
     }],
