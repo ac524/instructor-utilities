@@ -46,9 +46,9 @@ class ValidationSchema {
 
     }
 
-    clone(include) {
+    clone(name, include) {
 
-        return new ValidationSchema( selectSchema(this.schema, include) );
+        return new ValidationSchema( name, selectSchema(this.schema, include) );
         
     }
 

@@ -1,4 +1,4 @@
-const ValidationSchema = require("./ValidationSchema");
+const ValidationSchema = require("../ValidationSchema");
 
 const roomValidation = new ValidationSchema("room", {
     name: { type: "string", empty: false }

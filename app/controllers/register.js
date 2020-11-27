@@ -26,9 +26,7 @@ const register = async ({ registerData }) => {
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
-    classroom = await Classroom.findOne({
-      registerCode: token._id
-    });
+    classroom = await Classroom.findOne({ registerCode: token._id });
 
     if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
     

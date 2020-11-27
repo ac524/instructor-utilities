@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const staffMethods = require("./methods/staff");
 const studentMethods = require("./methods/student");
 const classroomMethods = require("./methods/classroom");
 
@@ -15,7 +16,6 @@ const InvitesSchema = new Schema({
   }
 });
 
-// Create Schema
 const StaffSchema = new Schema({
   role: {
     type: String,
@@ -31,6 +31,9 @@ const StaffSchema = new Schema({
     default: Date.now
   }
 });
+
+StaffSchema.methods.isAllowedTo = staffMethods.isAllowedTo;
+StaffSchema.methods.getPermissionList = staffMethods.getPermissionList;
 
 // Create Schema
 const StudentSchema = new Schema({

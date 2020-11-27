@@ -7,6 +7,8 @@ export const SET_TOPBAR = "SET_TOPBAR";
  * CLASSROOM ACTIONS
  */
 export const SET_CLASSROOM = "SET_CLASSROOM";
+export const SET_PERMISSIONS = "SET_PERMISSIONS";
+export const SET_CR_AND_PERMS = "SET_CR_AND_PERMS";
 
 /**
  * STAFF ACTIONS

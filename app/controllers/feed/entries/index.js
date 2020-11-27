@@ -1,10 +1,12 @@
+const perms = require("../../../config/permissions");
+
 const {
     CommentEntryType,
     ElevationEntryType
 } = require("./types");
 
 module.exports = [
-    new CommentEntryType( "comment" ),
-    new ElevationEntryType( "elevate" ),
-    new ElevationEntryType( "deelevate" )
+    new CommentEntryType( "comment", perms.feedComment ),
+    new ElevationEntryType( "elevate", perms.feedElevate ),
+    new ElevationEntryType( "deelevate", perms.feedDeelevate )
 ]
