@@ -65,7 +65,6 @@ const addRequest = ( route, type, config ) => {
 
         handlers.push( createCheckPermission( typeof permission === "string" ? permission : permission[ permMap[type] ] ) );
 
-
     // Add the Controller handler.
     handlers.push( Array.isArray(ctrl) ? createControllerHandler( ...ctrl ) : createControllerHandler( ctrl ) );
 
