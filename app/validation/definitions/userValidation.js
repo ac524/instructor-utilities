@@ -1,4 +1,4 @@
-const ValidationSchema = require("./ValidationSchema");
+const ValidationSchema = require("../ValidationSchema");
 
 const userValidation = new ValidationSchema("user", {
     name: { type: "string", min: 3 },

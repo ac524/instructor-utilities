@@ -13,7 +13,7 @@ const validationMap = {
 }
 
 const permMap = {
-    get: "get",
+    get: "view",
     post: "create",
     patch: "update",
     delete: "delete"
@@ -64,6 +64,7 @@ const addRequest = ( route, type, config ) => {
     if( permission )
 
         handlers.push( createCheckPermission( typeof permission === "string" ? permission : permission[ permMap[type] ] ) );
+
 
     // Add the Controller handler.
     handlers.push( Array.isArray(ctrl) ? createControllerHandler( ...ctrl ) : createControllerHandler( ctrl ) );
