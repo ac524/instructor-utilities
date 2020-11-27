@@ -18,4 +18,7 @@
  * 
  * @typedef {import('./FeedSchema').FeedDocument} FeedDocument
  * @typedef {import('./FeedSchema').FeedSchema} FeedSchema
+ * 
+ * @typedef {import('./TokenSchema').TokenDocument} TokenDocument
+ * @typedef {import('./TokenSchema').TokenSchema} TokenSchema
  */
