@@ -10,7 +10,7 @@ const homeUrl = require("../config/options")( "publicUrl" );
 
 /**
  * Type Definition Imports
- * @typedef {import('../models/schema').InviteDocument} InviteDocument
+ * @typedef {import('../models/schema/InviteSchema').InviteDocument} InviteDocument
  */
 
 /** HELPER METHODS **/

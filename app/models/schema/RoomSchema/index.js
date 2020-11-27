@@ -3,9 +3,9 @@ const { ObjectId } = Schema.Types;
 
 /**
  * Type Definition Imports
- * @typedef {import('../').InviteDocument} InviteDocument
- * @typedef {import('../').MemberDocument} MemberDocument
- * @typedef {import('../').StudentDocument} StudentDocument
+ * @typedef {import('../InviteSchema').InviteDocument} InviteDocument
+ * @typedef {import('../MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('../StudentSchema').StudentDocument} StudentDocument
  */
 
 const InviteSchema = require("../InviteSchema");

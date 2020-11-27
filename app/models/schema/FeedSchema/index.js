@@ -3,7 +3,7 @@ const { ObjectId } = Schema.Types;
 
 /**
  * Type Definition Imports
- * @typedef {import('../').FeedEntryDocument} FeedEntryDocument
+ * @typedef {import('../FeedEntrySchema').FeedEntryDocument} FeedEntryDocument
  */
 
 const FeedEntrySchema = require("../FeedEntrySchema");
