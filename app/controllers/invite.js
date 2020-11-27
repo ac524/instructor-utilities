@@ -1,19 +1,24 @@
 const crypto = require('crypto');
 const mail = require('../config/utils/mail');
 
-const { Token, Classroom, User } = require("../models");
+const { Token, Room, User } = require("../models");
 
 const passwordHash = require("../config/utils/passwordHash");
 const ioEmit = require("./utils/ioEmit");
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 const homeUrl = require("../config/options")( "publicUrl" );
 
+/**
+ * Type Definition Imports
+ * @typedef {import('../models/schema').InviteDocument} InviteDocument
+ */
+
 /** HELPER METHODS **/
 
 const addStaff = async (roomId, member) => {
 
     const { staff } =
-        await Classroom
+        await Room
             .findByIdAndUpdate(roomId, { $push: { staff: member } }, {new:true})
             .select("staff")
             .populate("staff.user");
@@ -22,6 +27,11 @@ const addStaff = async (roomId, member) => {
 
 }
 
+/**
+ * @param {*} room 
+ * @param {InviteDocument} invite 
+ * @param {*} from 
+ */
 const sendInvite = ( room, invite, from ) => {
 
     return mail.send(
@@ -43,7 +53,7 @@ const sendInvite = ( room, invite, from ) => {
 
 const create = async ({ roomId, user, inviteData })  => {
 
-    const roomEmails = await Classroom.findById(roomId).populate('staff.user',"email").select("invites.email");
+    const roomEmails = await Room.findById(roomId).populate('staff.user',"email").select("invites.email");
 
     const { email } = inviteData;
 
@@ -74,7 +84,7 @@ const create = async ({ roomId, user, inviteData })  => {
     };
 
     const room =
-        await Classroom
+        await Room
             .findByIdAndUpdate( roomId, update, { new: true } )
             .populate( 'invites.token' );
 
@@ -92,7 +102,7 @@ const create = async ({ roomId, user, inviteData })  => {
  */
 const remove = async ({ roomId, inviteId }) => {
 
-    const room = await Classroom.findById( roomId );
+    const room = await Room.findById( roomId );
 
     const invite = room.invites.id( inviteId );
 
