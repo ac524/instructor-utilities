@@ -9,11 +9,18 @@ const { room: roomPerm } = require("../config/permissions");
 
 const {
     getSingle,
+    getPermissions,
     update
 } = require("../controllers/room");
 
 const roomCtlrConfig = {
     keyMap: { body: "roomData" }
+};
+
+const sharedConfig = {
+    auth: true,
+    paramCheck: true,
+    middleware: [ setRoom.fromParam, isRoomMember ],
 };
 
 module.exports = createRouter([
@@ -30,10 +37,13 @@ module.exports = createRouter([
             permission: roomPerm,
             ctrl: [ update, roomCtlrConfig ]
         }
-    }, {
-        auth: true,
-        paramCheck: true,
-        middleware: [ setRoom.fromParam, isRoomMember ],
-    }]
+    }, sharedConfig],
+
+    ["/:roomId/permissions", {
+        get: {
+            defaultError: "get your permissions for the room",
+            ctrl: getPermissions
+        }
+    }, sharedConfig]
 
 ]);

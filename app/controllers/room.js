@@ -14,6 +14,16 @@ const getSingle = async ({ roomId }) => {
 
 }
 
+/**
+ * @param {object} param0 
+ * @param {object} param0.member - MemberSchema object
+ */
+const getPermissions = async ({ member }) => {
+
+    return member.getPermissionList();
+
+}
+
 const update = async ({ roomId, roomData }) => {
 
     await Classroom.findByIdAndUpdate( roomId, roomData );
@@ -22,5 +32,6 @@ const update = async ({ roomId, roomData }) => {
 
 module.exports = {
     getSingle,
+    getPermissions,
     update
 }

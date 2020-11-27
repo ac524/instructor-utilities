@@ -5,6 +5,7 @@ import actions from "./actions";
 const DashboardContext = createContext([
     {
         classroom: null,
+        permissions: [],
         editStudent: "",
         studentFeed: null,
         topbar: {},
@@ -45,6 +46,7 @@ export const DashboardProvider = ( { children } ) => {
 
     const reducerState = useReducer( reducer, {
         classroom: null,
+        permissions: [],
         editStudent: false,
         studentFeed: null,
         topbar: undefined,

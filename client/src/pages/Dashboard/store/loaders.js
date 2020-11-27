@@ -1,7 +1,7 @@
 import { getDashboardAction as gda } from "./";
 import { useDashboardDispatch } from "./getters";
 import { useEffect } from "react";
-import { ADD_STUDENT_FEED_ITEMS, SET_CLASSROOM, SET_STUDENT_FEED } from "./actionsNames";
+import { ADD_STUDENT_FEED_ITEMS, SET_CLASSROOM, SET_CR_AND_PERMS, SET_STUDENT_FEED } from "./actionsNames";
 import api from "utils/api";
 import { useReadyStep } from "utils/ready";
 import { useSocket } from "utils/socket.io";
@@ -20,13 +20,14 @@ export const useClassroomLoader = ( roomId ) => {
 
             try {
 
-                const { data } = await api.getClassroom( roomId );
+                const { data: classroom } = await api.getClassroom( roomId );
+                const { data: permissions } = await api.getClassroomPerms( roomId );
 
-                dispatch(gda(SET_CLASSROOM, data));
+                dispatch(gda(SET_CR_AND_PERMS, { classroom, permissions }));
 
             } catch( err ) {
 
-                dispatch(gda(SET_CLASSROOM, null));
+                dispatch(gda(SET_CR_AND_PERMS, { classroom: null, permissions: [] }));
 
             }
 

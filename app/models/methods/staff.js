@@ -8,6 +8,12 @@ module.exports = {
 
         return roles.get( this.role ).can( permission );
       
+    },
+
+    getPermissionList: function() {
+
+        return roles.get( this.role ).list;
+
     }
 
 }

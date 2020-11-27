@@ -8,6 +8,8 @@ import {
      * CLASSROOM ACTIONS
      */
     SET_CLASSROOM,
+    SET_PERMISSIONS,
+    SET_CR_AND_PERMS,
 
     /**
      * STAFF ACTIONS
@@ -48,12 +50,16 @@ export default {
     /**
      * TOPBAR VIEW ACTIONS
      */
-    [SET_TOPBAR]: ( state, payload ) => ({ ...state, topbar: payload }),
+    [SET_TOPBAR]: ( state, topbar ) => ({ ...state, topbar }),
 
     /**
      * CLASSROOM ACTIONS
      */
-    [SET_CLASSROOM]: ( state, payload ) => ({ ...state, classroom: payload }),
+    [SET_CLASSROOM]: ( state, classroom ) => ({ ...state, classroom }),
+
+    [SET_PERMISSIONS]: ( state, permissions ) => ({ ...state, permissions }),
+
+    [SET_CR_AND_PERMS]: ( state, { classroom, permissions } ) => ({ ...state, classroom, permissions }),
 
     /**
      * STAFF ACTIONS

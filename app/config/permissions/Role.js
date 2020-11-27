@@ -19,6 +19,12 @@ class Role {
 
     }
 
+    get list() {
+
+        return [...this.permissions].map( ([perm]) => perm );
+
+    }
+
     can( permission ) {
 
         return this.permissions.has( permission );
