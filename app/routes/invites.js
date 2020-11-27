@@ -5,8 +5,9 @@ const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
 const userValidation = require("../validation/userValidation");
+const inviteValidation = require("../validation/inviteValidation");
 
-const { CREATE_INVITE, DELETE_INVITE } = require("../config/permissions");
+const { invite: invitePerm } = require("../config/permissions");
 
 const {
     create,
@@ -15,7 +16,6 @@ const {
     emailCheck,
     register
 } = require("../controllers/invite");
-const inviteValidation = require("../validation/inviteValidation");
 
 const inviteCtlrConfig = {
     keyMap: { body: "inviteData" }
@@ -33,7 +33,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "create the invite",
             validation: inviteValidation,
-            permission: CREATE_INVITE,
+            permission: invitePerm,
             middleware: [ setRoom.fromParam, isRoomMember ],
             ctrl: [ create, inviteCtlrConfig ]
         }
@@ -44,7 +44,7 @@ module.exports = createRouter([
             paramCheck: true,
             auth: true,
             defaultError: "delete the invite",
-            permission: DELETE_INVITE,
+            permission: invitePerm,
             middleware: [ setRoom.fromParam, isRoomMember ],
             ctrl: remove
         }

@@ -5,7 +5,7 @@ const isRoomMember = require("./middleware/isRoomMember");
 
 const studentValidation = require("../validation/studentValidation");
 
-const { CREATE_STUDENT, UPDATE_STUDENT, DELETE_STUDENT, VIEW_STUDENT } = require("../config/permissions");
+const { student: studentPerm } = require("../config/permissions");
 
 const {
     create,
@@ -29,7 +29,7 @@ module.exports = createRouter([
             defaultError: "create the student",
             validation: studentValidation,
             middleware: newStudentMiddleware,
-            permission: CREATE_STUDENT,
+            permission: studentPerm,
             ctrl: [ create, studentCtlrConfig ]
         }
     }],
@@ -37,18 +37,18 @@ module.exports = createRouter([
     ["/:roomId/:studentId", {
         get: {
             defaultError: "get the student",
-            permission: VIEW_STUDENT,
+            permission: studentPerm,
             ctrl: getSingle
         },
         patch: {
             defaultError: "update the student",
             validation: studentValidation,
-            permission: UPDATE_STUDENT,
+            permission: studentPerm,
             ctrl: [ update, studentCtlrConfig ]
         },
         delete: {
             defaultError: "delete the student",
-            permission: DELETE_STUDENT,
+            permission: studentPerm,
             ctrl: deleteSingle
         }
      }, {

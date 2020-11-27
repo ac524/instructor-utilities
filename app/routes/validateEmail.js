@@ -1,10 +1,11 @@
 const createRouter = require("./utils/createRouter");
 
+const resendValidation = require("../validation/resendValidation");
+
 const {
     validate,
     resend
 } = require("../controllers/validateEmail");
-const resendValidation = require("../validation/resendValidation");
 
 const resendCtlrConfig = {
     keyMap: { body: "config" }

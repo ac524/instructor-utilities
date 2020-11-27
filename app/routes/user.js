@@ -5,7 +5,7 @@ const userValidation = require("../validation/userValidation");
 
 const createRouter = require("./utils/createRouter");
 
-const { LEAVE_ROOM, ARCHIVE_ROOM } = require("../config/permissions");
+const { room: roomPerm } = require("../config/permissions");
 
 const {
     update,
@@ -38,7 +38,7 @@ module.exports = createRouter([
         delete: {
             auth: true,
             defaultError: "leave the room",
-            permission: LEAVE_ROOM,
+            permission: roomPerm.leave,
             ctrl: leaveRoom
         }
     }, sharedRoomActionsConfig],
@@ -47,7 +47,7 @@ module.exports = createRouter([
         delete: {
             auth: true,
             defaultError: "archive the room",
-            permission: ARCHIVE_ROOM,
+            permission: roomPerm.archive,
             ctrl: archiveRoom
         }
     }, sharedRoomActionsConfig],
