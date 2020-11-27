@@ -46,6 +46,8 @@ import {
     ADD_STUDENT_FEED_ITEMS, ADD_STUDENTS
 } from "./actionsNames";
 
+const makePermMap = permissions => new Map( permissions.map( perm => [perm, 1] ) );
+
 export default {
     /**
      * TOPBAR VIEW ACTIONS
@@ -57,9 +59,9 @@ export default {
      */
     [SET_CLASSROOM]: ( state, classroom ) => ({ ...state, classroom }),
 
-    [SET_PERMISSIONS]: ( state, permissions ) => ({ ...state, permissions }),
+    [SET_PERMISSIONS]: ( state, permissions ) => ({ ...state, permissions: makePermMap( permissions ) }),
 
-    [SET_CR_AND_PERMS]: ( state, { classroom, permissions } ) => ({ ...state, classroom, permissions }),
+    [SET_CR_AND_PERMS]: ( state, { classroom, permissions } ) => ({ ...state, classroom, permissions: makePermMap( permissions ) }),
 
     /**
      * STAFF ACTIONS
