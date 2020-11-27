@@ -3,6 +3,15 @@ const { Room, Feed } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../validation/definitions/studentValidation').StudentData} StudentData
+ * 
+ * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('../models/schema/RoomSchema').MemberDocument} MemberDocument
+ */
+
 const getRoomWithStudents = roomId => Room.findById(roomId).select("students");
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
 const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Room.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
@@ -10,6 +19,11 @@ const mapUpdateKeys = updates => Object.fromEntries(Object.entries(updates).map(
 
 /** HELPER METHODS **/
 
+/**
+ * @param {ObjectId} createdBy 
+ * @param {ObjectId} roomId 
+ * @param {StudentData} data 
+ */
 const studentFactory = async ( createdBy, roomId, data ) => {
 
     const feedId = new ObjectId();
@@ -46,6 +60,14 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef CreateStudentOptions
+ * @property {UserDocument} user
+ * @property {ObjectId} roomId
+ * @property {StudentData} studentData
+ * 
+ * @param {CreateStudentOptions} param0 
+ */
 const create = async ( { user, roomId, studentData } ) => {
 
     // Is this a request to make many students?
@@ -68,6 +90,14 @@ const create = async ( { user, roomId, studentData } ) => {
 
 }
 
+/**
+ * @typedef CreateStudentsOptions
+ * @property {UserDocument} user
+ * @property {ObjectId} roomId
+ * @property {StudentData[]} studentData
+ * 
+ * @param {CreateStudentsOptions} param0 
+ */
 const createMany = async ( { user, roomId, studentData } ) => {
 
     const students = [];
@@ -89,6 +119,13 @@ const createMany = async ( { user, roomId, studentData } ) => {
 
 }
 
+/**
+ * @typedef GetStudentOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} studentId
+ * 
+ * @param {GetStudentOptions} param0 
+ */
 const getSingle = async ( { roomId, studentId } )  => {
 
     const student = await findStudentById( roomId, studentId );
@@ -101,6 +138,14 @@ const getSingle = async ( { roomId, studentId } )  => {
 
 }
 
+/**
+ * @typedef UpdateStudentOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} studentId
+ * @property {StudentData} studentData
+ * 
+ * @param {UpdateStudentOptions} param0 
+ */
 const update = async ( { roomId, studentId, studentData } ) => {
     
     const student = await findStudentByIdAndUpdate( roomId, studentId, mapUpdateKeys(studentData) );
@@ -111,6 +156,13 @@ const update = async ( { roomId, studentId, studentData } ) => {
 
 }
 
+/**
+ * @typedef DeleteStudentOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} studentId
+ * 
+ * @param {DeleteStudentOptions} param0 
+ */
 const deleteSingle = async ( { roomId, studentId } )  => {
 
     const room = await getRoomWithStudents( roomId );
