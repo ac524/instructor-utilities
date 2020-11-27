@@ -8,8 +8,19 @@ const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 const { User, Token, Room } = require("../models");
 const { InvalidDataError, NotFoundError } = require('../config/errors');
 
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('../validation/definitions/registerValidation').RegistrationData} RegistrationData
+ */
+
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef RegisterOptions
+ * @property {RegistrationData} registerData
+ * 
+ * @param {RegisterOptions} param0 
+ */
 const register = async ({ registerData }) => {
 
   let classroom;
