@@ -21,4 +21,7 @@
  * 
  * @typedef {import('./TokenSchema').TokenDocument} TokenDocument
  * @typedef {import('./TokenSchema').TokenSchema} TokenSchema
+ * 
+ * @typedef {import('./UserSchema').UserDocument} UserDocument
+ * @typedef {import('./UserSchema').UserSchema} UserSchema
  */
