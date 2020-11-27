@@ -24,4 +24,10 @@
  * 
  * @typedef {import('./UserSchema').UserDocument} UserDocument
  * @typedef {import('./UserSchema').UserSchema} UserSchema
+ * 
+ * @typedef {import('./AppTypeSchema').AppTypeDocument} AppTypeDocument
+ * @typedef {import('./AppTypeSchema').AppTypeSchema} AppTypeSchema
+ * 
+ * @typedef {import('./AppSchema').AppDocument} AppDocument
+ * @typedef {import('./AppSchema').AppSchema} AppSchema
  */
