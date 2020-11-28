@@ -6,6 +6,7 @@ const passwordHash = require("../config/utils/passwordHash");
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
 const { User, Token, Room } = require("../models");
+const { getOneByToken: getToken  } = require("./token");
 const { InvalidDataError, NotFoundError } = require('../config/errors');
 
 /**
@@ -31,9 +32,7 @@ const register = async ({ registerData }) => {
   if( code ) {
   
     // Create the User's classroom
-    const token = await Token.findOne({
-      token: code
-    });
+    const token = await getToken({ token: code });
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
