@@ -1,4 +1,4 @@
-require("../config/mongoose");
+require("../app/config/mongoose");
 
 const {
     seedUser,

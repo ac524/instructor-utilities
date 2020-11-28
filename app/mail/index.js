@@ -2,7 +2,7 @@ const mjml2html = require("mjml");
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
-const getOption = require("../../options");
+const getOption = require("../config/options");
 const { strategy, ...emailConfig } = getOption( "email" );
 const homeUrl = getOption( "publicUrl" );
 
@@ -13,7 +13,7 @@ const disabledSend = () => new Promise((resolve) => resolve(false));
 class Mail {
 
     strategy;
-    viewDir = "app/views/email/";
+    viewDir = "app/mail/views/";
 
     defaultData = {
         homeUrl

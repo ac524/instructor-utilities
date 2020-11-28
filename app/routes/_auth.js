@@ -1,6 +1,6 @@
 const createRouter = require("./utils/createRouter");
 
-const { login: loginVal } = require("../validation")
+const { login: loginVal } = require("../config/validation")
 
 const {
     login,

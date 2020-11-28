@@ -1,4 +1,4 @@
-const mail = require('../config/utils/mail');
+const mail = require('../mail');
 
 const passwordHash = require("../config/utils/passwordHash");
 
@@ -10,7 +10,7 @@ const { InvalidDataError, NotFoundError } = require('../config/errors');
 
 /**
  * TYPE DEFINITION IMPORTS
- * @typedef {import('../validation/definitions/registerValidation').RegistrationData} RegistrationData
+ * @typedef {import('../config/validation/definitions/registerValidation').RegistrationData} RegistrationData
  */
 
 /** CONTROLLER METHODS **/

@@ -10,8 +10,7 @@ const crypto = require("crypto");
 // const ncp = require("copy-paste");
 
 const ObjectId = require("mongoose").Types.ObjectId;
-const { Classroom } = require("./app/models");
-const Token = require("./app/models/Token");
+const { Room, Token } = require("./app/models");
 
 const [ , , code ] = process.argv;
 
@@ -41,7 +40,7 @@ const createRoomWithCode = async ( code ) => {
     
         await token.save();
     
-        const classroom = new Classroom({
+        const classroom = new Room({
             _id: roomId,
             registerCode: token._id,
             name: "PENDING"

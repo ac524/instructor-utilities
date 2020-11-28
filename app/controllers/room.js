@@ -4,7 +4,7 @@ const { Room } = require("../models");
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
- * @typedef {import('../validation/definitions/roomValidation').RoomData} RoomData
+ * @typedef {import('../config/validation/definitions/roomValidation').RoomData} RoomData
  */
 
 /** CONTROLLER METHODS **/

@@ -3,7 +3,7 @@ const createRouter = require("./utils/createRouter");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const { student: studentVal } = require("../validation");
+const { student: studentVal } = require("../config/validation");
 
 const { student: studentPerm } = require("../config/permissions");
 

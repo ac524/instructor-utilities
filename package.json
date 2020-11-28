@@ -9,7 +9,7 @@
     "start:prod": "node app/server.js",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
     "client": "cd client && npm run start",
-    "seed": "node app/seed",
+    "seed": "node seed",
     "seed:reset": "node app/seed/reset",
     "install": "cd client && npm install",
     "build": "cd client && npm run build",
