@@ -4,7 +4,6 @@ const homeUrl = require("../config/options")( "publicUrl" );
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 
 const { Room } = require("../models");
-
 const tokenCtrl = require("./token");
 const userCtrl = require('./user');
 

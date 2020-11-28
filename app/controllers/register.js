@@ -1,14 +1,10 @@
 const mail = require('../mail');
 
-const passwordHash = require("../config/utils/passwordHash");
-
 // Load input validation
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
 const { Room } = require("../models");
-
 const userCtrl = require("./user");
-
 const tokenCtrl = require("./token");
 
 const { InvalidDataError, NotFoundError } = require('../config/errors');
@@ -62,7 +58,7 @@ const register = async ({ registerData }) => {
     email,
     password,
     isVerified: !mail.isEnabled
-  })
+  });
 
   const { roomname } = registerData;
 
