@@ -15,6 +15,11 @@ const ioEmit = require("./utils/ioEmit");
 /** CONTROLLER METHODS **/
 
 /**
+ * @param {UserData} search 
+ */
+const findOne = async ( search ) => await User.findOne( search );
+
+/**
  * @typedef UpdateUserOptions
  * @property {UserDocument} user
  * @property {UserData} userData
@@ -79,6 +84,7 @@ const getRoomsShort = async ({ user }) =>
         .select("name staff.role staff.user");
 
 module.exports = {
+    findOne,
     update,
     leaveRoom,
     archiveRoom,

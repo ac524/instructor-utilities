@@ -4,8 +4,9 @@ const jwt = require("jsonwebtoken");
 const secret = require("../config/options")( "secret" );
 
 // Load User model
-const { User } = require("../models");
 const { InvalidDataError } = require("../config/errors");
+
+const userCtrl = require("./user");
 
 const jwtSign = util.promisify( jwt.sign );
 
@@ -36,7 +37,7 @@ const login = async ({ credentials }) => {
   const { email, password } = credentials;
 
   // Find user by email
-  const user = await User.findOne({ email });
+  const user =  await userCtrl.findOne({ email });
 
   if (!user)
 
