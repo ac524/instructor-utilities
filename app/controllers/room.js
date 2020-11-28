@@ -1,5 +1,7 @@
 const { Room } = require("../models");
 
+const actions = require("./actions");
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
@@ -17,12 +19,14 @@ const { Room } = require("../models");
  */
 const getSingle = async ({ roomId }) => {
 
-        const room =
-            await Room.findById( roomId )
-                .populate("staff.user", "name email date")
-                .populate("invites.token");
+    const room = await actions.getOne( Room, roomId, {
+        populate: [
+            ["staff.user", "name email date"],
+            "invites.token"
+        ]
+    } );
 
-        return await room.getFeedAggregate();
+    return await room.getFeedAggregate();
 
 }
 
