@@ -1,7 +1,10 @@
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 const ioEmit = require("./utils/ioEmit");
 
-const { User, Token } = require("../models");
+const { User } = require("../models");
+
+const tokenCtrl = require("./token");
+
 const { NotFoundError } = require("../config/errors");
 
 /**
@@ -37,7 +40,7 @@ const resend = async ({ config }) => {
  */
 const validate = async ({ token }) => {
 
-    const tokenRecord = await Token.findOne({ token });
+    const tokenRecord = await tokenCtrl.getOneByToken({ token });
 
     if( !tokenRecord ) throw new NotFoundError( "Token not found." );
 

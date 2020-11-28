@@ -12,6 +12,7 @@ const { Token } = require("../models");
  */
 
 /** CONTROLLER METHODS **/
+
 /**
  * @typedef CreateTokenOptions
  * @property {ObjectId} relation
