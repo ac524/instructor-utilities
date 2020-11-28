@@ -5,17 +5,20 @@
  */
 
 /**
+ * @typedef CreateDocOptions
+ * @property {Boolean} save
  * 
  * @param {MongoModel} DocModel 
  * @param {Object} options 
+ * @param {CreateDocOptions} config 
  * @returns {MongoDocument}
  */
-const create = async ( DocModel, options ) => {
+const create = async ( DocModel, options, config = { save: true } ) => {
 
     /** @type {MongoDocument} */
     const document = new DocModel( options );
 
-    await document.save();
+    if( config.save ) await document.save();
 
     return document;
 

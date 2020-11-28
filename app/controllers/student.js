@@ -3,6 +3,8 @@ const { Room, Feed } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
+const feedCtrl = require("./feed");
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
@@ -40,12 +42,12 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
     const student = room.students.id( studentId );
 
-    const feed = new Feed({
+    const feed = await feedCtrl.create({
         _id: feedId,
         room: roomId,
         for: studentId,
         in: "students"
-    });
+    }, { save: false });
 
     feed.pushItem( createdBy, "create" );
 
