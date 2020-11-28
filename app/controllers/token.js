@@ -8,7 +8,8 @@ const { Token } = require("../models");
  * @typedef {import('../models/schema/TokenSchema').TokenDocument} TokenDocument
  * 
  * @typedef TokenData
- * @property
+ * @property {ObjectId} relation
+ * @property {string} token
  */
 
 /** CONTROLLER METHODS **/
@@ -39,13 +40,10 @@ const create = async ( { relation, tokenString }, { bytes = 16 } = {} ) => {
 }
 
 /**
- * @typedef GetTokenByTokenOptions
- * @property {string} token
- * 
- * @param {GetTokenByTokenOptions} param0 
+ * @param {TokenData} search 
  * @returns {TokenDocument}
  */
-const getOneByToken = async ({ token }) => await Token.findOne({ token });
+const findOne = async ( search ) => await Token.findOne( search );
 
 
 /**
@@ -62,6 +60,6 @@ const deleteOne = async ({ tokenId }) => {
 
 module.exports = {
     create,
-    getOneByToken,
+    findOne,
     deleteOne
 }

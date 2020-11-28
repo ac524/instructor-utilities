@@ -40,7 +40,7 @@ const resend = async ({ config }) => {
  */
 const validate = async ({ token }) => {
 
-    const tokenRecord = await tokenCtrl.getOneByToken({ token });
+    const tokenRecord = await tokenCtrl.findOne({ token });
 
     if( !tokenRecord ) throw new NotFoundError( "Token not found." );
 

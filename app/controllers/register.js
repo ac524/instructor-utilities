@@ -34,7 +34,7 @@ const register = async ({ registerData }) => {
   if( code ) {
   
     // Create the User's classroom
-    const token = await tokenCtrl.getOneByToken({ token: code });
+    const token = await tokenCtrl.findOne({ token: code });
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
