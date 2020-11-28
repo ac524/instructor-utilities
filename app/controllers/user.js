@@ -2,6 +2,8 @@ const passwordHash = require('../config/utils/passwordHash');
 
 const { User, Room } = require("../models");
 
+const actions = require("./actions");
+
 const ioEmit = require("./utils/ioEmit");
 
 /**
@@ -18,23 +20,16 @@ const ioEmit = require("./utils/ioEmit");
  * @param {UserData} param0
  * @returns {UserDocument}
  */
-const create = async ( { password, ...data } ) => {
-
-    const user = new User({
-        ...data,
-        password: await passwordHash( password )
-    });
-
-    await user.save();
-
-    return user;
-
-}
+const create = async ( { password, ...data } ) => await actions.create( User, {
+    ...data,
+    password: await passwordHash( password )
+} );
 
 /**
- * @param {UserData} search 
+ * @param {UserData} search
+ * @returns {UserDocument}
  */
-const findOne = async ( search ) => await User.findOne( search );
+const findOne = async ( search ) => await actions.findOne( User, search );
 
 /**
  * @typedef UpdateUserOptions
@@ -45,13 +40,12 @@ const findOne = async ( search ) => await User.findOne( search );
  */
 const update = async ({ userId, user, userData: { password, ...userData } }) => {
 
-    if( password ) userData.password = await passwordHash( userData.password );
-
-    user
-    
-        ? await user.update( userData )
-        
-        : await User.findByIdAndUpdate( userId, userData );
+    await actions.update( User, {
+        docId: userId,
+        doc: user,
+        ...userData,
+        password: password && await passwordHash( userData.password )
+    } );
 
 }
 
@@ -98,6 +92,9 @@ const archiveRoom = async ({ roomId, room }) => {
  * @property {UserDocument} user
  * 
  * @param {GetUserRoomsShortOptions} param0 
+ * 
+ * // TODO detail return object.
+ * @returns {Object}
  */
 const getRoomsShort = async ({ user }) =>
     await Room
