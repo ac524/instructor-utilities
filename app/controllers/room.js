@@ -1,12 +1,24 @@
-const { InvalidUserError } = require("../config/errors");
-const { Classroom } = require("../models");
+const { Room } = require("../models");
+
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
+ * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('../validation/definitions/roomValidation').RoomData} RoomData
+ */
 
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef GetRoomOptions
+ * @property {ObjectId} roomId
+ * 
+ * @param {GetRoomOptions} param0 
+ */
 const getSingle = async ({ roomId }) => {
 
         const room =
-            await Classroom.findById( roomId )
+            await Room.findById( roomId )
                 .populate("staff.user", "name email date")
                 .populate("invites.token");
 
@@ -15,8 +27,10 @@ const getSingle = async ({ roomId }) => {
 }
 
 /**
- * @param {object} param0 
- * @param {object} param0.member - MemberSchema object
+ * @typedef GetRoomPermissionsOptions
+ * @property {MemberDocument} member
+ * 
+ * @param {GetRoomPermissionsOptions} param0 
  */
 const getPermissions = async ({ member }) => {
 
@@ -24,9 +38,16 @@ const getPermissions = async ({ member }) => {
 
 }
 
+/**
+ * @typedef UpdateRoomOptions
+ * @property {ObjectId} roomId
+ * @property {RoomData} roomData
+ * 
+ * @param {UpdateRoomOptions} param0 
+ */
 const update = async ({ roomId, roomData }) => {
 
-    await Classroom.findByIdAndUpdate( roomId, roomData );
+    await Room.findByIdAndUpdate( roomId, roomData );
 
 }
 

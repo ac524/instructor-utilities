@@ -1,12 +1,26 @@
 const passwordHash = require('../config/utils/passwordHash');
-const { InvalidUserError } = require("../config/errors");
 
-const { User, Classroom } = require("../models");
+const { User, Room } = require("../models");
 
 const ioEmit = require("./utils/ioEmit");
 
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('../models/schema/RoomSchema').MemberDocument} MemberDocument
+ * @typedef {import('../validation/definitions/userValidation').UserData} UserData
+ */
+
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef UpdateUserOptions
+ * @property {UserDocument} user
+ * @property {UserData} userData
+ * 
+ * @param {UpdateUserOptions} param0 
+ */
 const update = async ({ user, userData: { password, ...userData } }) => {
 
     if( password ) userData.password = await passwordHash( userData.password );
@@ -16,10 +30,13 @@ const update = async ({ user, userData: { password, ...userData } }) => {
 }
 
 /**
- * Disassociate the currect user from a classroom.
- * - Removes the classroom ID from the user.
- * - Removes the staff entry
- * - Removes the staff reference from the classroom.
+ * @typedef LeaveUserRoomOptions
+ * @property {string} roomId
+ * @property {UserDocument} user
+ * @property {RoomDocument} room
+ * @property {MemberDocument} member
+ * 
+ * @param {LeaveUserRoomOptions} param0 
  */
 const leaveRoom = async ({ roomId, user, room, member }) => {
 
@@ -36,9 +53,11 @@ const leaveRoom = async ({ roomId, user, room, member }) => {
 }
 
 /**
- * Removes a room's id from all associated user docs to remove all direct associations starting from a user. The room
- * and staff are left intact,so they can later be brought back if needed.
- * - Removes the classroom ID from all known associated users.
+ * @typedef ArchiveUserRoomOptions
+ * @property {string} roomId
+ * @property {RoomDocument} room
+ * 
+ * @param {ArchiveUserRoomOptions} param0 
  */
 const archiveRoom = async ({ roomId, room }) => {
 
@@ -48,8 +67,14 @@ const archiveRoom = async ({ roomId, room }) => {
 
 }
 
+/**
+ * @typedef GetUserRoomsShortOptions
+ * @property {UserDocument} user
+ * 
+ * @param {GetUserRoomsShortOptions} param0 
+ */
 const getRoomsShort = async ({ user }) =>
-    await Classroom
+    await Room
         .find({ _id: { $in: user.classrooms } })
         .select("name staff.role staff.user");
 

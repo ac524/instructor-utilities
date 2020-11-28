@@ -1,15 +1,15 @@
-const { Feed, Classroom, User } = require("../../models");
+const { Feed, Room, User } = require("../../models");
 
 module.exports = async () => {
 
-    await Classroom.deleteMany({});
+    await Room.deleteMany({});
     await Feed.deleteMany({});
 
     const users = await User.find({});
 
     const seedData = await require("../data/classrooms")( users );
 
-    const results = await Classroom.collection.insertMany(seedData);
+    const results = await Room.collection.insertMany(seedData);
 
     const classroomId = results.insertedIds['0'];
 

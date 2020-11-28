@@ -1,19 +1,37 @@
 const crypto = require('crypto');
 const mail = require('../config/utils/mail');
 
-const { Token, Classroom, User } = require("../models");
+const { Token, Room, User } = require("../models");
 
 const passwordHash = require("../config/utils/passwordHash");
 const ioEmit = require("./utils/ioEmit");
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 const homeUrl = require("../config/options")( "publicUrl" );
 
+/**
+ * Type Definition Imports
+ * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
+ * 
+ * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../models/schema/InviteSchema').InviteDocument} InviteDocument
+ * @typedef {import('../models/schema/TokenSchema').TokenDocument} TokenDocument
+ * 
+ * @typedef {import('../validation/definitions/inviteValidation').InviteData} InviteData
+ * @typedef {import('../validation/definitions/registerValidation').RegistrationData} RegistrationData
+ */
+
 /** HELPER METHODS **/
 
+/**
+ * @param {ObjectId} roomId 
+ * @param {MemberDocument} member 
+ */
 const addStaff = async (roomId, member) => {
 
     const { staff } =
-        await Classroom
+        await Room
             .findByIdAndUpdate(roomId, { $push: { staff: member } }, {new:true})
             .select("staff")
             .populate("staff.user");
@@ -22,6 +40,11 @@ const addStaff = async (roomId, member) => {
 
 }
 
+/**
+ * @param {RoomDocument} room 
+ * @param {InviteDocument} invite 
+ * @param {UserDocument} from 
+ */
 const sendInvite = ( room, invite, from ) => {
 
     return mail.send(
@@ -41,9 +64,17 @@ const sendInvite = ( room, invite, from ) => {
 
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef CreateRoomInviteOptions
+ * @property {ObjectId} roomId
+ * @property {UserDocument} user
+ * @property {InviteData} inviteData
+ * 
+ * @param {CreateRoomInviteOptions} param0 
+ */
 const create = async ({ roomId, user, inviteData })  => {
 
-    const roomEmails = await Classroom.findById(roomId).populate('staff.user',"email").select("invites.email");
+    const roomEmails = await Room.findById(roomId).populate('staff.user',"email").select("invites.email");
 
     const { email } = inviteData;
 
@@ -74,7 +105,7 @@ const create = async ({ roomId, user, inviteData })  => {
     };
 
     const room =
-        await Classroom
+        await Room
             .findByIdAndUpdate( roomId, update, { new: true } )
             .populate( 'invites.token' );
 
@@ -86,13 +117,16 @@ const create = async ({ roomId, user, inviteData })  => {
 
 }
 
-
 /**
- * Delete an invite
+ * @typedef RemoveRoomInviteOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} inviteId
+ * 
+ * @param {RemoveRoomInviteOptions} param0 
  */
 const remove = async ({ roomId, inviteId }) => {
 
-    const room = await Classroom.findById( roomId );
+    const room = await Room.findById( roomId );
 
     const invite = room.invites.id( inviteId );
 
@@ -107,7 +141,10 @@ const remove = async ({ roomId, inviteId }) => {
 }
 
 /**
- * Checks if an invite's email has a user.
+ * @typedef GetInviteEmailCheckOptions
+ * @property {InviteDocument} invite
+ * 
+ * @param {GetInviteEmailCheckOptions} param0 
  */
 const emailCheck = async ({ invite }) => {
 
@@ -122,7 +159,11 @@ const emailCheck = async ({ invite }) => {
 }
 
 /**
- * Register a User through an invite.
+ * @typedef RegisterInviteOptions
+ * @property {InviteDocument} invite
+ * @property {RegistrationData} registerData
+ * 
+ * @param {RegisterInviteOptions} param0 
  */
 const register = async ({ invite, registerData }) => {
 
@@ -149,7 +190,13 @@ const register = async ({ invite, registerData }) => {
 }
 
 /**
- * Accept the invitation to join a room.
+ * @typedef AcceptInviteOptions
+ * @property {TokenDocument} inviteToken
+ * @property {RoomDocument} inviteRoom
+ * @property {InviteDocument} invite
+ * @property {UserDocument} user
+ * 
+ * @param {AcceptInviteOptions} param0 
  */
 const accept = async ({ inviteToken, inviteRoom, invite, user }) => {
 

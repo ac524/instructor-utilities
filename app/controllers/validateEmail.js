@@ -4,12 +4,18 @@ const ioEmit = require("./utils/ioEmit");
 const { User, Token } = require("../models");
 const { NotFoundError } = require("../config/errors");
 
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('../validation/definitions/resendValidation').ResendData} ResendData
+ */
+
 /** CONTROLLER METHODS **/
 
 /**
- * @param {object} param0 
- * @param {object} param0.config
- * @param {string} param0.config.email
+ * @typedef {Object} ResendValidateEmailOptions
+ * @property {ResendData} config
+ * 
+ * @param {ResendValidateEmailOptions} param0
  */
 const resend = async ({ config }) => {
 
@@ -23,6 +29,12 @@ const resend = async ({ config }) => {
 
 }
 
+/**
+ * @typedef {Object} ValidateEmailOptions
+ * @property {string} token
+ * 
+ * @param {ValidateEmailOptions} param0 
+ */
 const validate = async ({ token }) => {
 
     const tokenRecord = await Token.findOne({ token });
