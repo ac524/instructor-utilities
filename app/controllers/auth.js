@@ -9,10 +9,28 @@ const { InvalidDataError } = require("../config/errors");
 
 const jwtSign = util.promisify( jwt.sign );
 
+/**
+ * Type Definition Imports
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../validation/definitions/loginValidation').LoginData} LoginData
+ */
+
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef GetAuthUserOptions
+ * @property {UserDocument} user
+ * 
+ * @param {GetAuthUserOptions} param0 
+ */
 const authenticated = ({ user }) => user;
 
+/**
+ * @typedef LoginOptions
+ * @property {LoginData} credentials
+ * 
+ * @param {LoginOptions} param0 
+ */
 const login = async ({ credentials }) => {
 
   const { email, password } = credentials;
