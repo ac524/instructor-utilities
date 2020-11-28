@@ -5,8 +5,10 @@ const passwordHash = require("../config/utils/passwordHash");
 // Load input validation
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
-const { User, Token, Room } = require("../models");
-const { getOneByToken: getToken  } = require("./token");
+const { User, Room } = require("../models");
+
+const tokenCtrl = require("./token");
+
 const { InvalidDataError, NotFoundError } = require('../config/errors');
 
 /**
@@ -32,7 +34,7 @@ const register = async ({ registerData }) => {
   if( code ) {
   
     // Create the User's classroom
-    const token = await getToken({ token: code });
+    const token = await tokenCtrl.getOneByToken({ token: code });
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
@@ -78,7 +80,7 @@ const register = async ({ registerData }) => {
   }
 
   if( classroom.registerCode ) {
-    await Token.findByIdAndDelete(classroom.registerCode);
+    await tokenCtrl.deleteOne( classroom.registerCode );
     classroom.registerCode = undefined;
   }
 

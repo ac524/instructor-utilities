@@ -1,11 +1,16 @@
 const crypto = require('crypto');
 const mail = require('../mail');
 
-const { Token, Room, User } = require("../models");
 
 const passwordHash = require("../config/utils/passwordHash");
-const ioEmit = require("./utils/ioEmit");
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
+
+const { Room, User } = require("../models");
+
+const tokenCtrl = require("./token");
+
+const ioEmit = require("./utils/ioEmit");
+
 const homeUrl = require("../config/options")( "publicUrl" );
 
 /**
@@ -88,12 +93,7 @@ const create = async ({ roomId, user, inviteData })  => {
 
         throw new InvalidDataError( "Unable to create invite.", { email: "This email already has an invite." } );
 
-    const token = new Token({
-        relation: roomId,
-        token: crypto.randomBytes(16).toString('hex')
-    });
-
-    await token.save();
+    const token = await tokenCtrl.create({ relation: roomId });
 
     const update = {
         $push: {
@@ -132,7 +132,7 @@ const remove = async ({ roomId, inviteId }) => {
 
     if( !invite ) throw new NotFoundError( "Invite not found." );
 
-    await Token.findByIdAndDelete( invite.token );
+    await tokenCtrl.deleteOne( invite.token );
 
     invite.remove();
 
