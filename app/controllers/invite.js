@@ -1,17 +1,14 @@
-const crypto = require('crypto');
 const mail = require('../mail');
 
-
-const passwordHash = require("../config/utils/passwordHash");
+const homeUrl = require("../config/options")( "publicUrl" );
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 
-const { Room, User } = require("../models");
+const { Room } = require("../models");
 
 const tokenCtrl = require("./token");
+const userCtrl = require('./user');
 
 const ioEmit = require("./utils/ioEmit");
-
-const homeUrl = require("../config/options")( "publicUrl" );
 
 /**
  * Type Definition Imports
@@ -149,7 +146,8 @@ const remove = async ({ roomId, inviteId }) => {
 const emailCheck = async ({ invite }) => {
 
     const { email } = invite;
-    const user = await User.findOne({ email });
+
+    const user = await userCtrl.findOne({ email });
 
     return {
         hasUser: Boolean( user ),
@@ -169,7 +167,7 @@ const register = async ({ invite, registerData }) => {
 
     const { email } = invite;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await userCtrl.findOne({ email });
 
     if( existingUser )
 
@@ -178,14 +176,12 @@ const register = async ({ invite, registerData }) => {
     const { name, password } = registerData;
 
     // Create the User
-    const user = new User({
+    await userCtrl.create({
         name,
         email,
-        password: await passwordHash( password ),
+        password,
         isVerified: true
     });
-
-    await user.save();
 
 }
 

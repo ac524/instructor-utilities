@@ -15,18 +15,14 @@ const { Token } = require("../models");
 /** CONTROLLER METHODS **/
 
 /**
- * @typedef CreateTokenOptions
- * @property {ObjectId} relation
- * @property {string} tokenString
- * 
  * @typedef CreateTokenConfig
  * @property {number} bytes
  * 
- * @param {CreateTokenOptions} param0 
+ * @param {TokenData} param0 
  * @param {CreateTokenConfig} param1
  * @returns {TokenDocument}
  */
-const create = async ( { relation, tokenString }, { bytes = 16 } = {} ) => {
+const create = async ( { relation, token: tokenString }, { bytes = 16 } = {} ) => {
 
     const token = new Token({
         relation,

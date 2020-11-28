@@ -15,6 +15,23 @@ const ioEmit = require("./utils/ioEmit");
 /** CONTROLLER METHODS **/
 
 /**
+ * @param {UserData} param0
+ * @returns {UserDocument}
+ */
+const create = async ( { password, ...data } ) => {
+
+    const user = new User({
+        ...data,
+        password: await passwordHash( password )
+    });
+
+    await user.save();
+
+    return user;
+
+}
+
+/**
  * @param {UserData} search 
  */
 const findOne = async ( search ) => await User.findOne( search );
@@ -84,6 +101,7 @@ const getRoomsShort = async ({ user }) =>
         .select("name staff.role staff.user");
 
 module.exports = {
+    create,
     findOne,
     update,
     leaveRoom,
