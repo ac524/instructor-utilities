@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('./definitions/userValidation').UserData} UserData
+ */
+
 module.exports = {
     app: require("./definitions/appValidation"),
     comment: require("./definitions/commentValidation"),

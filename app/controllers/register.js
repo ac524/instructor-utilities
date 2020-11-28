@@ -5,11 +5,22 @@ const passwordHash = require("../config/utils/passwordHash");
 // Load input validation
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
-const { User, Token, Classroom } = require("../models");
+const { User, Token, Room } = require("../models");
 const { InvalidDataError, NotFoundError } = require('../config/errors');
+
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('../validation/definitions/registerValidation').RegistrationData} RegistrationData
+ */
 
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef RegisterOptions
+ * @property {RegistrationData} registerData
+ * 
+ * @param {RegisterOptions} param0 
+ */
 const register = async ({ registerData }) => {
 
   let classroom;
@@ -26,7 +37,7 @@ const register = async ({ registerData }) => {
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
-    classroom = await Classroom.findOne({ registerCode: token._id });
+    classroom = await Room.findOne({ registerCode: token._id });
 
     if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
     
@@ -61,7 +72,7 @@ const register = async ({ registerData }) => {
   } else {
 
     // Create the User's classroom
-    classroom = new Classroom({
+    classroom = new Room({
       name: roomname
     });
 

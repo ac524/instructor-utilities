@@ -1,6 +1,6 @@
 module.exports = {
   User: require("./User"),
-  Classroom: require("./Classroom"),
+  Room: require("./Room"),
   Feed: require("./Feed"),
   Token: require("./Token"),
   App: require("./App"),

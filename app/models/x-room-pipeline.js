@@ -6,7 +6,7 @@
  * on document populations on different scenarios. Side tabling this effort for now and moving relevant
  * code here for potential review and reapproach later on.
  * 
- * Pulled from models/Classroom.js
+ * Pulled from models/Room.js
  */
 
 const roomProject = {

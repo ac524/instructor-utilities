@@ -1,5 +1,5 @@
-const Feed = require("../Feed");
-const User = require("../User");
+const Feed = require("../../Feed");
+const User = require("../../User");
 
 const feedAggregates = [
     {
