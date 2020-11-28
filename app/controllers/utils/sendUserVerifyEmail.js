@@ -1,4 +1,4 @@
-const mail = require('../../config/utils/mail');
+const mail = require('../../mail');
 const crypto = require('crypto');
 
 const { Token } = require("../../models");

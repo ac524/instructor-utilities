@@ -5,7 +5,7 @@ const appTypes  = require("../config/apps/registry.json");
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
- * @typedef {import('../validation/definitions/appValidation').AppData} AppData
+ * @typedef {import('../config/validation/definitions/appValidation').AppData} AppData
  */
 
 /** CONTROLLER METHODS **/

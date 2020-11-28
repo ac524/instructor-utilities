@@ -9,7 +9,7 @@ const ioEmit = require("./utils/ioEmit");
  * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
  * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
  * @typedef {import('../models/schema/RoomSchema').MemberDocument} MemberDocument
- * @typedef {import('../validation/definitions/userValidation').UserData} UserData
+ * @typedef {import('../config/validation/definitions/userValidation').UserData} UserData
  */
 
 /** CONTROLLER METHODS **/

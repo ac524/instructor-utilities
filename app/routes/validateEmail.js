@@ -1,6 +1,6 @@
 const createRouter = require("./utils/createRouter");
 
-const { resend: resendVal } = require("../validation");
+const { resend: resendVal } = require("../config/validation");
 
 const {
     validate,

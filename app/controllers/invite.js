@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const mail = require('../config/utils/mail');
+const mail = require('../mail');
 
 const { Token, Room, User } = require("../models");
 
@@ -18,8 +18,8 @@ const homeUrl = require("../config/options")( "publicUrl" );
  * @typedef {import('../models/schema/InviteSchema').InviteDocument} InviteDocument
  * @typedef {import('../models/schema/TokenSchema').TokenDocument} TokenDocument
  * 
- * @typedef {import('../validation/definitions/inviteValidation').InviteData} InviteData
- * @typedef {import('../validation/definitions/registerValidation').RegistrationData} RegistrationData
+ * @typedef {import('../config/validation/definitions/inviteValidation').InviteData} InviteData
+ * @typedef {import('../config/validation/definitions/registerValidation').RegistrationData} RegistrationData
  */
 
 /** HELPER METHODS **/

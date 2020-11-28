@@ -6,7 +6,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
- * @typedef {import('../validation/definitions/studentValidation').StudentData} StudentData
+ * @typedef {import('../config/validation/definitions/studentValidation').StudentData} StudentData
  */
 
 const getRoomWithStudents = roomId => Room.findById(roomId).select("students");

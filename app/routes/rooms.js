@@ -3,7 +3,7 @@ const createRouter = require("./utils/createRouter");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const { register: roomVal } = require("../validation");
+const { register: roomVal } = require("../config/validation");
 
 const { room: roomPerm } = require("../config/permissions");
 

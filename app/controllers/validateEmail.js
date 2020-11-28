@@ -6,7 +6,7 @@ const { NotFoundError } = require("../config/errors");
 
 /**
  * TYPE DEFINITION IMPORTS
- * @typedef {import('../validation/definitions/resendValidation').ResendData} ResendData
+ * @typedef {import('../config/validation/definitions/resendValidation').ResendData} ResendData
  */
 
 /** CONTROLLER METHODS **/
