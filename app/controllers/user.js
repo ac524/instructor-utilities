@@ -20,7 +20,7 @@ const ioEmit = require("./utils/ioEmit");
  * @param {UserData} param0
  * @returns {UserDocument}
  */
-const create = async ( { password, ...data } ) => await actions.create( User, {
+const create = async ( { password, ...data } ) => await actions.createOne( User, {
     ...data,
     password: await passwordHash( password )
 } );
@@ -40,11 +40,13 @@ const findOne = async ( search ) => await actions.findOne( User, search );
  */
 const update = async ({ userId, user, userData: { password, ...userData } }) => {
 
-    await actions.update( User, {
+    await actions.updateOne( User, {
         docId: userId,
         doc: user,
-        ...userData,
-        password: password && await passwordHash( userData.password )
+        data: {
+            ...userData,
+            password: password && await passwordHash( userData.password )
+        }
     } );
 
 }

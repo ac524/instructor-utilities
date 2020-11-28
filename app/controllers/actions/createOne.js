@@ -13,7 +13,7 @@
  * @param {CreateDocOptions} config 
  * @returns {MongoDocument}
  */
-const create = async ( DocModel, options, config = { save: true } ) => {
+const createOne = async ( DocModel, options, config = { save: true } ) => {
 
     /** @type {MongoDocument} */
     const document = new DocModel( options );
@@ -24,4 +24,4 @@ const create = async ( DocModel, options, config = { save: true } ) => {
 
 }
 
-module.exports = create;
+module.exports = createOne;

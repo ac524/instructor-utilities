@@ -8,7 +8,7 @@ const entryTypes = require("./entries");
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * @typedef {import('../../models/schema/FeedSchema').FeedDocument} FeedDocument
- * @typedef {import('../actions/create').CreateDocOptions} CreateDocOptions
+ * @typedef {import('../actions/createOne').CreateDocOptions} CreateDocOptions
  * 
  * @typedef FeedData
  * @property {ObjectId} _id
@@ -24,7 +24,7 @@ const entryTypes = require("./entries");
  * @param {CreateDocOptions} config
  * @returns {FeedDocument}
  */
-const create = async ( data, config ) => await actions.create( Feed, data, config );
+const create = async ( data, config ) => await actions.createOne( Feed, data, config );
 
 /**
  * @typedef GetFeedOptions

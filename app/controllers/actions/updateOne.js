@@ -9,12 +9,13 @@
  * @typedef UpdateModelOptions
  * @property {ObjectId} docId
  * @property {MongoDocument} doc
+ * @property {Object} data
  * 
  * @param {MongoModel} DocModel 
  * @param {UpdateModelOptions} param1 
  * @returns {MongoDocument}
  */
-const update = async ( DocModel, { docId, doc, ...data } ) => {
+const updateOne = async ( DocModel, { docId, doc, data } ) => {
 
     if( doc ) {
 
@@ -27,4 +28,4 @@ const update = async ( DocModel, { docId, doc, ...data } ) => {
 
 }
 
-module.exports = update;
+module.exports = updateOne;
