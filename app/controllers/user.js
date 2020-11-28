@@ -43,11 +43,15 @@ const findOne = async ( search ) => await User.findOne( search );
  * 
  * @param {UpdateUserOptions} param0 
  */
-const update = async ({ user, userData: { password, ...userData } }) => {
+const update = async ({ userId, user, userData: { password, ...userData } }) => {
 
     if( password ) userData.password = await passwordHash( userData.password );
 
-    if (updateList.length) await user.update( userData );
+    user
+    
+        ? await user.update( userData )
+        
+        : await User.findByIdAndUpdate( userId, userData );
 
 }
 

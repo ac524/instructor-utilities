@@ -1,9 +1,8 @@
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 const ioEmit = require("./utils/ioEmit");
 
-const { User } = require("../models");
-
 const tokenCtrl = require("./token");
+const userCtrl = require("./user");
 
 const { NotFoundError } = require("../config/errors");
 
@@ -24,7 +23,7 @@ const resend = async ({ config }) => {
 
     const { email } = config;
 
-    const user = await User.findOne({ email });
+    const user = await userCtrl.findOne({ email });
 
     if( !user ) throw new NotFoundError( "Email not found." );
 
@@ -46,7 +45,10 @@ const validate = async ({ token }) => {
 
     const update = { isVerified: true };
 
-    await User.findByIdAndUpdate( tokenRecord.relation, update );
+    await userCtrl.update({
+        userId: tokenRecord.relation,
+        userData: update
+    });
 
     ioEmit( "user:update", { isVerified:true }, `user:${tokenRecord.relation}` );
 
