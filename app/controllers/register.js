@@ -5,7 +5,9 @@ const passwordHash = require("../config/utils/passwordHash");
 // Load input validation
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
-const { User, Room } = require("../models");
+const { Room } = require("../models");
+
+const userCtrl = require("./user");
 
 const tokenCtrl = require("./token");
 
@@ -46,7 +48,7 @@ const register = async ({ registerData }) => {
 
   const { email } = registerData;
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await userCtrl.findOne({ email });
 
   if( existingUser )
 
@@ -55,14 +57,12 @@ const register = async ({ registerData }) => {
   const { name, password } = registerData;
 
   // Create the User
-  const user = new User({
+  const user = await userCtrl.create({
     name,
     email,
-    password: await passwordHash( password ),
+    password,
     isVerified: !mail.isEnabled
-  });
-
-  await user.save();
+  })
 
   const { roomname } = registerData;
 
