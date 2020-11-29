@@ -7,6 +7,7 @@ const actions = require("./actions");
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
  * @typedef {import('../config/validation/definitions/roomValidation').RoomData} RoomData
+ * @typedef {import('./actions/utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
 /** CONTROLLER METHODS **/
@@ -29,6 +30,12 @@ const getSingle = async ({ roomId }) => {
     return await room.getFeedAggregate();
 
 }
+
+/**
+ * @param {RoomData} search 
+ * @param {QueryModifierOptions} queryOptions 
+ */
+const getDocs = async ( search, queryOptions ) => await actions.findMany( Room, { search }, queryOptions );
 
 /**
  * @typedef GetRoomPermissionsOptions
@@ -60,6 +67,7 @@ const update = async ({ roomId, roomData }) => {
 
 module.exports = {
     getSingle,
+    getDocs,
     getPermissions,
     update
 }

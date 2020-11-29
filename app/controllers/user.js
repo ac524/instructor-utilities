@@ -3,6 +3,7 @@ const passwordHash = require('../config/utils/passwordHash');
 const { User, Room } = require("../models");
 
 const actions = require("./actions");
+const roomCtrl = require("./room");
 
 const ioEmit = require("./utils/ioEmit");
 
@@ -85,7 +86,10 @@ const archiveRoom = async ({ roomId, room }) => {
 
     const staffUserIds = room.staff.map(({ user }) => user);
 
-    await User.updateMany({ _id: { $in: staffUserIds } }, { $pull: { classrooms: roomId } });
+    await actions.updateMany( User, {
+        search: { _id: { $in: staffUserIds } },
+        data: { $pull: { classrooms: roomId } }
+    } );
 
 }
 
@@ -96,12 +100,9 @@ const archiveRoom = async ({ roomId, room }) => {
  * @param {GetUserRoomsShortOptions} param0 
  * 
  * // TODO detail return object.
- * @returns {Object}
+ * @returns {RoomDocument[]}
  */
-const getRoomsShort = async ({ user }) =>
-    await Room
-        .find({ _id: { $in: user.classrooms } })
-        .select("name staff.role staff.user");
+const getRoomsShort = async ({ user }) => await roomCtrl.getDocs( { _id: { $in: user.classrooms } }, { select: "name staff.role staff.user" } );
 
 module.exports = {
     create,
