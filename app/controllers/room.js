@@ -8,10 +8,19 @@ const actions = require("./actions");
  * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
  * @typedef {import("../models/schema/RoomSchema").RoomDocument} RoomDocument
  * @typedef {import('../config/validation/definitions/roomValidation').RoomData} RoomData
+ * @typedef {import('./actions/createOne').CreateDocOptions} CreateDocOptions
  * @typedef {import('./actions/utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
 /** CONTROLLER METHODS **/
+
+/**
+ * @param {RoomData} data 
+ * @param {CreateDocOptions} config 
+ * 
+ * @returns {RoomDocument}
+ */
+const create = async ( data, config ) => await actions.createOne( Room, data, config );
 
 /**
  * @typedef GetRoomOptions
@@ -43,7 +52,15 @@ const getSingle = async ({ roomId }) => {
  * 
  * @returns {RoomDocument}
  */
-const getDoc = async ( { roomId }, queryOptions ) => await actions.getOne( Room, roomId, queryOptions );
+const getDoc = async ( { roomId, search }, queryOptions ) => {
+
+    return roomId
+
+        ? await actions.getOne( Room, roomId, queryOptions )
+
+        : await actions.findOne( Room, search, queryOptions );
+
+}
 
 /**
  * @param {RoomData} search 
@@ -87,6 +104,7 @@ const update = async ({ roomId, room, search, roomData }, queryOptions) => {
 }
 
 module.exports = {
+    create,
     getSingle,
     getDoc,
     getDocs,

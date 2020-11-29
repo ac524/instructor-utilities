@@ -3,9 +3,9 @@ const mail = require('../mail');
 // Load input validation
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
-const { Room } = require("../models");
 const userCtrl = require("./user");
 const tokenCtrl = require("./token");
+const roomCtrl = require("./room");
 
 const { InvalidDataError, NotFoundError } = require('../config/errors');
 
@@ -36,7 +36,7 @@ const register = async ({ registerData }) => {
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
-    classroom = await Room.findOne({ registerCode: token._id });
+    classroom =  await roomCtrl.getDoc( { search: { registerCode: token._id } } );
 
     if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
     
@@ -69,9 +69,7 @@ const register = async ({ registerData }) => {
   } else {
 
     // Create the User's classroom
-    classroom = new Room({
-      name: roomname
-    });
+    classroom = roomCtrl.create( { name: roomname }, { save: false } );
 
   }
 
