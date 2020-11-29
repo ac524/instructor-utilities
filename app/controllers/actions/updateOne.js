@@ -19,7 +19,7 @@ const queryModifier = require("./utils/queryModifier");
  * @param {QueryModifierOptions} queryOptions 
  * @returns {MongoDocument}
  */
-const updateOne = async ( DocModel, { docId, doc, data }, queryOptions ) => {
+const updateOne = async ( DocModel, { docId, doc, search, data }, queryOptions ) => {
 
     if( doc ) {
 
@@ -27,6 +27,10 @@ const updateOne = async ( DocModel, { docId, doc, data }, queryOptions ) => {
         return doc;
 
     }
+
+    if( search )
+
+        return queryModifier( DocModel.findOneAndUpdate( search, data, { new: true } ), queryOptions );
 
     return await queryModifier( DocModel.findByIdAndUpdate( docId, data, { new: true } ), queryOptions );
 

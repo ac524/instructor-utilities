@@ -1,6 +1,6 @@
 const passwordHash = require('../config/utils/passwordHash');
 
-const { User, Room } = require("../models");
+const { User } = require("../models");
 
 const actions = require("./actions");
 const roomCtrl = require("./room");

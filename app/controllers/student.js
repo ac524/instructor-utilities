@@ -1,11 +1,9 @@
 const { NotFoundError } = require("../config/errors");
-const { Room } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const actions = require("./actions");
-
 const feedCtrl = require("./feed");
+const roomCtrl = require("./room");
 
 /**
  * TYPE DEFINITION IMPORTS
@@ -13,9 +11,22 @@ const feedCtrl = require("./feed");
  * @typedef {import('../config/validation/definitions/studentValidation').StudentData} StudentData
  */
 
-const getRoomWithStudents = roomId => Room.findById(roomId).select("students");
+const getRoomWithStudents = async roomId =>  await roomCtrl.getDoc( { roomId }, { select: "students" } );
+
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
-const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Room.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
+
+const findStudentByIdAndUpdate = async ( roomId, studentId, update ) =>
+
+    (await roomCtrl.update(
+            {
+                search: { _id: roomId, "students._id": studentId },
+                data: {  $set: update }
+            },
+            { select: "students" }
+        ))
+        .students
+        .id(studentId);
+
 const mapUpdateKeys = updates => Object.fromEntries(Object.entries(updates).map(([key,value])=>[`students.$.${key}`,value]));
 
 /** HELPER METHODS **/
@@ -40,7 +51,7 @@ const studentFactory = async ( createdBy, roomId, data ) => {
         }
     };
 
-    const room = await actions.updateOne( Room, {
+    const room = roomCtrl.update( {
         docId: roomId,
         data: update
     }, { select: "students" } );
