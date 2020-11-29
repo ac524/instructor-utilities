@@ -1,7 +1,9 @@
 const { NotFoundError } = require("../config/errors");
-const { Room, Feed } = require("../models");
+const { Room } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;
+
+const actions = require("./actions");
 
 const feedCtrl = require("./feed");
 
@@ -38,7 +40,10 @@ const studentFactory = async ( createdBy, roomId, data ) => {
         }
     };
 
-    const room = await Room.findByIdAndUpdate( roomId, update, { new: true } ).select("students");
+    const room = await actions.updateOne( Room, {
+        docId: roomId,
+        data: update
+    }, { select: "students" } );
 
     const student = room.students.id( studentId );
 
@@ -175,7 +180,7 @@ const deleteSingle = async ( { roomId, studentId } )  => {
 
     await room.save();
 
-    await Feed.findByIdAndDelete(student.feed);
+    await feedCtrl.deleteDoc({ feedId: student.feed });
 
 }
 

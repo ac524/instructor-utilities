@@ -51,7 +51,10 @@ const getPermissions = async ({ member }) => {
  */
 const update = async ({ roomId, roomData }) => {
 
-    await Room.findByIdAndUpdate( roomId, roomData );
+    await actions.updateOne( Room, {
+        docId: roomId,
+        data: roomData
+    } );
 
 }
 

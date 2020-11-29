@@ -59,9 +59,16 @@ const getSingleItems = async ({ feedId }) => {
 
 }
 
+const deleteDoc = async ({ feedId }) => {
+
+    await actions.deleteOne( Feed, feedId )
+
+}
+
 module.exports = {
     create,
     getSingle,
     getSingleItems,
+    deleteDoc,
     entryTypes
 }

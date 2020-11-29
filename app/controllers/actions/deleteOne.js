@@ -5,19 +5,17 @@ const queryModifier = require("./utils/queryModifier");
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * @typedef {import('mongoose').Model} MongoModel
  * @typedef {import('mongoose').Document} MongoDocument
- * @typedef {import('./utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
 /**
  * @param {MongoModel} DocModel 
- * @param {ObjectId} docId 
- * @param {QueryModifierOptions} options 
+ * @param {ObjectId} docId
  * @returns {MongoDocument}
  */
-const getOne = async ( DocModel, docId, options ) => {
+const deleteOne = async ( DocModel, docId ) => {
 
     /** @type {MongoDocument} */
-    const document = await queryModifier( DocModel.findById( docId ), options );
+    const document = await DocModel.findByIdAndDelete( docId );
 
     // TODO Not found error
 
@@ -25,4 +23,4 @@ const getOne = async ( DocModel, docId, options ) => {
 
 }
 
-module.exports = getOne;
+module.exports = deleteOne;

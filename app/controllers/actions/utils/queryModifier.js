@@ -3,14 +3,29 @@
  * @typedef {import('mongoose').Query} Query
  */
 
+ /**
+  * @param {Query} query 
+  * @param {Array} populations 
+  */
+const populateMod = ( query, populations ) => {
+
+    for( populateParams of populations )
+        
+        query.populate( ...(Array.isArray( populateParams ) ? populateParams : [populateParams]) );
+
+};
+
+/**
+ * @param {Query} query 
+ * @param {Array} populations 
+ */
+const selectMod = ( query, select ) => {
+    query.select( select );
+}
+
 const modifierMap = {
-    populate: ( query, populations ) => {
-
-        for( populateParams of populations )
-            
-            query.populate( ...(Array.isArray( populateParams ) ? populateParams : [populateParams]) );
-
-    }
+    populate: populateMod,
+    select: selectMod
 }
 
 /**

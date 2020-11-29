@@ -1,8 +1,11 @@
+const queryModifier = require("./utils/queryModifier");
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * @typedef {import('mongoose').Model} MongoModel
  * @typedef {import('mongoose').Document} MongoDocument
+ * @typedef {import('./utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
 /**
@@ -13,9 +16,10 @@
  * 
  * @param {MongoModel} DocModel 
  * @param {UpdateModelOptions} param1 
+ * @param {QueryModifierOptions} queryOptions 
  * @returns {MongoDocument}
  */
-const updateOne = async ( DocModel, { docId, doc, data } ) => {
+const updateOne = async ( DocModel, { docId, doc, data }, queryOptions ) => {
 
     if( doc ) {
 
@@ -24,7 +28,7 @@ const updateOne = async ( DocModel, { docId, doc, data } ) => {
 
     }
 
-    return await DocModel.findByIdAndUpdate( docId, data );
+    return await queryModifier( DocModel.findByIdAndUpdate( docId, data, { new: true } ), queryOptions );
 
 }
 

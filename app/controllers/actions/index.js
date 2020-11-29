@@ -6,9 +6,12 @@ const findOne = require("./findOne");
 
 const updateOne = require("./updateOne");
 
+const deleteOne = require("./deleteOne");
+
 module.exports = {
     createOne,
     getOne,
     findOne,
-    updateOne
+    updateOne,
+    deleteOne
 };

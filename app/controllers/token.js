@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const actions = require("./actions");
+
 const { Token } = require("../models");
 
 /**
@@ -22,18 +24,10 @@ const { Token } = require("../models");
  * @param {CreateTokenConfig} param1
  * @returns {TokenDocument}
  */
-const create = async ( { relation, token: tokenString }, { bytes = 16 } = {} ) => {
-
-    const token = new Token({
-        relation,
-        token: tokenString || crypto.randomBytes(bytes).toString('hex')
-    });
-
-    await token.save();
-
-    return token;
-
-}
+const create = async ( { relation, token: tokenString }, { bytes = 16 } = {} ) => await actions.createOne( Token, {
+    relation,
+    token: tokenString || crypto.randomBytes(bytes).toString('hex')
+} );
 
 /**
  * @param {TokenData} search 
