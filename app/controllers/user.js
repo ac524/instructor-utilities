@@ -2,6 +2,8 @@ const passwordHash = require('../config/utils/passwordHash');
 
 const { User } = require("../models");
 
+const SchemaController = require("./SchemaController");
+
 const actions = require("./actions");
 const roomCtrl = require("./room");
 
@@ -9,13 +11,42 @@ const ioEmit = require("./utils/ioEmit");
 
 /**
  * TYPE DEFINITION IMPORTS
- * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
- * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
- * @typedef {import('../models/schema/RoomSchema').MemberDocument} MemberDocument
- * @typedef {import('../config/validation/definitions/userValidation').UserData} UserData
+ * @typedef {import('mongoose').Model} MongoModel
+ * @typedef {import('mongoose').Document} MongoDocument
+ * @typedef {import('./SchemaController').CreateDocOptions} CreateDocOptions
+ * @typedef {import('./SchemaController').CreateDocConfig} CreateDocConfig
  */
 
-/** CONTROLLER METHODS **/
+/** CONTROLLER DEFINITION **/
+class UserController extends SchemaController {
+
+    constructor() {
+
+        super( 'user', User );
+
+    }
+
+    /**
+     * @param {MongoModel} DocModel 
+     * @param {CreateDocOptions} param0 
+     * @param {CreateDocConfig} config
+     * 
+     * @returns {MongoDocument}
+     */
+    createOne( { data: { password, ...data } }, config ) {
+
+        super.createOne({
+            date: {
+                ...data,
+                // Hash the password before saving.
+                password: await passwordHash( password )
+            }
+        }, config);
+
+    }
+
+}
+
 
 /**
  * @param {UserData} param0

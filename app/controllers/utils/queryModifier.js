@@ -20,7 +20,9 @@ const populateMod = ( query, populations ) => {
  * @param {Array} populations 
  */
 const selectMod = ( query, select ) => {
+
     query.select( select );
+
 }
 
 const modifierMap = {
@@ -31,6 +33,7 @@ const modifierMap = {
 /**
  * @typedef QueryModifierOptions
  * @property {Array} populate - A list of populate configurations.
+ * @property {string} select - A string of member names to select.
  * 
  * @param {Query} query 
  * @param {QueryModifierOptions} options 
