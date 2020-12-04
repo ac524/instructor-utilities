@@ -37,7 +37,7 @@ const login = async ({ credentials }) => {
   const { email, password } = credentials;
 
   // Find user by email
-  const user =  await userCtrl.findOne({ email });
+  const user =  await userCtrl.findOne({ search: { email } });
 
   if (!user)
 

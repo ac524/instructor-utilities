@@ -23,7 +23,7 @@ const resend = async ({ config }) => {
 
     const { email } = config;
 
-    const user = await userCtrl.findOne({ email });
+    const user = await userCtrl.findOne({ search: { email } });
 
     if( !user ) throw new NotFoundError( "Email not found." );
 
@@ -45,9 +45,9 @@ const validate = async ({ token }) => {
 
     const update = { isVerified: true };
 
-    await userCtrl.update({
-        userId: tokenRecord.relation,
-        userData: update
+    await userCtrl.updateOne({
+        docId: tokenRecord.relation,
+        data: update
     });
 
     ioEmit( "user:update", { isVerified:true }, `user:${tokenRecord.relation}` );

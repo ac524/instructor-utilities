@@ -1,4 +1,4 @@
-const queryModifier = require("./utils/queryModifier");
+const queryModifier = require("../utils/queryModifier");
 
 /**
  * TYPE DEFINITION IMPORTS

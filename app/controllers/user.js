@@ -15,6 +15,8 @@ const ioEmit = require("./utils/ioEmit");
  * @typedef {import('mongoose').Document} MongoDocument
  * @typedef {import('./SchemaController').CreateDocOptions} CreateDocOptions
  * @typedef {import('./SchemaController').CreateDocConfig} CreateDocConfig
+ * @typedef {import('./SchemaController').UpdateDocOptions} UpdateDocOptions
+ * @typedef {import('./utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
 /** CONTROLLER DEFINITION **/
@@ -27,21 +29,45 @@ class UserController extends SchemaController {
     }
 
     /**
-     * @param {MongoModel} DocModel 
      * @param {CreateDocOptions} param0 
      * @param {CreateDocConfig} config
      * 
      * @returns {MongoDocument}
      */
-    createOne( { data: { password, ...data } }, config ) {
+    async createOne( { data: { password, ...data } }, config ) {
 
         super.createOne({
-            date: {
+            data: {
                 ...data,
                 // Hash the password before saving.
                 password: await passwordHash( password )
             }
         }, config);
+
+    }
+
+    /**
+     * @param {UpdateDocOptions} param1 
+     * @param {QueryModifierOptions} queryOptions
+     * 
+     * @returns {MongoDocument}
+     */
+    async updateOne( { data: { password, ...data }, ...updateOptions }, queryOptions ) {
+
+        super.updateOne({
+            ...updateOptions,
+            data: {
+                ...data,
+                // Hash the password before saving.
+                password: await passwordHash( password )
+            }
+        }, queryOptions);
+
+    }
+
+    async getRoomBasics({ user }) {
+
+        return await roomCtrl.getDocs( { _id: { $in: user.classrooms } }, { select: "name staff.role staff.user" } );
 
     }
 
@@ -135,11 +161,13 @@ const archiveRoom = async ({ roomId, room }) => {
  */
 const getRoomsShort = async ({ user }) => await roomCtrl.getDocs( { _id: { $in: user.classrooms } }, { select: "name staff.role staff.user" } );
 
-module.exports = {
-    create,
-    findOne,
-    update,
-    leaveRoom,
-    archiveRoom,
-    getRoomsShort
-};
+module.exports = new UserController();
+
+// {
+//     create,
+//     findOne,
+//     update,
+//     leaveRoom,
+//     archiveRoom,
+//     getRoomsShort
+// };

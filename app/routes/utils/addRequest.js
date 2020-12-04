@@ -6,10 +6,21 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 const isVerified = require("../middleware/isVerified");
 const ValidationSchema = require("../../config/validation/ValidationSchema");
 const PermissionSet = require("../../config/permissions/PermissionSet");
+const SchemaController = require("../../controllers/SchemaController");
 
 const validationMap = {
     post: validation => validation.postHandler(),
     patch: validation => validation.patchHandler()
+}
+
+const schemaCtrlMap = {
+    patch: ctrl => [ ctrl.callable("updateOne"), {
+        keyMap: {
+            body: "data",
+            [ctrl.key]: "doc",
+            [`${ctrl.key}Id`]: "docId",
+        }
+    } ]
 }
 
 const permMap = {
@@ -65,8 +76,16 @@ const addRequest = ( route, type, config ) => {
 
         handlers.push( createCheckPermission( typeof permission === "string" ? permission : permission[ permMap[type] ] ) );
 
-    // Add the Controller handler.
-    handlers.push( Array.isArray(ctrl) ? createControllerHandler( ...ctrl ) : createControllerHandler( ctrl ) );
+    if( ctrl instanceof SchemaController ) {
+
+        handlers.push( createControllerHandler( ...schemaCtrlMap[type]( ctrl ) ) );
+
+    } else {
+
+        // Add the Controller handler.
+        handlers.push( Array.isArray(ctrl) ? createControllerHandler( ...ctrl ) : createControllerHandler( ctrl ) );
+
+    }
 
     route[type]( ...handlers );
 

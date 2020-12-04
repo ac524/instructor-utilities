@@ -146,7 +146,7 @@ const emailCheck = async ({ invite }) => {
 
     const { email } = invite;
 
-    const user = await userCtrl.findOne({ email });
+    const user = await userCtrl.findOne({ search: { email } });
 
     return {
         hasUser: Boolean( user ),
@@ -166,7 +166,7 @@ const register = async ({ invite, registerData }) => {
 
     const { email } = invite;
 
-    const existingUser = await userCtrl.findOne({ email });
+    const existingUser = await userCtrl.findOne({ search: { email } });
 
     if( existingUser )
 
@@ -175,12 +175,12 @@ const register = async ({ invite, registerData }) => {
     const { name, password } = registerData;
 
     // Create the User
-    await userCtrl.create({
+    await userCtrl.createOne({ data: {
         name,
         email,
         password,
         isVerified: true
-    });
+    } });
 
 }
 

@@ -57,6 +57,12 @@ class SchemaController {
 
     }
 
+    callable( action ) {
+
+        return this[action].bind(this);
+
+    }
+
     /**
      * @param {Object} data
      * 

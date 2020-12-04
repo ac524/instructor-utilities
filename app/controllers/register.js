@@ -44,7 +44,7 @@ const register = async ({ registerData }) => {
 
   const { email } = registerData;
 
-  const existingUser = await userCtrl.findOne({ email });
+  const existingUser = await userCtrl.findOne({ search: { email } });
 
   if( existingUser )
 
@@ -53,12 +53,12 @@ const register = async ({ registerData }) => {
   const { name, password } = registerData;
 
   // Create the User
-  const user = await userCtrl.create({
+  const user = await userCtrl.createOne({ data: {
     name,
     email,
     password,
     isVerified: !mail.isEnabled
-  });
+  } });
 
   const { roomname } = registerData;
 
