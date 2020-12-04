@@ -1,23 +1,12 @@
+const userCtrl = require("../controllers/user");
+
+const { user: userVal } = require("../config/validation");
+const { room: roomPerm } = require("../config/permissions");
+
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const { user: userVal } = require("../config/validation");
-
 const createRouter = require("./utils/createRouter");
-
-const { room: roomPerm } = require("../config/permissions");
-
-// const {
-//     update,
-//     getRoomsShort,
-//     leaveRoom,
-//     archiveRoom
-// } = require("../controllers/user");
-const userCtrl = require("../controllers/user");
-
-const userCtlrConfig = {
-    keyMap: { body: "userData" }
-};
 
 const sharedRoomActionsConfig = {
     paramCheck: true,
@@ -35,29 +24,29 @@ module.exports = createRouter([
         }
     }],
 
-    // ["/rooms/:roomId/leave", {
-    //     delete: {
-    //         auth: true,
-    //         defaultError: "leave the room",
-    //         permission: roomPerm.leave,
-    //         ctrl: leaveRoom
-    //     }
-    // }, sharedRoomActionsConfig],
+    ["/rooms/:roomId/leave", {
+        delete: {
+            auth: true,
+            defaultError: "leave the room",
+            permission: roomPerm.leave,
+            ctrl: userCtrl.callable( "leaveRoom" )
+        }
+    }, sharedRoomActionsConfig],
 
-    // ["/rooms/:roomId/archive", {
-    //     delete: {
-    //         auth: true,
-    //         defaultError: "archive the room",
-    //         permission: roomPerm.archive,
-    //         ctrl: archiveRoom
-    //     }
-    // }, sharedRoomActionsConfig],
+    ["/rooms/:roomId/archive", {
+        delete: {
+            auth: true,
+            defaultError: "archive the room",
+            permission: roomPerm.archive,
+            ctrl: userCtrl.callable( "archiveRoom" )
+        }
+    }, sharedRoomActionsConfig],
 
     ["/rooms/short", {
         get: {
             auth: true,
             defaultError: "get short room details",
-            ctrl: userCtrl.callable( "getRoomBasics" )
+            ctrl: userCtrl.callable( "getRoomsBasics" )
         }
     }]
 
