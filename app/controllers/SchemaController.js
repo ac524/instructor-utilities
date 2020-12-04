@@ -158,12 +158,6 @@ class SchemaController {
      */
     async updateOne( { docId, doc, search, data }, queryOptions ) {
 
-        // If given the document's ID,
-        if( docId )
-
-            // Find it by ID, update it, and then return the updated document.
-            return await queryModifier( this.model.findByIdAndUpdate( docId, data, { new: true } ), queryOptions );
-
         // If provided the target document,
         if( doc ) {
 
@@ -173,6 +167,12 @@ class SchemaController {
             return doc;
 
         }
+
+        // If given the document's ID,
+        if( docId )
+
+            // Find it by ID, update it, and then return the updated document.
+            return await queryModifier( this.model.findByIdAndUpdate( docId, data, { new: true } ), queryOptions );
 
         // Otherwise, expect a search for the target doc.
         return queryModifier( this.model.findOneAndUpdate( search, data, { new: true } ), queryOptions );
