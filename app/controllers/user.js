@@ -17,6 +17,9 @@ const ioEmit = require("./utils/ioEmit");
  * @typedef {import('./SchemaController').CreateDocConfig} CreateDocConfig
  * @typedef {import('./SchemaController').UpdateDocOptions} UpdateDocOptions
  * @typedef {import('./utils/queryModifier').QueryModifierOptions} QueryModifierOptions
+ * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
  */
 
 /**
@@ -106,7 +109,7 @@ class UserController extends SchemaController {
 
         await room.save();
 
-        await user.update({ $pull: { classrooms: roomId } });
+        await user.updateOne({ $pull: { classrooms: roomId } });
 
         ioEmit( "dispatch", { type: "REMOVE_STAFF", payload: memberId }, `room:${roomId}` );
 
