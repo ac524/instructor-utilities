@@ -57,6 +57,11 @@ class SchemaController {
 
     }
 
+    /**
+     * @param {string} action  - A target contoller method to extract.
+     * 
+     * @returns {CallableFunction} - The target controller method with the object instance explictly bound to the scope.
+     */
     callable( action ) {
 
         return this[action].bind(this);
