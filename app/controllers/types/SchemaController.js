@@ -85,16 +85,16 @@ class SchemaController {
     /**
      * @param {MongoModel} DocModel 
      * @param {CreateDocOptions} param0 
-     * @param {CreateDocConfig} config
+     * @param {CreateDocConfig} param1
      * 
      * @returns {MongoDocument}
      */
-    async createOne( { data }, config = { save: true } ) {
+    async createOne( { data }, { save = true } ) {
 
         /** @type {MongoDocument} */
         const document = this.makeDoc( data );
     
-        if( config.save )
+        if( save )
         
             await document.save();
     
@@ -113,19 +113,26 @@ class SchemaController {
 
     /**
      * @param {FindDocOptions} param0
+     * @param {QueryModifierOptions} queryOptions
      * 
      * @returns {MongoDocument}
      */
-    async findOne( { docId, search } ) {
+    async findOne( { docId, search }, queryOptions ) {
 
         /** @type {MongoDocument} */
-        let document = docId
+        let document = await queryModifier(
+
+            docId
         
-            // Fetch by id if provided.
-            ? await this.model.findById( docId )
+                // Fetch by id if provided.
+                ? this.model.findById( docId )
             
-            // Otherwise expect search criteria.
-            : await this.model.findOne( search );
+                // Otherwise expect search criteria.
+                : this.model.findOne( search ),
+
+            queryOptions
+
+        );
 
         // TODO Not found error
 

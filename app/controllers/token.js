@@ -4,6 +4,10 @@ const actions = require("./actions");
 
 const { Token } = require("../models");
 
+// const TokenController = require("./definitions/TokenController");
+
+// module.exports = TokenController;
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
