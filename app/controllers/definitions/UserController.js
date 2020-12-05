@@ -17,7 +17,6 @@ const ioEmit = require("../utils/ioEmit");
  * @typedef {import('../types/SchemaController').CreateDocOptions} CreateDocOptions
  * @typedef {import('../types/SchemaController').CreateDocConfig} CreateDocConfig
  * @typedef {import('../types/SchemaController').UpdateDocOptions} UpdateDocOptions
- * @typedef {import('../types/SchemaController').FindDocOptions} FindDocOptions
  * 
  * @typedef {import('../utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  * 
