@@ -1,11 +1,11 @@
-const queryModifier = require("./utils/queryModifier");
+const queryModifier = require("../utils/queryModifier");
 
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * @typedef {import('mongoose').Model} MongoModel
  * @typedef {import('mongoose').Document} MongoDocument
- * @typedef {import('./utils/queryModifier').QueryModifierOptions} QueryModifierOptions
+ * @typedef {import('../utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
 /**

@@ -6,7 +6,7 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 const isVerified = require("../middleware/isVerified");
 const ValidationSchema = require("../../config/validation/ValidationSchema");
 const PermissionSet = require("../../config/permissions/PermissionSet");
-const SchemaController = require("../../controllers/SchemaController");
+const SchemaController = require("../../controllers/types/SchemaController");
 
 const validationMap = {
     post: validation => validation.postHandler(),
