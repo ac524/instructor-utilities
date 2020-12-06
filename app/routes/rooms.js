@@ -20,7 +20,7 @@ module.exports = createRouter([
         get: {
             defaultError: "get the room",
             permission: roomPerm,
-            ctrl: roomCtrl.callable("getAggregate")
+            ctrl: roomCtrl.binding.getAggregate
         },
         patch: {
             defaultError: "update the room",
@@ -33,7 +33,7 @@ module.exports = createRouter([
     ["/:roomId/permissions", {
         get: {
             defaultError: "get your permissions for the room",
-            ctrl: roomCtrl.callable("getPermissions")
+            ctrl: roomCtrl.binding.getPermissions
         }
     }, sharedConfig]
 

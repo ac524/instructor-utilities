@@ -1,5 +1,7 @@
 const queryModifier = require("../utils/queryModifier");
 
+const Controller = require("./Controller");
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
@@ -45,7 +47,7 @@ const queryModifier = require("../utils/queryModifier");
  * @property {ObjectId} data
  */
 
-class SchemaController {
+class SchemaController extends Controller {
 
     /**
      * @param {string} key 
@@ -53,19 +55,10 @@ class SchemaController {
      */
     constructor( key, model ) {
 
+        super();
+
         this.key = key;
         this.model = model;
-
-    }
-
-    /**
-     * @param {string} action  - A target contoller method to extract.
-     * 
-     * @returns {CallableFunction} - The target controller method with the object instance explictly bound to the scope.
-     */
-    callable( action ) {
-
-        return this[action].bind(this);
 
     }
 

@@ -1,12 +1,13 @@
+const ValidationSchema = require("../../config/validation/ValidationSchema");
+const PermissionSet = require("../../config/permissions/PermissionSet");
+const SchemaController = require("../../controllers/types/SchemaController");
+
 const createControllerHandler = require("../middleware/createControllerHandler");
 const createCheckPermission = require("../middleware/createCheckPermission");
 const setDefaultError = require("../middleware/setDefaultError");
 const globalParamsValidation = require("../middleware/globalParamsValidation");
 const isAuthenticated = require("../middleware/isAuthenticated");
 const isVerified = require("../middleware/isVerified");
-const ValidationSchema = require("../../config/validation/ValidationSchema");
-const PermissionSet = require("../../config/permissions/PermissionSet");
-const SchemaController = require("../../controllers/types/SchemaController");
 
 const validationMap = {
     post: validation => validation.postHandler(),
@@ -14,9 +15,26 @@ const validationMap = {
 }
 
 const schemaCtrlMap = {
-    patch: ctrl => [ ctrl.callable("updateOne"), {
+    post: ctrl => [ ctrl.binding.createOne, {
+        keyMap: {
+            body: "data"
+        }
+    } ],
+    get: ctrl => [ ctrl.binding.findOne, {
+        keyMap: {
+            [ctrl.key]: "doc",
+            [`${ctrl.key}Id`]: "docId",
+        }
+    } ],
+    patch: ctrl => [ ctrl.binding.updateOne, {
         keyMap: {
             body: "data",
+            [ctrl.key]: "doc",
+            [`${ctrl.key}Id`]: "docId",
+        }
+    } ],
+    delete: ctrl => [ ctrl.binding.deleteOne, {
+        keyMap: {
             [ctrl.key]: "doc",
             [`${ctrl.key}Id`]: "docId",
         }

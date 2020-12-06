@@ -29,7 +29,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "leave the room",
             permission: roomPerm.leave,
-            ctrl: userCtrl.callable( "leaveRoom" )
+            ctrl: userCtrl.binding.leaveRoom
         }
     }, sharedRoomActionsConfig],
 
@@ -38,7 +38,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "archive the room",
             permission: roomPerm.archive,
-            ctrl: userCtrl.callable( "archiveRoom" )
+            ctrl: userCtrl.binding.archiveRoom
         }
     }, sharedRoomActionsConfig],
 
@@ -46,7 +46,7 @@ module.exports = createRouter([
         get: {
             auth: true,
             defaultError: "get short room details",
-            ctrl: userCtrl.callable( "getRoomsBasics" )
+            ctrl: userCtrl.binding.getRoomsBasics
         }
     }]
 
