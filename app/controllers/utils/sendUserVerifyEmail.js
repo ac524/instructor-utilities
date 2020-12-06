@@ -6,13 +6,13 @@ const homeUrl = require("../../config/options")( "publicUrl" );
 
 const sendUserVerifyEmail = async (user) => {
 
-    const token = await tokenCtrl.create({ relation: user._id });
+    const token = await tokenCtrl.createOne({ data: { relation: user._id } });
 
     await mail.send(
       "welcome",
       {
         name: "Anthony Brown",
-        verificationLink: `${homeUrl}/validate-email/${token.token}`
+        verificationLink: `${homeUrl}/validate-email/${token.tokenString}`
       },
       {
         to: user.email,

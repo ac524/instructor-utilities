@@ -53,7 +53,7 @@ const sendInvite = ( room, invite, from ) => {
         {
             name: from.name,
             roomName: room.name,
-            inviteLink: `${homeUrl}/invite/${invite.token.token}`
+            inviteLink: `${homeUrl}/invite/${invite.token.tokenString}`
         },
         {
             to: invite.email,
@@ -89,7 +89,7 @@ const create = async ({ roomId, user, inviteData })  => {
 
         throw new InvalidDataError( "Unable to create invite.", { email: "This email already has an invite." } );
 
-    const token = await tokenCtrl.create({ relation: roomId });
+    const token = await tokenCtrl.createOne( { data: { relation: roomId } } );
 
     const update = {
         $push: {
@@ -128,7 +128,7 @@ const remove = async ({ roomId, inviteId }) => {
 
     if( !invite ) throw new NotFoundError( "Invite not found." );
 
-    await tokenCtrl.deleteOne( invite.token );
+    await tokenCtrl.deleteOne( { docId: invite.token } );
 
     invite.remove();
 

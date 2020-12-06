@@ -22,7 +22,7 @@ module.exports = createRouter([
         }
     }],
 
-    ["/:token", {
+    ["/:tokenString", {
         post: {
             defaultError: "validate the email",
             ctrl: validate

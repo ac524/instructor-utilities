@@ -89,7 +89,7 @@ class SchemaController {
      * 
      * @returns {MongoDocument}
      */
-    async createOne( { data }, { save = true } ) {
+    async createOne( { data }, { save = true } = {} ) {
 
         /** @type {MongoDocument} */
         const document = this.makeDoc( data );

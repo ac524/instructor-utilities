@@ -37,9 +37,9 @@ const resend = async ({ config }) => {
  * 
  * @param {ValidateEmailOptions} param0 
  */
-const validate = async ({ token }) => {
+const validate = async ({ tokenString }) => {
 
-    const tokenRecord = await tokenCtrl.findOne({ token });
+    const tokenRecord = await tokenCtrl.getByTokenString({ tokenString });
 
     if( !tokenRecord ) throw new NotFoundError( "Token not found." );
 

@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const { Token } = require("../../models");
 
 const SchemaController = require("../types/SchemaController");
@@ -42,7 +44,7 @@ class TokenController extends SchemaController {
      * 
      * @returns {MongoDocument}
      */
-    async createOne( { data: { tokenString, ...data } }, { bytes = 16, ...config } ) {
+    async createOne( { data: { tokenString, ...data } }, { bytes = 16, ...config } = {} ) {
 
         return super.createOne({
             data: {
