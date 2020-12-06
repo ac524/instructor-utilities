@@ -36,7 +36,7 @@ const register = async ({ registerData }) => {
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
-    classroom =  await roomCtrl.getDoc( { search: { registerCode: token._id } } );
+    classroom =  await roomCtrl.findOne( { search: { registerCode: token._id } } );
 
     if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
     
@@ -69,13 +69,15 @@ const register = async ({ registerData }) => {
   } else {
 
     // Create the User's classroom
-    classroom = roomCtrl.create( { name: roomname }, { save: false } );
+    classroom = roomCtrl.createOne( { data: { name: roomname } }, { save: false } );
 
   }
 
   if( classroom.registerCode ) {
+
     await tokenCtrl.deleteOne( classroom.registerCode );
     classroom.registerCode = undefined;
+    
   }
 
   await classroom.save();

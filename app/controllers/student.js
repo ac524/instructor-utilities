@@ -11,13 +11,13 @@ const roomCtrl = require("./room");
  * @typedef {import('../config/validation/definitions/studentValidation').StudentData} StudentData
  */
 
-const getRoomWithStudents = async roomId =>  await roomCtrl.getDoc( { roomId }, { select: "students" } );
+const getRoomWithStudents = async docId =>  await roomCtrl.findOne( { docId }, { select: "students" } );
 
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
 
 const findStudentByIdAndUpdate = async ( roomId, studentId, update ) =>
 
-    (await roomCtrl.update(
+    (await roomCtrl.updateOne(
             {
                 search: { _id: roomId, "students._id": studentId },
                 data: {  $set: update }
@@ -51,7 +51,7 @@ const studentFactory = async ( createdBy, roomId, data ) => {
         }
     };
 
-    const room = roomCtrl.update( {
+    const room = roomCtrl.updateOne( {
         docId: roomId,
         data: update
     }, { select: "students" } );

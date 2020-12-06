@@ -1,21 +1,12 @@
-const createRouter = require("./utils/createRouter");
-
-const setRoom = require("./middleware/setRoom");
-const isRoomMember = require("./middleware/isRoomMember");
-
 const { register: roomVal } = require("../config/validation");
-
 const { room: roomPerm } = require("../config/permissions");
 
-const {
-    getSingle,
-    getPermissions,
-    update
-} = require("../controllers/room");
+const roomCtrl = require("../controllers/room");
 
-const roomCtlrConfig = {
-    keyMap: { body: "roomData" }
-};
+const isRoomMember = require("./middleware/isRoomMember");
+const setRoom = require("./middleware/setRoom");
+
+const createRouter = require("./utils/createRouter");
 
 const sharedConfig = {
     auth: true,
@@ -29,20 +20,20 @@ module.exports = createRouter([
         get: {
             defaultError: "get the room",
             permission: roomPerm,
-            ctrl: getSingle
+            ctrl: roomCtrl.callable("getAggregate")
         },
         patch: {
             defaultError: "update the room",
             validation: roomVal,
             permission: roomPerm,
-            ctrl: [ update, roomCtlrConfig ]
+            ctrl: roomCtrl
         }
     }, sharedConfig],
 
     ["/:roomId/permissions", {
         get: {
             defaultError: "get your permissions for the room",
-            ctrl: getPermissions
+            ctrl: roomCtrl.callable("getPermissions")
         }
     }, sharedConfig]
 

@@ -36,6 +36,7 @@ const queryModifier = require("../utils/queryModifier");
  * @typedef UpdateDocOptions
  * @property {ObjectId} docId
  * @property {MongoDocument} doc
+ * @property {Object} search
  * @property {Object} data
  *
  * SchemaController.updateMany() 
@@ -83,7 +84,6 @@ class SchemaController {
     }
 
     /**
-     * @param {MongoModel} DocModel 
      * @param {CreateDocOptions} param0 
      * @param {CreateDocConfig} param1
      * 
@@ -187,7 +187,6 @@ class SchemaController {
     }
 
     /**
-     * @param {MongoModel} DocModel 
      * @param {UpdateDocsOptions} param1 
      * @param {QueryModifierOptions} queryOptions 
      * @returns {MongoDocument}

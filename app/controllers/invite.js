@@ -3,7 +3,7 @@ const mail = require('../mail');
 const homeUrl = require("../config/options")( "publicUrl" );
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 
-const { Room } = require("../models");
+const roomCtrl = require("./room");
 const tokenCtrl = require("./token");
 const userCtrl = require('./user');
 
@@ -32,10 +32,13 @@ const ioEmit = require("./utils/ioEmit");
 const addStaff = async (roomId, member) => {
 
     const { staff } =
-        await Room
-            .findByIdAndUpdate(roomId, { $push: { staff: member } }, {new:true})
-            .select("staff")
-            .populate("staff.user");
+        await roomCtrl.updateOne({
+            docId: roomId,
+            data: { $push: { staff: member } }
+        }, {
+            select: "staff",
+            populate: "staff.user"
+        } );
 
     return staff[ staff.length - 1 ];
 
@@ -101,9 +104,12 @@ const create = async ({ roomId, user, inviteData })  => {
     };
 
     const room =
-        await Room
-            .findByIdAndUpdate( roomId, update, { new: true } )
-            .populate( 'invites.token' );
+        await roomCtrl.updateOne({
+            docId: roomId,
+            data: update
+        }, {
+            populate: "invites.token"
+        });
 
     const invite = room.invites[ room.invites.length - 1 ];
 
@@ -122,7 +128,7 @@ const create = async ({ roomId, user, inviteData })  => {
  */
 const remove = async ({ roomId, inviteId }) => {
 
-    const room = await Room.findById( roomId );
+    const room = await roomCtrl.findOne( { docId: roomId } );
 
     const invite = room.invites.id( inviteId );
 

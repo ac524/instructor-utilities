@@ -96,7 +96,7 @@ class UserController extends SchemaController {
      */
     async getRoomsBasics( { user } ) {
 
-        return await roomCtrl.getDocs( { _id: { $in: user.classrooms } }, { select: "name staff.role staff.user" } );
+        return await roomCtrl.findMany( { search: { _id: { $in: user.classrooms } } }, { select: "name staff.role staff.user" } );
 
     }
 
