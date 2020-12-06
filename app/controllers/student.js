@@ -58,11 +58,13 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
     const student = room.students.id( studentId );
 
-    const feed = await feedCtrl.create({
-        _id: feedId,
-        room: roomId,
-        for: studentId,
-        in: "students"
+    const feed = await feedCtrl.createOne({
+        data: {
+            _id: feedId,
+            room: roomId,
+            for: studentId,
+            in: "students"
+        }
     }, { save: false });
 
     feed.pushItem( createdBy, "create" );
@@ -191,7 +193,7 @@ const deleteSingle = async ( { roomId, studentId } )  => {
 
     await room.save();
 
-    await feedCtrl.deleteDoc({ feedId: student.feed });
+    await feedCtrl.deleteOne({ docId: student.feed });
 
 }
 

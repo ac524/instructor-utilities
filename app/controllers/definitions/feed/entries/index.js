@@ -1,4 +1,4 @@
-const perms = require("../../../config/permissions");
+const perms = require("../../../../config/permissions");
 
 const {
     CommentEntryType,

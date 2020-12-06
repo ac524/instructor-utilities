@@ -9,6 +9,11 @@
   */
 const populateMod = ( query, populations ) => {
 
+    if( typeof populations === "string" ) {
+        query.populate( populations );
+        return;
+    }
+
     for( populateParams of populations )
         
         query.populate( ...(Array.isArray( populateParams ) ? populateParams : [populateParams]) );

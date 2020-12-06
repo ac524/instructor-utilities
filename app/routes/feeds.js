@@ -1,15 +1,11 @@
+const { feed } = require("../config/permissions");
+
+const feedCtrl = require("../controllers/feed");
+
 const createRouter = require("./utils/createRouter");
 
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
-
-const { feed } = require("../config/permissions");
-
-const {
-    getSingle,
-    getSingleItems,
-    entryTypes
-} = require("../controllers/feed");
 
 const sharedConfig = {
     paramCheck: true,
@@ -23,7 +19,7 @@ module.exports = createRouter([
         get: {
             defaultError: "get the feed",
             permission: feed,
-            ctrl: getSingle
+            ctrl: feedCtrl
         }
     }, sharedConfig],
 
@@ -31,11 +27,11 @@ module.exports = createRouter([
         get: {
             defaultError: "get the feed items",
             permission: feed,
-            ctrl: getSingleItems
+            ctrl: feedCtrl.binding.getItems
         }
     }, sharedConfig],
 
-    ...entryTypes.map( entryType => (
+    ...feedCtrl.entryTypes.map( entryType => (
         [ ...entryType.getRouteConfig(), sharedConfig ]
     ) )
 

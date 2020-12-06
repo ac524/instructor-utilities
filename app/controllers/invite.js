@@ -3,9 +3,9 @@ const mail = require('../mail');
 const homeUrl = require("../config/options")( "publicUrl" );
 const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 
+const userCtrl = require("./user");
 const roomCtrl = require("./room");
 const tokenCtrl = require("./token");
-const userCtrl = require('./user');
 
 const ioEmit = require("./utils/ioEmit");
 
