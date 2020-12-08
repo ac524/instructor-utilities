@@ -27,7 +27,7 @@ const setRoom = async (req, next) => {
 module.exports = {
     async fromBody(req, res, next) {
 
-        req.crdata.set( "roomId", req.body.roomId );
+        req.crdata.set( "roomId", req.body.roomId || req.body.room );
 
         await setRoom(req, next);
 

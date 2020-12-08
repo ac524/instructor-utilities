@@ -7,6 +7,7 @@ const Controller = require("./Controller");
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * @typedef {import('mongoose').Model} MongoModel
  * @typedef {import('mongoose').Document} MongoDocument
+ * @typedef {import('mongoose').DocumentQuery} DocumentQuery
  * @typedef {import('../utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
@@ -49,6 +50,9 @@ const Controller = require("./Controller");
 
 class SchemaController extends Controller {
 
+    /** @type {QueryModifierOptions} */
+    queryDefaults = {};
+
     /**
      * @param {string} key 
      * @param {MongoModel} model 
@@ -73,6 +77,19 @@ class SchemaController extends Controller {
         const DocModel = this.model;
 
         return new DocModel( data );
+
+    }
+
+    /**
+     * @param {DocumentQuery} query 
+     * @param {QueryModifierOptions} modifier 
+     */
+    async query( query, modifiers ) {
+
+        return queryModifier( query, {
+            ...this.queryDefaults,
+            ...modifiers
+        } );
 
     }
 
@@ -113,7 +130,7 @@ class SchemaController extends Controller {
     async findOne( { docId, search }, queryOptions ) {
 
         /** @type {MongoDocument} */
-        let document = await queryModifier(
+        let document = await this.query(
 
             docId
         
@@ -142,7 +159,7 @@ class SchemaController extends Controller {
     async findMany( { search }, queryOptions ) {
     
         /** @type {MongoDocument} */
-        const documents = await queryModifier( this.model.find( search ), queryOptions );
+        const documents = await this.query( this.model.find( search ), queryOptions );
     
         // TODO Not found error
     
@@ -172,10 +189,10 @@ class SchemaController extends Controller {
         if( docId )
 
             // Find it by ID, update it, and then return the updated document.
-            return await queryModifier( this.model.findByIdAndUpdate( docId, data, { new: true } ), queryOptions );
+            return await this.query( this.model.findByIdAndUpdate( docId, data, { new: true } ), queryOptions );
 
         // Otherwise, expect a search for the target doc.
-        return queryModifier( this.model.findOneAndUpdate( search, data, { new: true } ), queryOptions );
+        return this.query( this.model.findOneAndUpdate( search, data, { new: true } ), queryOptions );
 
     }
 
@@ -186,7 +203,7 @@ class SchemaController extends Controller {
      */
     async updateMany( { search, data }, queryOptions ) {
 
-        return await queryModifier( this.model.updateMany( search, data, { new: true } ), queryOptions );
+        return await this.query( this.model.updateMany( search, data, { new: true } ), queryOptions );
 
     }
 
