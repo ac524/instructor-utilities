@@ -1,7 +1,10 @@
-const { Feed } =  require("../../../../models");
+const { Feed } =  require("../../../../../models");
+const { comment: commentVal } = require("../../../../../config/validation");
 const EntryType = require("./EntryType");
 
-class ElevationEntryType extends EntryType {
+class CommentEntryType extends EntryType {
+
+    validation = commentVal;
 
     async onCreateResHandler( entries, { feedId } ) {
 
@@ -12,7 +15,7 @@ class ElevationEntryType extends EntryType {
             entries,
             {
                 _id: student._id,
-                ...(await student.getFeedAggregateData(["elevation"]))
+                ...(await student.getFeedAggregateData(["recentComments"]))
             }
         ];
 
@@ -20,4 +23,4 @@ class ElevationEntryType extends EntryType {
 
 }
 
-module.exports = ElevationEntryType;
+module.exports = CommentEntryType;

@@ -138,9 +138,9 @@ class API {
      * App Routes
      */
 
-    async installApp( roomId, type ) {
+    async installApp( room, type ) {
 
-        return this.axios.post( `/api/apps`, { roomId, type } );
+        return this.axios.post( `/api/apps`, { room, type } );
 
     }
 

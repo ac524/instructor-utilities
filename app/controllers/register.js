@@ -1,11 +1,12 @@
 const mail = require('../mail');
 
-const passwordHash = require("../config/utils/passwordHash");
-
 // Load input validation
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
-const { User, Token, Room } = require("../models");
+const userCtrl = require("./user");
+const tokenCtrl = require("./token");
+const roomCtrl = require("./room");
+
 const { InvalidDataError, NotFoundError } = require('../config/errors');
 
 /**
@@ -31,13 +32,11 @@ const register = async ({ registerData }) => {
   if( code ) {
   
     // Create the User's classroom
-    const token = await Token.findOne({
-      token: code
-    });
+    const token = await tokenCtrl.getByTokenString({ tokenString: code });
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
-    classroom = await Room.findOne({ registerCode: token._id });
+    classroom =  await roomCtrl.findOne( { search: { registerCode: token._id } } );
 
     if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
     
@@ -45,7 +44,7 @@ const register = async ({ registerData }) => {
 
   const { email } = registerData;
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await userCtrl.findOne({ search: { email } });
 
   if( existingUser )
 
@@ -54,14 +53,12 @@ const register = async ({ registerData }) => {
   const { name, password } = registerData;
 
   // Create the User
-  const user = new User({
+  const user = await userCtrl.createOne({ data: {
     name,
     email,
-    password: await passwordHash( password ),
+    password,
     isVerified: !mail.isEnabled
-  });
-
-  await user.save();
+  } });
 
   const { roomname } = registerData;
 
@@ -72,15 +69,15 @@ const register = async ({ registerData }) => {
   } else {
 
     // Create the User's classroom
-    classroom = new Room({
-      name: roomname
-    });
+    classroom = roomCtrl.createOne( { data: { name: roomname } }, { save: false } );
 
   }
 
   if( classroom.registerCode ) {
-    await Token.findByIdAndDelete(classroom.registerCode);
+
+    await tokenCtrl.deleteOne( classroom.registerCode );
     classroom.registerCode = undefined;
+    
   }
 
   await classroom.save();

@@ -1,5 +1,5 @@
-const PermissionSet = require("../../../../config/permissions/PermissionSet");
-const { Feed } = require("../../../../models");
+const PermissionSet = require("../../../../../config/permissions/PermissionSet");
+const { Feed } = require("../../../../../models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const create = async (feedId, by, action, data) => {

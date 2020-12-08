@@ -49,7 +49,7 @@ module.exports = createRouter([
         }
     }],
 
-    ["/:token/accept", {
+    ["/:tokenString/accept", {
         post: {
             auth: true,
             defaultError: "accept the invite",
@@ -58,7 +58,7 @@ module.exports = createRouter([
         }
     }],
 
-    ["/:token/email", {
+    ["/:tokenString/email", {
         get: {
             defaultError: "check the email's status",
             middleware: setInvite,
@@ -66,7 +66,7 @@ module.exports = createRouter([
         }
     }],
 
-    ["/:token/register", {
+    ["/:tokenString/register", {
         post: {
             defaultError: "complete the registration",
             validation: userVal.clone("invite", ["name","password"]),
