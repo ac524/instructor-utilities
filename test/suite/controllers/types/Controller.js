@@ -10,7 +10,7 @@ describe("Controller", function() {
   
       it("should create a Controller object", function(done) {
 
-        // Arrange && Act
+        // Arrange and Act
         const controller = new Controller;
 
         // Asset 
@@ -22,10 +22,10 @@ describe("Controller", function() {
 
       it("should create a `binding` property that is a proxy of the object", function(done) {
 
-        // Arrange && Act
+        // Arrange and Act
         const controller = new Controller;
 
-         // Asset 
+         // Asset
          expect( util.types.isProxy( controller.binding ) ).to.equal( true );
          expect( controller.binding ).to.be.instanceof( Controller );
 
