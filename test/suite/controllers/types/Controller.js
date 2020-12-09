@@ -14,7 +14,7 @@ describe("Controller", function() {
         const controller = new Controller;
 
         // Asset 
-        expect( controller instanceof Controller ).to.equal( true );
+        expect( controller ).to.be.instanceof( Controller );
 
         return done();
 
@@ -27,7 +27,7 @@ describe("Controller", function() {
 
          // Asset 
          expect( util.types.isProxy( controller.binding ) ).to.equal( true );
-         expect( controller.binding instanceof Controller  ).to.equal( true );
+         expect( controller.binding ).to.be.instanceof( Controller );
 
          return done();
 

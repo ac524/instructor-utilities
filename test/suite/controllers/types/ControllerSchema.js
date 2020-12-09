@@ -1,20 +1,21 @@
 const { expect } = require("chai");
-const sinon = require("sinon");
+// const sinon = require("sinon");
 
 const mongoose = require( "mongoose" );
-const { Schema, Model } = mongoose;
+const { Model, Document } = mongoose;
 
 const TestModel = require("../../../lib/TestModel");
 
 const SchemaController = require("../../../../app/controllers/types/SchemaController");
 
+
+// after(function () {
+//   sinon.restore();
+// });
+
 describe("SchemaController", function() {
 
     describe("constructor()", function() {
-
-      after(function () {
-          sinon.restore();
-      });
   
       it("should create a SchemaController object", function(done) {
 
@@ -22,7 +23,7 @@ describe("SchemaController", function() {
         const schemaController = new SchemaController;
 
         // Assert
-        expect( schemaController instanceof SchemaController ).to.equal( true );
+        expect( schemaController ).to.be.instanceof( SchemaController );
 
         done();
 
@@ -59,7 +60,7 @@ describe("SchemaController", function() {
 
     describe("makeDoc()", function() {
 
-      it("should return a `Model` of the given collection", function(done) {
+      it("should return a `Document` of the given model", function(done) {
 
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
@@ -68,7 +69,7 @@ describe("SchemaController", function() {
         const doc = ctrl.makeDoc();
 
         // Assert
-        expect( doc instanceof Model ).to.equal( true );
+        expect( doc ).to.be.instanceof( Document );
         expect( doc.collection.collectionName ).to.equal( TestModel.collection.collectionName );
 
         done();
