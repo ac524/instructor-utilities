@@ -32,6 +32,12 @@ class API {
 
     }
 
+    async getClassroomPerms( roomId ) {
+
+        return this.axios.get( `/api/rooms/${roomId}/permissions` );
+
+    }
+
     async updateClassroom( roomId, data ) {
 
         return this.axios.patch( `/api/rooms/${roomId}`, data );
@@ -132,15 +138,15 @@ class API {
      * App Routes
      */
 
-    async installApp( roomId, type ) {
+    async installApp( room, type ) {
 
-        return this.axios.post( `/api/apps`, { roomId, type } );
+        return this.axios.post( `/api/apps`, { room, type } );
 
     }
 
     async getApp( roomId, type ) {
 
-        return this.axios.post( `/api/apps/${type}/${roomId}` );
+        return this.axios.get( `/api/apps/${type}/${roomId}` );
 
     }
 
@@ -208,13 +214,13 @@ class API {
 
     async validate( token ) {
 
-        return this.axios.post(`/api/validate/${token}`);
+        return this.axios.post(`/api/validate-email/${token}`);
 
     }
 
     async resendValidation( data ) {
 
-        return this.axios.post("/api/validate/resend", data);
+        return this.axios.post("/api/validate-email/resend", data);
 
     }
 

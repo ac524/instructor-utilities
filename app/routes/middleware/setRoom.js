@@ -1,16 +1,18 @@
-const { Classroom, Feed } = require("../../models");
+const { Feed } = require("../../models");
 const { NotFoundError } = require("../../config/errors");
 
-const setClassroom = async (req, next) => {
+const roomCtrl = require("../../controllers/room");
+
+const setRoom = async (req, next) => {
 
     try {
 
         const roomId = req.crdata.get("roomId");
-        const classroom = await Classroom.findById( roomId ).select("staff");
+        const classroom = await roomCtrl.findOne( { docId: roomId }, { select: "staff" } );
 
         if( !classroom ) throw new NotFoundError("Classroom not found");
 
-        req.crdata.set( "classroom", classroom );
+        req.crdata.set( "room", classroom );
 
         next();
 
@@ -25,16 +27,16 @@ const setClassroom = async (req, next) => {
 module.exports = {
     async fromBody(req, res, next) {
 
-        req.crdata.set( "roomId", req.body.roomId );
+        req.crdata.set( "roomId", req.body.roomId || req.body.room );
 
-        await setClassroom(req, next);
+        await setRoom(req, next);
 
     },
     async fromParam(req, res, next) {
 
         req.crdata.set( "roomId", req.params.roomId );
 
-        await setClassroom(req, next);
+        await setRoom(req, next);
 
     },
     async fromFeed(req, res, next) {
@@ -53,7 +55,7 @@ module.exports = {
 
         }
 
-        await setClassroom(req, next);
+        await setRoom(req, next);
 
     }
 }

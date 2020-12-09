@@ -1,15 +1,41 @@
 const { NotFoundError } = require("../config/errors");
-const { Classroom, Feed } = require("../models");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const getRoomWithStudents = roomId => Classroom.findById(roomId).select("students");
+const feedCtrl = require("./feed");
+const roomCtrl = require("./room");
+
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../config/validation/definitions/studentValidation').StudentData} StudentData
+ */
+
+const getRoomWithStudents = async docId =>  await roomCtrl.findOne( { docId }, { select: "students" } );
+
 const findStudentById = async ( roomId, studentId ) => (await getRoomWithStudents(roomId)).students.id(studentId);
-const findStudentByIdAndUpdate = async ( roomId, studentId, update ) => (await Classroom.findOneAndUpdate({ _id: roomId, "students._id": studentId }, {  $set: update }, { new: true }).select("students")).students.id(studentId);
+
+const findStudentByIdAndUpdate = async ( roomId, studentId, update ) =>
+
+    (await roomCtrl.updateOne(
+            {
+                search: { _id: roomId, "students._id": studentId },
+                data: {  $set: update }
+            },
+            { select: "students" }
+        ))
+        .students
+        .id(studentId);
+
 const mapUpdateKeys = updates => Object.fromEntries(Object.entries(updates).map(([key,value])=>[`students.$.${key}`,value]));
 
 /** HELPER METHODS **/
 
+/**
+ * @param {ObjectId} createdBy 
+ * @param {ObjectId} roomId 
+ * @param {StudentData} data 
+ */
 const studentFactory = async ( createdBy, roomId, data ) => {
 
     const feedId = new ObjectId();
@@ -25,16 +51,21 @@ const studentFactory = async ( createdBy, roomId, data ) => {
         }
     };
 
-    const room = await Classroom.findByIdAndUpdate( roomId, update, { new: true } ).select("students");
+    const room = roomCtrl.updateOne( {
+        docId: roomId,
+        data: update
+    }, { select: "students" } );
 
     const student = room.students.id( studentId );
 
-    const feed = new Feed({
-        _id: feedId,
-        room: roomId,
-        for: studentId,
-        in: "students"
-    });
+    const feed = await feedCtrl.createOne({
+        data: {
+            _id: feedId,
+            room: roomId,
+            for: studentId,
+            in: "students"
+        }
+    }, { save: false });
 
     feed.pushItem( createdBy, "create" );
 
@@ -46,16 +77,24 @@ const studentFactory = async ( createdBy, roomId, data ) => {
 
 /** CONTROLLER METHODS **/
 
-const create = async ( { user, roomId, body } ) => {
+/**
+ * @typedef CreateStudentOptions
+ * @property {UserDocument} user
+ * @property {ObjectId} roomId
+ * @property {StudentData} studentData
+ * 
+ * @param {CreateStudentOptions} param0 
+ */
+const create = async ( { user, roomId, studentData } ) => {
 
     // Is this a request to make many students?
-    if( body.students ) return await createMany( { body, user, roomId } );
+    if( studentData.students ) return await createMany( { studentData: studentData.students, user, roomId } );
 
     const {
         name,
         priorityLevel,
         assignedTo
-    } = body;
+    } = studentData;
 
     const data = {
         name,
@@ -68,19 +107,26 @@ const create = async ( { user, roomId, body } ) => {
 
 }
 
-const createMany = async ( { user, roomId, body } ) => {
+/**
+ * @typedef CreateStudentsOptions
+ * @property {UserDocument} user
+ * @property {ObjectId} roomId
+ * @property {StudentData[]} studentData
+ * 
+ * @param {CreateStudentsOptions} param0 
+ */
+const createMany = async ( { user, roomId, studentData } ) => {
 
-    const studentData = body.students;
     const students = [];
 
-    for( let i = 0; i < studentData.length; i++ ) {
+    for( const { name, priorityLevel, assignedTo } of studentData ) {
 
         const data = {
-            name: studentData[i].name,
-            priorityLevel: studentData[i].priorityLevel,
+            name,
+            priorityLevel,
         }
 
-        if( studentData[i].assignedTo ) data.assignedTo = studentData[i].assignedTo;
+        if( assignedTo ) data.assignedTo = assignedTo;
 
         students.push( await studentFactory( user._id, roomId, data ) );
 
@@ -90,9 +136,16 @@ const createMany = async ( { user, roomId, body } ) => {
 
 }
 
+/**
+ * @typedef GetStudentOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} studentId
+ * 
+ * @param {GetStudentOptions} param0 
+ */
 const getSingle = async ( { roomId, studentId } )  => {
 
-    const student = await findStudentById( roomId, studentId ); // (await Classroom.findById(req.roomId).select("students")).students.id(req.params.studentId);
+    const student = await findStudentById( roomId, studentId );
 
     if( !student )
 
@@ -102,17 +155,17 @@ const getSingle = async ( { roomId, studentId } )  => {
 
 }
 
-const update = async ( { roomId, studentId, body } ) => {
-
-    const update = ["name","priorityLevel","assignedTo"].reduce((update, name) => {
-
-        if( !body.hasOwnProperty(name) ) return update;
-
-        return { ...update, [name]: body[name] };
-
-    }, {});
+/**
+ * @typedef UpdateStudentOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} studentId
+ * @property {StudentData} studentData
+ * 
+ * @param {UpdateStudentOptions} param0 
+ */
+const update = async ( { roomId, studentId, studentData } ) => {
     
-    const student = await findStudentByIdAndUpdate( roomId, studentId, mapUpdateKeys(update) );
+    const student = await findStudentByIdAndUpdate( roomId, studentId, mapUpdateKeys(studentData) );
 
     if( !student )
 
@@ -120,6 +173,13 @@ const update = async ( { roomId, studentId, body } ) => {
 
 }
 
+/**
+ * @typedef DeleteStudentOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} studentId
+ * 
+ * @param {DeleteStudentOptions} param0 
+ */
 const deleteSingle = async ( { roomId, studentId } )  => {
 
     const room = await getRoomWithStudents( roomId );
@@ -133,7 +193,7 @@ const deleteSingle = async ( { roomId, studentId } )  => {
 
     await room.save();
 
-    await Feed.findByIdAndDelete(student.feed);
+    await feedCtrl.deleteOne({ docId: student.feed });
 
 }
 

@@ -1,27 +1,54 @@
-const crypto = require('crypto');
-const mail = require('../config/utils/mail');
+const mail = require('../mail');
 
-const { Token, Classroom, User } = require("../models");
-
-const passwordHash = require("../config/utils/passwordHash");
-const ioEmit = require("./utils/ioEmit");
-const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 const homeUrl = require("../config/options")( "publicUrl" );
+const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
+
+const userCtrl = require("./user");
+const roomCtrl = require("./room");
+const tokenCtrl = require("./token");
+
+const ioEmit = require("./utils/ioEmit");
+
+/**
+ * Type Definition Imports
+ * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
+ * 
+ * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../models/schema/InviteSchema').InviteDocument} InviteDocument
+ * @typedef {import('../models/schema/TokenSchema').TokenDocument} TokenDocument
+ * 
+ * @typedef {import('../config/validation/definitions/inviteValidation').InviteData} InviteData
+ * @typedef {import('../config/validation/definitions/registerValidation').RegistrationData} RegistrationData
+ */
 
 /** HELPER METHODS **/
 
+/**
+ * @param {ObjectId} roomId 
+ * @param {MemberDocument} member 
+ */
 const addStaff = async (roomId, member) => {
 
     const { staff } =
-        await Classroom
-            .findByIdAndUpdate(roomId, { $push: { staff: member } }, {new:true})
-            .select("staff")
-            .populate("staff.user");
+        await roomCtrl.updateOne({
+            docId: roomId,
+            data: { $push: { staff: member } }
+        }, {
+            select: "staff",
+            populate: "staff.user"
+        } );
 
     return staff[ staff.length - 1 ];
 
 }
 
+/**
+ * @param {RoomDocument} room 
+ * @param {InviteDocument} invite 
+ * @param {UserDocument} from 
+ */
 const sendInvite = ( room, invite, from ) => {
 
     return mail.send(
@@ -29,7 +56,7 @@ const sendInvite = ( room, invite, from ) => {
         {
             name: from.name,
             roomName: room.name,
-            inviteLink: `${homeUrl}/invite/${invite.token.token}`
+            inviteLink: `${homeUrl}/invite/${invite.token.tokenString}`
         },
         {
             to: invite.email,
@@ -41,11 +68,19 @@ const sendInvite = ( room, invite, from ) => {
 
 /** CONTROLLER METHODS **/
 
-const create = async ({ roomId, user, body })  => {
+/**
+ * @typedef CreateRoomInviteOptions
+ * @property {ObjectId} roomId
+ * @property {UserDocument} user
+ * @property {InviteData} inviteData
+ * 
+ * @param {CreateRoomInviteOptions} param0 
+ */
+const create = async ({ roomId, user, inviteData })  => {
 
-    const roomEmails = await Classroom.findById(roomId).populate('staff.user',"email").select("invites.email");
+    const roomEmails = await Room.findById(roomId).populate('staff.user',"email").select("invites.email");
 
-    const { email } = body;
+    const { email } = inviteData;
 
     // Check if the email is already registered to a staff member.
     if( roomEmails.staff.map( ({user}) => user.email ).includes( email ) )
@@ -57,12 +92,7 @@ const create = async ({ roomId, user, body })  => {
 
         throw new InvalidDataError( "Unable to create invite.", { email: "This email already has an invite." } );
 
-    const token = new Token({
-        relation: roomId,
-        token: crypto.randomBytes(16).toString('hex')
-    });
-
-    await token.save();
+    const token = await tokenCtrl.createOne( { data: { relation: roomId } } );
 
     const update = {
         $push: {
@@ -74,9 +104,12 @@ const create = async ({ roomId, user, body })  => {
     };
 
     const room =
-        await Classroom
-            .findByIdAndUpdate( roomId, update, { new: true } )
-            .populate( 'invites.token' );
+        await roomCtrl.updateOne({
+            docId: roomId,
+            data: update
+        }, {
+            populate: "invites.token"
+        });
 
     const invite = room.invites[ room.invites.length - 1 ];
 
@@ -86,19 +119,22 @@ const create = async ({ roomId, user, body })  => {
 
 }
 
-
 /**
- * Delete an invite
+ * @typedef RemoveRoomInviteOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} inviteId
+ * 
+ * @param {RemoveRoomInviteOptions} param0 
  */
 const remove = async ({ roomId, inviteId }) => {
 
-    const room = await Classroom.findById( roomId );
+    const room = await roomCtrl.findOne( { docId: roomId } );
 
     const invite = room.invites.id( inviteId );
 
     if( !invite ) throw new NotFoundError( "Invite not found." );
 
-    await Token.findByIdAndDelete( invite.token );
+    await tokenCtrl.deleteOne( { docId: invite.token } );
 
     invite.remove();
 
@@ -107,12 +143,16 @@ const remove = async ({ roomId, inviteId }) => {
 }
 
 /**
- * Checks if an invite's email has a user.
+ * @typedef GetInviteEmailCheckOptions
+ * @property {InviteDocument} invite
+ * 
+ * @param {GetInviteEmailCheckOptions} param0 
  */
 const emailCheck = async ({ invite }) => {
 
     const { email } = invite;
-    const user = await User.findOne({ email });
+
+    const user = await userCtrl.findOne({ search: { email } });
 
     return {
         hasUser: Boolean( user ),
@@ -122,32 +162,42 @@ const emailCheck = async ({ invite }) => {
 }
 
 /**
- * Register a User through an invite.
+ * @typedef RegisterInviteOptions
+ * @property {InviteDocument} invite
+ * @property {RegistrationData} registerData
+ * 
+ * @param {RegisterInviteOptions} param0 
  */
-const register = async ({ invite, body }) => {
+const register = async ({ invite, registerData }) => {
 
     const { email } = invite;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await userCtrl.findOne({ search: { email } });
 
     if( existingUser )
 
         throw new InvalidDataError( "Invalid registration.", { email: "Email already exists" } );
 
-    // Create the User
-    const user = new User({
-        name: body.name,
-        email,
-        password: await passwordHash( body.password ),
-        isVerified: true
-    });
+    const { name, password } = registerData;
 
-    await user.save();
+    // Create the User
+    await userCtrl.createOne({ data: {
+        name,
+        email,
+        password,
+        isVerified: true
+    } });
 
 }
 
 /**
- * Accept the invitation to join a room.
+ * @typedef AcceptInviteOptions
+ * @property {TokenDocument} inviteToken
+ * @property {RoomDocument} inviteRoom
+ * @property {InviteDocument} invite
+ * @property {UserDocument} user
+ * 
+ * @param {AcceptInviteOptions} param0 
  */
 const accept = async ({ inviteToken, inviteRoom, invite, user }) => {
 

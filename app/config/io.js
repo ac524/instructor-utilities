@@ -1,6 +1,7 @@
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
-const { Classroom, Feed } = require("../models");
+const { Feed } = require("../models");
+const roomCtrl = require("../controllers/room");
 const secret = require("./options")( "secret" );
 
 
@@ -26,7 +27,7 @@ const getUserFromVerify = token => {
 
 const isStaffMember = async ( userId, roomId ) => {
 
-    const room = await Classroom.findById(roomId).select("staff");
+    const room = await roomCtrl.findOne( { docId: roomId }, { select: "staff" } );
 
     const staffMember = room.staff.find( member => member.user.equals(userId) );
 

@@ -1,23 +1,32 @@
-const router = require("express").Router();
-const isAuthenticated = require("./middleware/isAuthenticated");
+const createRouter = require("./utils/createRouter");
 
-const cch = require("./middleware/createControllerHandler");
-const sde = require("./middleware/setDefaultError");
+const { login: loginVal } = require("../config/validation")
 
 const {
     login,
     authenticated
 } = require("../controllers/auth");
 
-const loginValidation = require("../validation/loginValidation");
+const loginCtlrConfig = {
+    keyMap: { body: "credentials" }
+};
 
-router.post(
-    "/login",
-    sde("An error occured while trying to login."),
-    loginValidation.postHandler(),
-    cch( login )
-);
+module.exports = createRouter([
 
-router.post( "/authenticated", isAuthenticated, cch( authenticated ) );
+    ["/login", {
+        post: {
+            defaultError: "login",
+            validation: loginVal,
+            ctrl: [ login, loginCtlrConfig ]
+        }
+    }],
 
-module.exports = router;
+    ["/authenticated", {
+        post: {
+            defaultError: "get the authenticated user",
+            auth: true,
+            ctrl: authenticated
+        }
+    }]
+
+]);

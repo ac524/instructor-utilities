@@ -1,14 +1,24 @@
-const router = require("express").Router();
+const createRouter = require("./utils/createRouter");
 
-const registerValidation = require("../validation/registerValidation");
-
-const cch = require("./middleware/createControllerHandler");
-const sde = require("./middleware/setDefaultError");
+const { register: registerVal } = require("../config/validation");
 
 const {
     register
 } = require("../controllers/register");
 
-router.post( "/", registerValidation.postHandler(), sde("An error occured during registration."), cch( register ) );
 
-module.exports = router;
+const registerCtlrConfig = {
+    keyMap: { body: "registerData" }
+};
+
+module.exports = createRouter([
+
+    ["/", {
+        post: {
+            defaultError: "complete the registration",
+            validation: registerVal,
+            ctrl: [ register, registerCtlrConfig ]
+        }
+    }]
+
+]);

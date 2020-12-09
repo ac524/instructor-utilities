@@ -1,9 +1,11 @@
 const appTypes  = require("./registry.json");
-const { AppType } = require("../../models");
+
+const appTypeCtrl = require("../../controllers/appType");
 
 const registerAppTypes = async () => {
 
-    const registered = await AppType.find({});
+    const registered = await appTypeCtrl.findMany({ search: {} });
+
     const processed = [];
     const types = Object.keys( appTypes );
 
@@ -39,12 +41,10 @@ const registerAppTypes = async () => {
     // Register new apps.
     for( let i = 0; i < toRegister.length; i++ ) {
 
-        const newAppType = AppType({
+        await appTypeCtrl.createOne({
             type: toRegister[i],
             name: appTypes[toRegister[i]].name
         });
-
-        await newAppType.save();
 
     }
 

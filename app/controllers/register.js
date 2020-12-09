@@ -1,69 +1,83 @@
-const mail = require('../config/utils/mail');
-
-const passwordHash = require("../config/utils/passwordHash");
+const mail = require('../mail');
 
 // Load input validation
 const sendUserVerifyEmail = require("./utils/sendUserVerifyEmail");
 
-const { User, Token, Classroom } = require("../models");
+const userCtrl = require("./user");
+const tokenCtrl = require("./token");
+const roomCtrl = require("./room");
+
 const { InvalidDataError, NotFoundError } = require('../config/errors');
+
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('../config/validation/definitions/registerValidation').RegistrationData} RegistrationData
+ */
 
 /** CONTROLLER METHODS **/
 
-const register = async ({ body }) => {
+/**
+ * @typedef RegisterOptions
+ * @property {RegistrationData} registerData
+ * 
+ * @param {RegisterOptions} param0 
+ */
+const register = async ({ registerData }) => {
 
   let classroom;
-  const hasCode = Boolean(body.code);
 
-  if( hasCode ) {
+  // TODO Code verification and class room association should be moved to middleware so classroom can be passed directily into the controller.
+  const { code } = registerData;
+
+  if( code ) {
   
     // Create the User's classroom
-    const token = await Token.findOne({
-      token: body.code
-    });
+    const token = await tokenCtrl.getByTokenString({ tokenString: code });
 
     if( !token )  throw new NotFoundError( "Unknown registration code.", { code: "Code not found" } );
 
-    classroom = await Classroom.findOne({
-      registerCode: token._id
-    });
+    classroom =  await roomCtrl.findOne( { search: { registerCode: token._id } } );
 
     if( !classroom ) throw new InvalidDataError( "Registration code claimed.", { code: "Your room is no longer available" } );
     
   }
 
-  const existingUser = await User.findOne({ email: body.email });
+  const { email } = registerData;
+
+  const existingUser = await userCtrl.findOne({ search: { email } });
 
   if( existingUser )
 
     throw new InvalidDataError( "Cannot create user.", { email: "Email already exists." } );
 
-  // Create the User
-  const user = new User({
-    name: body.name,
-    email: body.email,
-    password: await passwordHash( body.password ),
-    isVerified: !mail.isEnabled
-  });
+  const { name, password } = registerData;
 
-  await user.save();
+  // Create the User
+  const user = await userCtrl.createOne({ data: {
+    name,
+    email,
+    password,
+    isVerified: !mail.isEnabled
+  } });
+
+  const { roomname } = registerData;
 
   if( classroom ) {
 
-    classroom.name = body.roomname;
+    classroom.name = roomname;
 
   } else {
 
     // Create the User's classroom
-    classroom = new Classroom({
-      name: body.roomname
-    });
+    classroom = roomCtrl.createOne( { data: { name: roomname } }, { save: false } );
 
   }
 
   if( classroom.registerCode ) {
-    await Token.findByIdAndDelete(classroom.registerCode);
+
+    await tokenCtrl.deleteOne( classroom.registerCode );
     classroom.registerCode = undefined;
+    
   }
 
   await classroom.save();

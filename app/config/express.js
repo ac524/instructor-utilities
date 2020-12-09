@@ -10,31 +10,38 @@ const PORT = getOption( "port" );
 const app = express();
 const server = http.createServer(app);
 
-
-// Include data parsing middleware.
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
 const io = require("./io")(server, app);
 
-const compression = require("compression");
-// TODO Research usage of this compression. Does it work for client side requests?
-// const msgpack = require("express-msgpack");
+const addDataParsing = () => {
+    // Include data parsing middleware.
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
+}
 
-// gzip compression.
-app.use(compression());
-// msgpack compression for json.
-// app.use(msgpack());
+const addCompression = () => {
+    const compression = require("compression");
+    // TODO Research usage of this compression. Does it work for client side requests?
+    // const msgpack = require("express-msgpack");
+    
+    // gzip compression.
+    app.use(compression());
+    // msgpack compression for json.
+    // app.use(msgpack());
+}
 
-app.use(passport.initialize());
-// Passport config
-passport.use( require("./jwtstrategy") );
+const addAuth = () => {
+    app.use(passport.initialize());
+    // Passport config
+    passport.use( require("./jwtstrategy") );
+}
 
-// Use the /public directory for static file loading.
-app.use(express.static("public"));
-app.use(express.static("client/build"));
+
 
 const addRoutes = () => {
+
+    // Use the /public directory for static file loading.
+    app.use(express.static("public"));
+    app.use(express.static("client/build"));
 
     app.use( require("../routes") );
 
@@ -51,6 +58,9 @@ const listen = () => {
 }
 
 module.exports = {
+    addDataParsing,
+    addCompression,
+    addAuth,
     addRoutes,
     listen,
     app,

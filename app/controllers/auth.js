@@ -4,21 +4,40 @@ const jwt = require("jsonwebtoken");
 const secret = require("../config/options")( "secret" );
 
 // Load User model
-const { User } = require("../models");
 const { InvalidDataError } = require("../config/errors");
+
+const userCtrl = require("./user");
 
 const jwtSign = util.promisify( jwt.sign );
 
+/**
+ * Type Definition Imports
+ * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../config/validation/definitions/loginValidation').LoginData} LoginData
+ */
+
 /** CONTROLLER METHODS **/
 
+/**
+ * @typedef GetAuthUserOptions
+ * @property {UserDocument} user
+ * 
+ * @param {GetAuthUserOptions} param0 
+ */
 const authenticated = ({ user }) => user;
 
-const login = async ({ body }) => {
+/**
+ * @typedef LoginOptions
+ * @property {LoginData} credentials
+ * 
+ * @param {LoginOptions} param0 
+ */
+const login = async ({ credentials }) => {
 
-  const { email, password } = body;
+  const { email, password } = credentials;
 
   // Find user by email
-  const user = await User.findOne({ email });
+  const user =  await userCtrl.findOne({ search: { email } });
 
   if (!user)
 
