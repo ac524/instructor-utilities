@@ -11,13 +11,13 @@ describe("Auth Controller", function() {
 
     it("should return the User object it's passed", function(done) {
 
-      // Configure needed data.
+      // Arrange - Configure needed data.
       const user = new User ({name: "bob"});
       
-      // Peform the action to test.
+      // Act - Peform the action to test.
       const result = authenticated({ user });
 
-      // Assert a result.
+      // Assert - Expect a result.
       expect( result ).to.equal( user );
 
       return done();
