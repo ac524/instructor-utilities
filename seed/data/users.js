@@ -1,4 +1,4 @@
-const passwordHash = require("../../config/utils/passwordHash");
+const passwordHash = require("../../app/config/utils/passwordHash");
 
 module.exports = async () => [
     {

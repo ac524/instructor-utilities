@@ -1,22 +1,12 @@
+const userCtrl = require("../controllers/user");
+
+const { user: userVal } = require("../config/validation");
+const { room: roomPerm } = require("../config/permissions");
+
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const { user: userVal } = require("../validation");
-
 const createRouter = require("./utils/createRouter");
-
-const { room: roomPerm } = require("../config/permissions");
-
-const {
-    update,
-    getRoomsShort,
-    leaveRoom,
-    archiveRoom
-} = require("../controllers/user");
-
-const userCtlrConfig = {
-    keyMap: { body: "userData" }
-};
 
 const sharedRoomActionsConfig = {
     paramCheck: true,
@@ -30,7 +20,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "update the user",
             validation: userVal,
-            ctrl: [ update, userCtlrConfig ]
+            ctrl: userCtrl
         }
     }],
 
@@ -39,7 +29,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "leave the room",
             permission: roomPerm.leave,
-            ctrl: leaveRoom
+            ctrl: userCtrl.binding.leaveRoom
         }
     }, sharedRoomActionsConfig],
 
@@ -48,7 +38,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "archive the room",
             permission: roomPerm.archive,
-            ctrl: archiveRoom
+            ctrl: userCtrl.binding.archiveRoom
         }
     }, sharedRoomActionsConfig],
 
@@ -56,7 +46,7 @@ module.exports = createRouter([
         get: {
             auth: true,
             defaultError: "get short room details",
-            ctrl: getRoomsShort
+            ctrl: userCtrl.binding.getRoomsBasics
         }
     }]
 

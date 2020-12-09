@@ -1,5 +1,5 @@
-const { Feed } =  require("../../../../models");
-const { comment: commentVal } = require("../../../../validation");
+const { Feed } =  require("../../../../../models");
+const { comment: commentVal } = require("../../../../../config/validation");
 const EntryType = require("./EntryType");
 
 class CommentEntryType extends EntryType {

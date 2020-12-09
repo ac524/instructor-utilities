@@ -1,12 +1,14 @@
-const { Room, Feed } = require("../../models");
+const { Feed } = require("../../models");
 const { NotFoundError } = require("../../config/errors");
+
+const roomCtrl = require("../../controllers/room");
 
 const setRoom = async (req, next) => {
 
     try {
 
         const roomId = req.crdata.get("roomId");
-        const classroom = await Room.findById( roomId ).select("staff");
+        const classroom = await roomCtrl.findOne( { docId: roomId }, { select: "staff" } );
 
         if( !classroom ) throw new NotFoundError("Classroom not found");
 
@@ -25,7 +27,7 @@ const setRoom = async (req, next) => {
 module.exports = {
     async fromBody(req, res, next) {
 
-        req.crdata.set( "roomId", req.body.roomId );
+        req.crdata.set( "roomId", req.body.roomId || req.body.room );
 
         await setRoom(req, next);
 

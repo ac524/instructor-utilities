@@ -1,12 +1,13 @@
-const crypto = require('crypto');
-const mail = require('../config/utils/mail');
+const mail = require('../mail');
 
-const { Token, Room, User } = require("../models");
-
-const passwordHash = require("../config/utils/passwordHash");
-const ioEmit = require("./utils/ioEmit");
-const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
 const homeUrl = require("../config/options")( "publicUrl" );
+const { InvalidDataError, InvalidUserError, NotFoundError } = require('../config/errors');
+
+const userCtrl = require("./user");
+const roomCtrl = require("./room");
+const tokenCtrl = require("./token");
+
+const ioEmit = require("./utils/ioEmit");
 
 /**
  * Type Definition Imports
@@ -18,8 +19,8 @@ const homeUrl = require("../config/options")( "publicUrl" );
  * @typedef {import('../models/schema/InviteSchema').InviteDocument} InviteDocument
  * @typedef {import('../models/schema/TokenSchema').TokenDocument} TokenDocument
  * 
- * @typedef {import('../validation/definitions/inviteValidation').InviteData} InviteData
- * @typedef {import('../validation/definitions/registerValidation').RegistrationData} RegistrationData
+ * @typedef {import('../config/validation/definitions/inviteValidation').InviteData} InviteData
+ * @typedef {import('../config/validation/definitions/registerValidation').RegistrationData} RegistrationData
  */
 
 /** HELPER METHODS **/
@@ -31,10 +32,13 @@ const homeUrl = require("../config/options")( "publicUrl" );
 const addStaff = async (roomId, member) => {
 
     const { staff } =
-        await Room
-            .findByIdAndUpdate(roomId, { $push: { staff: member } }, {new:true})
-            .select("staff")
-            .populate("staff.user");
+        await roomCtrl.updateOne({
+            docId: roomId,
+            data: { $push: { staff: member } }
+        }, {
+            select: "staff",
+            populate: "staff.user"
+        } );
 
     return staff[ staff.length - 1 ];
 
@@ -52,7 +56,7 @@ const sendInvite = ( room, invite, from ) => {
         {
             name: from.name,
             roomName: room.name,
-            inviteLink: `${homeUrl}/invite/${invite.token.token}`
+            inviteLink: `${homeUrl}/invite/${invite.token.tokenString}`
         },
         {
             to: invite.email,
@@ -88,12 +92,7 @@ const create = async ({ roomId, user, inviteData })  => {
 
         throw new InvalidDataError( "Unable to create invite.", { email: "This email already has an invite." } );
 
-    const token = new Token({
-        relation: roomId,
-        token: crypto.randomBytes(16).toString('hex')
-    });
-
-    await token.save();
+    const token = await tokenCtrl.createOne( { data: { relation: roomId } } );
 
     const update = {
         $push: {
@@ -105,9 +104,12 @@ const create = async ({ roomId, user, inviteData })  => {
     };
 
     const room =
-        await Room
-            .findByIdAndUpdate( roomId, update, { new: true } )
-            .populate( 'invites.token' );
+        await roomCtrl.updateOne({
+            docId: roomId,
+            data: update
+        }, {
+            populate: "invites.token"
+        });
 
     const invite = room.invites[ room.invites.length - 1 ];
 
@@ -126,13 +128,13 @@ const create = async ({ roomId, user, inviteData })  => {
  */
 const remove = async ({ roomId, inviteId }) => {
 
-    const room = await Room.findById( roomId );
+    const room = await roomCtrl.findOne( { docId: roomId } );
 
     const invite = room.invites.id( inviteId );
 
     if( !invite ) throw new NotFoundError( "Invite not found." );
 
-    await Token.findByIdAndDelete( invite.token );
+    await tokenCtrl.deleteOne( { docId: invite.token } );
 
     invite.remove();
 
@@ -149,7 +151,8 @@ const remove = async ({ roomId, inviteId }) => {
 const emailCheck = async ({ invite }) => {
 
     const { email } = invite;
-    const user = await User.findOne({ email });
+
+    const user = await userCtrl.findOne({ search: { email } });
 
     return {
         hasUser: Boolean( user ),
@@ -169,7 +172,7 @@ const register = async ({ invite, registerData }) => {
 
     const { email } = invite;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await userCtrl.findOne({ search: { email } });
 
     if( existingUser )
 
@@ -178,14 +181,12 @@ const register = async ({ invite, registerData }) => {
     const { name, password } = registerData;
 
     // Create the User
-    const user = new User({
+    await userCtrl.createOne({ data: {
         name,
         email,
-        password: await passwordHash( password ),
+        password,
         isVerified: true
-    });
-
-    await user.save();
+    } });
 
 }
 

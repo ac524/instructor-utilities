@@ -1,4 +1,4 @@
-const { Feed } =  require("../../../../models");
+const { Feed } =  require("../../../../../models");
 const EntryType = require("./EntryType");
 
 class ElevationEntryType extends EntryType {

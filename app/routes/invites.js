@@ -4,7 +4,7 @@ const setInvite = require("./middleware/setInvite");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const { user: userVal, invite: inviteVal } = require("../validation");
+const { user: userVal, invite: inviteVal } = require("../config/validation");
 
 const { invite: invitePerm } = require("../config/permissions");
 
@@ -49,7 +49,7 @@ module.exports = createRouter([
         }
     }],
 
-    ["/:token/accept", {
+    ["/:tokenString/accept", {
         post: {
             auth: true,
             defaultError: "accept the invite",
@@ -58,7 +58,7 @@ module.exports = createRouter([
         }
     }],
 
-    ["/:token/email", {
+    ["/:tokenString/email", {
         get: {
             defaultError: "check the email's status",
             middleware: setInvite,
@@ -66,7 +66,7 @@ module.exports = createRouter([
         }
     }],
 
-    ["/:token/register", {
+    ["/:tokenString/register", {
         post: {
             defaultError: "complete the registration",
             validation: userVal.clone("invite", ["name","password"]),

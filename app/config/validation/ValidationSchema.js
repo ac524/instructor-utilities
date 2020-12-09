@@ -1,6 +1,6 @@
 const { compile, mapErrors } = require("./validator");
 
-const { InvalidDataError } = require("../config/errors");
+const { InvalidDataError } = require("../errors");
 
 // Validate schema as is.
 const vStrict = schema => compile(schema);

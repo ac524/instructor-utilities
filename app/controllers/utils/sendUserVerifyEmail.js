@@ -1,24 +1,18 @@
-const mail = require('../../config/utils/mail');
-const crypto = require('crypto');
+const mail = require('../../mail');
 
-const { Token } = require("../../models");
+const tokenCtrl = require("../../controllers/token");
+
 const homeUrl = require("../../config/options")( "publicUrl" );
 
 const sendUserVerifyEmail = async (user) => {
 
-    const token = new Token({
-        relation: user._id,
-        token: crypto.randomBytes(16).toString('hex')
-    });
- 
-    // Save the verification token
-    await token.save();
+    const token = await tokenCtrl.createOne({ data: { relation: user._id } });
 
     await mail.send(
       "welcome",
       {
         name: "Anthony Brown",
-        verificationLink: `${homeUrl}/validate-email/${token.token}`
+        verificationLink: `${homeUrl}/validate-email/${token.tokenString}`
       },
       {
         to: user.email,

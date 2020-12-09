@@ -1,20 +1,13 @@
-const createRouter = require("./utils/createRouter");
+const { app: appVal } = require("../config/validation")
+
+const appCtrl = require('../controllers/app');
+const appTypeCtrl = require('../controllers/appType');
 
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
+const setAppSearch = require("./middleware/setAppSearch");
 
-const { app: appVal } = require("../validation")
-
-const {
-    getTypes,
-    getSingle,
-    create,
-    update
-} = require("../controllers/app");
-
-const appCtlrConfig = {
-    keyMap: { body: "appData" }
-};
+const createRouter = require("./utils/createRouter");
 
 const sharedConfig = { auth: true };
 
@@ -25,30 +18,30 @@ module.exports = createRouter([
             defaultError: "create the app",
             validation: appVal,
             middleware: [ setRoom.fromBody, isRoomMember ],
-            ctrl: [ create, appCtlrConfig ]
+            ctrl: appCtrl
         }
     }, sharedConfig],
 
     ["/types", {
         get: {
             defaultError: "get app types",
-            ctrl: getTypes
+            ctrl: appTypeCtrl.binding.getEnabled
         }
     }, sharedConfig],
 
     ["/:appTypeId/:roomId", {
         get: {
             defaultError: "get the app",
-            ctrl: getSingle
+            ctrl: appCtrl
         },
         patch: {
             defaultError: "update the app",
-            ctrl: [ update, appCtlrConfig ]
+            ctrl: appCtrl
         }
     }, {
         ...sharedConfig,
         paramCheck: true,
-        middleware: [ setRoom.fromParam, isRoomMember ]
+        middleware: [ setRoom.fromParam, isRoomMember, setAppSearch ]
     }]
 
 ]);

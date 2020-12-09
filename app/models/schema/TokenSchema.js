@@ -14,7 +14,7 @@ const TokenSchema = new Schema({
         type: ObjectId,
         required: true
     },
-    token: {
+    tokenString: {
         type: String,
         unique: true,
         index: true,
