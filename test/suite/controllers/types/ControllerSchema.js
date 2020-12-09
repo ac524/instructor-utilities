@@ -8,6 +8,8 @@ describe("SchemaController", function() {
   
       it("should create a SchemaController object", function(done) {
 
+        done();
+        
       });
 
     });
