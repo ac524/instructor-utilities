@@ -22,14 +22,23 @@ module.exports = function() {
      * 
      * @returns {Document}
      */
-    const makeDocHelper = ( ctrl, data ) => {
+    const makeDocHelper = ( ctrl ) => {
 
-        const doc = ctrl.makeDoc( data );
+        // Keep a copy of the real makeDoc function.
+        const makeDoc = ctrl.binding.makeDoc;
 
-        sandbox.stub(ctrl, "makeDoc").callsFake(() => doc);
-        sandbox.stub(doc, "save").callsFake(() => {});
+        // THEN stub the one that will be accessed.
+        sandbox.stub(ctrl, "makeDoc").callsFake( data => {
 
-        return doc;
+            // Make the new doc.
+            const doc = makeDoc( data );
+
+            // THEN stub the doc's `save` method.
+            sandbox.stub(doc, "save").callsFake(() => {});
+
+            return doc;
+
+        });
 
     }
 
@@ -39,7 +48,7 @@ module.exports = function() {
         const ctrl = new SchemaController( "modelkey", TestModel );
         const test = { name: "A test" };
 
-        makeDocHelper( ctrl, test );
+        makeDocHelper( ctrl );
 
         // Act
         ctrl.createOne( { data: test } );
@@ -51,39 +60,35 @@ module.exports = function() {
 
     });
 
-    it("should call the document's save method by default", (done) => {
+    it("should call the document's save method by default", async () => {
 
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
         const test = { name: "A test" };
 
-        const doc = makeDocHelper( ctrl, test );
+        makeDocHelper( ctrl );
 
         // Act
-        ctrl.createOne( { data: test } );
+        const doc = await ctrl.createOne( { data: test } );
 
         // Assert
         expect( doc.save.calledOnce ).to.be.true;
 
-        done();
-
     });
 
-    it("should not call the document's save if configured with `save` set to false", (done) => {
+    it("should not call the document's save if configured with `save` set to false", async () => {
 
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
         const test = { name: "A test" };
 
-        const doc = makeDocHelper( ctrl, test );
+        makeDocHelper( ctrl );
 
         // Act
-        ctrl.createOne( { data: test }, { save: false } );
+        const doc = await ctrl.createOne( { data: test }, { save: false } );
 
         // Assert
         expect( doc.save.calledOnce ).to.be.false;
-
-        done();
 
     });
 
