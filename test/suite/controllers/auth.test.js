@@ -3,9 +3,9 @@ const { authenticated, login } = require("../../../app/controllers/auth");
 const { User } = require("../../../app/models");
 const expect = chai.expect
 
-describe("Auth Controller", function() {
+describe("AuthController", function() {
 
-  describe("#authenticated()", function() {
+  describe("authenticated()", function() {
 
     it("should return the User object it's passed", function(done) {
 
