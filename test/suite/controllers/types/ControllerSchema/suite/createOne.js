@@ -5,6 +5,26 @@ const SchemaController = require("@crsm/controllers/types/SchemaController");
 
 const TestModel = require("@crsmtest/lib/TestModel");
 
+const createMakeDocHelper = sandbox => ctrl => {
+
+    // Keep a copy of the real makeDoc function.
+    const makeDoc = ctrl.binding.makeDoc;
+
+    // THEN stub the one that will be accessed.
+    sandbox.stub(ctrl, "makeDoc").callsFake( data => {
+
+        // Make the new doc.
+        const doc = makeDoc( data );
+
+        // THEN stub the doc's `save` method.
+        sandbox.stub(doc, "save").callsFake(() => {});
+
+        return doc;
+
+    });
+
+}
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Document} Document
@@ -22,25 +42,7 @@ module.exports = function() {
      * 
      * @returns {Document}
      */
-    const makeDocHelper = ( ctrl ) => {
-
-        // Keep a copy of the real makeDoc function.
-        const makeDoc = ctrl.binding.makeDoc;
-
-        // THEN stub the one that will be accessed.
-        sandbox.stub(ctrl, "makeDoc").callsFake( data => {
-
-            // Make the new doc.
-            const doc = makeDoc( data );
-
-            // THEN stub the doc's `save` method.
-            sandbox.stub(doc, "save").callsFake(() => {});
-
-            return doc;
-
-        });
-
-    }
+    const makeDocHelper = createMakeDocHelper( sandbox );
 
     it("should call the `makeDoc` method with the given data", (done) => {
 
