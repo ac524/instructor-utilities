@@ -16,8 +16,16 @@ const getDirFiles = async folder => {
   for( filename of  await readDir( folder )) {
 
     const filePath = path.join(folder, filename);
+
+    const match = filename.match(/\.js$/);
+
+    if( !match ) {
+      files.push( ...(await getDirFiles( filePath )) );
+      continue;
+    }
   
-    files.push( ...(filename.match(/\.js$/) ? [ filePath ] : await getDirFiles( filePath )) );
+    // Push files named `test.js` or that end with `.test.js`
+    if( "test.js" === filename || ".test.js" === filename.substr(-8) ) files.push( filePath );
 
   }
 
