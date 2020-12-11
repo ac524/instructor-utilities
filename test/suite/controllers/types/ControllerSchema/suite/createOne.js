@@ -5,7 +5,11 @@ const SchemaController = require("@crsm/controllers/types/SchemaController");
 
 const TestModel = require("@crsmtest/lib/TestModel");
 
-const createMakeDocHelper = sandbox => ctrl => {
+const createMakeDocHelper = sandbox => 
+    /**
+     * @param {SchemaController} ctrl 
+     */
+    ctrl => {
 
     // Keep a copy of the real makeDoc function.
     const makeDoc = ctrl.binding.makeDoc;
@@ -36,12 +40,6 @@ module.exports = function() {
 
     afterEach(() => sandbox.restore());
 
-    /**
-     * Stubs the makeDoc function after using it to create a document that can be safely stubbed and spied on.
-     * @param {SchemaController} ctrl
-     * 
-     * @returns {Document}
-     */
     const makeDocHelper = createMakeDocHelper( sandbox );
 
     it("should call the `makeDoc` method with the given data", (done) => {
