@@ -8,6 +8,8 @@ const readDir = util.promisify( fs.readdir );
 
 const dirname = "suite";
 
+const ignoreMap = new Map([ ["suite",1] ]);
+
 // Recursively looks for files in folders and builds on list of all found .js files.
 const getDirFiles = async folder => {
 
@@ -20,11 +22,11 @@ const getDirFiles = async folder => {
     const match = filename.match(/\.js$/);
 
     if( !match ) {
-      files.push( ...(await getDirFiles( filePath )) );
+      if( !ignoreMap.has( filename ) ) files.push( ...(await getDirFiles( filePath )) );
       continue;
     }
   
-    // Push files named `test.js` or that end with `.test.js`
+    // Push files named `test.js` or that end with `.test.js`.
     if( "test.js" === filename || ".test.js" === filename.substr(-8) ) files.push( filePath );
 
   }

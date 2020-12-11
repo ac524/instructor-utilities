@@ -1,15 +1,10 @@
 const { expect } = require("chai");
-const { createSandbox } = require("sinon");
 
 const SchemaController = require("@crsm/controllers/types/SchemaController");
 
 const TestModel = require("@crsmtest/lib/TestModel");
 
 module.exports = function() {
-
-    const sandbox = createSandbox();
-
-    afterEach(() => sandbox.restore());
 
     it("should create a SchemaController object", function(done) {
 
