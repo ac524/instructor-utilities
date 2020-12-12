@@ -21,7 +21,7 @@ const createMakeDocHelper = sandbox =>
             const doc = makeDoc( data );
 
             // THEN stub the doc's `save` method.
-            sandbox.stub(doc, "save").callsFake(() => {});
+            sandbox.stub(doc, "save");
 
             return doc;
 
