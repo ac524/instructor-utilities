@@ -6,7 +6,7 @@ const TestModel = require("@crsmtest/lib/TestModel");
 
 module.exports = function() {
 
-    it("should create a SchemaController object", function(done) {
+    it("should create a SchemaController object", () => {
 
         // Arrange and Act
         const schemaController = new SchemaController;
@@ -14,11 +14,9 @@ module.exports = function() {
         // Assert
         expect( schemaController ).to.be.instanceof( SchemaController );
 
-        done();
-
       });
 
-      it("should assign the first param to the `key` property", function(done) {
+      it("should assign the first param to the `key` property", () => {
 
         // Arrange
         const key = "modelkey";
@@ -29,19 +27,15 @@ module.exports = function() {
         // Assert
         expect( schemaController.key ).to.equal( key );
 
-        done();
-
       });
 
-      it("should assign the second param to the `model` property", function(done) {
+      it("should assign the second param to the `model` property", () => {
 
         // Act
         const schemaController = new SchemaController( "modelkey", TestModel );
 
         // Assert
         expect( schemaController.model ).to.equal( TestModel );
-
-        done();
 
       });
 

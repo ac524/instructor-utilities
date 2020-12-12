@@ -10,19 +10,20 @@ module.exports = function() {
 
     const sandbox = createSandbox();
 
-    afterEach(() => sandbox.restore());
+    before(() => sandbox.stub( TestModel, "deleteOne" ))
+
+    after(() => sandbox.restore());
 
     it( "should call the model's deleteOne method with the provided `docId`", () => {
 
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
         const docId = new ObjectId();
-        
-        sandbox.stub( TestModel, "deleteOne" );
 
         // Act
         ctrl.deleteOne( { docId } );
 
+        // Assert
         expect( TestModel.deleteOne.calledWithExactly( docId ) );
 
 
@@ -35,12 +36,11 @@ module.exports = function() {
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
         const doc = new TestModel({name: "A test"});
-        
-        sandbox.stub( TestModel, "deleteOne" );
 
         // Act
         ctrl.deleteOne( { doc } );
 
+        // Assert
         expect( TestModel.deleteOne.calledWithExactly( doc._id ) );
 
 

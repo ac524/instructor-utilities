@@ -38,11 +38,11 @@ module.exports = function() {
 
     const sandbox = createSandbox();
 
-    afterEach(() => sandbox.restore());
+    after(() => sandbox.restore());
 
     const makeDocHelper = createMakeDocHelper( sandbox );
 
-    it("should call the `makeDoc` method with the given data", (done) => {
+    it("should call the `makeDoc` method with the given data", () => {
 
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
@@ -55,8 +55,6 @@ module.exports = function() {
 
         // Assert
         expect( ctrl.makeDoc.calledWithExactly( test ) ).to.be.true;
-
-        done();
 
     });
 

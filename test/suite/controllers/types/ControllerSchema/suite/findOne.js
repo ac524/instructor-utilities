@@ -40,6 +40,7 @@ module.exports = function() {
         // Act
         ctrl.findOne( { docId } );
 
+        // Assert
         expect( ctrl.query.calledOnce ).to.be.true;
 
     } );

@@ -7,7 +7,7 @@ const TestModel = require("@crsmtest/lib/TestModel");
 
 module.exports = function() {
 
-    it("should return a `Document` of the given model", function(done) {
+    it("should return a `Document` of the given model", () => {
 
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
@@ -19,11 +19,9 @@ module.exports = function() {
         expect( doc ).to.be.instanceof( Document );
         expect( doc.collection.collectionName ).to.equal( TestModel.collection.collectionName );
 
-        done();
-
     });
 
-    it("should assign given data to the created `Model`", function(done) {
+    it("should assign given data to the created `Model`", () => {
 
         // Arrange
         const ctrl = new SchemaController( "modelkey", TestModel );
@@ -34,8 +32,6 @@ module.exports = function() {
 
         // Assert
         expect( doc ).to.include( test );
-
-        done();
 
     });
 
