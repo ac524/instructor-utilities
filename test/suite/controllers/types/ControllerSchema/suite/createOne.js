@@ -11,23 +11,23 @@ const createMakeDocHelper = sandbox =>
      */
     ctrl => {
 
-    // Keep a copy of the real makeDoc function.
-    const makeDoc = ctrl.binding.makeDoc;
+        // Keep a copy of the real makeDoc function.
+        const makeDoc = ctrl.binding.makeDoc;
 
-    // THEN stub the one that will be accessed.
-    sandbox.stub(ctrl, "makeDoc").callsFake( data => {
+        // THEN stub the one that will be accessed.
+        sandbox.stub(ctrl, "makeDoc").callsFake( data => {
 
-        // Make the new doc.
-        const doc = makeDoc( data );
+            // Make the new doc.
+            const doc = makeDoc( data );
 
-        // THEN stub the doc's `save` method.
-        sandbox.stub(doc, "save").callsFake(() => {});
+            // THEN stub the doc's `save` method.
+            sandbox.stub(doc, "save").callsFake(() => {});
 
-        return doc;
+            return doc;
 
-    });
+        });
 
-}
+    }
 
 /**
  * TYPE DEFINITION IMPORTS

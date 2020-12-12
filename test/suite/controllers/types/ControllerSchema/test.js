@@ -1,6 +1,7 @@
 const classConstructor = require("./suite/constructor");
 const makeDoc = require("./suite/makeDoc");
 const createOne = require("./suite/createOne");
+const deleteOne = require("./suite/deleteOne");
 
 describe("ControllerSchema", function() {
 
@@ -9,5 +10,6 @@ describe("ControllerSchema", function() {
     addDesc( "constructor()", classConstructor );
     addDesc( "makeDoc()", makeDoc );
     addDesc( "createOne()", createOne );
+    addDesc( "deleteOne()", deleteOne );
 
 });
