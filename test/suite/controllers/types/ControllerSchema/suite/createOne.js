@@ -1,9 +1,9 @@
 const { expect } = require("chai");
 const { createSandbox } = require("sinon");
 
-const SchemaController = require("@crsm/controllers/types/SchemaController");
+const SchemaController = require("~crsm/controllers/types/SchemaController");
 
-const TestModel = require("@crsmtest/lib/TestModel");
+const TestModel = require("~crsmtest/lib/TestModel");
 
 const createMakeDocHelper = sandbox => 
     /**

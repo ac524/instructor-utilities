@@ -2,7 +2,7 @@ const util = require("util");
 
 const { expect } = require("chai");
 
-const Controller = require("@crsm/controllers/types/Controller");
+const Controller = require("~crsm/controllers/types/Controller");
 
 module.exports = function() {
 

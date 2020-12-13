@@ -4,9 +4,9 @@ const { createSandbox } = require("sinon");
 const { Types } = require("mongoose");
 const { ObjectId } = Types;
 
-const SchemaController = require("@crsm/controllers/types/SchemaController");
+const SchemaController = require("~crsm/controllers/types/SchemaController");
 
-const TestModel = require("@crsmtest/lib/TestModel");
+const TestModel = require("~crsmtest/lib/TestModel");
 
 const createMakeCtrl = sandbox =>
     /**

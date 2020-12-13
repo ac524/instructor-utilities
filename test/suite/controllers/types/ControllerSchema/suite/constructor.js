@@ -1,8 +1,8 @@
 const { expect } = require("chai");
 
-const SchemaController = require("@crsm/controllers/types/SchemaController");
+const SchemaController = require("~crsm/controllers/types/SchemaController");
 
-const TestModel = require("@crsmtest/lib/TestModel");
+const TestModel = require("~crsmtest/lib/TestModel");
 
 module.exports = function() {
 

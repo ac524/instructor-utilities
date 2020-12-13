@@ -2,9 +2,9 @@ const { expect } = require("chai");
 const { createSandbox } = require("sinon");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const SchemaController = require("@crsm/controllers/types/SchemaController");
+const SchemaController = require("~crsm/controllers/types/SchemaController");
 
-const TestModel = require("@crsmtest/lib/TestModel");
+const TestModel = require("~crsmtest/lib/TestModel");
 
 module.exports = function() {
 
