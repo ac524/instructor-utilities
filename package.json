@@ -3,6 +3,10 @@
   "version": "0.5.5",
   "description": "Classroom student management utilities for instructors to effectively organize and keep track of student progress with a team of staff members.",
   "main": "app/server.js",
+  "_moduleAliases": {
+    "@crsm": "app",
+    "@crsmtest": "test"
+  },
   "scripts": {
     "envsetup": "node envsetup",
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
@@ -12,15 +16,22 @@
     "seed": "node seed",
     "seed:reset": "node app/seed/reset",
     "install": "cd client && npm install",
+    "postinstall": "link-module-alias",
     "build": "cd client && npm run build",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "test": "node test/run"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.2.0",
     "concurrently": "^5.3.0",
     "inquirer": "^7.3.3",
-    "nodemon": "^2.0.6"
+    "link-module-alias": "^1.2.0",
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6",
+    "nyc": "^15.1.0",
+    "sinon": "^9.2.1"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
