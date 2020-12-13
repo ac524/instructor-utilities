@@ -1,4 +1,3 @@
-const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
 const { Feed } = require("../models");
 const roomCtrl = require("../controllers/room");
@@ -139,11 +138,11 @@ const configureSocket = async socket => {
 
 }
 
-module.exports = (server, app) => {
+module.exports = server => {
 
-    const io = socketIo.listen(server);
+    const io = require("socket.io")( server );
 
-    io.on("connect", configureSocket);
+    io.on("connection", configureSocket);
 
     return io;
 

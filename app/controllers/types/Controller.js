@@ -33,6 +33,7 @@ class Controller {
 
     constructor() {
 
+        /** @type {this} - A proxy of the object that can return the functions with .bind() applied. */
         this.binding = makeFnBindingMap( this );
 
     }

@@ -1,10 +1,10 @@
 const PermissionSet = require("../PermissionSet");
 
-class FeedDelevateSet extends PermissionSet {
+class FeedDeelevateSet extends PermissionSet {
 
     constructor() {
 
-        super( "feed delevate", [
+        super( "feed deelevate", [
             "create"
         ] );
 
@@ -12,4 +12,4 @@ class FeedDelevateSet extends PermissionSet {
 
 }
 
-module.exports = FeedDelevateSet;
+module.exports = FeedDeelevateSet;
