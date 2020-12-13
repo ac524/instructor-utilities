@@ -17,6 +17,7 @@
     "seed:reset": "node app/seed/reset",
     "install": "cd client && npm install",
     "postinstall": "link-module-alias",
+    "preinstall": "command -v link-module-alias && link-module-alias clean || true",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build",
     "test": "node test/run"
