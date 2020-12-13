@@ -17,7 +17,6 @@
     "seed:reset": "node app/seed/reset",
     "install": "cd client && npm install",
     "postinstall": "link-module-alias",
-    "preinstall": "command -v link-module-alias && link-module-alias clean || true",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build",
     "test": "node test/run"
@@ -32,7 +31,7 @@
     "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
     "nyc": "^15.1.0",
-    "sinon": "^9.2.1"
+    "sinon": "^9.2.2"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
@@ -45,10 +44,10 @@
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "mjml": "^4.7.1",
-    "mongoose": "^5.10.14",
-    "nodemailer": "^6.4.16",
+    "mongoose": "^5.11.7",
+    "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^3.0.4"
   }
 }

@@ -10,7 +10,7 @@ const PORT = getOption( "port" );
 const app = express();
 const server = http.createServer(app);
 
-const io = require("./io")(server, app);
+const io = require("./io")(server);
 
 const addDataParsing = () => {
     // Include data parsing middleware.
