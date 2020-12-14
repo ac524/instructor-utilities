@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { createSandbox } = require("sinon");
 
-const { Types } = require("mongoose");
+const { Types, Query } = require("mongoose");
 const { ObjectId } = Types;
 
 const SchemaController = require("~crsm/controllers/types/SchemaController");
@@ -28,8 +28,8 @@ module.exports = function() {
 
     before(() => {
         // const newDocQuery = () => new DocumentQuery;
-        sandbox.stub( TestModel, "findById" );
-        sandbox.stub( TestModel, "findOne" );
+        sandbox.stub( TestModel, "findById" ).callsFake(()=>new Query);
+        sandbox.stub( TestModel, "findOne" ).callsFake(()=>new Query);
     });
 
     afterEach(() => {
@@ -41,7 +41,7 @@ module.exports = function() {
 
     describe("Query call", () => {
 
-        it( "should be called with a `DocumentQuery` and provided `queryOptions`", () => {
+        it( "should be called with a `Query` and provided `queryOptions`", () => {
 
             // Arrange
             const ctrl = makeCtrl();
@@ -56,7 +56,7 @@ module.exports = function() {
              * TODO Unsure on how to test the first param at the moment. You can't seem to just create a
              * `new DocumentQuery` for the stub method, so more exploration will be needed to solve.
              */
-            // expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( DocumentQuery );
+            expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( Query );
             expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
 
         } );
@@ -96,7 +96,6 @@ module.exports = function() {
     
         });
     
-
     });
 
     describe("By `search`", () => {
