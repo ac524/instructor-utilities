@@ -39,27 +39,31 @@ module.exports = function() {
 
     after(() => sandbox.restore());
 
-    describe("By `docId`", () => {
+    describe("Query call", () => {
 
-        it( "should call the `query` method with a `DocumentQuery` and provided `queryOptions` when passed a `docId`", () => {
+        it( "should be called with a `DocumentQuery` and provided `queryOptions`", () => {
 
             // Arrange
             const ctrl = makeCtrl();
             const docId = new ObjectId();
             const queryOptions = { select: "name" };
-    
+
             // Act
             ctrl.findOne( { docId }, queryOptions );
-    
+
             // Assert
             /**
-             * TODO  Unsure on how to test the first param at the moment. You can't seem to just create a
+             * TODO Unsure on how to test the first param at the moment. You can't seem to just create a
              * `new DocumentQuery` for the stub method, so more exploration will be needed to solve.
              */
             // expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( DocumentQuery );
             expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
-    
+
         } );
+
+    });
+
+    describe("By `docId`", () => {
     
         it( "should call the model's `findById` method with `docId` when provided", () => {
     
@@ -97,26 +101,6 @@ module.exports = function() {
 
     describe("By `search`", () => {
 
-        it( "should call the `query` method with a `DocumentQuery` and provided `queryOptions` when passed a `search`", () => {
-
-            // Arrange
-            const ctrl = makeCtrl();
-            const search = { name: "A test" };
-            const queryOptions = { select: "name" };
-
-            // Act
-            ctrl.findOne( { search }, queryOptions );
-
-            // Assert
-            /**
-             * TODO Unsure on how to test the first param at the moment. You can't seem to just create a
-             * `new DocumentQuery` for the stub method, so more exploration will be needed to solve.
-             */
-            // expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( DocumentQuery );
-            expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
-
-        } );
-
         it( "should call the model's `findOne` method with `search` when provided", () => {
 
             // Arrange
@@ -150,8 +134,7 @@ module.exports = function() {
 
     });
 
-    // Rename to something like priority testing?
-    describe("By `docId` and `search`", () => {
+    describe("Priority `docId` > than `search`", () => {
 
         it( "should call the model's findById method if provided a `docId` and `search`", async () => {
 
