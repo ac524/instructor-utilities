@@ -4,21 +4,8 @@ const { createSandbox } = require("sinon");
 const { Types, Query } = require("mongoose");
 const { ObjectId } = Types;
 
-const SchemaController = require("~crsm/controllers/types/SchemaController");
-
 const TestModel = require("~crsmtest/lib/TestModel");
-
-const createMakeCtrl = sandbox =>
-    /**
-     * @returns {SchemaController}
-     */
-    () => {
-        const ctrl = new SchemaController( "modelkey", TestModel );
-
-        sandbox.stub( ctrl, "query" );
-
-        return ctrl;
-    }
+const createMakeCtrl = require("~crsmtest/lib/createMakeCtrl");
 
 module.exports = function() {
 
