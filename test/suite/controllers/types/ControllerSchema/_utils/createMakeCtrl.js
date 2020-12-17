@@ -1,6 +1,6 @@
 const SchemaController = require("~crsm/controllers/types/SchemaController");
 
-const TestModel = require("./TestModel");
+const TestModel = require("~crsmtest/lib/TestModel");
 
 const createMakeCtrl = sandbox =>
     /**

@@ -5,7 +5,7 @@ const { Types, Query } = require("mongoose");
 const { ObjectId } = Types;
 
 const TestModel = require("~crsmtest/lib/TestModel");
-const createMakeCtrl = require("~crsmtest/lib/createMakeCtrl");
+const createMakeCtrl = require("../_utils/createMakeCtrl");
 
 module.exports = function() {
 
