@@ -5,6 +5,13 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const feedCtrl = require("./feed");
 const roomCtrl = require("./room");
 
+const StudentController = require("./definitions/StudentController");
+
+module.exports = new StudentController();
+
+
+
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
