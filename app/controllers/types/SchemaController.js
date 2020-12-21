@@ -41,6 +41,7 @@ const Controller = require("./Controller");
  * @property {MongoDocument} doc
  * @property {Object} search
  * @property {Object} data
+ * @property {Object} config
  *
  * SchemaController.updateMany() 
  * @typedef UpdateDocsOptions
@@ -173,7 +174,7 @@ class SchemaController extends Controller {
      * 
      * @returns {MongoDocument}
      */
-    async updateOne( { docId, doc, search, data }, queryOptions ) {
+    async updateOne( { docId, doc, search, data, config = {} }, queryOptions ) {
 
         // If provided the target document,
         if( doc ) {
@@ -189,10 +190,10 @@ class SchemaController extends Controller {
         if( docId )
 
             // Find it by ID, update it, and then return the updated document.
-            return await this.query( this.model.findByIdAndUpdate( docId, data, { new: true } ), queryOptions );
+            return await this.query( this.model.findByIdAndUpdate( docId, data, { new: true, ...config } ), queryOptions );
 
         // Otherwise, expect a search for the target doc.
-        return this.query( this.model.findOneAndUpdate( search, data, { new: true } ), queryOptions );
+        return this.query( this.model.findOneAndUpdate( search, data, { new: true, ...config } ), queryOptions );
 
     }
 

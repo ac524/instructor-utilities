@@ -1,17 +1,49 @@
 const { InvalidDataError } = require("~crsm/config/errors");
-const { findOne } = require("../../models/App");
+
 const Controller = require("./Controller");
 const SchemaController = require("./SchemaController");
+
+/**
+ * TYPE DEFINITION IMPORTS
+ * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
+ */
+
+/**
+ * TYPE DEFINITIONS FOR METHODS
+ * 
+ * SubSchemaController.createOne()
+ * @typedef CreateSubDocOptions
+ * @property {ObjectId} belongsTo - Owner document ID to insert into.
+ * @property {Object} data - Data to apply to the sub document.
+ * 
+ * SubSchemaController.findOne()
+ * @typedef FindSubDocOptions
+ * @property {ObjectId} docId - Sub document id
+ * 
+ * SubSchemaController.updateOne()
+ * @typedef UpdateSubDocOptions
+ * @property {ObjectId} docId - Sub document id
+ * @property {Object} data - Data to apply to the sub document.
+ * 
+ * SubSchemaController.deleteOne()
+ * @typedef DeleteSubDocOptions
+ * @property {ObjectId} docId - Sub document id
+ * 
+ */
 
 class SubSchemaController extends Controller {
 
     /** @type {string} */
     key;
 
+    /** @type {string} */
+    prop;
+
     /** @type {SchemaController} */
     ctrl;
 
     /**
+     * @param {string} key;
      * @param {SchemaController} ctrl 
      */
     constructor( key, ctrl ) {
@@ -24,12 +56,19 @@ class SubSchemaController extends Controller {
 
     }
 
+    /**
+     * @returns {string} - Conjoined key combining the ctrl key + sub ctrl key.
+     */
     get ctrlKey() {
 
         return this.ctrl.key + this.key[0].toUpperCase() + this.key.slice(1);
 
     }
 
+    /**
+     * @param {Object} data - Sub doc data.
+     * @returns {Object} - Sub doc data mapped to mongo query potential keys.
+     */
     mapSubDocKeys( data ) {
 
         return Object.keys( data )
@@ -40,6 +79,10 @@ class SubSchemaController extends Controller {
 
     }
 
+    /**
+     * @param {CreateSubDocOptions} param0
+     * @returns {Object}
+     */
     async createOne( { belongsTo, data } ) {
 
         if( !belongsTo ) throw new InvalidDataError("`belongsTo` is required when creating new sub documents");
@@ -60,6 +103,10 @@ class SubSchemaController extends Controller {
 
     }
 
+    /**
+     * @param {FindSubDocOptions} param0 
+     * @returns {Object}
+     */
     async findOne( { docId } ) {
 
         return (
@@ -77,6 +124,10 @@ class SubSchemaController extends Controller {
 
     }
 
+    /**
+     * @param {UpdateSubDocOptions} param0
+     * @returns {Object}
+     */
     async updateOne( { docId, data } ) {
 
         return (
@@ -87,10 +138,33 @@ class SubSchemaController extends Controller {
                 data: this.mapSubDocKeys( data, true )
             }, {
                 // Select the subdoc list - TODO figure out how to not have to select the entire sub doc list here. The "potential" flag ".$" doesn't work with the { new: true } flag on the mongoose query.
-                select: `${this.prop}`
+                select: this.prop
             })
 
         // Select the target subdoc to return.
+        )[this.prop].id(docId);
+
+    }
+
+    /**
+     * @param {DeleteSubDocOptions} param0 
+     */
+    async deleteOne({ docId }) {
+
+        // Make the query.
+        return (
+
+            // Find and update the target subdoc.
+            await this.ctrl.updateOne({
+                search: { [`${this.prop}._id`]: docId },
+                data: { $pull: { [`${this.prop}`]: { "_id": docId } } },
+                // Return the old document so we can extract the deleted student.
+                config: { new: false }
+            }, {
+                // Get our new subdoc by slicing the new last item in the list.
+                select: this.prop
+            })
+
         )[this.prop].id(docId);
 
     }
