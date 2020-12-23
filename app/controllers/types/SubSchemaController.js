@@ -147,7 +147,8 @@ class SubSchemaController extends Controller {
     }
 
     /**
-     * @param {DeleteSubDocOptions} param0 
+     * @param {DeleteSubDocOptions} param0
+     * @returns {Object}
      */
     async deleteOne({ docId }) {
 

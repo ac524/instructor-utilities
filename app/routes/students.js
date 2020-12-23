@@ -1,9 +1,9 @@
 const createRouter = require("./utils/createRouter");
 
-const setRoom = require("./middleware/setRoom");
-const isRoomMember = require("./middleware/isRoomMember");
-
-const { student: studentVal } = require("../config/validation");
+const {
+    student: studentVal,
+    createStudent: createStudentVal
+} = require("../config/validation");
 
 const { student: studentPerm } = require("../config/permissions");
 
@@ -14,8 +14,18 @@ const {
     deleteSingle
 } = require("../controllers/student");
 
-const newStudentMiddleware = [ setRoom.fromBody, isRoomMember ];
-const existingStudentMiddleware = [ setRoom.fromParam, isRoomMember ];
+const extractBelongsTo = ( req, res, next ) => {
+
+    if( req.body.belongsTo ) {
+
+        req.crdata.set( "belongsTo", req.body.belongsTo );
+        delete req.body.belongsTo;
+
+    }
+
+    next();
+
+}
 
 const studentCtlrConfig = {
     keyMap: { body: "studentData" }
@@ -27,14 +37,14 @@ module.exports = createRouter([
         post: {
             auth: true,
             defaultError: "create the student",
-            validation: studentVal,
-            middleware: newStudentMiddleware,
+            validation: createStudentVal,
+            middleware: extractBelongsTo,
             permission: studentPerm,
             ctrl: [ create, studentCtlrConfig ]
         }
     }],
 
-    ["/:roomId/:studentId", {
+    ["/:studentId", {
         get: {
             defaultError: "get the student",
             permission: studentPerm,

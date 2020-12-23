@@ -1,6 +1,7 @@
-const ValidationSchema = require("../../config/validation/ValidationSchema");
-const PermissionSet = require("../../config/permissions/PermissionSet");
-const SchemaController = require("../../controllers/types/SchemaController");
+const ValidationSchema = require("~crsm/config/validation/ValidationSchema");
+const PermissionSet = require("~crsm/config/permissions/PermissionSet");
+const SchemaController = require("~crsm/controllers/types/SchemaController");
+const SubSchemaController = require("~crsm/controllers/types/SubSchemaController");
 
 const createControllerHandler = require("../middleware/createControllerHandler");
 const createCheckPermission = require("../middleware/createCheckPermission");
@@ -37,6 +38,31 @@ const schemaCtrlMap = {
         keyMap: {
             [ctrl.key]: "doc",
             [`${ctrl.key}Id`]: "docId",
+        }
+    } ]
+}
+
+const subSchemaCtrlMap = {
+    post: subCtrl => [ subCtrl.binding.createOne, {
+        keyMap: {
+            body: "data",
+            [`${subCtrl.ctrl.key}Id`]: "belongsTo"
+        }
+    } ],
+    get: subCtrl => [ subCtrl.binding.findOne, {
+        keyMap: {
+            [`${subCtrl.key}Id`]: "docId",
+        }
+    } ],
+    patch: subCtrl => [ subCtrl.binding.updateOne, {
+        keyMap: {
+            body: "data",
+            [`${subCtrl.key}Id`]: "docId",
+        }
+    } ],
+    delete: subCtrl => [ subCtrl.binding.deleteOne, {
+        keyMap: {
+            [`${subCtrl.key}Id`]: "docId",
         }
     } ]
 }
@@ -85,7 +111,7 @@ const addRequest = ( route, type, config ) => {
     // Add authentication.
     if( auth ) handlers.push( [ isAuthenticated, isVerified ] );
 
-    if( validation && validationMap[type] ) validationMap[type]( validation );
+    if( validation && validationMap[type] ) handlers.push( validationMap[type]( validation ) );
 
     // Add additional middleware.
     if( middleware ) handlers.push( middleware );
@@ -97,6 +123,10 @@ const addRequest = ( route, type, config ) => {
     if( ctrl instanceof SchemaController ) {
 
         handlers.push( createControllerHandler( ...schemaCtrlMap[type]( ctrl ) ) );
+
+    } else if( ctrl instanceof SubSchemaController ) {
+
+        handlers.push( createControllerHandler( ...subSchemaCtrlMap[type]( ctrl ) ) );
 
     } else {
 
