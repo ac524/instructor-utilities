@@ -38,6 +38,22 @@ module.exports = function() {
 
         });
 
+        it( "should call the `query` method with a `Query` when provided `queryOptions`", () => {
+
+            // Arrange
+            const ctrl = makeCtrl();
+            const search = { name: "A test" };
+            const queryOptions = { select: "name" };
+
+            // Act
+            ctrl.findMany( { search }, queryOptions );
+
+            // Assert
+            expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( Query );
+            expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
+
+        });
+
     });
 
 }
