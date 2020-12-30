@@ -54,6 +54,27 @@ module.exports = function() {
 
         });
 
+        it( "should return all matching documents when passed a `search` for existing documents", async () => {
+
+            // Arrange
+            const ctrl = makeCtrl();
+            const doc1 = new TestModel( { name: "First test" } );
+            const doc2 = new TestModel( { name: "Second test" } );
+            const doc3 = new TestModel( { name: "Third test" } );
+            const search = { name: "test" };
+
+            ctrl.query.callsFake(() => doc1);
+            ctrl.query.callsFake(() => doc2);
+            ctrl.query.callsFake(() => doc3);
+
+            // Act
+            const foundDocs = await ctrl.findMany( { search } );
+
+            // Assert
+            expect( foundDocs ).to.equal( doc1, doc2, doc3 );
+
+        });
+
     });
 
 }
