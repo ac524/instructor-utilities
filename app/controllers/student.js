@@ -51,7 +51,7 @@ const studentFactory = async ( createdBy, roomId, data ) => {
         }
     };
 
-    const room = roomCtrl.updateOne( {
+    const room = await roomCtrl.updateOne( {
         docId: roomId,
         data: update
     }, { select: "students" } );

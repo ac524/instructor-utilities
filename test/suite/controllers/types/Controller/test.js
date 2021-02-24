@@ -1,4 +1,4 @@
-const classConstructor = require("./suite/constructor");
+const classConstructor = require("./_suite/constructor");
 
 describe("Controller", function() {
 

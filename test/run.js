@@ -8,16 +8,6 @@ const readDir = util.promisify( fs.readdir );
 // Starting diretor to scan.
 const dirname = "suite";
 
-// A map of folder names to ignore during the scan for test files.
-const ignoreMap = new Map(
-  [
-
-    // Folder name ignore list.
-    "suite"
-
-  ].map(filename=>[filename,1])
-);
-
 // Recursively looks for files in folders and builds on list of all found .js files.
 const getDirFiles = async folder => {
 
@@ -30,7 +20,11 @@ const getDirFiles = async folder => {
     const match = filename.match(/\.js$/);
 
     if( !match ) {
-      if( !ignoreMap.has( filename ) ) files.push( ...(await getDirFiles( filePath )) );
+      // Ignore folders prefixed with "_"
+      if( filename[0] !== "_" )
+
+        files.push( ...(await getDirFiles( filePath )) );
+
       continue;
     }
   

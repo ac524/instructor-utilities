@@ -1,24 +1,11 @@
 const { expect } = require("chai");
 const { createSandbox } = require("sinon");
 
-const { Types } = require("mongoose");
+const { Types, Query } = require("mongoose");
 const { ObjectId } = Types;
 
-const SchemaController = require("~crsm/controllers/types/SchemaController");
-
 const TestModel = require("~crsmtest/lib/TestModel");
-
-const createMakeCtrl = sandbox =>
-    /**
-     * @returns {SchemaController}
-     */
-    () => {
-        const ctrl = new SchemaController( "modelkey", TestModel );
-
-        sandbox.stub( ctrl, "query" );
-
-        return ctrl;
-    }
+const createMakeCtrl = require("../_utils/createMakeCtrl");
 
 module.exports = function() {
 
@@ -27,9 +14,8 @@ module.exports = function() {
     const makeCtrl = createMakeCtrl(sandbox);
 
     before(() => {
-        // const newDocQuery = () => new DocumentQuery;
-        sandbox.stub( TestModel, "findById" );
-        sandbox.stub( TestModel, "findOne" );
+        sandbox.stub( TestModel, "findById" ).callsFake(()=>new Query);
+        sandbox.stub( TestModel, "findOne" ).callsFake(()=>new Query);
     });
 
     afterEach(() => {
@@ -40,28 +26,8 @@ module.exports = function() {
     after(() => sandbox.restore());
 
     describe("By `docId`", () => {
-
-        it( "should call the `query` method with a `DocumentQuery` and provided `queryOptions` when passed a `docId`", () => {
-
-            // Arrange
-            const ctrl = makeCtrl();
-            const docId = new ObjectId();
-            const queryOptions = { select: "name" };
     
-            // Act
-            ctrl.findOne( { docId }, queryOptions );
-    
-            // Assert
-            /**
-             * TODO  Unsure on how to test the first param at the moment. You can't seem to just create a
-             * `new DocumentQuery` for the stub method, so more exploration will be needed to solve.
-             */
-            // expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( DocumentQuery );
-            expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
-    
-        } );
-    
-        it( "should call the model's `findById` method with `docId` when provided", () => {
+        it( "should call the model's `findById` method", () => {
     
             // Arrange
             const ctrl = makeCtrl();
@@ -73,6 +39,22 @@ module.exports = function() {
             // Assert
             expect( TestModel.findById.calledWithExactly(docId) ).to.be.true;
     
+        });
+
+        it( "should be call the `query` method with a `Query` and provided `queryOptions`", () => {
+
+            // Arrange
+            const ctrl = makeCtrl();
+            const docId = new ObjectId();
+            const queryOptions = { select: "name" };
+
+            // Act
+            ctrl.findOne( { docId }, queryOptions );
+
+            // Assert
+            expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( Query );
+            expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
+
         });
     
         it( "should return a `Document` when passed an existing `docId`", async () => {
@@ -92,30 +74,9 @@ module.exports = function() {
     
         });
     
-
     });
 
     describe("By `search`", () => {
-
-        it( "should call the `query` method with a `DocumentQuery` and provided `queryOptions` when passed a `search`", () => {
-
-            // Arrange
-            const ctrl = makeCtrl();
-            const search = { name: "A test" };
-            const queryOptions = { select: "name" };
-
-            // Act
-            ctrl.findOne( { search }, queryOptions );
-
-            // Assert
-            /**
-             * TODO Unsure on how to test the first param at the moment. You can't seem to just create a
-             * `new DocumentQuery` for the stub method, so more exploration will be needed to solve.
-             */
-            // expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( DocumentQuery );
-            expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
-
-        } );
 
         it( "should call the model's `findOne` method with `search` when provided", () => {
 
@@ -128,6 +89,22 @@ module.exports = function() {
 
             // Assert
             expect( TestModel.findOne.calledWithExactly(search) ).to.be.true;
+
+        });
+
+        it( "should be call the `query` method with a `Query` and provided `queryOptions`", () => {
+
+            // Arrange
+            const ctrl = makeCtrl();
+            const search = { name: "A test" };
+            const queryOptions = { select: "name" };
+
+            // Act
+            ctrl.findOne( { search }, queryOptions );
+
+            // Assert
+            expect( ctrl.query.getCall(0).args[0] ).to.be.instanceof( Query );
+            expect( ctrl.query.args[0][1] ).to.equal( queryOptions );
 
         });
 
@@ -150,8 +127,7 @@ module.exports = function() {
 
     });
 
-    // Rename to something like priority testing?
-    describe("By `docId` and `search`", () => {
+    describe("Priority `docId` > than `search`", () => {
 
         it( "should call the model's findById method if provided a `docId` and `search`", async () => {
 
