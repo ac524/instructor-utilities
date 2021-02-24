@@ -2,8 +2,23 @@ import React from "react";
 import { DateTime } from "luxon";
 
 const formats = {
-    toRelative: dateTime => dateTime.toRelative(),
+    toRelative: dateTime => formatDate(dateTime.toRelative()),
     default: (dateTime, format) => dateTime.toFormat(format)
+}
+
+const formatDate = (dateTime) =>{
+    const [, numberString, type ] = dateTime.match(/(\d+)\s+(second|day)s?/) || [];
+    
+    if(!numberString || !type) return dateTime
+
+    if(type === "second") return "now"
+
+    const number = parseInt(numberString)
+
+    if(number >= 7)  return `${Math.floor(number / 7)} weeks ago`
+
+    return dateTime
+              
 }
 
 const Date = ( { date, format = "toRelative", className, ...props } ) => {
