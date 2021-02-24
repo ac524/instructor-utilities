@@ -78,7 +78,13 @@ const sendInvite = ( room, invite, from ) => {
  */
 const create = async ({ roomId, user, inviteData })  => {
 
-    const roomEmails = await Room.findById(roomId).populate('staff.user',"email").select("invites.email");
+    const roomEmails = await roomCtrl.findOne(
+        { docId:roomId },
+        {
+            populate: ["staff.user","email"],
+            select: "invites.email"
+        }
+    );
 
     const { email } = inviteData;
 
