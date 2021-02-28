@@ -5,7 +5,7 @@ require("./app/config/mongoose");
 
 const passwordHash = require("./app/config/utils/passwordHash");
 
-const { User } = require("./app/models");
+const { User } = require("./app/controllers/models");
 
 const [ , , userId, password ] = process.argv;
 

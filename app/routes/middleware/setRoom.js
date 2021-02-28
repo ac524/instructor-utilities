@@ -1,4 +1,4 @@
-const { Feed } = require("~crsm/models");
+const { Feed } = require("../../controllers/definitions/models");
 const { NotFoundError } = require("~crsm/config/errors");
 
 const roomCtrl = require("~crsm/controllers/room");

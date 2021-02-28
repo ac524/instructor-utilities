@@ -11,7 +11,7 @@ const { InvalidDataError, NotFoundError } = require('../config/errors');
 
 /**
  * TYPE DEFINITION IMPORTS
- * @typedef {import('../config/validation/definitions/registerValidation').RegistrationData} RegistrationData
+ * @typedef {import('~crsm/routes/validation/definitions/registerValidation').RegistrationData} RegistrationData
  */
 
 /** CONTROLLER METHODS **/

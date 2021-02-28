@@ -1,4 +1,4 @@
-const { InvalidConfig } = require("../errors");
+const { InvalidConfig } = require("~crsm/config/errors");
 
 /**
  * @param {string} perm 

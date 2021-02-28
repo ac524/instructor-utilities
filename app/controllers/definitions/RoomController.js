@@ -1,11 +1,11 @@
-const { Room } = require("../../models");
+const { Room } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
 
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
- * @typedef {import('../../models/schema/MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('./models/schema/MemberSchema').MemberDocument} MemberDocument
  */
 
 /**

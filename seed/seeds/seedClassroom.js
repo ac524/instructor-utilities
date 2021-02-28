@@ -1,4 +1,4 @@
-const { Feed, Room, User } = require("../../app/models");
+const { Feed, Room, User } = require("../../app/controllers/models");
 
 module.exports = async () => {
 
