@@ -88,15 +88,17 @@ class API {
 
     }
 
-    async updateStudent( roomId, studentId, update ) {
+    async updateStudent( studentId, update ) {
 
-        return this.axios.patch( `/api/students/${roomId}/${studentId}`, update );
+        return this.axios.patch( `/api/students/${studentId}`, update );
 
     }
 
-    async removeStudent( roomId, studentId ) {
+    async removeStudent( studentId ) {
 
-        return this.axios.delete( `/api/students/${roomId}/${studentId}` );
+        console.log( studentId );
+
+        return this.axios.delete( `/api/students/${studentId}` );
 
     }
 

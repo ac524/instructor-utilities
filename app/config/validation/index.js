@@ -11,5 +11,6 @@ module.exports = {
     resend: require("./definitions/resendValidation"),
     room: require("./definitions/roomValidation"),
     student: require("./definitions/studentValidation"),
+    createStudent: require("./definitions/createStudentValidation"),
     user: require("./definitions/userValidation")
 }
