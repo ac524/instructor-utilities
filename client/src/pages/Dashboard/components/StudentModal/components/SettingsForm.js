@@ -13,6 +13,7 @@ import { useSocket } from "utils/socket.io";
 
 const validateStudentData = createValidator({
     filters: {
+        priorityLevel: value => parseInt(value),
         assignedTo: value => value || null
     },
     validators: {
@@ -110,7 +111,7 @@ const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
 
                 dispatch(dispatchData);
 
-                await api.updateStudent( roomId, _id, data );
+                await api.updateStudent( _id, data );
 
                 socket.emit( `${roomId}:dispatch`, dispatchData );
 

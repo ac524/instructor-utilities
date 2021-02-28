@@ -6,6 +6,7 @@ const SchemaController = require("./SchemaController");
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
+ * @typedef {import('../utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  */
 
 /**
@@ -16,18 +17,22 @@ const SchemaController = require("./SchemaController");
  * @property {ObjectId} belongsTo - Owner document ID to insert into.
  * @property {Object} data - Data to apply to the sub document.
  * 
+ * SubSchemaController.findOwner()
+ * @typedef FindSubDocOwnerOptions
+ * @property {ObjectId} docId - Sub document id.
+ * 
  * SubSchemaController.findOne()
  * @typedef FindSubDocOptions
- * @property {ObjectId} docId - Sub document id
+ * @property {ObjectId} docId - Sub document id.
  * 
  * SubSchemaController.updateOne()
  * @typedef UpdateSubDocOptions
- * @property {ObjectId} docId - Sub document id
+ * @property {ObjectId} docId - Sub document id.
  * @property {Object} data - Data to apply to the sub document.
  * 
  * SubSchemaController.deleteOne()
  * @typedef DeleteSubDocOptions
- * @property {ObjectId} docId - Sub document id
+ * @property {ObjectId} docId - Sub document id.
  * 
  */
 
@@ -76,6 +81,19 @@ class SubSchemaController extends Controller {
                 ...newMap,
                 [`${this.prop}.$.${dataKey}`]: data[dataKey]
             }), {} );
+
+    }
+
+    /**
+     * @param {CreateSubDocOptions} param0
+     * @param {QueryModifierOptions} queryOptions
+     * @returns {Object}
+     */
+    async findOwner( { docId }, queryOptions ) {
+
+        return await this.ctrl.findOne({
+            search: { [`${this.prop}._id`]: docId }
+        }, queryOptions);
 
     }
 

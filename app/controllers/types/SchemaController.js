@@ -118,7 +118,7 @@ class SchemaController extends Controller {
      */
     async deleteOne( { docId, doc } ) {
     
-        await this.model.deleteOne( doc ? doc._id : docId );
+        await this.model.findByIdAndDelete( doc ? doc._id : docId );
 
     }
 

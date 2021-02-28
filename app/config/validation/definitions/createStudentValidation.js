@@ -13,9 +13,9 @@ const studentValidation = require("./studentValidation");
  * @property {number} priorityLevel
  * @property {ObjectId} assignedTo
  */
-const studentValidation = new ValidationSchema("student", {
+const createStudentValidation = new ValidationSchema("student", {
     ...studentValidation.schema,
-    belongsTo: { type: "objectID" }
+    roomId: { type: "objectID" }
 });
 
-module.exports = studentValidation;
+module.exports = createStudentValidation;

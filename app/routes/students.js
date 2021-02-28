@@ -1,31 +1,35 @@
-const createRouter = require("./utils/createRouter");
 
 const {
     student: studentVal,
     createStudent: createStudentVal
-} = require("../config/validation");
+} = require("~crsm/config/validation");
 
-const { student: studentPerm } = require("../config/permissions");
+const { student: studentPerm } = require("~crsm/config/permissions");
 
-const {
-    create,
-    getSingle,
-    update,
-    deleteSingle
-} = require("../controllers/student");
+const studentCtrl = require("~crsm/controllers/student");
 
-const extractBelongsTo = ( req, res, next ) => {
+const createRouter = require("./utils/createRouter");
 
-    if( req.body.belongsTo ) {
+const isRoomMember = require("./middleware/isRoomMember");
+const setRoom = require("./middleware/setRoom");
 
-        req.crdata.set( "belongsTo", req.body.belongsTo );
-        delete req.body.belongsTo;
+// const extractBelongsTo = ( req, res, next ) => {
 
-    }
+//     if( req.body.belongsTo ) {
 
-    next();
+//         // Set the belongsTo key for the controller.
+//         req.crdata.set( "belongsTo", req.body.belongsTo );
 
-}
+//         // Set the roomId for authentication..
+//         req.crdata.set( "roomId", req.body.belongsTo );
+
+//         delete req.body.belongsTo;
+
+//     }
+
+//     next();
+
+// }
 
 const studentCtlrConfig = {
     keyMap: { body: "studentData" }
@@ -38,9 +42,16 @@ module.exports = createRouter([
             auth: true,
             defaultError: "create the student",
             validation: createStudentVal,
-            middleware: extractBelongsTo,
+            middleware: [ setRoom.fromBody, isRoomMember ],
             permission: studentPerm,
-            ctrl: [ create, studentCtlrConfig ]
+            ctrl: studentCtrl,
+            ctrlFilter: ([ ctrl, config ]) => [ctrl, {
+                ...config,
+                keyMap: {
+                    ...config.keyMap,
+                    user: "createdBy"
+                }
+            }]
         }
     }],
 
@@ -48,23 +59,23 @@ module.exports = createRouter([
         get: {
             defaultError: "get the student",
             permission: studentPerm,
-            ctrl: getSingle
+            ctrl: studentCtrl
         },
         patch: {
             defaultError: "update the student",
             validation: studentVal,
             permission: studentPerm,
-            ctrl: [ update, studentCtlrConfig ]
+            ctrl: studentCtrl
         },
         delete: {
             defaultError: "delete the student",
             permission: studentPerm,
-            ctrl: deleteSingle
+            ctrl: studentCtrl
         }
      }, {
         auth: true,
         paramCheck: true,
-        middleware: existingStudentMiddleware
+        middleware: [ setRoom.fromStudent, isRoomMember ]
     }]
 
 ]);

@@ -83,6 +83,26 @@ const permMap = {
  * @property {ValidationSchema} config.validation
  */
 
+const parseCtrl = ( type, ctrl, ctrlFilter = ctrl => ctrl ) => {
+
+    let createConfig;
+
+    if( ctrl instanceof SchemaController )
+
+        createConfig = schemaCtrlMap[type]( ctrl );
+
+    else if( ctrl instanceof SubSchemaController )
+
+        createConfig = subSchemaCtrlMap[type]( ctrl );
+
+    else
+        
+        createConfig = ctrl;
+
+    return ctrlFilter( createConfig );
+
+}
+
 /**
  * @param {*} route 
  * @param {*} type 
@@ -99,7 +119,8 @@ const addRequest = ( route, type, config ) => {
         middleware,
         validation,
         permission,
-        ctrl
+        ctrl,
+        ctrlFilter
     } = config;
 
     // Add params validation.
@@ -120,20 +141,10 @@ const addRequest = ( route, type, config ) => {
 
         handlers.push( createCheckPermission( typeof permission === "string" ? permission : permission[ permMap[type] ] ) );
 
-    if( ctrl instanceof SchemaController ) {
+    let createConfig = parseCtrl( type, ctrl, ctrlFilter );
 
-        handlers.push( createControllerHandler( ...schemaCtrlMap[type]( ctrl ) ) );
-
-    } else if( ctrl instanceof SubSchemaController ) {
-
-        handlers.push( createControllerHandler( ...subSchemaCtrlMap[type]( ctrl ) ) );
-
-    } else {
-
-        // Add the Controller handler.
-        handlers.push( Array.isArray(ctrl) ? createControllerHandler( ...ctrl ) : createControllerHandler( ctrl ) );
-
-    }
+    // Add the Controller handler.
+    handlers.push( Array.isArray(createConfig) ? createControllerHandler( ...createConfig ) : createControllerHandler( createConfig ) );
 
     route[type]( ...handlers );
 

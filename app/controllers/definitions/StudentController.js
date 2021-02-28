@@ -1,3 +1,4 @@
+const ObjectId = require("mongoose").Types.ObjectId;
 const SubSchemaController = require("../types/SubSchemaController");
 
 const roomCtrl = require("../room");
@@ -17,7 +18,7 @@ const feedCtrl = require("../feed");
  * @typedef {CreateSubDocOptions & CreateStudentOptionsData} CreateStudentOptions
  */
 
-const makeFeed = async data => {
+const makeFeed = async (data, createdBy) => {
 
     const feed = await feedCtrl.createOne({ data }, { save: false });
 
@@ -58,7 +59,7 @@ class StudentController extends SubSchemaController {
             room: belongsTo,
             for: newStudent._id,
             in: "students"
-        });
+        }, createdBy._id);
 
         return newStudent;
 
@@ -78,7 +79,7 @@ class StudentController extends SubSchemaController {
 
         const deletedStudent = await super.deleteOne({ docId });
 
-        await feedCtrl.deleteOne({ docId: deletedStudent.feed });
+        if( deletedStudent.feed ) await feedCtrl.deleteOne({ docId: deletedStudent.feed });
 
         return deletedStudent;
 

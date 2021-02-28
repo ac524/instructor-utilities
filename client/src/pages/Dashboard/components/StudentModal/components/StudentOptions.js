@@ -85,7 +85,7 @@ const RemoveButton = ({studentId}) => {
 
         try {
 
-            await api.removeStudent( roomId, studentId );
+            await api.removeStudent( studentId );
 
             dispatch(gda( EDIT_STUDENT, false ));
 
