@@ -4,7 +4,7 @@ const setInvite = require("./middleware/setInvite");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
-const { user: userVal, invite: inviteVal } = require("../config/validation");
+const { user: userVal, invite: inviteVal } = require("./validation");
 
 const { invite: invitePerm } = require("../config/permissions");
 

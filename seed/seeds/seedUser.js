@@ -1,4 +1,4 @@
-const { User } = require("../../app/models");
+const { User } = require("../../app/controllers/models");
 
 module.exports = async () => {
 

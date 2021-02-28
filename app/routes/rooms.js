@@ -1,4 +1,4 @@
-const { register: roomVal } = require("../config/validation");
+const { register: roomVal } = require("./validation");
 const { room: roomPerm } = require("../config/permissions");
 
 const roomCtrl = require("../controllers/room");

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { Feed } = require("../models");
+const { Feed } = require("../controllers/definitions/models");
 const roomCtrl = require("../controllers/room");
 const secret = require("./options")( "secret" );
 

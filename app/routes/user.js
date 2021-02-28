@@ -1,6 +1,6 @@
 const userCtrl = require("../controllers/user");
 
-const { user: userVal } = require("../config/validation");
+const { user: userVal } = require("./validation");
 const { room: roomPerm } = require("../config/permissions");
 
 const setRoom = require("./middleware/setRoom");

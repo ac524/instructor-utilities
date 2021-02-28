@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-const { Token } = require("../../models");
+const { Token } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
 

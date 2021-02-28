@@ -1,6 +1,6 @@
 require("../app/config/mongoose");
 
-const db = require("../models");
+const db = require("../controllers/models");
 
 const resetDb = async () => {
 

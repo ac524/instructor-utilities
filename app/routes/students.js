@@ -2,7 +2,7 @@
 const {
     student: studentVal,
     createStudent: createStudentVal
-} = require("~crsm/config/validation");
+} = require("~crsm/routes/validation");
 
 const { student: studentPerm } = require("~crsm/config/permissions");
 

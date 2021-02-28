@@ -1,6 +1,6 @@
 const chai = require("chai");
 const { authenticated, login } = require("../../../app/controllers/auth");
-const { User } = require("../../../app/models");
+const { User } = require("../../../app/controllers/models");
 const expect = chai.expect
 
 describe("AuthController", function() {

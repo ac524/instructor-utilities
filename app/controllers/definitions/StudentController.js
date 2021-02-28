@@ -7,8 +7,8 @@ const feedCtrl = require("../feed");
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import("../types/SubSchemaController").CreateSubDocOptions} CreateSubDocOptions
- * @typedef {import("~crsm/models/schema/UserSchema").UserDocument} UserDocument
- * @typedef {import("~crsm/models/schema/StudentSchema").StudentDocument} StudentDocument
+ * @typedef {import("./models/schema/UserSchema").UserDocument} UserDocument
+ * @typedef {import("./models/schema/StudentSchema").StudentDocument} StudentDocument
  */
 
 /**

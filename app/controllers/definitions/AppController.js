@@ -1,6 +1,6 @@
 const appTypes  = require("../../config/apps/registry.json");
 
-const { App } = require("../../models");
+const { App } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
 
@@ -10,7 +10,7 @@ const roomCtrl = require("../room");
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
- * @typedef {import('../../models/schema/AppSchema').AppDocument} AppDocument
+ * @typedef {import('./models/schema/AppSchema').AppDocument} AppDocument
  * 
  * @typedef {import("../types/SchemaController").CreateDocOptions} CreateDocOptions
  * @typedef {import("../types/SchemaController").CreateDocConfig} CreateDocConfig

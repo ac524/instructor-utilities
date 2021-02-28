@@ -1,4 +1,4 @@
-const { Feed } = require("../../app/models");
+const { Feed } = require("../../app/controllers/models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const createStudentFeed = async (roomId,student,instructor,assignedTo) => {

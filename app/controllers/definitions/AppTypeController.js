@@ -1,4 +1,4 @@
-const { AppType } = require("../../models");
+const { AppType } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
 

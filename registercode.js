@@ -10,7 +10,7 @@ const crypto = require("crypto");
 // const ncp = require("copy-paste");
 
 const ObjectId = require("mongoose").Types.ObjectId;
-const { Room, Token } = require("./app/models");
+const { Room, Token } = require("./app/controllers/models");
 
 const [ , , code ] = process.argv;
 
