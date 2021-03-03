@@ -42,8 +42,10 @@ const registerAppTypes = async () => {
     for( let i = 0; i < toRegister.length; i++ ) {
 
         await appTypeCtrl.createOne({
-            type: toRegister[i],
-            name: appTypes[toRegister[i]].name
+            data: {
+                type: toRegister[i],
+                name: appTypes[toRegister[i]].name
+            }
         });
 
     }

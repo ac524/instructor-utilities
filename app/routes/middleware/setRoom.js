@@ -1,7 +1,8 @@
-const { Feed } = require("../../models");
-const { NotFoundError } = require("../../config/errors");
+const { Feed } = require("../../controllers/definitions/models");
+const { NotFoundError } = require("~crsm/config/errors");
 
-const roomCtrl = require("../../controllers/room");
+const roomCtrl = require("~crsm/controllers/room");
+const studentCtrl = require("~crsm/controllers/student");
 
 const setRoom = async (req, next) => {
 
@@ -25,6 +26,13 @@ const setRoom = async (req, next) => {
 }
 
 module.exports = {
+    async fromBody(req, res, next) {
+
+        req.crdata.set( "roomId", req.body.roomId || req.body.room );
+
+        await setRoom(req, next);
+
+    },
     async fromBody(req, res, next) {
 
         req.crdata.set( "roomId", req.body.roomId || req.body.room );
@@ -56,6 +64,23 @@ module.exports = {
         }
 
         await setRoom(req, next);
+
+    },
+    async fromStudent(req, res, next) {
+
+        try {
+
+            const room = await studentCtrl.findOwner({ docId: req.params.studentId }, { select: "_id" });
+
+            req.crdata.set( "roomId", room._id );
+
+            await setRoom(req, next);
+
+        } catch( err ) {
+
+            next(err);
+
+        }
 
     }
 }

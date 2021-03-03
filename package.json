@@ -1,11 +1,11 @@
 {
   "name": "crsm",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "Classroom student management utilities for instructors to effectively organize and keep track of student progress with a team of staff members.",
   "main": "app/server.js",
   "_moduleAliases": {
-    "~crsm": "app",
-    "~crsmtest": "test"
+    "~crsm": "./app",
+    "~crsmtest": "./test"
   },
   "scripts": {
     "envsetup": "node envsetup",
@@ -20,8 +20,7 @@
     "postinstall": "link-module-alias",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build",
-    "test": "exit 0",
-    "testreal": "node test/run"
+    "test": "node test/run"
   },
   "author": "",
   "license": "ISC",

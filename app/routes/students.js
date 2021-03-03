@@ -1,21 +1,35 @@
-const createRouter = require("./utils/createRouter");
-
-const setRoom = require("./middleware/setRoom");
-const isRoomMember = require("./middleware/isRoomMember");
-
-const { student: studentVal } = require("../config/validation");
-
-const { student: studentPerm } = require("../config/permissions");
 
 const {
-    create,
-    getSingle,
-    update,
-    deleteSingle
-} = require("../controllers/student");
+    student: studentVal,
+    createStudent: createStudentVal
+} = require("~crsm/routes/validation");
 
-const newStudentMiddleware = [ setRoom.fromBody, isRoomMember ];
-const existingStudentMiddleware = [ setRoom.fromParam, isRoomMember ];
+const { student: studentPerm } = require("~crsm/config/permissions");
+
+const studentCtrl = require("~crsm/controllers/student");
+
+const createRouter = require("./utils/createRouter");
+
+const isRoomMember = require("./middleware/isRoomMember");
+const setRoom = require("./middleware/setRoom");
+
+// const extractBelongsTo = ( req, res, next ) => {
+
+//     if( req.body.belongsTo ) {
+
+//         // Set the belongsTo key for the controller.
+//         req.crdata.set( "belongsTo", req.body.belongsTo );
+
+//         // Set the roomId for authentication..
+//         req.crdata.set( "roomId", req.body.belongsTo );
+
+//         delete req.body.belongsTo;
+
+//     }
+
+//     next();
+
+// }
 
 const studentCtlrConfig = {
     keyMap: { body: "studentData" }
@@ -27,34 +41,41 @@ module.exports = createRouter([
         post: {
             auth: true,
             defaultError: "create the student",
-            validation: studentVal,
-            middleware: newStudentMiddleware,
+            validation: createStudentVal,
+            middleware: [ setRoom.fromBody, isRoomMember ],
             permission: studentPerm,
-            ctrl: [ create, studentCtlrConfig ]
+            ctrl: studentCtrl,
+            ctrlFilter: ([ ctrl, config ]) => [ctrl, {
+                ...config,
+                keyMap: {
+                    ...config.keyMap,
+                    user: "createdBy"
+                }
+            }]
         }
     }],
 
-    ["/:roomId/:studentId", {
+    ["/:studentId", {
         get: {
             defaultError: "get the student",
             permission: studentPerm,
-            ctrl: getSingle
+            ctrl: studentCtrl
         },
         patch: {
             defaultError: "update the student",
             validation: studentVal,
             permission: studentPerm,
-            ctrl: [ update, studentCtlrConfig ]
+            ctrl: studentCtrl
         },
         delete: {
             defaultError: "delete the student",
             permission: studentPerm,
-            ctrl: deleteSingle
+            ctrl: studentCtrl
         }
      }, {
         auth: true,
         paramCheck: true,
-        middleware: existingStudentMiddleware
+        middleware: [ setRoom.fromStudent, isRoomMember ]
     }]
 
 ]);

@@ -1,4 +1,4 @@
-const { app: appVal } = require("../config/validation")
+const { app: appVal } = require("./validation")
 
 const appCtrl = require('../controllers/app');
 const appTypeCtrl = require('../controllers/appType');
