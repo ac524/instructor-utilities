@@ -4,8 +4,8 @@
   "description": "Classroom student management utilities for instructors to effectively organize and keep track of student progress with a team of staff members.",
   "main": "app/server.js",
   "_moduleAliases": {
-    "~crsm": "app",
-    "~crsmtest": "test"
+    "~crsm": "./app",
+    "~crsmtest": "./test"
   },
   "scripts": {
     "envsetup": "node envsetup",
