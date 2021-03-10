@@ -1,4 +1,4 @@
-const { InvalidDataError } = require("~crsm/config/errors");
+const { InvalidDataError } = require("../../config/errors");
 
 const Controller = require("./Controller");
 const SchemaController = require("./SchemaController");

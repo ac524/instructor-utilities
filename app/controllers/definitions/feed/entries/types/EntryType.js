@@ -1,4 +1,4 @@
-const PermissionSet = require("~crsm/config/permissions/PermissionSet");
+const PermissionSet = require("../../../../../config/permissions/PermissionSet");
 const { Feed } = require("../../../models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
