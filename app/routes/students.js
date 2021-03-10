@@ -1,39 +1,16 @@
-
 const {
     student: studentVal,
     createStudent: createStudentVal
-} = require("~crsm/routes/validation");
+} = require("./validation");
 
-const { student: studentPerm } = require("~crsm/config/permissions");
+const { student: studentPerm } = require("../config/permissions");
 
-const studentCtrl = require("~crsm/controllers/student");
+const studentCtrl = require("../controllers/student");
 
 const createRouter = require("./utils/createRouter");
 
 const isRoomMember = require("./middleware/isRoomMember");
 const setRoom = require("./middleware/setRoom");
-
-// const extractBelongsTo = ( req, res, next ) => {
-
-//     if( req.body.belongsTo ) {
-
-//         // Set the belongsTo key for the controller.
-//         req.crdata.set( "belongsTo", req.body.belongsTo );
-
-//         // Set the roomId for authentication..
-//         req.crdata.set( "roomId", req.body.belongsTo );
-
-//         delete req.body.belongsTo;
-
-//     }
-
-//     next();
-
-// }
-
-const studentCtlrConfig = {
-    keyMap: { body: "studentData" }
-}
 
 module.exports = createRouter([
 

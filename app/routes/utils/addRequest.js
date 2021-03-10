@@ -1,7 +1,7 @@
-const ValidationSchema = require("~crsm/routes/validation/ValidationSchema");
-const PermissionSet = require("~crsm/config/permissions/PermissionSet");
-const SchemaController = require("~crsm/controllers/types/SchemaController");
-const SubSchemaController = require("~crsm/controllers/types/SubSchemaController");
+const ValidationSchema = require("../validation/ValidationSchema");
+const PermissionSet = require("../../config/permissions/PermissionSet");
+const SchemaController = require("../../controllers/types/SchemaController");
+const SubSchemaController = require("../../controllers/types/SubSchemaController");
 
 const createControllerHandler = require("../middleware/createControllerHandler");
 const createCheckPermission = require("../middleware/createCheckPermission");

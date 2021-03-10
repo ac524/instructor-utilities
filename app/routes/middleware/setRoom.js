@@ -1,8 +1,8 @@
 const { Feed } = require("../../controllers/definitions/models");
-const { NotFoundError } = require("~crsm/config/errors");
+const { NotFoundError } = require("../../config/errors");
 
-const roomCtrl = require("~crsm/controllers/room");
-const studentCtrl = require("~crsm/controllers/student");
+const roomCtrl = require("../../controllers/room");
+const studentCtrl = require("../../controllers/student");
 
 const setRoom = async (req, next) => {
 
