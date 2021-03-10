@@ -12,8 +12,8 @@ const jwtSign = util.promisify( jwt.sign );
 
 /**
  * Type Definition Imports
- * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
- * @typedef {import('../config/validation/definitions/loginValidation').LoginData} LoginData
+ * @typedef {import('../controllers/models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('~crsm/routes/validation/definitions/loginValidation').LoginData} LoginData
  */
 
 /** CONTROLLER METHODS **/

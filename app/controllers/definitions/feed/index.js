@@ -1,6 +1,6 @@
 const SchemaController = require("../../types/SchemaController");
 
-const { Feed } = require("../../../models");
+const { Feed } = require("../models");
 
 const entryTypes = require("./entries");
 

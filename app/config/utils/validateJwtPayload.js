@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { User } = require("../../controllers/definitions/models");
 
 module.exports = (jwtPayload, done) => {
 

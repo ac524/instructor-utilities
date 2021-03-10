@@ -1,6 +1,6 @@
 const passwordHash = require('../../config/utils/passwordHash');
 
-const { User } = require("../../models");
+const { User } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
 
@@ -20,9 +20,9 @@ const ioEmit = require("../utils/ioEmit");
  * 
  * @typedef {import('../utils/queryModifier').QueryModifierOptions} QueryModifierOptions
  * 
- * @typedef {import('../../models/schema/RoomSchema').RoomDocument} RoomDocument
- * @typedef {import('../../models/schema/UserSchema').UserDocument} UserDocument
- * @typedef {import('../../models/schema/MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('./models/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('./models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('./models/schema/MemberSchema').MemberDocument} MemberDocument
  */
 
 /**

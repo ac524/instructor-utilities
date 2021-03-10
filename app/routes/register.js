@@ -1,6 +1,6 @@
 const createRouter = require("./utils/createRouter");
 
-const { register: registerVal } = require("../config/validation");
+const { register: registerVal } = require("./validation");
 
 const {
     register

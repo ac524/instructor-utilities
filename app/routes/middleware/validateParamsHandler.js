@@ -1,5 +1,5 @@
 const { InvalidDataError } = require("../../config/errors");
-const { compile, mapErrors } = require("../../config/validation/validator");
+const { compile, mapErrors } = require(".././validation/validator");
 
 const validateParamsHandler = schema => {
 

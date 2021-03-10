@@ -13,14 +13,14 @@ const ioEmit = require("./utils/ioEmit");
  * Type Definition Imports
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  * 
- * @typedef {import('../models/schema/MemberSchema').MemberDocument} MemberDocument
- * @typedef {import('../models/schema/RoomSchema').RoomDocument} RoomDocument
- * @typedef {import('../models/schema/UserSchema').UserDocument} UserDocument
- * @typedef {import('../models/schema/InviteSchema').InviteDocument} InviteDocument
- * @typedef {import('../models/schema/TokenSchema').TokenDocument} TokenDocument
+ * @typedef {import('../controllers/models/schema/MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('../controllers/models/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('../controllers/models/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('../controllers/models/schema/InviteSchema').InviteDocument} InviteDocument
+ * @typedef {import('../controllers/models/schema/TokenSchema').TokenDocument} TokenDocument
  * 
- * @typedef {import('../config/validation/definitions/inviteValidation').InviteData} InviteData
- * @typedef {import('../config/validation/definitions/registerValidation').RegistrationData} RegistrationData
+ * @typedef {import('~crsm/routes/validation/definitions/inviteValidation').InviteData} InviteData
+ * @typedef {import('~crsm/routes/validation/definitions/registerValidation').RegistrationData} RegistrationData
  */
 
 /** HELPER METHODS **/

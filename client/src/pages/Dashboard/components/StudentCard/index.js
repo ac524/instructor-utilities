@@ -9,7 +9,7 @@ import {
 import api from "utils/api";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
-import { getDashboardAction as gda, useClassroom, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
@@ -18,7 +18,6 @@ import "./style.sass";
 export const StudentMenu = ({ _id, name }) => {
     
     const dispatch = useDashboardDispatch();
-    const { _id: roomId } = useClassroom();
 
     const openEdit = (_id) => {
         dispatch(gda(EDIT_STUDENT, _id));
@@ -26,7 +25,7 @@ export const StudentMenu = ({ _id, name }) => {
 
     const removeStudent = async(_id) => {
         dispatch(gda( REMOVE_STUDENT, _id ));
-        await api.removeStudent( roomId, _id );
+        await api.removeStudent( _id );
     }
 
     const dropdownLabel = <Icon icon="ellipsis-h" />;
