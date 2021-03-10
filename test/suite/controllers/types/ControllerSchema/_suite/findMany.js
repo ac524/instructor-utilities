@@ -38,7 +38,7 @@ module.exports = function() {
 
         });
 
-        it( "should call the `query` method with a `Query` when provided `queryOptions`", () => {
+        it( "should call the `query` method with a `Query` and provided `queryOptions`", () => {
 
             // Arrange
             const ctrl = makeCtrl();
@@ -63,15 +63,13 @@ module.exports = function() {
             const doc3 = new TestModel( { name: "Third test" } );
             const search = { name: "test" };
 
-            ctrl.query.callsFake(() => doc1);
-            ctrl.query.callsFake(() => doc2);
-            ctrl.query.callsFake(() => doc3);
+            ctrl.query.callsFake(() => [doc1, doc2, doc3]);
 
             // Act
             const foundDocs = await ctrl.findMany( { search } );
 
             // Assert
-            expect( foundDocs ).to.equal( doc1, doc2, doc3 );
+            expect( foundDocs ).to.deep.equal( [doc1, doc2, doc3] );
 
         });
 
