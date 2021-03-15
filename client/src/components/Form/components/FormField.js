@@ -2,6 +2,8 @@ import { Form as FormCollection } from "react-bulma-components";
 
 import { FormInput } from "./FormInput"
 
+import { Error } from "components/Errors";
+
 const { Field, Control, Label } = FormCollection;
 
 export const FormField = ({

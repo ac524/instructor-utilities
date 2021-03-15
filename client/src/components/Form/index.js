@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 
-import { Form as FormCollection, Button } from "react-bulma-components";
+import { Button } from "react-bulma-components";
 
 import { ErrorProvider, Error, useInputErrorColor } from "../Errors";
 
@@ -9,44 +9,6 @@ import { validateAll } from "utils/validation";
 import { useFormFields } from "./utils"
 
 import { FormField } from "./components"
-
-const { Field, Control, Label, Input, Select, Textarea } = FormCollection;
-
-// export const FormField = ({
-//   label,
-//   type = "text",
-//   name,
-//   placeholder,
-//   value,
-//   onChange,
-//   options,
-//   inputColor,
-//   inputProps = {},
-//   ...props
-// }) => {
-//   const fieldInputProps = {
-//     name,
-//     type,
-//     value,
-//     onChange: onChange || null,
-//     ...inputProps
-//   };
-
-//   if (options) fieldInputProps.options = options;
-//   if (placeholder) fieldInputProps.placeholder = placeholder;
-//   if (!fieldInputProps.color && inputColor)
-//     fieldInputProps.color = inputColor(name);
-
-//   return (
-//     <Field {...props}>
-//       {label && <Label>{label}</Label>}
-//       <Control>
-//         <FormInput {...fieldInputProps} />
-//         <Error name={name} />
-//       </Control>
-//     </Field>
-//   );
-// };
 
 const Form = ({
   fields,
