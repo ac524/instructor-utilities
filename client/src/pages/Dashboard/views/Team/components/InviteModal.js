@@ -8,7 +8,8 @@ import {
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
-import Form, { createValidator } from "components/Form";
+import Form from "components/Form";
+import { createValidator } from "utils/validation";
 import api from "utils/api";
 import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { ADD_INVITE } from "pages/Dashboard/store/actionsNames";
