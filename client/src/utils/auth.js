@@ -5,7 +5,7 @@ import api from "./api";
 import { useStoreContext, getStoreAction as gsa } from "store";
 import { LOGIN_USER, LOGOUT_USER } from "store/actions";
 import { useHistory } from "react-router-dom";
-import { createValidator } from "components/Form";
+import { createValidator } from "./validation";
 import { useSocket } from "./socket.io";
 
 const setAuthToken = token => {

@@ -1,6 +1,7 @@
 import React from "react";
 
-import Form, { createValidator } from "components/Form";
+import Form from "components/Form";
+import { createValidator } from "utils/validation";
 import api from "utils/api";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 

@@ -7,7 +7,8 @@ import {
 } from "react-bulma-components";
 
 import { useLogout, useLogin } from "utils/auth";
-import Form, { createValidator } from "./Form";
+import Form from "./Form";
+import { createValidator } from "utils/validation";
 import { useHistory } from "react-router-dom";
 import Modal, { ModalButton, ModalLink } from "./Modal";
 
