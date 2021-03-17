@@ -2,6 +2,7 @@
 const SubSchemaController = require("../types/SubSchemaController");
 const feedCtrl = require("../feed");
 const studentCtrl = require("../student");
+const userCtrl = require("../user");
 
 /**
  * @param {FeedEntryController} ctrl 
@@ -57,10 +58,20 @@ class FeedEntryController extends SubSchemaController {
 
     async findOne( options, queryOptions = {} ) {
 
-        return super.findOne( options, {
-            populate: "items.by",
-            ...queryOptions
-        }  );
+        const entry = await super.findOne( options, queryOptions );
+
+        if( !entry ) return entry;
+
+        return {
+            ...entry._doc,
+            by: await userCtrl.findOne( { docId: entry.by }, { select: "name" } )
+        }
+
+        // TODO Find a way to rework underlying sub schema code to allow a populate for sub fields.
+        // return super.findOne( options, {
+        //     populate: "items.by",
+        //     ...queryOptions
+        // }  );
 
     }
 
