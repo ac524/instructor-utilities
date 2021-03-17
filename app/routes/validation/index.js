@@ -4,6 +4,7 @@
 
 module.exports = {
     app: require("./definitions/appValidation"),
+    feedEntry: require("./definitions/feedEntryValidation"),
     comment: require("./definitions/commentValidation"),
     invite: require("./definitions/inviteValidation"),
     login: require("./definitions/loginValidation"),

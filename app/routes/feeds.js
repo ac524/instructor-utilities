@@ -14,6 +14,7 @@ const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 
 const {
+    feedEntry: feedEntryVal,
     comment: commentVal
 } = require("./validation");
 
@@ -26,13 +27,15 @@ const sharedConfig = {
 const entryTypeConfigByAction = {
     comment: {
         validation: commentVal,
-        perm: feedCommentPerm
+        permission: feedCommentPerm
     },
     elevate: {
-        perm: feedElevatePerm
+        validation: feedEntryVal,
+        permission: feedElevatePerm
     },
     deelevate: {
-        perm: feedDeelevatePerm
+        validation: feedEntryVal,
+        permission: feedDeelevatePerm
     }
 }
 
@@ -55,7 +58,7 @@ module.exports = createRouter([
     }, sharedConfig],
 
     ...Object.entries( feedEntryCtrls ).map(([,entryTypeCtrl]) => (
-        [`/:feedId/${entryTypeCtrl.action}`, {
+        [`/${entryTypeCtrl.action}`, {
             post: {
                 defaultError: `add the feed ${entryTypeCtrl.action} entry`,
                 ctrl: entryTypeCtrl,
