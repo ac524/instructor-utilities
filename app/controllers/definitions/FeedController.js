@@ -1,8 +1,6 @@
-const SchemaController = require("../../types/SchemaController");
+const SchemaController = require("../types/SchemaController");
 
-const { Feed } = require("../models");
-
-const entryTypes = require("./entries");
+const { Feed } = require("./models");
 
 /**
  * TYPE DEFINITIONS FOR METHODS
@@ -17,10 +15,6 @@ class FeedController extends SchemaController {
 
         super( 'feed', Feed );
 
-    }
-
-    get entryTypes() {
-        return entryTypes
     }
 
     /**
