@@ -11,6 +11,8 @@ const handleRouteError = (err, res) => {
 
     const { statusCode, response } = err;
 
+    throw err;
+
     res.status( statusCode ).json( response );
 
 };
