@@ -39,7 +39,7 @@ Prominent features include:
 * Adding students
 * Assigning students to TAs
 * Adding student comments
-* Elevating students up the staff heirachy
+* Elevating students up the staff hierarchy
 
 ## Credits
 
