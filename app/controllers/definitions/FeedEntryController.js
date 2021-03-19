@@ -34,12 +34,11 @@ const updateStudentAggregates = async (ctrl, entry) => {
 
 class FeedEntryController extends SubSchemaController {
 
-    constructor( action, aggregates = [] ) {
+    constructor( action ) {
 
         super( "item", feedCtrl );
 
         this.action = action;
-        this.aggregates = aggregates;
 
     }
 
