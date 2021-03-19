@@ -14,7 +14,7 @@ const FeedEntrySchema = require("../FeedEntrySchema");
  * @property {ObjectId} feed
  * 
  * @property {*} getFeedAggregateData
- * @property {*} getFeedAggregate
+ * @property {*} getAggregateKeysByAction
  * 
  * @typedef {import('mongoose').Document & StudentSchema} StudentDocument
  */
@@ -48,8 +48,8 @@ const StudentSchema = new Schema({
   recentComments: [ FeedEntrySchema ]
 });
 
-StudentSchema.methods.getFeedAggregateData = methods.getFeedAggregateData;
+StudentSchema.methods.getAggregateKeysByAction = methods.getAggregateKeysByAction;
 
-StudentSchema.methods.getFeedAggregate = methods.getFeedAggregate;
+StudentSchema.methods.getFeedAggregateData = methods.getFeedAggregateData;
 
 module.exports = StudentSchema;
