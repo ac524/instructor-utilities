@@ -3,6 +3,8 @@ const { ObjectId } = Schema.Types;
 
 const methods = require("./methods")
 
+const FeedEntrySchema = require("../FeedEntrySchema");
+
 /**
  * @typedef {Object} StudentSchema
  * @property {ObjectId} _id
@@ -38,7 +40,12 @@ const StudentSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  elevation: {
+    type: Number,
+    default: 0
+  },
+  recentComments: [ FeedEntrySchema ]
 });
 
 StudentSchema.methods.getFeedAggregateData = methods.getFeedAggregateData;
