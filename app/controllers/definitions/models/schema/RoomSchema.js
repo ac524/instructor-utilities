@@ -3,16 +3,14 @@ const { ObjectId } = Schema.Types;
 
 /**
  * Type Definition Imports
- * @typedef {import('../InviteSchema').InviteDocument} InviteDocument
- * @typedef {import('../MemberSchema').MemberDocument} MemberDocument
- * @typedef {import('../StudentSchema').StudentDocument} StudentDocument
+ * @typedef {import('./InviteSchema').InviteDocument} InviteDocument
+ * @typedef {import('./MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('./StudentSchema').StudentDocument} StudentDocument
  */
 
-const InviteSchema = require("../InviteSchema");
-const MemberSchema = require("../MemberSchema");
-const StudentSchema = require("../StudentSchema");
-
-const methods = require("./methods");
+const InviteSchema = require("./InviteSchema");
+const MemberSchema = require("./MemberSchema");
+const StudentSchema = require("./StudentSchema");
 
 /**
  * @typedef {Object} RoomSchema
@@ -50,7 +48,5 @@ const RoomSchema = new Schema({
       default: Date.now
     }
 });
-  
-RoomSchema.methods.getFeedAggregate = methods.getFeedAggregate;
 
 module.exports = RoomSchema;
