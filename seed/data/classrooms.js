@@ -2,6 +2,18 @@ const { Feed } = require("../../app/controllers/definitions/models");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const createStudentFeed = async (roomId, student, instructor, assignedTo) => {
+
+  const comment = {
+    _id: new ObjectId(),
+    action: "comment",
+    by: assignedTo.user,
+    data: {
+      comment:
+        "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.",
+    },
+    date: Date.now(),
+  };
+
   const feed = new Feed({
     room: roomId,
     for: student._id,
@@ -13,16 +25,7 @@ const createStudentFeed = async (roomId, student, instructor, assignedTo) => {
         by: instructor.user,
         date: Date.now(),
       },
-      {
-        _id: new ObjectId(),
-        action: "comment",
-        by: assignedTo.user,
-        data: {
-          comment:
-            "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.",
-        },
-        date: Date.now(),
-      },
+      comment,
       {
         _id: new ObjectId(),
         action: "elevate",
@@ -43,7 +46,11 @@ const createStudentFeed = async (roomId, student, instructor, assignedTo) => {
 
   await feed.save();
 
-  return feed._id;
+  return {
+    feed: feed._id,
+    elevation: 0,
+    recentComments: [comment]
+  };
 };
 
 const createStudents = async (roomId, staff) => {
@@ -93,13 +100,19 @@ const createStudents = async (roomId, staff) => {
     assignedTo: randomStaffId(),
   }));
 
-  for (let i = 0; i < students.length; i++)
-    students[i].feed = await createStudentFeed(
-      roomId,
-      students[i],
-      instructor,
-      taStaff.find(({ _id }) => _id.equals(students[i].assignedTo))
-    );
+  for (let i = 0; i < students.length; i++) {
+
+    students[i] = {
+      ...students[i],
+      ...(await createStudentFeed(
+        roomId,
+        students[i],
+        instructor,
+        taStaff.find(({ _id }) => _id.equals(students[i].assignedTo))
+      ))
+    };
+
+  }
 
   return students;
 };
