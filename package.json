@@ -5,6 +5,7 @@
   "main": "app/server.js",
   "_moduleAliases": {
     "~crsm": "./app",
+    "~crsmmodels": "./app/controllers/definitions/models",
     "~crsmtest": "./test"
   },
   "scripts": {
