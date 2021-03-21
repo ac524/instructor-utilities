@@ -12,6 +12,8 @@ const createRouter = require("./utils/createRouter");
 
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
+const setFeed = require("./middleware/setFeed");
+const isFeedEntryOwner = require("./middleware/isFeedEntryOwner");
 
 const {
     feedEntry: feedEntryVal,
@@ -21,7 +23,7 @@ const {
 const sharedConfig = {
     paramCheck: true,
     auth: true,
-    middleware: [ setRoom.fromFeed, isRoomMember ]
+    middleware: [ setFeed, setRoom.fromFeed, isRoomMember ]
 }
 
 const entryTypeConfigByAction = {
@@ -70,6 +72,20 @@ module.exports = createRouter([
                     }
                 }],
                 ...(entryTypeConfigByAction[entryTypeCtrl.action] || {})
+            }
+        }, sharedConfig ],
+        [`/${entryTypeCtrl.action}/:itemId`, {
+            patch: {
+                defaultError: `update the feed ${entryTypeCtrl.action} entry`,
+                ctrl: entryTypeCtrl,
+                permission: entryTypeConfigByAction[entryTypeCtrl.action].permission,
+                middleware: [ setFeed, isFeedEntryOwner ]
+            },
+            delete: {
+                defaultError: `delete the feed ${entryTypeCtrl.action} entry`,
+                ctrl: entryTypeCtrl,
+                permission: entryTypeConfigByAction[entryTypeCtrl.action].permission,
+                middleware: [ setFeed, isFeedEntryOwner ]
             }
         }, sharedConfig ]
     ))
