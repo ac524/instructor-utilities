@@ -20,6 +20,7 @@ import { useSocket } from "utils/socket.io";
 import PendingVerification from "./components/PendingVerification";
 import Fade from "animations/Fade";
 import UserSettings from "./views/UserSettings";
+import FirstRoom from "./views/FirstRoom"
 
 loadDashboardIcons();
 
@@ -93,6 +94,12 @@ const Dashboard = () => {
                         <div className="dashboard-panel has-background-white-bis">
                             <Topbar />
                             <UserSettings />
+                        </div>
+                    </Route>
+                    <Route path="/first-room">
+                        <div className="dashboard-panel has-background-white-bis">
+                            <Topbar />
+                            <FirstRoom />
                         </div>
                     </Route>
                     <Route>
