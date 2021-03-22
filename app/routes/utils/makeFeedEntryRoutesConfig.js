@@ -75,7 +75,8 @@ const makeFeedEntryRoutesConfig = ( feedEntryCtrl ) => {
                 defaultError: `add the feed ${feedEntryCtrl.action} entry`,
                 ctrl: feedEntryCtrl,
                 validation,
-                permission
+                permission,
+                middleware: [ setFeed,  setRoom.fromFeed, isRoomMember ]
             }
         } ],
         ...(
