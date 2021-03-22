@@ -18,7 +18,8 @@ const validationMap = {
 const schemaCtrlMap = {
     post: ctrl => [ ctrl.binding.createOne, {
         keyMap: {
-            body: "data"
+            body: "data",
+            user: "createdBy"
         }
     } ],
     get: ctrl => [ ctrl.binding.findOne, {
@@ -46,7 +47,8 @@ const subSchemaCtrlMap = {
     post: subCtrl => [ subCtrl.binding.createOne, {
         keyMap: {
             body: "data",
-            [`${subCtrl.ctrl.key}Id`]: "belongsTo"
+            [`${subCtrl.ctrl.key}Id`]: "belongsTo",
+            user: "createdBy"
         }
     } ],
     get: subCtrl => [ subCtrl.binding.findOne, {

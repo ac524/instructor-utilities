@@ -21,14 +21,7 @@ module.exports = createRouter([
             validation: createStudentVal,
             middleware: [ setRoom.fromBody, isRoomMember ],
             permission: studentPerm,
-            ctrl: studentCtrl,
-            ctrlFilter: ([ ctrl, config ]) => [ctrl, {
-                ...config,
-                keyMap: {
-                    ...config.keyMap,
-                    user: "createdBy"
-                }
-            }]
+            ctrl: studentCtrl
         }
     }],
 

@@ -15,6 +15,8 @@ const isRoomMember = require("./middleware/isRoomMember");
 const setFeed = require("./middleware/setFeed");
 const isFeedEntryOwner = require("./middleware/isFeedEntryOwner");
 
+const makeFeedEntryRoutesConfig = require("./utils/makeFeedEntryRoutesConfig");
+
 const {
     feedEntry: feedEntryVal,
     comment: commentVal
@@ -59,35 +61,34 @@ module.exports = createRouter([
         }
     }, sharedConfig],
 
-    ...Object.entries( feedEntryCtrls ).map(([,entryTypeCtrl]) => (
-        [`/${entryTypeCtrl.action}`, {
-            post: {
-                defaultError: `add the feed ${entryTypeCtrl.action} entry`,
-                ctrl: entryTypeCtrl,
-                ctrlFilter: ([ ctrl, config ]) => [ctrl, {
-                    ...config,
-                    keyMap: {
-                        ...config.keyMap,
-                        user: "createdBy"
-                    }
-                }],
-                ...(entryTypeConfigByAction[entryTypeCtrl.action] || {})
-            }
-        }, sharedConfig ],
-        [`/${entryTypeCtrl.action}/:itemId`, {
-            patch: {
-                defaultError: `update the feed ${entryTypeCtrl.action} entry`,
-                ctrl: entryTypeCtrl,
-                permission: entryTypeConfigByAction[entryTypeCtrl.action].permission,
-                middleware: [ setFeed, isFeedEntryOwner ]
-            },
-            delete: {
-                defaultError: `delete the feed ${entryTypeCtrl.action} entry`,
-                ctrl: entryTypeCtrl,
-                permission: entryTypeConfigByAction[entryTypeCtrl.action].permission,
-                middleware: [ setFeed, isFeedEntryOwner ]
-            }
-        }, sharedConfig ]
-    ))
+    ...Object
+        .entries( feedEntryCtrls )
+        .reduce((routes,[,entryTypeCtrl]) => [
+            ...routes,
+            ...makeFeedEntryRoutesConfig(entryTypeCtrl)
+        ], [])
+        // .map(([,entryTypeCtrl]) => (
+        //     [`/${entryTypeCtrl.action} `, {
+        //         post: {
+        //             defaultError: `add the feed ${entryTypeCtrl.action} entry`,
+        //             ctrl: entryTypeCtrl,
+        //             ...(entryTypeConfigByAction[entryTypeCtrl.action] || {})
+        //         }
+        //     }, sharedConfig ],
+        //     [`/${entryTypeCtrl.action}/:itemId`, {
+        //         patch: {
+        //             defaultError: `update the feed ${entryTypeCtrl.action} entry`,
+        //             ctrl: entryTypeCtrl,
+        //             permission: entryTypeConfigByAction[entryTypeCtrl.action].permission,
+        //             middleware: [ setFeed, isFeedEntryOwner ]
+        //         },
+        //         delete: {
+        //             defaultError: `delete the feed ${entryTypeCtrl.action} entry`,
+        //             ctrl: entryTypeCtrl,
+        //             permission: entryTypeConfigByAction[entryTypeCtrl.action].permission,
+        //             middleware: [ setFeed, isFeedEntryOwner ]
+        //         }
+        //     }, sharedConfig ]
+        // ))
 
 ]);
