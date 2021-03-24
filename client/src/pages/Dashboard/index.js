@@ -21,7 +21,6 @@ import PendingVerification from "./components/PendingVerification";
 import Fade from "animations/Fade";
 import UserSettings from "./views/UserSettings";
 
-
 loadDashboardIcons();
 
 export const DashboardContainer = () => {
