@@ -63,6 +63,16 @@ class FeedEntryController extends SubSchemaController {
         };
 
     }
+    
+    async updateOne( { data, ...options } ) {
+
+        return super.updateOne( {
+            ...options,
+            // Data should be nested in the entry's `data` field.
+            data: { data }
+        } );
+
+    }
 
     async findOne( options, queryOptions = {} ) {
 

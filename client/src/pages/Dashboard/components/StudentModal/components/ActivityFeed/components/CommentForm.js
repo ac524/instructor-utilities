@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Form from "components/Form";
 import { createValidator } from "utils/validation";
@@ -11,7 +11,11 @@ const validateInviteData = createValidator({
     }
 });
 
-const CommentForm = ({ feedId }) => {
+const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
+
+    const [values, setValues] = useState( entry ? entry.data : {
+        comment: ""
+    } );
 
     const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
 
@@ -19,9 +23,20 @@ const CommentForm = ({ feedId }) => {
 
         try {
             
-            handleFeedEventResponse( (await api.createComment( feedId, data )).data );
+            let { data: resData } = entry
+                ? await api.updateComment( entry._id, data )
+                : await api.createComment( feedId, data )
 
-            setValues({ comment: "" });
+            console.log(resData);
+
+            if( !entry ) {
+                handleFeedEventResponse( resData );
+                setValues({ comment: "" });
+            }
+
+            console.log("after comment");
+
+            afterComment();
 
         } catch(err) {
             
@@ -31,17 +46,19 @@ const CommentForm = ({ feedId }) => {
 
     }
 
+    const commentField = {
+        placeholder: "Add a comment...",
+        name: "comment",
+        type: "textarea",
+        value: values.comment
+    };
+
     return (
         <div style={{flexGrow:0}}>
             <Form
                 flat
-                fields={[
-                    {
-                        placeholder: "Add a comment...",
-                        name: "comment",
-                        type: "textarea"
-                    }
-                ]}
+                fields={[ commentField ]}
+                fieldValueSource={values}
                 validation={validateInviteData}
                 onSubmit={handleSubmit}
                 buttonText="comment"
