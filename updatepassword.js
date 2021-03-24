@@ -1,11 +1,11 @@
 require("dotenv").config();
 
 // MongoDB
-require("./app/config/mongoose");
+require("~crsm/config/mongoose");
 
-const passwordHash = require("./app/config/utils/passwordHash");
+const passwordHash = require("~crsm/config/utils/passwordHash");
 
-const { User } = require("./app/controllers/models");
+const { User } = require("~crsmmodels");
 
 const [ , , userId, password ] = process.argv;
 
@@ -13,9 +13,19 @@ const updatepassword = async ( userId, password ) => {
 
     try {
 
-        await User.findByIdAndUpdate( userId, {
+        const user = await User.findByIdAndUpdate( userId, {
             password: await passwordHash( password )
-        } );
+        }, { new: true } );
+
+        if( !user ) {
+
+            console.log( `User id ${userId} not found` );
+
+        } else {
+            
+            console.log( "Updated user", user );
+
+        }
         
         process.exit(0);
 

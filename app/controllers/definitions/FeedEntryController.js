@@ -9,15 +9,24 @@ const userCtrl = require("../user");
  * @param {import('mongoose').Schema.Types.ObjectId} docId 
  * @returns 
  */
-const getStudentUpdate = async (ctrl, docId) => {
+const updateStudentAggregates = async (ctrl, entry) => {
 
-    const feed = await ctrl.findOwner( { docId }, { select: "for" } );
+    const feed = await ctrl.findOwner( { docId: entry._id }, { select: "for" } );
+
     const student = await studentCtrl.findOne({ docId: feed.for });
+
+    const aggKeys = student.getAggregateKeysByAction( entry.action );
+
+    if( !aggKeys.length ) return {};
+
+    const aggUpdate = await student.getFeedAggregateData(aggKeys);
+
+    await studentCtrl.updateOne({ docId: student._id, data: aggUpdate });
 
     return {
         studentUpdate: {
             _id: student._id,
-            ...(await student.getFeedAggregateData(ctrl.aggregates))
+            ...aggUpdate
         }
     }
 
@@ -25,12 +34,11 @@ const getStudentUpdate = async (ctrl, docId) => {
 
 class FeedEntryController extends SubSchemaController {
 
-    constructor( action, aggregates = [] ) {
+    constructor( action ) {
 
         super( "item", feedCtrl );
 
         this.action = action;
-        this.aggregates = aggregates;
 
     }
 
@@ -51,7 +59,7 @@ class FeedEntryController extends SubSchemaController {
                 // Create the new entry
                 await this.findOne({ docId: newEntry._id })
             ],
-            ...(this.aggregates.length ? getStudentUpdate(this, newEntry._id) : {})
+            ...( await updateStudentAggregates(this, newEntry) ) 
         };
 
     }

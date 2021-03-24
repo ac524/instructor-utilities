@@ -28,19 +28,15 @@ class RoomController extends SchemaController {
 
     }
 
-    /**
-     * @param {GetAggregateOptions} param0 
-     */
-    async getAggregate({ roomId }) {
+    async findOne( options, queryOptions = {} ) {
 
-        const room = await this.findOne({ docId: roomId }, {
+        return super.findOne( options, {
             populate: [
                 ["staff.user", "name email date"],
                 "invites.token"
-            ]
-        });
-
-        return await room.getFeedAggregate();
+            ],
+            ...queryOptions
+        } );
 
     }
 

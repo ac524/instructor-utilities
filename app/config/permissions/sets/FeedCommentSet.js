@@ -5,7 +5,9 @@ class FeedCommentSet extends PermissionSet {
     constructor() {
 
         super( "feed comment", [
-            "create"
+            "create",
+            "update",
+            "delete"
         ] );
 
     }
