@@ -43,9 +43,21 @@ export const PrivateRoute = ({ component: Component, children, redirectTo = "/",
 
 const Routes = () => {
 
+    let guestRedirect
+
     const authUser = useAuthorizedUser();
 
-    const guestRedirect = authUser ? `/${authUser.classrooms[0]}` : "/";
+    if(!authUser) {
+        guestRedirect = "/"
+
+    }else if(authUser.classrooms.length>0){
+        guestRedirect = `/${authUser.classrooms[0]}`
+    }
+    else {
+        guestRedirect = "/settings"
+    }
+
+
 
     return (
         <Switch>
