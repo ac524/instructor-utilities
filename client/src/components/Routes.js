@@ -43,9 +43,17 @@ export const PrivateRoute = ({ component: Component, children, redirectTo = "/",
 
 const Routes = () => {
 
+    let guestRedirect
+
     const authUser = useAuthorizedUser();
 
-    const guestRedirect = authUser ? `/${authUser.classrooms[0]}` : "/";
+    if(!authUser) {
+        guestRedirect = "/";
+    } else if(authUser.classrooms.length) {
+        guestRedirect = `/${authUser.classrooms[0]}`;
+    } else {
+        guestRedirect = "/settings";
+    }
 
     return (
         <Switch>
@@ -54,7 +62,7 @@ const Routes = () => {
             <Route path="/validate-email/:token" exact component={Pages.ValidateEmail} />
             <Route path="/invite/:token" exact component={Pages.Invite} />
 
-            <GuestRoute path="/register" redirectTo={guestRedirect} exact component={Pages.Register} />
+            <GuestRoute path="/register" exact redirectTo={guestRedirect} component={Pages.Register} />
             <GuestRoute path="/" exact redirectTo={guestRedirect} component={Pages.Home}/>
 
             <PrivateRoute path="/:roomId" component={Pages.Dashboard} />
