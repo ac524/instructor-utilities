@@ -13,6 +13,7 @@ import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { REFRESH_USER_ROOMS } from "store/actions";
 
 import api from "utils/api";
+import { useAuthorizedUser } from "utils/auth";
 
 const validateClassroomData = createValidator({
     validators: {
@@ -21,19 +22,20 @@ const validateClassroomData = createValidator({
 });
 
 export const useClassroomModalLoader = (roomId) => {
-
+    
     const [ room, setRoom ] = useState();
 
     useEffect(() => {
 
         if( false === roomId ) {
+            
             setRoom(null);
             return;
         }
 
         if( !roomId ) {
 
-            setRoom({});
+            setRoom({name:""});
 
         } else {
 
@@ -42,7 +44,7 @@ export const useClassroomModalLoader = (roomId) => {
             try {
 
                 getRoom();
-
+                
             } catch(err) {
 
                 // TODO error handling
@@ -62,17 +64,29 @@ export const useClassroomModalLoader = (roomId) => {
 
 export const ClassroomForm = ({ room, afterUpdate }) => {
 
+    const {_id} = useAuthorizedUser();
+
     const dispatch = useStoreDispatch();
 
     const handleSubmit = async (data, setErrors) => {
 
+
         const updateList = Object.entries(data).filter( ([key,value]) => value !== room[key] );
+
+ 
 
         if( updateList.length ) {
 
             const updates = Object.fromEntries( updateList );
 
             try {
+
+                if(!room._id){
+                    //TODO add newClassRoom to state
+                    const newClassRoom = await api.createClassroom(updates);
+                    
+                    return
+                }
 
                 await api.updateClassroom( room._id, updates );
                 dispatch(gsa( REFRESH_USER_ROOMS ))
@@ -96,6 +110,7 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
                 {
                     label: "Name",
                     name: "name",
+                    placeholder: "Name of Classroom",
                     value: room.name
                 }
             ]}
@@ -109,9 +124,10 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
 }
 
 const ClassroomModal = ( { roomId=false, onClose } ) => {
-
-    const room = useClassroomModalLoader( roomId );
     
+    const room = useClassroomModalLoader( roomId );
+    // const createRoom;
+    // if (room === {}) createNewClassroom()
     return (
         <Modal
             show={false !== roomId}

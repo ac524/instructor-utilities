@@ -37,7 +37,13 @@ const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
 
     return (
         <div {...props}>
-            <Heading renderAs="h3" size={6} className="is-primary">Instructor Rooms</Heading>
+            <Heading renderAs="h3" size={6} className="is-primary">Instructor Rooms
+                <Button size="small"  class="is-primary button is-small" onClick={()=>onEdit(null)}>
+                    <Icon icon="plus-circle"/>
+                    <span>New</span>
+                </Button>
+            </Heading>
+            
             <div className="has-flex-rows is-bordered">
             {
                 rooms.map( room => (
