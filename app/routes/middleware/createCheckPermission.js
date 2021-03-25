@@ -8,8 +8,6 @@ const createCheckPermission = permission => ( req, res, next ) => {
     
         return next( new InvalidDataError( "Expected a member to validate permissions, but got none." ) );
 
-    // console.log();
-
     if( ! member.isAllowedTo( permission ) )
 
         return next( new InvalidDataError( `You are not allowed to ${permission}.` ) );
