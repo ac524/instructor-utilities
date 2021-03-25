@@ -3,15 +3,16 @@ const SubSchemaController = require("../types/SubSchemaController");
 const feedCtrl = require("../feed");
 const studentCtrl = require("../student");
 const userCtrl = require("../user");
+const options = require("../../config/options");
 
 /**
  * @param {FeedEntryController} ctrl 
  * @param {import('mongoose').Schema.Types.ObjectId} docId 
  * @returns 
  */
-const updateStudentAggregates = async (ctrl, entry) => {
+const updateStudentAggregates = async (ctrl, entry, feed) => {
 
-    const feed = await ctrl.findOwner( { docId: entry._id }, { select: "for" } );
+    if( !feed ) feed = await ctrl.findOwner( { docId: entry._id }, { select: "for" } );
 
     const student = await studentCtrl.findOne({ docId: feed.for });
 
@@ -31,6 +32,16 @@ const updateStudentAggregates = async (ctrl, entry) => {
     }
 
 }
+
+const formatChangeRes = async (ctrl,entry,feed) => ({
+    entries: [ entry ],
+    ...( await updateStudentAggregates(ctrl, entry, feed) ) 
+})
+
+const populateBy = async entry => ({
+    ...entry._doc,
+    by: await userCtrl.findOne( { docId: entry.by }, { select: "name" } )
+});
 
 class FeedEntryController extends SubSchemaController {
 
@@ -53,16 +64,36 @@ class FeedEntryController extends SubSchemaController {
             }
         });
 
-        return {
-            // Returns as an array (for future dev where one entry might cause another to insert by reaction causing multiple returns)
-            entries: [
-                // Create the new entry
-                await this.findOne({ docId: newEntry._id })
-            ],
-            ...( await updateStudentAggregates(this, newEntry) ) 
-        };
+        return formatChangeRes( this, await this.findOne({ docId: newEntry._id }) );
 
     }
+    
+    async updateOne( { data, ...options } ) {
+
+        const entry = await super.updateOne( {
+            ...options,
+            // Data should be nested in the entry's `data` field.
+            data: { data }
+        } );
+
+        if( !entry ) return entry;
+
+        return formatChangeRes( this, await populateBy( entry ) );
+
+    }
+
+     async deleteOne( { docId, ...options } ) {
+
+        // Feed needs to be fetch before delete, as it won't be avaible later to find by this entry after it has been remove.
+        const feed = await this.findOwner( { docId: docId }, { select: "for" } );
+
+        const entry = await super.deleteOne( { docId, ...options } );
+
+        if( !entry ) return entry;
+
+        return formatChangeRes( this, await populateBy( entry ), feed );
+
+     }
 
     async findOne( options, queryOptions = {} ) {
 
@@ -70,12 +101,9 @@ class FeedEntryController extends SubSchemaController {
 
         if( !entry ) return entry;
 
-        return {
-            ...entry._doc,
-            by: await userCtrl.findOne( { docId: entry.by }, { select: "name" } )
-        }
-
         // TODO Find a way to rework underlying sub schema code to allow a populate for sub fields.
+        return populateBy( entry );
+
         // return super.findOne( options, {
         //     populate: "items.by",
         //     ...queryOptions

@@ -127,6 +127,18 @@ class API {
 
     }
 
+    async updateComment( entryId, data ) {
+
+        return this.axios.patch( `/api/feeds/comment/${entryId}`, data );
+
+    }
+
+    async deleteComment( entryId ) {
+
+        return this.axios.delete( `/api/feeds/comment/${entryId}` );
+
+    }
+
     async createElevate( feedId ) {
 
         return this.axios.post( `/api/feeds/elevate`, { feedId } );
