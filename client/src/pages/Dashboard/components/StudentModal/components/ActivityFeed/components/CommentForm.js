@@ -27,14 +27,10 @@ const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
                 ? await api.updateComment( entry._id, data )
                 : await api.createComment( feedId, data )
 
-            console.log(resData);
-
-            if( !entry ) {
-                handleFeedEventResponse( resData );
-                setValues({ comment: "" });
-            }
-
-            console.log("after comment");
+            // Reset the form if not updating an existing comment.
+            if(!entry) setValues({comment:""});
+            
+            handleFeedEventResponse( resData, entry ? "update" : "push" );
 
             afterComment();
 

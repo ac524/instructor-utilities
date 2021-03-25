@@ -13,14 +13,9 @@ import { useAuthorizedUser } from "utils/auth";
 import Dropdown from "components/Dropdown";
 import CommentForm from "../components/CommentForm";
 import api from "utils/api";
+import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 
-const CommentOptions = ({ entryId, editAction, ...props }) => {
-
-    const deleteComment = async () => {
-
-        await api.deleteComment( entryId );
-
-    }
+const CommentOptions = ({ deleteAction, editAction, ...props }) => {
 
     return (
         <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-text-link" className="is-right ml-1" ariaLabel="Options to edit this comment" {...props}>
@@ -28,7 +23,7 @@ const CommentOptions = ({ entryId, editAction, ...props }) => {
                 <Icon icon={["far", "edit"]} />
                 <span>Edit</span>
             </Button>
-            <Button className="dropdown-item" size="small" onClick={deleteComment}>
+            <Button className="dropdown-item" size="small" onClick={deleteAction}>
                 <Icon icon={["far", "trash-alt"]} />
                 <span>Delete</span>
             </Button>
@@ -42,8 +37,18 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
     const user = useAuthorizedUser();
     const [isEditing, setIsEditing] = useState(false);
 
+    const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
+
     const edit = () => setIsEditing(true);
     const closeEdit = () => setIsEditing(false);
+
+    const deleteComment = async () => {
+
+        const {data: deleteRes} = await api.deleteComment( _id );
+
+        handleFeedEventResponse( deleteRes, "delete" );
+
+    }
 
     return (
         <FeedEntry block>
@@ -54,7 +59,7 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
                 <div className="is-flex is-size-7">
                     <span><strong><UserName user={by} /></strong> commented:</span>
                     <Date className="end" date={date} />
-                    {user._id === by._id && <CommentOptions entryId={_id} editAction={edit} />}
+                    {user._id === by._id && <CommentOptions editAction={edit} deleteAction={deleteComment} />}
                 </div>
                 {
                     isEditing
