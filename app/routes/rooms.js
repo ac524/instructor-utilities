@@ -20,7 +20,7 @@ module.exports = createRouter([
         get: {
             defaultError: "get the room",
             permission: roomPerm,
-            ctrl: roomCtrl.binding.getAggregate
+            ctrl: roomCtrl
         },
         patch: {
             defaultError: "update the room",

@@ -1,4 +1,3 @@
-const { Feed } = require("../../controllers/definitions/models");
 const { NotFoundError } = require("../../config/errors");
 
 const roomCtrl = require("../../controllers/room");
@@ -49,22 +48,7 @@ module.exports = {
     },
     async fromFeed(req, res, next) {
 
-        try {
-            
-            const feedId = req.params.feedId || req.body.feedId;
-
-            const feed = await Feed.findById( feedId ).select( "room" );
-
-            if( !feed ) throw new NotFoundError( "Target feed not found." );
-
-            req.crdata.set( "feedId", feedId );
-            req.crdata.set( "roomId", feed.room );
-
-        } catch( err ) {
-            
-            next(err);
-
-        }
+        req.crdata.set( "roomId", req.crdata.get("feed").room );
 
         await setRoom(req, next);
 

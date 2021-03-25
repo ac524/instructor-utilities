@@ -1,4 +1,5 @@
 const { InvalidDataError } = require("../../config/errors");
+const { populate } = require("../definitions/models/Feed");
 
 const Controller = require("./Controller");
 const SchemaController = require("./SchemaController");
@@ -125,7 +126,7 @@ class SubSchemaController extends Controller {
      * @param {FindSubDocOptions} param0 
      * @returns {Object}
      */
-    async findOne( { docId }, queryOptions ) {
+    async findOne( { docId } ) {
 
         return (
 
@@ -135,7 +136,7 @@ class SubSchemaController extends Controller {
             }, {
                 // Select the potential matching document.
                 select: `${this.prop}.$`,
-                ...queryOptions
+                populate: false
             })
 
         // Select the target subdoc to return.

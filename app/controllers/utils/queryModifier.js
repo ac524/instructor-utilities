@@ -9,6 +9,8 @@
   */
 const populateMod = ( query, populations ) => {
 
+    if( false === populations ) return;
+
     if( typeof populations === "string" ) {
         query.populate( populations );
         return;
