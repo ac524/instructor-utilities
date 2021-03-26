@@ -3,6 +3,7 @@ const makeDoc = require("./_suite/makeDoc");
 const createOne = require("./_suite/createOne");
 const deleteOne = require("./_suite/deleteOne");
 const findOne = require("./_suite/findOne");
+const findMany = require("./_suite/findMany");
 const updateOne = require("./_suite/updateOne");
 
 describe("ControllerSchema", function() {
@@ -14,6 +15,7 @@ describe("ControllerSchema", function() {
     addDesc( "createOne()", createOne );
     addDesc( "deleteOne()", deleteOne );
     addDesc( "findOne()", findOne );
+    addDesc( "findMany()", findMany);
     addDesc( "updateOne()", updateOne );
 
 });

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
-import Form, { createValidator } from "components/Form";
+import Form from "components/Form";
+import { createValidator } from "utils/validation";
 import api from "utils/api";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 
@@ -10,7 +11,11 @@ const validateInviteData = createValidator({
     }
 });
 
-const CommentForm = ({ feedId }) => {
+const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
+
+    const [values, setValues] = useState( entry ? entry.data : {
+        comment: ""
+    } );
 
     const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
 
@@ -18,9 +23,16 @@ const CommentForm = ({ feedId }) => {
 
         try {
             
-            handleFeedEventResponse( (await api.createComment( feedId, data )).data );
+            let { data: resData } = entry
+                ? await api.updateComment( entry._id, data )
+                : await api.createComment( feedId, data )
 
-            setValues({ comment: "" });
+            // Reset the form if not updating an existing comment.
+            if(!entry) setValues({comment:""});
+            
+            handleFeedEventResponse( resData, entry ? "update" : "push" );
+
+            afterComment();
 
         } catch(err) {
             
@@ -30,17 +42,19 @@ const CommentForm = ({ feedId }) => {
 
     }
 
+    const commentField = {
+        placeholder: "Add a comment...",
+        name: "comment",
+        type: "textarea",
+        value: values.comment
+    };
+
     return (
         <div style={{flexGrow:0}}>
             <Form
                 flat
-                fields={[
-                    {
-                        placeholder: "Add a comment...",
-                        name: "comment",
-                        type: "textarea"
-                    }
-                ]}
+                fields={[ commentField ]}
+                fieldValueSource={values}
                 validation={validateInviteData}
                 onSubmit={handleSubmit}
                 buttonText="comment"

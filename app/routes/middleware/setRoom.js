@@ -1,8 +1,7 @@
-const { Feed } = require("../../controllers/definitions/models");
-const { NotFoundError } = require("~crsm/config/errors");
+const { NotFoundError } = require("../../config/errors");
 
-const roomCtrl = require("~crsm/controllers/room");
-const studentCtrl = require("~crsm/controllers/student");
+const roomCtrl = require("../../controllers/room");
+const studentCtrl = require("../../controllers/student");
 
 const setRoom = async (req, next) => {
 
@@ -49,19 +48,7 @@ module.exports = {
     },
     async fromFeed(req, res, next) {
 
-        try {
-
-            const feed = await Feed.findById( req.params.feedId ).select( "room" );
-
-            if( !feed ) throw new NotFoundError( "Target feed not found." );
-
-            req.crdata.set( "roomId", feed.room );
-
-        } catch( err ) {
-            
-            next(err);
-
-        }
+        req.crdata.set( "roomId", req.crdata.get("feed").room );
 
         await setRoom(req, next);
 

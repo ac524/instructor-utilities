@@ -7,7 +7,8 @@ const isProd = require("../options")("isProd");
 const handleRouteError = (err, res) => {
 
     // Log for non production environments.
-    if( !isProd ) console.log( err.sourceErr || err );
+    // if( !isProd )
+    console.log( err.sourceErr || err );
 
     const { statusCode, response } = err;
 

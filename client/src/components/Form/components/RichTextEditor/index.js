@@ -1,9 +1,9 @@
 import React from "react";
 import { Editor, EditorState, getDefaultKeyBinding, RichUtils } from "draft-js";
-import "./RichText.css";
-import "../../node_modules/draft-js/dist/Draft.css";
+import "draft-js/dist/Draft.css";
+import "./styles.sass";
 
-class RichTextEditor extends React.Component {
+export class RichTextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = { editorState: EditorState.createEmpty() };
@@ -191,5 +191,3 @@ const InlineStyleControls = (props) => {
     </div>
   );
 };
-
-export default RichTextEditor;

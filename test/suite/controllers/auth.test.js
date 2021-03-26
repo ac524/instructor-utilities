@@ -1,6 +1,6 @@
 const chai = require("chai");
-const { authenticated, login } = require("../../../app/controllers/auth");
-const { User } = require("../../../app/controllers/models");
+const { authenticated, login } = require("~crsm/controllers/auth");
+const { User } = require("~crsm/controllers/definitions/models");
 const expect = chai.expect
 
 describe("AuthController", function() {

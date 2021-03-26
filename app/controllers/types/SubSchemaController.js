@@ -1,4 +1,5 @@
-const { InvalidDataError } = require("~crsm/config/errors");
+const { InvalidDataError } = require("../../config/errors");
+const { populate } = require("../definitions/models/Feed");
 
 const Controller = require("./Controller");
 const SchemaController = require("./SchemaController");
@@ -101,7 +102,7 @@ class SubSchemaController extends Controller {
      * @param {CreateSubDocOptions} param0
      * @returns {Object}
      */
-    async createOne( { belongsTo, data } ) {
+    async createOne( { belongsTo, data }, queryOptions ) {
 
         if( !belongsTo ) throw new InvalidDataError("`belongsTo` is required when creating new sub documents");
 
@@ -114,7 +115,7 @@ class SubSchemaController extends Controller {
             }, {
                 // Get our new subdoc by slicing the new last item in the list.
                 select: { [this.prop]: { $slice: -1 } }
-            })
+            }, queryOptions)
         
         // Select the new subdoc to return.
         )[this.prop][0];
@@ -134,7 +135,8 @@ class SubSchemaController extends Controller {
                 search: { [`${this.prop}._id`]: docId }
             }, {
                 // Select the potential matching document.
-                select: `${this.prop}.$`
+                select: `${this.prop}.$`,
+                populate: false
             })
 
         // Select the target subdoc to return.

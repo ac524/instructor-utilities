@@ -1,4 +1,4 @@
-const roles = require("~crsm/config/permissions/roles");
+const roles = require("../../../../../config/permissions/roles");
 
 module.exports = {
 

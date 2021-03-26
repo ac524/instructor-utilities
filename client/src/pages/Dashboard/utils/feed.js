@@ -1,8 +1,14 @@
 import { useState } from "react";
 
 import { useDashboardDispatch, getDashboardAction as gda, useClassroom } from "pages/Dashboard/store";
-import { ADD_STUDENT_FEED_ITEMS, UPDATE_STUDENT } from "../store/actionsNames";
+import { ADD_STUDENT_FEED_ITEMS, DELETE_STUDENT_FEED_ITEMS, UPDATE_STUDENT, UPDATE_STUDENT_FEED_ITEMS } from "../store/actionsNames";
 import { useSocket } from "utils/socket.io";
+
+const actionsMap = {
+    push: ADD_STUDENT_FEED_ITEMS,
+    update: UPDATE_STUDENT_FEED_ITEMS,
+    delete: DELETE_STUDENT_FEED_ITEMS
+}
 
 export const useHandleFeedEventResponse = (feedId) => {
 
@@ -10,11 +16,11 @@ export const useHandleFeedEventResponse = (feedId) => {
     const socket = useSocket();
     const { _id } = useClassroom();
 
-    const [ handleFeedEventResponse ] = useState(() => ( { entries, studentUpdate } ) => {
+    const [ handleFeedEventResponse ] = useState(() => ( { entries, studentUpdate }, action = "push" ) => {
 
         if( entries ) {
-            dispatch( gda( ADD_STUDENT_FEED_ITEMS, entries ) );
-            socket.emit( `${feedId}:push`, entries );
+            dispatch( gda( actionsMap[action], entries ) );
+            socket.emit( `${feedId}:${action}`, entries );
         }
 
         if( studentUpdate ) {

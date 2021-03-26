@@ -1,6 +1,6 @@
 const { InvalidUserError } = require("../../config/errors");
 
-module.exports = async ( req, res, next ) => {
+const isRoomMember = async ( req, res, next ) => {
 
     try {
 
@@ -20,3 +20,5 @@ module.exports = async ( req, res, next ) => {
     }
 
 }
+
+module.exports = isRoomMember;
