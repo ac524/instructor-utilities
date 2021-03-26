@@ -1,7 +1,7 @@
 import { getDashboardAction as gda } from "./";
 import { useDashboardDispatch } from "./getters";
 import { useEffect } from "react";
-import { ADD_STUDENT_FEED_ITEMS, SET_CLASSROOM, SET_CR_AND_PERMS, SET_STUDENT_FEED } from "./actionsNames";
+import { ADD_STUDENT_FEED_ITEMS, DELETE_STUDENT_FEED_ITEMS, SET_CLASSROOM, SET_CR_AND_PERMS, SET_STUDENT_FEED, UPDATE_STUDENT_FEED_ITEMS } from "./actionsNames";
 import api from "utils/api";
 import { useReadyStep } from "utils/ready";
 import { useSocket } from "utils/socket.io";
@@ -65,11 +65,15 @@ export const useStudentFeedLoader = ( feedId ) => {
         if( !feedId ) return dispatch(gda( SET_STUDENT_FEED, null ));
 
         const addItems = ( message ) => dispatch( gda( ADD_STUDENT_FEED_ITEMS, message ) );
+        const updateItems = ( message ) => dispatch( gda( UPDATE_STUDENT_FEED_ITEMS, message ) );
+        const deleteItems = ( message ) => dispatch( gda( DELETE_STUDENT_FEED_ITEMS, message ) );
 
         const connectFeed = async () => {
             dispatch( gda( SET_STUDENT_FEED, (await api.getFeedItems(feedId)).data ) );
             socket.emit( "join:feed", feedId );
             socket.on( "feed:push", addItems );
+            socket.on( "feed:update", updateItems );
+            socket.on( "feed:delete", deleteItems );
         };
 
         try {
