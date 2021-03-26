@@ -18,12 +18,9 @@ export const useHandleFeedEventResponse = (feedId) => {
 
     const [ handleFeedEventResponse ] = useState(() => ( { entries, studentUpdate }, action = "push" ) => {
 
-        console.log(action,actionsMap[action], entries );
-
         if( entries ) {
             dispatch( gda( actionsMap[action], entries ) );
-
-            if(action === "push") socket.emit( `${feedId}:push`, entries );
+            socket.emit( `${feedId}:${action}`, entries );
         }
 
         if( studentUpdate ) {
