@@ -1,18 +1,9 @@
-import React, { useEffect, useState } from "react";
-
-import {
-    Button
-} from "react-bulma-components";
-
-import { getDashboardAction as gda, useDashboardDispatch, useStaffByRole } from "pages/Dashboard/store";
-import Form from "components/Form";
+import { useEffect, useState } from "react";
+import { useStaffByRole } from "pages/Dashboard/store";
 import { createValidator } from "utils/validation";
-import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
-import api from "utils/api";
-import { useSocket } from "utils/socket.io";
 
-const validateStudentData = createValidator({
+export const validateStudentData = createValidator({
     filters: {
         priorityLevel: value => parseInt(value),
         assignedTo: value => value || null
@@ -94,71 +85,3 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
     return fields;
     
 }
-
-const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
-
-    const dispatch = useDashboardDispatch();
-    const fields = useStudentSettingsFormFields( student, isBulkCreate );
-    const { _id } = student;
-    const socket = useSocket();
-
-    const handleSubmit = async (data, setErrors) => {
-
-        try {
-
-            if( _id ) {
-
-                const dispatchData = gda( UPDATE_STUDENT, { _id, ...data } );
-
-                dispatch(dispatchData);
-
-                await api.updateStudent( _id, data );
-
-                socket.emit( `${roomId}:dispatch`, dispatchData );
-
-            } else {
-
-                if( isBulkCreate ) {
-
-                    const students = data.name.split(/,|\n/).map( name => name.trim() ).filter( name => Boolean(name) ).map( name => ({
-                        ...data,
-                        name
-                    }) );
-                    
-                    const dispatchData = gda( ADD_STUDENTS, (await api.createStudent( { students, roomId } )).data );
-                    dispatch(dispatchData);
-                    socket.emit( `${roomId}:dispatch`, dispatchData );
-
-                } else {
-
-                    const dispatchData = gda( ADD_STUDENT, (await api.createStudent( { ...data, roomId } )).data );
-                    dispatch(dispatchData);
-                    socket.emit( `${roomId}:dispatch`, dispatchData );
-
-                }
-
-            }
-
-            if(afterSubmit) afterSubmit();
-
-        } catch(err) {
-
-            if( err.response ) setErrors( err.response.data );
-
-        }
-
-    }
-
-    const button = <Button color="primary" className="is-light has-shadow-light">{(_id ? "Save" : "Create") + " Student"}</Button>;
-
-    return <Form
-            fields={fields}
-            fieldValueSource={student._id}
-            validation={validateStudentData}
-            onSubmit={handleSubmit}
-            button={button}
-            />;
-
-}
-
-export default SettingsForm;
