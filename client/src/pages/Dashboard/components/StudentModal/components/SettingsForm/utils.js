@@ -26,7 +26,7 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
 
     }, [ ta, setStaffOptionsList ]);
 
-    const studentValue = student || {};
+    const studentValue = student || { meta: {} };
 
     const fields = [
         (
@@ -78,6 +78,12 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
             type: "select",
             options: staffOptionsList,
             value: studentValue.assignedTo || ""
+        },
+        {
+            label: "Github Username",
+            name: "meta.githubUser",
+            type: "text",
+            value: studentValue.meta.githubUser,
         }
     ];
 

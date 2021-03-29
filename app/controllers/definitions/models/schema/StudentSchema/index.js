@@ -41,7 +41,10 @@ const StudentSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  meta: Map,
+  meta: {
+    type: Map,
+    default: {}
+  },
   elevation: {
     type: Number,
     default: 0
