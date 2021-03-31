@@ -1,6 +1,6 @@
 import React from "react";
 import { Editor, EditorState, getDefaultKeyBinding, RichUtils } from "draft-js";
-import "./RichText.css";
+import "./RichText.sass";
 import "../../node_modules/draft-js/dist/Draft.css";
 
 class RichTextEditor extends React.Component {
