@@ -15,6 +15,13 @@ const sharedConfig = {
 };
 
 module.exports = createRouter([
+    ["/",{
+        post: {
+            defaultError: "create the room",
+            validation: roomVal,
+            ctrl: roomCtrl
+        }
+    }],
 
     ["/:roomId", {
         get: {
