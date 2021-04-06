@@ -82,8 +82,8 @@ export const StudentCard = ({ className, student: { _id, name, priorityLevel, as
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
-                <span>{name}</span>
-                <Button aria-label="Edit student" onClick={openEdit} size="small" className="ml-auto"><Icon icon="ellipsis-h" /></Button>
+                <span onClick={openEdit} className="student-name">{name}</span>
+                <input type="checkbox" className="ml-auto"></input>
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />
