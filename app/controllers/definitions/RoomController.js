@@ -28,6 +28,21 @@ class RoomController extends SchemaController {
 
     }
 
+    async createOne( { data, createdBy, ...options }, createConfig = {} ) {
+
+        // TODO extend data.staff with and instructor role. The user's id will come from createdBy._id.
+
+        const newClassroom = super.createOne( {
+            ...options,
+            data
+        }, createConfig );
+
+        // TODO go update the user's classroom list with the new classroom._id.
+
+        return newClassroom
+
+    }
+
     async findOne( options, queryOptions = {} ) {
 
         return super.findOne( options, {
