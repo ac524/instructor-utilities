@@ -1,6 +1,7 @@
 const { Room } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
+const UserController = require("./UserController");
 
 /**
  * TYPE DEFINITION IMPORTS
@@ -29,18 +30,26 @@ class RoomController extends SchemaController {
     }
 
     async createOne( { data, createdBy, ...options }, createConfig = {} ) {
-
-        // TODO extend data.staff with and instructor role. The user's id will come from createdBy._id.
-
-        const newClassroom = super.createOne( {
+      //TODO extend data.staff with and instructor role. The user's id will come from createdBy._id.
+        console.log("\x1b[31m", "Line 34 createdBy:", createdBy);
+        data.staff = {
+            role:"instructor",
+            user: createdBy
+        }
+        
+        const newClassroom = super.createOne(
+        {
             ...options,
-            data
-        }, createConfig );
-
+            data,
+        },
+        createConfig
+        );
         // TODO go update the user's classroom list with the new classroom._id.
+        const UpdateUser = new UserController()
 
-        return newClassroom
-
+        UpdateUser.updateOne( { data: { classrooms:newClassroom._id }, updateOptions: { doc: data.staff } } )
+     
+      return newClassroom;
     }
 
     async findOne( options, queryOptions = {} ) {
@@ -54,12 +63,6 @@ class RoomController extends SchemaController {
         } );
 
     }
-
-    async createOne( data , { save = true } = {} ) {
-        return super.createOne( data, save );
-
-    }
-
     /**
      * @param {GetPermissionsOptions} param0 
      */

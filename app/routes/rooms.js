@@ -1,4 +1,4 @@
-const { register: roomVal } = require("./validation");
+const { room: roomVal } = require("./validation");
 const { room: roomPerm } = require("../config/permissions");
 
 const roomCtrl = require("../controllers/room");
@@ -19,7 +19,7 @@ module.exports = createRouter([
         post: {
             defaultError: "create the room",
             validation: roomVal,
-            ctrl: roomCtrl.binding.createOne
+            ctrl: roomCtrl
         }
     }],
 
