@@ -40,6 +40,11 @@ class RoomController extends SchemaController {
 
     }
 
+    async createOne( data , { save = true } = {} ) {
+        return super.createOne( data, save );
+
+    }
+
     /**
      * @param {GetPermissionsOptions} param0 
      */

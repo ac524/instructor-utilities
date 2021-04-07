@@ -3,10 +3,6 @@ import { useStudentFeed, useStudentFeedLoader } from "pages/Dashboard/store";
 import React, { useEffect, useRef } from "react";
 
 import {
-    Box
-} from "react-bulma-components";
-
-import {
     Comment,
     Created,
     Elevate,
@@ -36,7 +32,7 @@ const ActivtyFeed = ({ student, className = "", style = {}, ...props }) => {
 
         const Entry = typeMap[item.action];
 
-        return <Entry key={item._id} student={student} by={item.by} date={item.date} data={item.data} />
+        return <Entry key={item._id} feedId={feed} _id={item._id} student={student} by={item.by} date={item.date} data={item.data} />
 
     }
 

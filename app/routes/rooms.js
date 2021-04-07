@@ -19,7 +19,7 @@ module.exports = createRouter([
         post: {
             defaultError: "create the room",
             validation: roomVal,
-            ctrl: roomCtrl
+            ctrl: roomCtrl.binding.createOne
         }
     }],
 

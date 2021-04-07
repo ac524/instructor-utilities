@@ -25,6 +25,8 @@ const instructorRole = new Role( "instructor", "Instructor", [
 
     /** FEED COMMENT PERMISSIONS **/
     perms.feedComment.create,
+    perms.feedComment.update,
+    perms.feedComment.delete,
 
     /** FEED ELEVATE PERMISSIONS **/
     perms.feedElevate.create,

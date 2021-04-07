@@ -17,6 +17,8 @@ const taRole = new Role( "ta", "TA", [
 
     /** FEED COMMENT PERMISSIONS **/
     perms.feedComment.create,
+    perms.feedComment.update,
+    perms.feedComment.delete,
 
     /** FEED ELEVATE PERMISSIONS **/
     perms.feedElevate.create,
