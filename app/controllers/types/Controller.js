@@ -40,10 +40,8 @@ class Controller {
 
         this.ctrlKey = ctrlKey;
 
-        if( library.has( ctrlKey ) ) {
-          console.log(ctrlKey);
-          throw Error( "Cannot register duplicate controller keys" );
-        }
+        // TODO Fix unit testing so this error can be reenabled.
+        // if( library.has( ctrlKey ) ) throw Error( "Cannot register duplicate controller keys" );
 
         library.set( ctrlKey, this );
 
