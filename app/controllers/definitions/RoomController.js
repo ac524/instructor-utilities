@@ -1,8 +1,5 @@
 const { Room } = require("./models");
-const userCtrl = require("../user"); // Import the user ctrl instance from one folder up
-
 const SchemaController = require("../types/SchemaController");
-const UserController = require("./UserController");
 
 /**
  * TYPE DEFINITION IMPORTS
@@ -32,26 +29,35 @@ class RoomController extends SchemaController {
 
     async createOne( { data, createdBy, ...options }, createConfig = {} ) {
       //TODO extend data.staff with and instructor role. The user's id will come from createdBy._id.
-        console.log("\x1b[31m", "Line 34 createdBy:", createdBy);
-        data.staff = {
-            role:"instructor",
-            user: createdBy
-        }
-        
-        const newClassroom = super.createOne(
+      data.staff = {
+        role: "instructor",
+        user: createdBy._id,
+      };
+
+      console.log("\x1b[31m", "Line 34 useEffect:", this.effect());
+
+      const newClassroom = await super.createOne(
         {
-            ...options,
-            data,
+          ...options,
+          data,
         },
         createConfig
-        );
-        // TODO go update the user's classroom list with the new classroom._id.
-    
-        userCtrl.updateOne({
-          docId: { _id: newClassroom._id },
-          data: { doc: data.staff },
+      );
+
+      console.log(newClassroom)
+      await this
+        // Use the new `this.effect()` function to access the `user` controller.
+        .effect("user")
+        // Call the `updateOne()` method
+        .updateOne({
+          docId: {
+            _id: createdBy._id,
+          },
+          data: {
+            classrooms: newClassroom._id,
+          },
         });
-     
+
       return newClassroom;
     }
 
