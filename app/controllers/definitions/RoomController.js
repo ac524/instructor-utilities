@@ -1,4 +1,5 @@
 const { Room } = require("./models");
+const userCtrl = require("../user"); // Import the user ctrl instance from one folder up
 
 const SchemaController = require("../types/SchemaController");
 const UserController = require("./UserController");
@@ -45,9 +46,11 @@ class RoomController extends SchemaController {
         createConfig
         );
         // TODO go update the user's classroom list with the new classroom._id.
-        const UpdateUser = new UserController()
-
-        UpdateUser.updateOne( { data: { classrooms:newClassroom._id }, updateOptions: { doc: data.staff } } )
+    
+        userCtrl.updateOne({
+          docId: { _id: newClassroom._id },
+          data: { doc: data.staff },
+        });
      
       return newClassroom;
     }
