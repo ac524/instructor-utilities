@@ -47,7 +47,7 @@ class FeedEntryController extends SubSchemaController {
 
     constructor( action ) {
 
-        super( "item", feedCtrl );
+        super( "item", feedCtrl, action );
 
         this.action = action;
 
