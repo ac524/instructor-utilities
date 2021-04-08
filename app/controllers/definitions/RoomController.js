@@ -54,7 +54,7 @@ class RoomController extends SchemaController {
             _id: createdBy._id,
           },
           data: {
-            classrooms: newClassroom._id,
+            $push :{ classrooms: newClassroom._id}
           },
         });
 
