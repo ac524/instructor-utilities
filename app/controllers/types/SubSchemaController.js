@@ -52,22 +52,13 @@ class SubSchemaController extends Controller {
      * @param {string} key;
      * @param {SchemaController} ctrl 
      */
-    constructor( key, ctrl ) {
+    constructor( key, ctrl, unique = "" ) {
 
-        super();
+        super( `${ctrl.key}-${key}` + (unique && `-${unique}`) );
 
         this.key = key;
         this.prop = key+"s";
         this.ctrl = ctrl;
-
-    }
-
-    /**
-     * @returns {string} - Conjoined key combining the ctrl key + sub ctrl key.
-     */
-    get ctrlKey() {
-
-        return this.ctrl.key + this.key[0].toUpperCase() + this.key.slice(1);
 
     }
 
