@@ -4,8 +4,6 @@ const { User } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
 
-const roomCtrl = require("../room");
-
 const ioEmit = require("../utils/ioEmit");
 
 /**
@@ -96,7 +94,7 @@ class UserController extends SchemaController {
      */
     async getRoomsBasics( { user } ) {
 
-        return await roomCtrl.findMany( { search: { _id: { $in: user.classrooms } } }, { select: "name staff.role staff.user" } );
+        return await this.effect("room").findMany( { search: { _id: { $in: user.classrooms } } }, { select: "name staff.role staff.user" } );
 
     }
 

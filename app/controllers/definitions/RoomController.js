@@ -34,7 +34,6 @@ class RoomController extends SchemaController {
         user: createdBy._id,
       };
 
-      console.log("\x1b[31m", "Line 34 useEffect:", this.effect());
 
       const newClassroom = await super.createOne(
         {
@@ -44,18 +43,15 @@ class RoomController extends SchemaController {
         createConfig
       );
 
-      console.log(newClassroom)
       await this
         // Use the new `this.effect()` function to access the `user` controller.
         .effect("user")
         // Call the `updateOne()` method
         .updateOne({
-          docId: {
-            _id: createdBy._id,
-          },
-          data: {
-            $push :{ classrooms: newClassroom._id}
-          },
+            docId: createdBy._id,
+            data: {
+                $push :{ classrooms: newClassroom._id }
+            },
         });
 
       return newClassroom;

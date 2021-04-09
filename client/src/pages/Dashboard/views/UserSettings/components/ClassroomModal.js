@@ -10,10 +10,11 @@ import {
 } from "react-bulma-components";
 
 import { useStoreDispatch, getStoreAction as gsa } from "store";
-import { REFRESH_USER_ROOMS } from "store/actions";
+import { REFRESH_USER_ROOMS, ADD_USER_ROOM_ID } from "store/actions";
 
 import api from "utils/api";
 import { useAuthorizedUser } from "utils/auth";
+
 
 const validateClassroomData = createValidator({
     validators: {
@@ -82,9 +83,11 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
             try {
 
                 if(!room._id){
-                    //TODO add newClassRoom to state
+ 
                     const newClassRoom = await api.createClassroom(updates);
-                    
+                    dispatch(gsa(ADD_USER_ROOM_ID, newClassRoom._id));
+                    if (afterUpdate) afterUpdate();
+
                     return
                 }
 
