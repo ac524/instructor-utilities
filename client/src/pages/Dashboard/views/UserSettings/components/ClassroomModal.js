@@ -84,7 +84,8 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
                 if(!room._id){
                     //TODO add newClassRoom to state
                     const newClassRoom = await api.createClassroom(updates);
-                    
+                    dispatch(gsa(ADD_USER_ROOM_ID, newClassRoom._id));
+                    if (afterUpdate) afterUpdate();
                     return
                 }
 
