@@ -19,7 +19,7 @@ const roomCtrl = require("../room");
 
 const makeFeed = async (data, createdBy, effect) => {
 
-    const feed = await effect.createOne({ data }, { save: false });
+    const feed = await effect("feed").createOne({ data }, { save: false });
 
     feed.pushItem( createdBy, "create" );
 
@@ -61,7 +61,7 @@ class StudentController extends SubSchemaController {
             in: "students",
           },
           createdBy._id,
-          this.effect("feed")
+          this.effect
         );
 
         return newStudent;

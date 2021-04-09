@@ -14,7 +14,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     if( !feed ) feed = await ctrl.findOwner( { docId: entry._id }, { select: "for" } );
 
-    const student = await studentCtrl.findOne({ docId: feed.for });
+    const student = await ctrl.effect("student").findOne({ docId: feed.for });
 
     const aggKeys = student.getAggregateKeysByAction( entry.action );
 
@@ -22,7 +22,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     const aggUpdate = await student.getFeedAggregateData(aggKeys);
 
-    await studentCtrl.updateOne({ docId: student._id, data: aggUpdate });
+    await ctrl.effect("student").updateOne({ docId: student._id, data: aggUpdate });
 
     return {
         studentUpdate: {
@@ -38,9 +38,9 @@ const formatChangeRes = async (ctrl,entry,feed) => ({
     ...( await updateStudentAggregates(ctrl, entry, feed) ) 
 })
 
-const populateBy = async entry => ({
-    ...entry._doc,
-    by: await userCtrl.findOne( { docId: entry.by }, { select: "name" } )
+const populateBy = async (entry, effect) => ({
+  ...entry._doc,
+  by: await effect("user").findOne({ docId: entry.by }, { select: "name" }),
 });
 
 class FeedEntryController extends SubSchemaController {
@@ -78,7 +78,7 @@ class FeedEntryController extends SubSchemaController {
 
         if( !entry ) return entry;
 
-        return formatChangeRes( this, await populateBy( entry ) );
+        return formatChangeRes( this, await populateBy( entry, this.effect ) );
 
     }
 
@@ -91,7 +91,7 @@ class FeedEntryController extends SubSchemaController {
 
         if( !entry ) return entry;
 
-        return formatChangeRes( this, await populateBy( entry ), feed );
+        return formatChangeRes( this, await populateBy( entry, this.effect ), feed );
 
      }
 
