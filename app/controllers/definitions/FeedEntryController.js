@@ -38,9 +38,9 @@ const formatChangeRes = async (ctrl,entry,feed) => ({
     ...( await updateStudentAggregates(ctrl, entry, feed) ) 
 })
 
-const populateBy = async (entry, effect) => ({
+const populateBy = async (entry, ctrl) => ({
   ...entry._doc,
-  by: await effect("user").findOne({ docId: entry.by }, { select: "name" }),
+  by: await ctrl.effect("user").findOne({ docId: entry.by }, { select: "name" }),
 });
 
 class FeedEntryController extends SubSchemaController {
@@ -78,7 +78,7 @@ class FeedEntryController extends SubSchemaController {
 
         if( !entry ) return entry;
 
-        return formatChangeRes( this, await populateBy( entry, this.effect ) );
+        return formatChangeRes( this, await populateBy( entry, this ) );
 
     }
 
@@ -91,7 +91,7 @@ class FeedEntryController extends SubSchemaController {
 
         if( !entry ) return entry;
 
-        return formatChangeRes( this, await populateBy( entry, this.effect ), feed );
+        return formatChangeRes( this, await populateBy( entry, this ), feed );
 
      }
 
