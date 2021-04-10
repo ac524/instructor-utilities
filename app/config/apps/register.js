@@ -1,4 +1,5 @@
 const appTypes  = require("./registry.json");
+const appTypeLibrary = require("./library");
 
 const appTypeCtrl = require("../../controllers/appType");
 
@@ -15,6 +16,8 @@ const registerAppTypes = async () => {
     // Update existing entries.
     for( let i = 0; i < registered.length; i++ ) {
 
+        appTypeLibrary.set( registered[i]._id, registered[i] );
+
         processed.push( registered[i].type );
 
         const updates = [];
@@ -28,7 +31,7 @@ const registerAppTypes = async () => {
 
             if( registered[i].isDisabled ) updates.push(["isDisabled", false]);
             
-            if( registered[i].name !== appRegistry.name ) updates.push(["name", appRegistry.name]);
+            // if( registered[i].name !== appRegistry.name ) updates.push(["name", appRegistry.name]);
 
         }
 
@@ -41,12 +44,14 @@ const registerAppTypes = async () => {
     // Register new apps.
     for( let i = 0; i < toRegister.length; i++ ) {
 
-        await appTypeCtrl.createOne({
+        const appType = await appTypeCtrl.createOne({
             data: {
                 type: toRegister[i],
-                name: appTypes[toRegister[i]].name
+                // name: appTypes[toRegister[i]].name
             }
         });
+
+        appTypeLibrary.set( appType._id, appType );
 
     }
 
