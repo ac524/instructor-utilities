@@ -8,6 +8,7 @@ import {
 import { useTopbarConfig } from "pages/Dashboard/components/Topbar";
 import UserSettingsForm from "./components/UserSettingsForm";
 import UserClassrooms from "./components/UserClassrooms";
+import NoClassroomNotification from "./components/NoClassroomNotification";
 
 const { Column } = Columns;
 
@@ -22,6 +23,7 @@ const UserSettings = () => {
                     <UserSettingsForm />
                 </Column>
                 <Column>
+                    <NoClassroomNotification />
                     <UserClassrooms />
                 </Column>
             </Columns>
