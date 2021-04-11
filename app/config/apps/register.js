@@ -10,9 +10,6 @@ const registerAppTypes = async () => {
     const processed = [];
     const types = Object.keys( appTypes );
 
-    // console.log(appTypes);
-    // console.log(registered);
-
     // Update existing entries.
     for( let i = 0; i < registered.length; i++ ) {
 
@@ -30,8 +27,6 @@ const registerAppTypes = async () => {
         } else {
 
             if( registered[i].isDisabled ) updates.push(["isDisabled", false]);
-            
-            // if( registered[i].name !== appRegistry.name ) updates.push(["name", appRegistry.name]);
 
         }
 
@@ -47,7 +42,6 @@ const registerAppTypes = async () => {
         const appType = await appTypeCtrl.createOne({
             data: {
                 type: toRegister[i],
-                // name: appTypes[toRegister[i]].name
             }
         });
 
