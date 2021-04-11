@@ -15,7 +15,7 @@ const studentValidation = new ValidationSchema("student", {
     name: { type: "string", empty: false },
     priorityLevel: { type: "number", min: 1, max: 10 },
     assignedTo: { type: "objectID", nullable: true },
-    meta: { type: "object" }
+    meta: { type: "object", optional: true }
 });
 
 module.exports = studentValidation;
