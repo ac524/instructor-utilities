@@ -1,5 +1,4 @@
 const { Room } = require("./models");
-
 const SchemaController = require("../types/SchemaController");
 
 /**
@@ -28,6 +27,36 @@ class RoomController extends SchemaController {
 
     }
 
+    async createOne( { data, createdBy, ...options }, createConfig = {} ) {
+      
+      if(createdBy){
+        data.staff = {
+          role: "instructor",
+          user: createdBy._id,
+        };
+      }
+      
+      const newClassroom = await super.createOne(
+        {
+          ...options,
+          data,
+        },
+        createConfig
+      );
+
+      if(createdBy){
+        await this
+          .effect("user")
+          .updateOne({
+            docId: createdBy._id,
+            data: {
+              $push: { classrooms: newClassroom._id },
+            },
+          });
+      }
+      return newClassroom;
+    }
+
     async findOne( options, queryOptions = {} ) {
 
         return super.findOne( options, {
@@ -39,7 +68,6 @@ class RoomController extends SchemaController {
         } );
 
     }
-
     /**
      * @param {GetPermissionsOptions} param0 
      */
