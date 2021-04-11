@@ -9,7 +9,13 @@
     "githubProfiles": {
         "name": "Github Profiles",
         "fields": {
-            "student": []
+            "student": [
+                {
+                    "label": "Github Username",
+                    "name": "githubUser",
+                    "type": "text"
+                }
+            ]
         }
     }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStaffByRole } from "pages/Dashboard/store";
+import { useClassroom, useStaffByRole } from "pages/Dashboard/store";
 import { createValidator } from "utils/validation";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
@@ -15,6 +15,26 @@ export const validateStudentData = createValidator({
 
 export const getStaffOptionsList = staff => [ { value: "", label: "Unassigned" }, ...staff.map(({ _id, user: { name } }) => ({ value: _id, label: name })) ];
 
+export const useStudentAppFields = ( studentValues ) => {
+
+    const { apps } = useClassroom();
+
+    return apps.reduce( (fields, app) => {
+
+        if(!app.fields.student.length) return fields;
+
+        return [ ...fields, ...app.fields.student.map((field) => {
+            return {
+                ...field,
+                name: `meta.${field.name}`,
+                value: studentValues.meta[field.name],
+            }
+        }) ]
+
+    }, []);
+
+}
+
 export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
 
     const { ta } = useStaffByRole();
@@ -27,6 +47,8 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
     }, [ ta, setStaffOptionsList ]);
 
     const studentValue = student || { meta: {} };
+
+    const appFields = useStudentAppFields( studentValue );
 
     const fields = [
         (
@@ -79,12 +101,7 @@ export const useStudentSettingsFormFields = ( student, isBulkCreate ) => {
             options: staffOptionsList,
             value: studentValue.assignedTo || ""
         },
-        {
-            label: "Github Username",
-            name: "meta.githubUser",
-            type: "text",
-            value: studentValue.meta.githubUser,
-        }
+        ...(isBulkCreate ? [] : appFields)
     ];
 
     // Student form fields configuration.

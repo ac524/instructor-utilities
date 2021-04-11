@@ -16,7 +16,7 @@ const registerAppTypes = async () => {
     // Update existing entries.
     for( let i = 0; i < registered.length; i++ ) {
 
-        appTypeLibrary.set( registered[i]._id, registered[i] );
+        appTypeLibrary.set( registered[i]._id.toString(), registered[i] );
 
         processed.push( registered[i].type );
 
@@ -51,7 +51,7 @@ const registerAppTypes = async () => {
             }
         });
 
-        appTypeLibrary.set( appType._id, appType );
+        appTypeLibrary.set( appType._id.toString(), appType );
 
     }
 

@@ -33,7 +33,8 @@ class RoomController extends SchemaController {
         return super.findOne( options, {
             populate: [
                 ["staff.user", "name email date"],
-                "invites.token"
+                "invites.token",
+                "apps"
             ],
             ...queryOptions
         } );
