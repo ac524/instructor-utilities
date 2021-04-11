@@ -5,5 +5,17 @@
             "selected": [],
             "disabled": []
         }
+    },
+    "githubProfiles": {
+        "name": "Github Profiles",
+        "fields": {
+            "student": [
+                {
+                    "label": "Github Username",
+                    "name": "githubUser",
+                    "type": "text"
+                }
+            ]
+        }
     }
 }

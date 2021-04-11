@@ -36,7 +36,7 @@ export const AppTypeCard = ( { appType } ) => {
     const [ , dispatch ] = useDashboardContext();
     const socket = useSocket();
     const { _id, apps: installedApps } = useClassroom();
-    const isInstalled = installedApps.includes( appType._id );
+    const isInstalled = -1 < installedApps.findIndex( (thisAppType) => thisAppType._id === appType._id );
     const icon = isInstalled ? "check" : "download";
     const color = isInstalled ? "success" : "primary";
     const text = isInstalled ? "Installed" : "Available";
@@ -47,7 +47,7 @@ export const AppTypeCard = ( { appType } ) => {
 
             const { data: app } = await api.installApp( _id, appType._id );
 
-            const action = gda( ADD_APP, app.type._id );
+            const action = gda( ADD_APP, app.type );
             dispatch(action);
             socket.emit("room:dispatch", action);
 

@@ -1,4 +1,5 @@
-const Schema = require("mongoose").Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 const { ObjectId } = Schema.Types;
 
 /**
@@ -41,7 +42,7 @@ const RoomSchema = new Schema({
     },
     apps: [{
       type: ObjectId,
-      ref:"App",
+      ref:"AppType",
     }],
     date: {
       type: Date,
