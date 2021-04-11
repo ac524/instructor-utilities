@@ -28,12 +28,14 @@ class RoomController extends SchemaController {
     }
 
     async createOne( { data, createdBy, ...options }, createConfig = {} ) {
-      //TODO extend data.staff with and instructor role. The user's id will come from createdBy._id.
-      data.staff = {
-        role: "instructor",
-        user: createdBy._id,
-      };
-
+      
+      if(createdBy){
+        data.staff = {
+          role: "instructor",
+          user: createdBy._id,
+        };
+      }
+      
       const newClassroom = await super.createOne(
         {
           ...options,
@@ -42,17 +44,16 @@ class RoomController extends SchemaController {
         createConfig
       );
 
-      await this
-        // Use the new `this.effect()` function to access the `user` controller.
-        .effect("user")
-        // Call the `updateOne()` method
-        .updateOne({
-          docId: createdBy._id,
-          data: {
-            $push :{ classrooms: newClassroom._id}
-          },
-        });
-
+      if(createdBy){
+        await this
+          .effect("user")
+          .updateOne({
+            docId: createdBy._id,
+            data: {
+              $push: { classrooms: newClassroom._id },
+            },
+          });
+      }
       return newClassroom;
     }
 
