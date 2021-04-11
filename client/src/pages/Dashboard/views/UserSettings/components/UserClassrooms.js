@@ -36,33 +36,40 @@ const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
     }
 
     return (
-        <div {...props}>
-            <Heading renderAs="h3" size={6} className="is-primary">Instructor Rooms</Heading>
-            <div className="has-flex-rows is-bordered">
-            {
-                rooms.map( room => (
-                    <div key={room._id} className="is-flex p-2" style={{alignItems:"center"}}>
-                        <span>{room.name}</span>
-                        <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
-                            {
-                                onEdit && (
-                                    <Button size="small" className="dropdown-item" onClick={()=>onEdit(room._id)}>
-                                        <Icon icon="cog" />
-                                        <span>Manage</span>
-                                    </Button>
-                                )
-                            }
-                            <Button size="small" className="dropdown-item" onClick={()=>handleArchiveRoom(room._id)}>
-                                <Icon icon="archive" />
-                                <span>Archive</span>
-                            </Button>
-                        </Dropdown>
-                    </div>
-                ) )
-            }
-            </div>
+      <div {...props}>
+        <Heading renderAs="h3" size={6} className="is-primary is-flex is-justify-content-space-between">
+          <span>Instructor Rooms</span>
+          <Button size="small" class="is-primary button is-small" onClick={() => onEdit(null)}>
+            <Icon icon="plus-circle" />
+            <span>Create Classroom</span>
+          </Button>
+        </Heading>
+
+        <div className="has-flex-rows is-bordered">
+          {
+            rooms.map((room) => (
+              <div key={room._id} className="is-flex p-2" style={{ alignItems: "center" }}>
+                <span>{room.name}</span>
+                <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
+                  {
+                    onEdit && (
+                      <Button size="small" className="dropdown-item" onClick={() => onEdit(room._id)}>
+                        <Icon icon="cog" />
+                        <span>Manage</span>
+                      </Button>
+                    )
+                  }
+                  <Button size="small" className="dropdown-item" onClick={() => handleArchiveRoom(room._id)}>
+                    <Icon icon="archive" />
+                    <span>Archive</span>
+                  </Button>
+                </Dropdown>
+              </div>
+            ) )
+          }
         </div>
-    )
+      </div>
+    );
 
 }
 
