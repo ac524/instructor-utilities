@@ -13,6 +13,10 @@
     "axios": "^0.21.1",
     "bulma": "^0.9.2",
     "bulma-slider": "^2.0.4",
+    "dompurify": "^2.2.7",
+    "draft-convert": "^2.1.10",
+    "draft-js": "^0.11.7",
+    "draft-js-plugins-utils": "^2.0.3",
     "jwt-decode": "^3.1.2",
     "luxon": "^1.26.0",
     "node-sass": "^5.0.0",
@@ -20,6 +24,7 @@
     "react-bulma-components": "^3.4.0",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.1",
+    "react-draft-wysiwyg": "^1.14.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "socket.io-client": "^3.1.1"
