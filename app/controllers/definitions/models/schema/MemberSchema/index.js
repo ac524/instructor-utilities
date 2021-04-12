@@ -24,6 +24,10 @@ const MemberSchema = new Schema({
         ref:'User',
         required: true
     },
+    meta: {
+      type: Map,
+      default: {}
+    },
     date: {
       type: Date,
       default: Date.now
