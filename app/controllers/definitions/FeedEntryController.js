@@ -14,7 +14,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     if( !feed ) feed = await ctrl.findOwner( { docId: entry._id }, { select: "for" } );
 
-    const student = await ctrl.effect("student").findOne({ docId: feed.for });
+    const student = await ctrl.effect("room-student").findOne({ docId: feed.for });
 
     const aggKeys = student.getAggregateKeysByAction( entry.action );
 
@@ -22,7 +22,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     const aggUpdate = await student.getFeedAggregateData(aggKeys);
 
-    await ctrl.effect("student").updateOne({ docId: student._id, data: aggUpdate });
+    await ctrl.effect("room-student").updateOne({ docId: student._id, data: aggUpdate });
 
     return {
         studentUpdate: {
@@ -102,7 +102,7 @@ class FeedEntryController extends SubSchemaController {
         if( !entry ) return entry;
 
         // TODO Find a way to rework underlying sub schema code to allow a populate for sub fields.
-        return populateBy( entry );
+        return populateBy( entry, this );
 
         // return super.findOne( options, {
         //     populate: "items.by",
