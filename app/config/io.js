@@ -45,9 +45,9 @@ class SocketDispatchLibrary {
         this.socket = socket;
     }
 
-    generate(room,action) {
-        this.library[room] = dispatch => {
-            this.socket.to(room).emit(action, dispatch);
+    generate(room,action,key) {
+        this.library[`${room}:${action}`] = dispatch => {
+            this.socket.to(room).emit(`${key}:${action}`, dispatch);
         }
         return this;
     }
@@ -65,15 +65,15 @@ class SocketDispatchLibrary {
 const privateChannels = {
     room: {
         authJoin : async ( userId, roomId ) => userId && await isStaffMember( userId, roomId ),
-        action: "dispatch"
+        actions: [ "dispatch" ]
     },
     feed: {
         authJoin : async ( userId, feedId ) => userId && await isFeedMember( userId, feedId ),
-        action: "push"
+        actions: [ "push", "update", "delete" ]
     },
     user: {
         authJoin : async ( userId, userId2 ) => userId && userId === userId2,
-        action: "update"
+        actions: [ "update" ]
     }
 };
 
@@ -100,18 +100,26 @@ const configureSocket = async socket => {
         const channelConfig = privateChannels[key];
 
         const connectItemActions = async itemId => {
-            
+
+            // console.log(itemId);
+
             // Authorize the join if a method is provided
             if( !channelConfig.authJoin || await channelConfig.authJoin( socketUserId, itemId ) ) {
-                
+
                 const roomName = `${key}:${itemId}`;
                 
                 socket.join( roomName );
 
-                if(!dispatchLib.has( roomName )) dispatchLib.generate( roomName, `${key}:${channelConfig.action}` );
+                for( action of  channelConfig.actions) {
 
-                // Connect the socket to the private messaging channel.
-                socket.on(`${itemId}:${channelConfig.action}`, dispatchLib.get( roomName ) );
+                    const socketFeedKey = `${roomName}:${action}`;
+
+                    if(!dispatchLib.has( socketFeedKey )) dispatchLib.generate( roomName, action, key );
+
+                    // Connect the socket to the private messaging channel.
+                    socket.on(`${itemId}:${action}`, dispatchLib.get( socketFeedKey ) );
+
+                }
 
             }
           
@@ -126,8 +134,13 @@ const configureSocket = async socket => {
 
             socket.leave( roomName );
 
-            // Disconnect the socket from the private messaging channel.
-            if(dispatchLib.has( roomName )) socket.off(`${itemId}:${channelConfig.action}`, dispatchLib.get( roomName ) );
+            for( action of  channelConfig.actions) {
+
+                const socketFeedKey = `${roomName}:${action}`;
+                // Disconnect the socket from the private messaging channel.
+                if(dispatchLib.has( socketFeedKey )) socket.off(`${itemId}:${action}`, dispatchLib.get( socketFeedKey ) );
+
+            }
 
         }
 
