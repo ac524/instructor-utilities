@@ -36,7 +36,8 @@ import {
     faTrashAlt,
     faEye,
     faEyeSlash,
-    faSquare
+    faSquare,
+    faEdit
 } from '@fortawesome/free-regular-svg-icons';
 
 export default () => library.add(
@@ -73,7 +74,8 @@ export default () => library.add(
     faTrashAlt,
     faEye,
     faEyeSlash,
-    faSquare
+    faSquare,
+    faEdit
 
     // faWeight
     // faSortAmountDownAlt

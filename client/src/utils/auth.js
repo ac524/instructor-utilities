@@ -4,8 +4,7 @@ import jwt_decode from "jwt-decode";
 import api from "./api";
 import { useStoreContext, getStoreAction as gsa } from "store";
 import { LOGIN_USER, LOGOUT_USER } from "store/actions";
-import { useHistory } from "react-router-dom";
-import { createValidator } from "components/Form";
+import { createValidator } from "./validation";
 import { useSocket } from "./socket.io";
 
 const setAuthToken = token => {
@@ -45,8 +44,6 @@ export const useAuthTokenStore = () => {
     const [ isDone, setIsDone ] = useState(false);
     const socket = useSocket();
 
-    const history = useHistory();
-
     useEffect(() => {
 
         if( !socket || isDone ) return;
@@ -71,9 +68,6 @@ export const useAuthTokenStore = () => {
             // Logout user
             setAuthToken( false );
             dispatch(gsa( LOGOUT_USER ));
-            
-            // Redirect to login
-            history.push("/");
 
         }
         
@@ -111,7 +105,7 @@ export const useAuthTokenStore = () => {
 
         }
 
-    }, [ socket, dispatch, history, isDone ])
+    }, [ socket, dispatch, isDone ])
 
     return isDone;
 
@@ -166,7 +160,6 @@ export const useLogout = () => {
 
     const [ ,dispatch ] = useStoreContext();
     const socket = useSocket();
-    const history = useHistory();
 
     return () => {
 
@@ -174,8 +167,6 @@ export const useLogout = () => {
         dispatch(gsa(LOGOUT_USER));
 
         socket.emit( "unauthorize" );
-
-        history.push("/");
 
     }
     

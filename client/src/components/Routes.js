@@ -5,17 +5,17 @@ import Pages from "pages";
 
 import { useIsAuthenticated, useAuthorizedUser } from "utils/auth";
 
-export const GuestRoute = ({ children, redirectTo = "/", ...props }) => {
+export const GuestRoute = ({ component: Component, children, redirectTo = "/", ...props }) => {
 
     const isAuth = useIsAuthenticated();
 
-    const render = ({ location }) => {
-        return isAuth
+    const render = ({ location }) => (
+        isAuth
         
             ? <Redirect to={{ pathname: redirectTo, state: { from: location } }} />
             
-            : children;
-    }
+            : (Component ? <Component /> : children)
+    );
 
     return (
         <Route
@@ -26,15 +26,11 @@ export const GuestRoute = ({ children, redirectTo = "/", ...props }) => {
 
 }
 
-export const PrivateRoute = ({ children, redirectTo = "/", ...props }) => {
+export const PrivateRoute = ({ component: Component, children, redirectTo = "/", ...props }) => {
 
     const isAuth = useIsAuthenticated();
 
-    const render = () => {
-
-        return isAuth ? children : <Pages.NotFound />;
-
-    }
+    const render = () => isAuth ? (Component ? <Component /> : children) : <Pages.NotFound />;
 
     return (
         <Route
@@ -47,9 +43,17 @@ export const PrivateRoute = ({ children, redirectTo = "/", ...props }) => {
 
 const Routes = () => {
 
+    let guestRedirect
+
     const authUser = useAuthorizedUser();
 
-    const homeRedirect = authUser ? `/${authUser.classrooms[0]}` : "/";
+    if(!authUser) {
+        guestRedirect = "/";
+    } else if(authUser.classrooms.length) {
+        guestRedirect = `/${authUser.classrooms[0]}`;
+    } else {
+        guestRedirect = "/settings";
+    }
 
     return (
         <Switch>
@@ -57,9 +61,12 @@ const Routes = () => {
             <Route path="/privacy" exact component={Pages.Privacy} />
             <Route path="/validate-email/:token" exact component={Pages.ValidateEmail} />
             <Route path="/invite/:token" exact component={Pages.Invite} />
-            <GuestRoute path="/register" exact><Pages.Register /></GuestRoute>
-            <GuestRoute path="/" exact redirectTo={homeRedirect}><Pages.Home /></GuestRoute>
-            <PrivateRoute path="/:roomId"><Pages.Dashboard /></PrivateRoute>
+
+            <GuestRoute path="/register" exact redirectTo={guestRedirect} component={Pages.Register} />
+            <GuestRoute path="/" exact redirectTo={guestRedirect} component={Pages.Home}/>
+
+            <PrivateRoute path="/:roomId" component={Pages.Dashboard} />
+            
             <Route path="*" component={Pages.NotFound} />
         </Switch>
     )

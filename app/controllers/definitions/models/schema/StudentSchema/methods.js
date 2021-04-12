@@ -36,13 +36,10 @@ const feedAggregatesFilter = include => agg => !include || include.includes( agg
 
 module.exports = {
 
-    getFeedAggregate: async function( includes ) {
+    getAggregateKeysByAction( action ) {
 
-        return {
-          ...this.toObject(),
-          ...(await this.getFeedAggregateData( includes ))
-        }
-      
+        return feedAggregates.reduce( (keys, agg) => agg.includes.includes(action) ? [ ...keys, agg.key ] : keys, [] );
+
     },
 
     getFeedAggregateData: async function( include ) {

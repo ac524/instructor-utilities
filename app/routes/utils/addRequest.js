@@ -1,7 +1,7 @@
-const ValidationSchema = require("~crsm/routes/validation/ValidationSchema");
-const PermissionSet = require("~crsm/config/permissions/PermissionSet");
-const SchemaController = require("~crsm/controllers/types/SchemaController");
-const SubSchemaController = require("~crsm/controllers/types/SubSchemaController");
+const ValidationSchema = require("../validation/ValidationSchema");
+const PermissionSet = require("../../config/permissions/PermissionSet");
+const SchemaController = require("../../controllers/types/SchemaController");
+const SubSchemaController = require("../../controllers/types/SubSchemaController");
 
 const createControllerHandler = require("../middleware/createControllerHandler");
 const createCheckPermission = require("../middleware/createCheckPermission");
@@ -18,7 +18,8 @@ const validationMap = {
 const schemaCtrlMap = {
     post: ctrl => [ ctrl.binding.createOne, {
         keyMap: {
-            body: "data"
+            body: "data",
+            user: "createdBy"
         }
     } ],
     get: ctrl => [ ctrl.binding.findOne, {
@@ -46,7 +47,8 @@ const subSchemaCtrlMap = {
     post: subCtrl => [ subCtrl.binding.createOne, {
         keyMap: {
             body: "data",
-            [`${subCtrl.ctrl.key}Id`]: "belongsTo"
+            [`${subCtrl.ctrl.key}Id`]: "belongsTo",
+            user: "createdBy"
         }
     } ],
     get: subCtrl => [ subCtrl.binding.findOne, {

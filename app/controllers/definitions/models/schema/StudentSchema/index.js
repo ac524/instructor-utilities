@@ -3,6 +3,8 @@ const { ObjectId } = Schema.Types;
 
 const methods = require("./methods")
 
+const FeedEntrySchema = require("../FeedEntrySchema");
+
 /**
  * @typedef {Object} StudentSchema
  * @property {ObjectId} _id
@@ -12,7 +14,7 @@ const methods = require("./methods")
  * @property {ObjectId} feed
  * 
  * @property {*} getFeedAggregateData
- * @property {*} getFeedAggregate
+ * @property {*} getAggregateKeysByAction
  * 
  * @typedef {import('mongoose').Document & StudentSchema} StudentDocument
  */
@@ -38,11 +40,16 @@ const StudentSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  elevation: {
+    type: Number,
+    default: 0
+  },
+  recentComments: [ FeedEntrySchema ]
 });
 
-StudentSchema.methods.getFeedAggregateData = methods.getFeedAggregateData;
+StudentSchema.methods.getAggregateKeysByAction = methods.getAggregateKeysByAction;
 
-StudentSchema.methods.getFeedAggregate = methods.getFeedAggregate;
+StudentSchema.methods.getFeedAggregateData = methods.getFeedAggregateData;
 
 module.exports = StudentSchema;

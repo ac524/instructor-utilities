@@ -107,6 +107,18 @@
 
 .button
     transition: background-color .3s ease, color .3s ease, border-color .3s ease
+    
+    &.is-text-link
+        border: none
+        background: transparent !important
+        color: $primary
+        padding: 0
+        font-size: inherit
+        line-height: inherit
+        height: auto
+
+        .icon:first-child:last-child
+            margin: 0
 
 @media screen and (max-width: 768px)
     .button.is-icon-only-mobile

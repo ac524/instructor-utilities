@@ -13,7 +13,10 @@ const getPrefix = file => file[0] === "_" ? "" : "/" + file.substr(0, file.lengt
 
 const routes = Router();
 
-// Read the current director and load found modules into the controllers list.
+/**
+ * Read the current directory and load found modules into the controllers list. File
+ * names not prefixed with an `_` will be used as part of the path file.
+ */
 fs
   .readdirSync(__dirname)
   .filter(filterFiles)

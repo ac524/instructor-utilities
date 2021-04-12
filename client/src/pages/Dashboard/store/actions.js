@@ -43,10 +43,16 @@ import {
     EDIT_STUDENT,
     SET_STUDENT_FEED,
     ADD_STUDENT_FEED_ITEM,
-    ADD_STUDENT_FEED_ITEMS, ADD_STUDENTS
+    ADD_STUDENT_FEED_ITEMS,
+    UPDATE_STUDENT_FEED_ITEM,
+    UPDATE_STUDENT_FEED_ITEMS,
+    DELETE_STUDENT_FEED_ITEM,
+    DELETE_STUDENT_FEED_ITEMS,
+    ADD_STUDENTS
 } from "./actionsNames";
 
 const makePermMap = permissions => new Map( permissions.map( perm => [perm, 1] ) );
+const makeDocIdMap = docList => new Map( docList.map( doc => [ doc._id, doc ] ) );
 
 export default {
     /**
@@ -164,5 +170,35 @@ export default {
     [ADD_STUDENT_FEED_ITEMS]: ( state, payload ) => ({
         ...state,
         studentFeed: [ ...state.studentFeed, ...payload ]
-    })
+    }),
+    [UPDATE_STUDENT_FEED_ITEM]: ( state, entryToUpdate ) => ({
+        ...state,
+        studentFeed: state.studentFeed.map((thisEntry) => thisEntry._id === entryToUpdate._id ? entryToUpdate : thisEntry)
+    }),
+    [UPDATE_STUDENT_FEED_ITEMS]: ( state, itemsToUpdate ) => {
+
+        console.log("UPDATE");
+
+        const updateIdMap = makeDocIdMap(itemsToUpdate);
+
+        return {
+            ...state,
+            studentFeed: state.studentFeed.map((item) => updateIdMap.has(item._id) ? updateIdMap.get(item._id) : item)
+        }
+    },
+    [DELETE_STUDENT_FEED_ITEM]: ( state, entryToDelete ) => ({
+        ...state,
+        studentFeed: state.studentFeed.filter(({_id}) => _id !== entryToDelete._id)
+    }),
+    [DELETE_STUDENT_FEED_ITEMS]: ( state, entriesToDelete ) => {
+
+        const deleteIdMap = makeDocIdMap(entriesToDelete);
+
+        console.log("DELETE", deleteIdMap);
+
+        return {
+            ...state,
+            studentFeed: state.studentFeed.filter(({_id}) => !deleteIdMap.has(_id))
+        }
+    },
 }
