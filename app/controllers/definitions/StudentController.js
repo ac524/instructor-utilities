@@ -27,6 +27,14 @@ const makeFeed = async (data, createdBy, effect) => {
 
 }
 
+const mapMetaData = (ctrl,metaData) => {
+    return Object.fromEntries(
+        Object
+            .entries(metaData)
+            .map( ([key,value]) => [`${ctrl.prop}.$.meta.${key}`,value])
+    );
+}
+
 class StudentController extends SubSchemaController {
 
     constructor() {
@@ -65,6 +73,22 @@ class StudentController extends SubSchemaController {
         );
 
         return newStudent;
+
+    }
+
+    /**
+     * @param {import("../types/SubSchemaController").UpdateSubDocOptions} param0
+     * @returns {Object}
+     */
+    async updateOne( { data: { meta, ...data }, ...options } ) {
+
+        return super.updateOne({
+            ...options,
+            data: {
+                ...data,
+                ...(meta ? { $set: mapMetaData(this,meta) } : {})
+            }
+        });
 
     }
 

@@ -65,8 +65,6 @@ export const useClassroomModalLoader = (roomId) => {
 
 export const ClassroomForm = ({ room, afterUpdate }) => {
 
-    const {_id} = useAuthorizedUser();
-
     const dispatch = useStoreDispatch();
 
     const handleSubmit = async (data, setErrors) => {
@@ -83,7 +81,7 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
             try {
 
                 if(!room._id){
- 
+                    
                     const newClassRoom = await api.createClassroom(updates);
                     dispatch(gsa(ADD_USER_ROOM_ID, newClassRoom._id));
                     if (afterUpdate) afterUpdate();
@@ -129,8 +127,6 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
 const ClassroomModal = ( { roomId=false, onClose } ) => {
     
     const room = useClassroomModalLoader( roomId );
-    // const createRoom;
-    // if (room === {}) createNewClassroom()
     return (
         <Modal
             show={false !== roomId}
