@@ -141,12 +141,31 @@ class SubSchemaController extends Controller {
      */
     async updateOne( { docId, data } ) {
 
+        const {
+            $set,
+            $unset,
+            $push,
+            $pull,
+            ...docData
+        } = data;
+
+        const modifiers = {};
+        if($unset) modifiers.$unset = $unset;
+        if($push) modifiers.$push = $push;
+        if($pull) modifiers.$pull = $pull;
+
         return (
 
             // Find and update the target subdoc.
             await this.ctrl.updateOne({
                 search: { [`${this.prop}._id`]: docId },
-                data: this.mapSubDocKeys( data, true )
+                data: {
+                    $set: {
+                        ...this.mapSubDocKeys(  docData, true ),
+                        ...$set
+                    },
+                    ...modifiers
+                }
             }, {
                 // Select the subdoc list - TODO figure out how to not have to select the entire sub doc list here. The "potential" flag ".$" doesn't work with the { new: true } flag on the mongoose query.
                 select: this.prop
