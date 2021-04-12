@@ -37,6 +37,12 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
     return (
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
+            <Button className="ml-2">
+                <span>Adjust Priority</span>
+            </Button>
+            <Button className="ml-2">
+                <span>Reassign</span>
+            </Button>
             <Input
                 className="ml-auto"
                 type="text"
