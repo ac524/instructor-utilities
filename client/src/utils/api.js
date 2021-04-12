@@ -1,246 +1,352 @@
 import axios from "axios";
 
 class API {
+  axios;
 
-    axios;
+  constructor() {
+    this.axios = axios.create();
+  }
 
-    constructor() {
+  setHeader(name, value) {
+    if (value) this.axios.defaults.headers.common[name] = value;
+    else delete this.axios.defaults.headers.common[name];
+  }
 
-        this.axios = axios.create();
+  /**
+   * Classroom Routes
+   */
 
-    }
+  async getClassroom(roomId) {
+    return this.axios.get(`/api/rooms/${roomId}`);
+  }
 
-    setHeader( name, value ) {
+  async getClassroomPerms(roomId) {
+    return this.axios.get(`/api/rooms/${roomId}/permissions`);
+  }
 
-        if( value )
+  async updateClassroom(roomId, data) {
+    return this.axios.patch(`/api/rooms/${roomId}`, data);
+  }
 
-            this.axios.defaults.headers.common[name] = value;
+  async createClassroom(data) {
+    return this.axios.post(`/api/rooms/`, data);
+  }
 
-        else
+  /**
+   * Invite Routes
+   */
 
-            delete this.axios.defaults.headers.common[name];
+  async createInvite(roomId, data) {
+    return this.axios.post(`/api/invites/${roomId}`, data);
+  }
 
-    }
+  async deleteInvite(roomId, inviteId) {
+    return this.axios.delete(`/api/invites/${roomId}/${inviteId}`);
+  }
 
-    /**
-     * Classroom Routes
-     */
+  async acceptInvite(token) {
+    return this.axios.post(`/api/invites/${token}/accept`);
+  }
 
-    async getClassroom( roomId ) {
+  async getInviteEmail(token) {
+    return this.axios.get(`/api/invites/${token}/email`);
+  }
 
-        return this.axios.get( `/api/rooms/${roomId}` );
+  async registerInvite(token, data) {
+    return this.axios.post(`/api/invites/${token}/register`, data);
+  }
 
-    }
+  /**
+   * Student Routes
+   */
 
-    async getClassroomPerms( roomId ) {
+  async createStudent(options) {
+    return this.axios.post(`/api/students`, options);
+  }
 
-        return this.axios.get( `/api/rooms/${roomId}/permissions` );
+  async updateStudent(studentId, update) {
+    return this.axios.patch(`/api/students/${studentId}`, update);
+  }
 
-    }
+  async removeStudent(studentId) {
+    console.log(studentId);
 
-    async updateClassroom( roomId, data ) {
+    return this.axios.delete(`/api/students/${studentId}`);
+  }
 
-        return this.axios.patch( `/api/rooms/${roomId}`, data );
+  /**
+   * Feed Routes
+   */
 
-    }
+  async getFeed(feedId) {
+    return this.axios.get(`/api/feeds/${feedId}`);
+  }
 
-    /**
-     * Invite Routes
-     */
+  async getFeedItems(feedId) {
+    return this.axios.get(`/api/feeds/${feedId}/items`);
+  }
 
-    async createInvite( roomId, data ) {
+  async createComment(feedId, data) {
+    return this.axios.post(`/api/feeds/comment`, {
+      feedId,
+      ...data,
+    });
+  }
 
-        return this.axios.post( `/api/invites/${roomId}`, data );
+  async createElevate(feedId) {
+    return this.axios.post(`/api/feeds/elevate`, { feedId });
+  }
 
-    }
+  async deleteInvite( roomId, inviteId ) {
 
-    async deleteInvite( roomId, inviteId ) {
+      return this.axios.delete( `/api/invites/${roomId}/${inviteId}` );
 
-        return this.axios.delete( `/api/invites/${roomId}/${inviteId}` );
+  }
 
-    }
+  async acceptInvite( token ) {
 
-    async acceptInvite( token ) {
+      return this.axios.post( `/api/invites/${token}/accept` );
 
-        return this.axios.post( `/api/invites/${token}/accept` );
+  }
 
-    }
+  async getInviteEmail( token ) {
 
-    async getInviteEmail( token ) {
+      return this.axios.get( `/api/invites/${token}/email` );
 
-        return this.axios.get( `/api/invites/${token}/email` );
+  }
 
-    }
+  async registerInvite( token, data ) {
 
-    async registerInvite( token, data ) {
+      return this.axios.post( `/api/invites/${token}/register`, data );
 
-        return this.axios.post( `/api/invites/${token}/register`, data );
+  }
 
-    }
+  /**
+   * Student Routes
+   */
 
-    /**
-     * Student Routes
-     */
+  async createStudent( options ) {
 
-    async createStudent( options ) {
+      return this.axios.post( `/api/students`, options );
 
-        return this.axios.post( `/api/students`, options );
+  }
 
-    }
+  async updateStudent( studentId, update ) {
 
-    async updateStudent( studentId, update ) {
+      return this.axios.patch( `/api/students/${studentId}`, update );
 
-        return this.axios.patch( `/api/students/${studentId}`, update );
+  }
 
-    }
+  async removeStudent( studentId ) {
 
-    async removeStudent( studentId ) {
+      console.log( studentId );
 
-        console.log( studentId );
+      return this.axios.delete( `/api/students/${studentId}` );
 
-        return this.axios.delete( `/api/students/${studentId}` );
+  }
 
-    }
+  /**
+   * Feed Routes
+   */
 
-    /**
-     * Feed Routes
-     */
+  async getFeed( feedId ) {
 
-    async getFeed( feedId ) {
+      return this.axios.get( `/api/feeds/${feedId}` );
 
-        return this.axios.get( `/api/feeds/${feedId}` );
+  }
 
-    }
+  async getFeedItems( feedId ) {
 
-    async getFeedItems( feedId ) {
+      return this.axios.get( `/api/feeds/${feedId}/items` );
 
-        return this.axios.get( `/api/feeds/${feedId}/items` );
+  }
 
-    }
+  async createComment( feedId, data ) {
 
-    async createComment( feedId, data ) {
+      return this.axios.post( `/api/feeds/comment`, {
+          feedId,
+          ...data
+        } );
 
-        return this.axios.post( `/api/feeds/comment`, {
-            feedId,
-            ...data
-         } );
+  }
 
-    }
+  async updateComment( entryId, data ) {
 
-    async updateComment( entryId, data ) {
+      return this.axios.patch( `/api/feeds/comment/${entryId}`, data );
 
-        return this.axios.patch( `/api/feeds/comment/${entryId}`, data );
+  }
 
-    }
+  async deleteComment( entryId ) {
 
-    async deleteComment( entryId ) {
+      return this.axios.delete( `/api/feeds/comment/${entryId}` );
 
-        return this.axios.delete( `/api/feeds/comment/${entryId}` );
+  }
 
-    }
+  async createElevate( feedId ) {
 
-    async createElevate( feedId ) {
+      return this.axios.post( `/api/feeds/elevate`, { feedId } );
 
-        return this.axios.post( `/api/feeds/elevate`, { feedId } );
+  }
 
-    }
+  async createDeelevate( feedId ) {
 
-    async createDeelevate( feedId ) {
+      return this.axios.post( `/api/feeds/deelevate`, { feedId } );
 
-        return this.axios.post( `/api/feeds/deelevate`, { feedId } );
+  }
 
-    }
+  /**
+   * App Routes
+   */
 
-    /**
-     * App Routes
-     */
+  async installApp( room, type ) {
 
-    async installApp( room, type ) {
+      return this.axios.post( `/api/apps`, { room, type } );
 
-        return this.axios.post( `/api/apps`, { room, type } );
+  }
 
-    }
+  async getApp( roomId, type ) {
 
-    async getApp( roomId, type ) {
+      return this.axios.get( `/api/apps/${type}/${roomId}` );
 
-        return this.axios.get( `/api/apps/${type}/${roomId}` );
+  }
 
-    }
+  async updateApp( roomId, type, data ) {
 
-    async updateApp( roomId, type, data ) {
+      return this.axios.patch( `/api/apps/${type}/${roomId}`, data );
 
-        return this.axios.patch( `/api/apps/${type}/${roomId}`, data );
+  }
 
-    }
+  async getAppTypes() {
 
-    async getAppTypes() {
+      return this.axios.get( "/api/apps/types" );
 
-        return this.axios.get( "/api/apps/types" );
+  }
 
-    }
+  /**
+   * User Routes
+   */
 
-    /**
-     * User Routes
-     */
+  async updateUser( data ) {
 
-    async updateUser( data ) {
+      return this.axios.patch( "/api/user", data );
 
-        return this.axios.patch( "/api/user", data );
+  }
 
-    }
+  async userRoomnames() {
 
-    async userRoomnames() {
+      return this.axios.get("/api/user/rooms/short");
 
-        return this.axios.get("/api/user/rooms/short");
+  }
 
-    }
+  async userLeaveRoom( roomId ) {
 
-    async userLeaveRoom( roomId ) {
+      return this.axios.delete(`/api/user/rooms/${roomId}/leave`);
 
-        return this.axios.delete(`/api/user/rooms/${roomId}/leave`);
+  }
 
-    }
+  async userArchiveRoom( roomId ) {
 
-    async userArchiveRoom( roomId ) {
+      return this.axios.delete(`/api/user/rooms/${roomId}/archive`);
 
-        return this.axios.delete(`/api/user/rooms/${roomId}/archive`);
+  }
 
-    }
+  /**
+   * Authentication Routes
+   */
 
-    /**
-     * Authentication Routes
-     */
+  async login( userData ) {
 
-    async login( userData ) {
+      return this.axios.post("/api/login", userData);
 
-        return this.axios.post("/api/login", userData);
+  }
 
-    }
+  async authenticated() {
 
-    async authenticated() {
+      return this.axios.post("/api/authenticated");
 
-        return this.axios.post("/api/authenticated");
+  }
 
-    }
+  async register( userData ) {
 
-    async register( userData ) {
+      return this.axios.post("/api/register", userData);
 
-        return this.axios.post("/api/register", userData);
+  }
 
-    }
+  async validate( token ) {
 
-    async validate( token ) {
+      return this.axios.post(`/api/validate-email/${token}`);
 
-        return this.axios.post(`/api/validate-email/${token}`);
+  }
 
-    }
+  async resendValidation( data ) {
 
-    async resendValidation( data ) {
+      return this.axios.post("/api/validate-email/resend", data);
 
-        return this.axios.post("/api/validate-email/resend", data);
+  }
 
-    }
+  /**
+   * App Routes
+   */
 
+  async installApp(room, type) {
+    return this.axios.post(`/api/apps`, { room, type });
+  }
+
+  async getApp(roomId, type) {
+    return this.axios.get(`/api/apps/${type}/${roomId}`);
+  }
+
+  async updateApp(roomId, type, data) {
+    return this.axios.patch(`/api/apps/${type}/${roomId}`, data);
+  }
+
+  async getAppTypes() {
+    return this.axios.get("/api/apps/types");
+  }
+
+  /**
+   * User Routes
+   */
+
+  async updateUser(data) {
+    return this.axios.patch("/api/user", data);
+  }
+
+  async userRoomnames() {
+    return this.axios.get("/api/user/rooms/short");
+  }
+
+  async userLeaveRoom(roomId) {
+    return this.axios.delete(`/api/user/rooms/${roomId}/leave`);
+  }
+
+  async userArchiveRoom(roomId) {
+    return this.axios.delete(`/api/user/rooms/${roomId}/archive`);
+  }
+
+  /**
+   * Authentication Routes
+   */
+
+  async login(userData) {
+    return this.axios.post("/api/login", userData);
+  }
+
+  async authenticated() {
+    return this.axios.post("/api/authenticated");
+  }
+
+  async register(userData) {
+    return this.axios.post("/api/register", userData);
+  }
+
+  async validate(token) {
+    return this.axios.post(`/api/validate-email/${token}`);
+  }
+
+  async resendValidation(data) {
+    return this.axios.post("/api/validate-email/resend", data);
+  }
 }
 
 export default new API();
