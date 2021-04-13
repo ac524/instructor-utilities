@@ -1,8 +1,6 @@
 const ObjectId = require("mongoose").Types.ObjectId;
 const SubSchemaController = require("../types/SubSchemaController");
 
-const roomCtrl = require("../room");
-
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import("../types/SubSchemaController").CreateSubDocOptions} CreateSubDocOptions
@@ -39,7 +37,7 @@ class StudentController extends SubSchemaController {
 
     constructor() {
 
-        super( "student", roomCtrl );
+        super( "student", "room" );
 
     }
 
