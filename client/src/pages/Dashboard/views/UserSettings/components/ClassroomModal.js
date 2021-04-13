@@ -13,8 +13,6 @@ import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { REFRESH_USER_ROOMS, ADD_USER_ROOM_ID } from "store/actions";
 
 import api from "utils/api";
-import { useAuthorizedUser } from "utils/auth";
-
 
 const validateClassroomData = createValidator({
     validators: {
