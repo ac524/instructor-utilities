@@ -1,6 +1,4 @@
-
 const SubSchemaController = require("../types/SubSchemaController");
-const feedCtrl = require("../feed");
 
 /**
  * @param {FeedEntryController} ctrl 
@@ -44,7 +42,7 @@ class FeedEntryController extends SubSchemaController {
 
     constructor( action ) {
 
-        super( "item", feedCtrl, action );
+        super( "item", "feed", action );
 
         this.action = action;
 

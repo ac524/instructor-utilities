@@ -1,8 +1,9 @@
 const { InvalidDataError } = require("../../config/errors");
-const { populate } = require("../definitions/models/Feed");
 
 const Controller = require("./Controller");
 const SchemaController = require("./SchemaController");
+
+const library = require("./library");
 
 /**
  * TYPE DEFINITION IMPORTS
@@ -45,21 +46,31 @@ class SubSchemaController extends Controller {
     /** @type {string} */
     prop;
 
-    /** @type {SchemaController} */
-    ctrl;
+    /** @type {string} */
+    modelCtrlKey;
 
     /**
      * @param {string} key;
-     * @param {SchemaController} ctrl 
+     * @param {string} modelCtrlKey 
+     * @param {string} unique 
      */
-    constructor( key, ctrl, unique = "" ) {
+    constructor( key, modelCtrlKey, unique = "" ) {
 
-        super( `${ctrl.key}.${key}` + (unique && `.${unique}`) );
+        if( !library.has(modelCtrlKey) ) throw new Error("Cannot register SubSchemaController before their dependent SchemaController");
+
+        super( `${library.get(modelCtrlKey).key}.${key}` + (unique && `.${unique}`) );
 
         this.key = key;
         this.prop = key+"s";
-        this.ctrl = ctrl;
+        this.modelCtrlKey = modelCtrlKey;
 
+    }
+
+    /**
+     * @returns {SchemaController}
+     */
+    get modelCtrl() {
+        return this.effect( this.modelCtrlKey );
     }
 
     /**
@@ -83,7 +94,7 @@ class SubSchemaController extends Controller {
      */
     async findOwner( { docId }, queryOptions ) {
 
-        return await this.ctrl.findOne({
+        return await this.modelCtrl.findOne({
             search: { [`${this.prop}._id`]: docId }
         }, queryOptions);
 
@@ -100,7 +111,7 @@ class SubSchemaController extends Controller {
         return (
 
             // Make the query.
-            await this.ctrl.updateOne({
+            await this.modelCtrl.updateOne({
                 docId: belongsTo,
                 data: { $push: { [this.prop]: data } }
             }, {
@@ -122,7 +133,7 @@ class SubSchemaController extends Controller {
         return (
 
             // Find and select the target subdoc.
-            await this.ctrl.findOne({
+            await this.modelCtrl.findOne({
                 search: { [`${this.prop}._id`]: docId }
             }, {
                 // Select the potential matching document.
@@ -157,7 +168,7 @@ class SubSchemaController extends Controller {
         return (
 
             // Find and update the target subdoc.
-            await this.ctrl.updateOne({
+            await this.modelCtrl.updateOne({
                 search: { [`${this.prop}._id`]: docId },
                 data: {
                     $set: {
@@ -186,7 +197,7 @@ class SubSchemaController extends Controller {
         return (
 
             // Find and update the target subdoc.
-            await this.ctrl.updateOne({
+            await this.modelCtrl.updateOne({
                 search: { [`${this.prop}._id`]: docId },
                 data: { $pull: { [`${this.prop}`]: { "_id": docId } } },
                 // Return the old document so we can extract the deleted student.
