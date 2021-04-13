@@ -41,40 +41,51 @@ const StoreContext = createContext({
 const { Provider } = StoreContext;
 
 const reducer = ( state, { type, payload } ) => {
-
+    
     const actions = {
         [SET_SOCKET]: () => ({ ...state, socket: payload }),
         [LOGIN_USER]: () => ({ ...state, userAuth: payload }),
-        [LOGOUT_USER]: () => ({ ...state, userAuth: { token: null, user: null } }),
+        [LOGOUT_USER]: () => ({
+            ...state,
+            userAuth: { token: null, user: null },
+        }),
         [UPDATE_USER]: () => ({
             ...state,
             userAuth: {
                 ...state.userAuth,
                 user: {
                     ...state.userAuth.user,
-                    ...payload
-                }
-            }
+                    ...payload,
+                },
+            },
         }),
-        [ADD_USER_ROOM_ID]: () => ({
-            ...state,
-            userAuth: {
-                ...state.userAuth,
-                user: {
-                    ...state.userAuth.user,
-                    classrooms: [ ...state.userAuth.user.classrooms, payload ]
-                }
+        [ADD_USER_ROOM_ID]: () => (
+            
+            {
+                ...state,
+                userAuth: {
+                    ...state.userAuth,
+                    user: {
+                        ...state.userAuth.user,
+                        classrooms: [
+                            ...state.userAuth.user.classrooms,
+                            payload,
+                        ],
+                    },
+                },
             }
-        }),
+        ),
         [REMOVE_USER_ROOM_ID]: () => ({
             ...state,
             userAuth: {
                 ...state.userAuth,
                 user: {
                     ...state.userAuth.user,
-                    classrooms: state.userAuth.user.classrooms.filter( roomId => roomId !== payload )
-                }
-            }
+                    classrooms: state.userAuth.user.classrooms.filter(
+                        (roomId) => roomId !== payload
+                    ),
+                },
+            },
         }),
         [REFRESH_USER_ROOMS]: () => ({
             ...state,
@@ -82,52 +93,50 @@ const reducer = ( state, { type, payload } ) => {
                 ...state.userAuth,
                 user: {
                     ...state.userAuth.user,
-                    classrooms: [ ...state.userAuth.user.classrooms ]
-                }
-            }
+                    classrooms: [...state.userAuth.user.classrooms],
+                },
+            },
         }),
         [ADD_READY_STEP]: () => {
             return {
                 ...state,
                 ready: {
                     ...state.ready,
-                    steps: [
-                        ...state.ready.steps,
-                        payload
-                    ]
-                }
-            }
+                    steps: [...state.ready.steps, payload],
+                },
+            };
         },
         [REMOVE_READY_STEP]: () => {
             return {
                 ...state,
                 ready: {
                     ...state.ready,
-                    steps: state.ready.steps.filter( step => step !== payload ),
-                    complete: state.ready.complete.filter( step => step !== payload )
-                }
-            }
+                    steps: state.ready.steps.filter((step) => step !== payload),
+                    complete: state.ready.complete.filter(
+                        (step) => step !== payload
+                    ),
+                },
+            };
         },
         [COMPLETE_READY_STEP]: () => {
             return {
                 ...state,
                 ready: {
                     ...state.ready,
-                    complete: [
-                        ...state.ready.complete,
-                        payload
-                    ]
-                }
-            }
+                    complete: [...state.ready.complete, payload],
+                },
+            };
         },
         [UNCOMPLETE_READY_STEP]: () => {
             return {
                 ...state,
                 ready: {
                     ...state.ready,
-                    complete: state.ready.complete.filter( step => step !== payload )
-                }
-            }
+                    complete: state.ready.complete.filter(
+                        (step) => step !== payload
+                    ),
+                },
+            };
         },
     };
 
