@@ -11,7 +11,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     if( !feed ) feed = await ctrl.findOwner( { docId: entry._id }, { select: "for" } );
 
-    const student = await ctrl.effect("room-student").findOne({ docId: feed.for });
+    const student = await ctrl.effect("room.student").findOne({ docId: feed.for });
 
     const aggKeys = student.getAggregateKeysByAction( entry.action );
 
@@ -19,7 +19,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     const aggUpdate = await student.getFeedAggregateData(aggKeys);
 
-    await ctrl.effect("room-student").updateOne({ docId: student._id, data: aggUpdate });
+    await ctrl.effect("room.student").updateOne({ docId: student._id, data: aggUpdate });
 
     return {
         studentUpdate: {

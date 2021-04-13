@@ -54,7 +54,7 @@ class SubSchemaController extends Controller {
      */
     constructor( key, ctrl, unique = "" ) {
 
-        super( `${ctrl.key}-${key}` + (unique && `-${unique}`) );
+        super( `${ctrl.key}.${key}` + (unique && `.${unique}`) );
 
         this.key = key;
         this.prop = key+"s";
