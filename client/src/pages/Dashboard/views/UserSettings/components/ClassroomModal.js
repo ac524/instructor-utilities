@@ -14,7 +14,6 @@ import { REFRESH_USER_ROOMS, ADD_USER_ROOM_ID } from "store/actions";
 
 import api from "utils/api";
 
-
 const validateClassroomData = createValidator({
     validators: {
         name: ({ name }) => Boolean(name) || "Classroom name is required",
