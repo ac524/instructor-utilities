@@ -1,9 +1,6 @@
 
 const SubSchemaController = require("../types/SubSchemaController");
 const feedCtrl = require("../feed");
-const studentCtrl = require("../student");
-const userCtrl = require("../user");
-const options = require("../../config/options");
 
 /**
  * @param {FeedEntryController} ctrl 
