@@ -60,7 +60,7 @@ class SchemaController extends Controller {
      */
     constructor( key, model, unique = "" ) {
 
-        super( key + (unique && `-${unique}`) );
+        super( key + (unique && `.${unique}`) );
 
         this.key = key;
         this.model = model;
