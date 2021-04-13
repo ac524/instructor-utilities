@@ -1,3 +1,5 @@
+const library = require("./library");
+
 /**
  * @see https://ponyfoo.com/articles/binding-methods-to-class-instance-objects#proxies
  * 
@@ -28,8 +30,6 @@ const makeFnBindingMap = controller => {
     return proxy;
 
 }
-
-const library = new Map();
 
 class Controller {
 

@@ -1,8 +1,9 @@
 const { InvalidDataError } = require("../../config/errors");
-const { populate } = require("../definitions/models/Feed");
 
 const Controller = require("./Controller");
 const SchemaController = require("./SchemaController");
+
+const library = require("./library");
 
 /**
  * TYPE DEFINITION IMPORTS
@@ -55,7 +56,9 @@ class SubSchemaController extends Controller {
      */
     constructor( key, modelCtrlKey, unique = "" ) {
 
-        super( `${ctrl.key}.${key}` + (unique && `.${unique}`) );
+        if( !library.has(modelCtrlKey) ) throw new Error("Cannot register SubSchemaController before their dependent SchemaController");
+
+        super( `${library.get(modelCtrlKey).key}.${key}` + (unique && `.${unique}`) );
 
         this.key = key;
         this.prop = key+"s";
