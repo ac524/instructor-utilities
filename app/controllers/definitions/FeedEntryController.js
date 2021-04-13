@@ -1,9 +1,4 @@
-
 const SubSchemaController = require("../types/SubSchemaController");
-const feedCtrl = require("../feed");
-const studentCtrl = require("../student");
-const userCtrl = require("../user");
-const options = require("../../config/options");
 
 /**
  * @param {FeedEntryController} ctrl 
@@ -14,7 +9,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     if( !feed ) feed = await ctrl.findOwner( { docId: entry._id }, { select: "for" } );
 
-    const student = await studentCtrl.findOne({ docId: feed.for });
+    const student = await ctrl.effect("room.student").findOne({ docId: feed.for });
 
     const aggKeys = student.getAggregateKeysByAction( entry.action );
 
@@ -22,7 +17,7 @@ const updateStudentAggregates = async (ctrl, entry, feed) => {
 
     const aggUpdate = await student.getFeedAggregateData(aggKeys);
 
-    await studentCtrl.updateOne({ docId: student._id, data: aggUpdate });
+    await ctrl.effect("room.student").updateOne({ docId: student._id, data: aggUpdate });
 
     return {
         studentUpdate: {
@@ -38,16 +33,16 @@ const formatChangeRes = async (ctrl,entry,feed) => ({
     ...( await updateStudentAggregates(ctrl, entry, feed) ) 
 })
 
-const populateBy = async entry => ({
-    ...entry._doc,
-    by: await userCtrl.findOne( { docId: entry.by }, { select: "name" } )
+const populateBy = async (entry, ctrl) => ({
+  ...entry._doc,
+  by: await ctrl.effect("user").findOne({ docId: entry.by }, { select: "name" }),
 });
 
 class FeedEntryController extends SubSchemaController {
 
     constructor( action ) {
 
-        super( "item", feedCtrl, action );
+        super( "item", "feed", action );
 
         this.action = action;
 
@@ -78,7 +73,7 @@ class FeedEntryController extends SubSchemaController {
 
         if( !entry ) return entry;
 
-        return formatChangeRes( this, await populateBy( entry ) );
+        return formatChangeRes( this, await populateBy( entry, this ) );
 
     }
 
@@ -91,7 +86,7 @@ class FeedEntryController extends SubSchemaController {
 
         if( !entry ) return entry;
 
-        return formatChangeRes( this, await populateBy( entry ), feed );
+        return formatChangeRes( this, await populateBy( entry, this ), feed );
 
      }
 
@@ -102,7 +97,7 @@ class FeedEntryController extends SubSchemaController {
         if( !entry ) return entry;
 
         // TODO Find a way to rework underlying sub schema code to allow a populate for sub fields.
-        return populateBy( entry );
+        return populateBy( entry, this );
 
         // return super.findOne( options, {
         //     populate: "items.by",
