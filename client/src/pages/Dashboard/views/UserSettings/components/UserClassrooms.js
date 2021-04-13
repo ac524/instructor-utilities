@@ -38,11 +38,7 @@ const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
     return (
       <div {...props}>
         <Heading renderAs="h3" size={6} className="is-primary is-flex is-justify-content-space-between">
-          <span>Instructor Rooms</span>
-          <Button size="small" class="is-primary button is-small" onClick={() => onEdit(null)}>
-            <Icon icon="plus-circle" />
-            <span>Create Classroom</span>
-          </Button>
+          Instructor Rooms
         </Heading>
 
         <div className="has-flex-rows is-bordered">
@@ -122,10 +118,33 @@ const UserClassrooms = () => {
 
     return (
         <Box className="is-shadowless">
-            <Heading renderAs="h2" size={4}>Classrooms</Heading>
-            {roomsByRole.instructor && <InstructorRoomsList  className="mt-5" rooms={roomsByRole.instructor} onEdit={(roomId)=>setEditRoomId(roomId)} />}
-            {roomsByRole.ta && <TaRoomsList  className="mt-5" rooms={roomsByRole.ta} />}
-            <ClassroomModal roomId={editRoomId} onClose={()=>setEditRoomId(false)} />
+            <Heading
+                renderAs="h2"
+                size={4}
+                className="is-flex is-justify-content-space-between">
+                <span>Classrooms</span>
+                <Button
+                    size="small"
+                    class="is-primary button is-small"
+                    onClick={() => setEditRoomId(null)}>
+                    <Icon icon="plus-circle" />
+                    <span>Create Classroom</span>
+                </Button>
+            </Heading>
+            {roomsByRole.instructor && (
+                <InstructorRoomsList
+                    className="mt-5"
+                    rooms={roomsByRole.instructor}
+                    onEdit={(roomId) => setEditRoomId(roomId)}
+                />
+            )}
+            {roomsByRole.ta && (
+                <TaRoomsList className="mt-5" rooms={roomsByRole.ta} />
+            )}
+            <ClassroomModal
+                roomId={editRoomId}
+                onClose={() => setEditRoomId(false)}
+            />
         </Box>
     );
 
