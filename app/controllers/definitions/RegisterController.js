@@ -1,4 +1,3 @@
-/** @format */
 const Controller = require("../types/Controller");
 
 const mail = require("../../mail");

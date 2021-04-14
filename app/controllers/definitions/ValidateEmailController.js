@@ -1,5 +1,3 @@
-/** @format */
-
 const sendUserVerifyEmail = require("../utils/sendUserVerifyEmail");
 const ioEmit = require("../utils/ioEmit");
 
