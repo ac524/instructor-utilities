@@ -13,7 +13,6 @@ import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { REFRESH_USER_ROOMS, ADD_USER_ROOM_ID } from "store/actions";
 
 import api from "utils/api";
-import { useAuthorizedUser } from "utils/auth";
 
 const validateClassroomData = createValidator({
     validators: {
@@ -81,8 +80,8 @@ export const ClassroomForm = ({ room, afterUpdate }) => {
 
                 if(!room._id){
                     
-                    const newClassRoom = await api.createClassroom(updates);
-                    dispatch(gsa(ADD_USER_ROOM_ID, newClassRoom._id));
+                    const { data } = await api.createClassroom(updates);
+                    await dispatch(gsa(ADD_USER_ROOM_ID, data._id));
                     if (afterUpdate) afterUpdate();
 
                     return

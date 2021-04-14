@@ -4,9 +4,6 @@ const { App } = require("./models");
 
 const SchemaController = require("../types/SchemaController");
 
-const appTypeCtrl = require("../appType");
-const roomCtrl = require("../room");
-
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
@@ -36,8 +33,8 @@ class AppController extends SchemaController {
      */
     async createOne( { data: { type, room, ...data } }, config ) {
 
-        const appType = await appTypeCtrl.findOne({ docId: type });
-        
+        const appType = await this.effect("appType").findOne({ docId: type });
+
         const app = await super.createOne({
             data: {
                 name: appTypes[ appType.type ].name,
@@ -48,9 +45,9 @@ class AppController extends SchemaController {
             }
         }, config );
 
-        await roomCtrl.updateOne({
-            docId: room,
-            data: { $push: { apps: appType._id } }
+        await this.effect("room").updateOne({
+          docId: room,
+          data: { $push: { apps: appType._id } },
         });
 
         // Populate the type document.
