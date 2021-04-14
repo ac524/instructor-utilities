@@ -14,13 +14,15 @@ import { useSocket } from "utils/socket.io";
 import "./style.sass";
 import Icon from "components/Icon";
 
+export const appWidgets = new Map();
+
+appWidgets.set( 'studentselect', (app, setAppData) => <SelectStudent data={app.data} setData={setAppData} /> );
+
 const getAppComponent = ( app, setAppData ) => {
 
-    const types = {
-        studentselect: () => <SelectStudent data={app.data} setData={setAppData} />
-    }
+    if( !appWidgets.has( app.type.type ) ) return <span>No widget defined</span>
 
-    return types[app.type.type]();
+    return appWidgets.get(app.type.type)( app, setAppData );
 
 }
 

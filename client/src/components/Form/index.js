@@ -6,7 +6,7 @@ import { ErrorProvider, Error, useInputErrorColor } from "../Errors";
 
 import { validateAll } from "utils/validation";
 
-import { useFormFields } from "./utils"
+import { useFormFields, formatValues } from "./utils"
 
 import { FormField } from "./components"
 
@@ -31,7 +31,7 @@ const Form = ({
 
   const submitData = async data => {
     setIsProcessing(true);
-    onSubmit && (await onSubmit(data, setErrors));
+    onSubmit && (await onSubmit(formatValues(data), setErrors));
     if (formRef.current) setIsProcessing(false);
   };
 

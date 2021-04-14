@@ -47,7 +47,7 @@ const subSchemaCtrlMap = {
     post: subCtrl => [ subCtrl.binding.createOne, {
         keyMap: {
             body: "data",
-            [`${subCtrl.ctrl.key}Id`]: "belongsTo",
+            [`${subCtrl.modelCtrl.key}Id`]: "belongsTo",
             user: "createdBy"
         }
     } ],
