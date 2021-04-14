@@ -10,25 +10,28 @@ const { InvalidDataError, NotFoundError } = require("../../config/errors");
 
 /**
  * TYPE DEFINITION IMPORTS
+ * 
  * @typedef {import('~crsm/routes/validation/definitions/registerValidation').RegistrationData} RegistrationData
  */
 
-/** TYPE DEFINITIONS **/
-
 /**
+ * TYPE DEFINITIONS
+ * 
  * @typedef RegisterOptions
  * @property {RegistrationData} registerData
- *
- * @param {RegisterOptions} param0
  */
 
 class RegisterController extends Controller {
+
 	constructor() {
 
 		super("register");
 
 	}
 
+	/**
+ 	 * @param {RegisterOptions} param0
+	 */
 	async register({ registerData }) {
 
         let classroom;

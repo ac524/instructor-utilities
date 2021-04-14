@@ -1,5 +1,3 @@
-/** @format */
-
 const mail = require("../../mail");
 
 const homeUrl = require("../../config/options")("publicUrl");
@@ -16,11 +14,11 @@ const Controller = require("../types/Controller");
  * Type Definition Imports
  * @typedef {import('mongoose').Schema.Types.ObjectId} ObjectId
  *
- * @typedef {import('../controllers/models/schema/MemberSchema').MemberDocument} MemberDocument
- * @typedef {import('../controllers/models/schema/RoomSchema').RoomDocument} RoomDocument
- * @typedef {import('../controllers/models/schema/UserSchema').UserDocument} UserDocument
- * @typedef {import('../controllers/models/schema/InviteSchema').InviteDocument} InviteDocument
- * @typedef {import('../controllers/models/schema/TokenSchema').TokenDocument} TokenDocument
+ * @typedef {import('~crsmmodels/schema/MemberSchema').MemberDocument} MemberDocument
+ * @typedef {import('~crsmmodels/schema/RoomSchema').RoomDocument} RoomDocument
+ * @typedef {import('~crsmmodels/schema/UserSchema').UserDocument} UserDocument
+ * @typedef {import('~crsmmodels/schema/InviteSchema').InviteDocument} InviteDocument
+ * @typedef {import('~crsmmodels/schema/TokenSchema').TokenDocument} TokenDocument
  *
  * @typedef {import('~crsm/routes/validation/definitions/inviteValidation').InviteData} InviteData
  * @typedef {import('~crsm/routes/validation/definitions/registerValidation').RegistrationData} RegistrationData
@@ -28,9 +26,32 @@ const Controller = require("../types/Controller");
 
 /**
  * Type Definitions
+ * 
+ * @typedef CreateRoomInviteOptions
+ * @property {ObjectId} roomId
+ * @property {UserDocument} user
+ * @property {InviteData} inviteData
+ * 
+ * @typedef RemoveRoomInviteOptions
+ * @property {ObjectId} roomId
+ * @property {ObjectId} inviteId
+ * 
+ * @typedef GetInviteEmailCheckOptions
+ * @property {InviteDocument} invite
+ * 
+ * @typedef RegisterInviteOptions
+ * @property {InviteDocument} invite
+ * @property {RegistrationData} registerData
+ * 
+ * @typedef AcceptInviteOptions
+ * @property {TokenDocument} inviteToken
+ * @property {RoomDocument} inviteRoom
+ * @property {InviteDocument} invite
+ * @property {UserDocument} user
  */
 
 class InviteController extends Controller {
+	
 	constructor() {
 
 		super("invite");
@@ -79,11 +100,6 @@ class InviteController extends Controller {
 	/** CONTROLLER METHODS **/
 
 	/**
-	 * @typedef CreateRoomInviteOptions
-	 * @property {ObjectId} roomId
-	 * @property {UserDocument} user
-	 * @property {InviteData} inviteData
-	 *
 	 * @param {CreateRoomInviteOptions} param0
 	 */
 	async create({ roomId, user, inviteData }) {
@@ -141,10 +157,6 @@ class InviteController extends Controller {
 	}
 
     /**
-     * @typedef RemoveRoomInviteOptions
-     * @property {ObjectId} roomId
-     * @property {ObjectId} inviteId
-     *
      * @param {RemoveRoomInviteOptions} param0
      */
     async remove ({ roomId, inviteId }) {
@@ -162,9 +174,6 @@ class InviteController extends Controller {
     }
 
     /**
-     * @typedef GetInviteEmailCheckOptions
-     * @property {InviteDocument} invite
-     *
      * @param {GetInviteEmailCheckOptions} param0
      */
     async emailCheck ( { invite } ) {
@@ -179,10 +188,6 @@ class InviteController extends Controller {
     }
 
     /**
-     * @typedef RegisterInviteOptions
-     * @property {InviteDocument} invite
-     * @property {RegistrationData} registerData
-     *
      * @param {RegisterInviteOptions} param0
      */
     async register ({ invite, registerData }) {
@@ -209,12 +214,6 @@ class InviteController extends Controller {
     }
     
     /**
-     * @typedef AcceptInviteOptions
-     * @property {TokenDocument} inviteToken
-     * @property {RoomDocument} inviteRoom
-     * @property {InviteDocument} invite
-     * @property {UserDocument} user
-     *
      * @param {AcceptInviteOptions} param0
      */
     async accept ( { inviteToken, inviteRoom, invite, user } ) {
