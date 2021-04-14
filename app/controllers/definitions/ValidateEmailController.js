@@ -10,21 +10,28 @@ const { NotFoundError } = require("../../config/errors");
 const Controller = require("../types/Controller");
 /**
  * TYPE DEFINITION IMPORTS
- * @typedef {import('~/routes/validation/definitions/resendValidation').ResendData} ResendData
+ * @typedef {import('~crsm/routes/validation/definitions/resendValidation').ResendData} ResendData
  */
 
 /**
  * Type Definitions
+ * 
+ * @typedef {Object} ResendValidateEmailOptions
+ * @property {ResendData} config
+ * 
+ * @typedef {Object} ValidateEmailOptions
+ * @property {string} token
  */
+
 class ValidateEmailController extends Controller {
+
 	constructor() {
+
 		super("validate.email");
+
 	}
 
     /**
-     * @typedef {Object} ResendValidateEmailOptions
-     * @property {ResendData} config
-     *
      * @param {ResendValidateEmailOptions} param0
      */
     async resend ({ config }) {
@@ -38,9 +45,6 @@ class ValidateEmailController extends Controller {
     };
 
     /**
-     * @typedef {Object} ValidateEmailOptions
-     * @property {string} token
-     *
      * @param {ValidateEmailOptions} param0
      */
     async validate ({ tokenString }) {
