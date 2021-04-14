@@ -56,7 +56,9 @@ registerRoute(
 	// Add in any other file extensions or routing criteria as needed.
 	({ url }) =>
 		url.origin === self.location.origin && url.pathname.endsWith(".png"), // Customize this strategy as needed, e.g., by changing to CacheFirst.
-	new NetworkFirst()
+	new NetworkFirst({
+		cacheName: "cache-pages"
+	})
 );
 
 // This allows the web app to trigger skipWaiting via
