@@ -15,7 +15,11 @@ import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { NetworkFirst } from "workbox-strategies";
+import {
+	NetworkFirst,
+	CacheFirst,
+	StaleWhileRevalidate
+} from "workbox-strategies";
 
 clientsClaim();
 
@@ -54,19 +58,46 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
 	// Add in any other file extensions or routing criteria as needed.
-	({ url }) =>
-		url.origin === self.location.origin && url.pathname.endsWith(".png"), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+	new RegExp('/(favicon|images)/.*\\.(png|jpg)'), 
+
+	// Customize this strategy as needed, e.g., by changing to CacheFirst.
+	new CacheFirst( {
+
+		cacheName: "cache-images"
+
+	} )
+);
+
+registerRoute(
+	// Add in any other file extensions or routing criteria as needed.
+	({ url }) => url.origin === self.location.origin, // Customize this strategy as needed, e.g., by changing to CacheFirst.
 	new NetworkFirst({
-		cacheName: "cache-pages"
+		cacheName: "cache-get-routes"
 	})
+);
+
+registerRoute(
+	new RegExp("/api/"),
+
+	new NetworkFirst( {
+
+		cacheName: "cache-post-routes"
+
+	} ),
+
+	"POST"
 );
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener("message", (event) => {
-	if (event.data && event.data.type === "SKIP_WAITING") {
+self.addEventListener( "message", ( event ) => {
+
+	if ( event.data && event.data.type === "SKIP_WAITING" ) {
+
 		self.skipWaiting();
+
 	}
+
 });
 
 // Any other custom service worker logic can go here.
