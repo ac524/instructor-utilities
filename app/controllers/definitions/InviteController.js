@@ -1,6 +1,7 @@
 const mail = require("../../mail");
 
 const homeUrl = require("../../config/options")("publicUrl");
+
 const {
 	InvalidDataError,
 	InvalidUserError,
@@ -217,13 +218,15 @@ class InviteController extends Controller {
      * @param {AcceptInviteOptions} param0
      */
     async accept ( { inviteToken, inviteRoom, invite, user } ) {
+
         const roomId = inviteRoom._id;
 
         if (user.email !== invite.email)
+
             throw new InvalidUserError("Please log into the correct account.");
 
         // Add the staff member to the classroom
-        const staff = await addStaff(roomId, {
+        const staff = await this.addStaff(roomId, {
             role: "ta",
             user: user._id
         });
@@ -244,6 +247,7 @@ class InviteController extends Controller {
         ioEmit("dispatch", deleteInviteDispatch, `room:${roomId}`);
 
         return { success: true, roomId: roomId };
+
     }
 }
 
