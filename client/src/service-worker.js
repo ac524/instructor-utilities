@@ -58,34 +58,24 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
 	// Add in any other file extensions or routing criteria as needed.
-	new RegExp('/(favicon|images)/.*\\.(png|jpg)'), 
+	new RegExp("/(favicon|images)/.*\\.(png|jpg)"),
 
 	// Customize this strategy as needed, e.g., by changing to CacheFirst.
-	new CacheFirst( {
-
-		cacheName: "cache-images"
-
-	} )
-);
-
-registerRoute(
-	// Add in any other file extensions or routing criteria as needed.
-	({ url }) => url.origin === self.location.origin, // Customize this strategy as needed, e.g., by changing to CacheFirst.
 	new NetworkFirst({
-		cacheName: "cache-get-routes"
+		
+		cacheName: "cache-images"
+		
 	})
 );
 
 registerRoute(
-	new RegExp("/api/"),
+	new RegExp("/"),
 
-	new NetworkFirst( {
+	new NetworkFirst({
 
-		cacheName: "cache-post-routes"
+		cacheName: "cache-routes"
 
-	} ),
-
-	"POST"
+	})
 );
 
 // This allows the web app to trigger skipWaiting via
