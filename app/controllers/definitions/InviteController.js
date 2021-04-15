@@ -235,7 +235,7 @@ class InviteController extends Controller {
         await user.update({ $push: { classrooms: roomId } });
 
         const addStaffDispatch = { type: "ADD_STAFF", payload: staff };
-        ioEmit("dispatch", addStaffDispatch, `room:${roomId}`);
+        ioEmit("room:dispatch", addStaffDispatch, `room:${roomId}`);
 
         await inviteToken.remove();
 
@@ -244,7 +244,7 @@ class InviteController extends Controller {
         await inviteRoom.save();
 
         const deleteInviteDispatch = { type: "DELETE_INVITE", payload: invite._id };
-        ioEmit("dispatch", deleteInviteDispatch, `room:${roomId}`);
+        ioEmit("room:dispatch", deleteInviteDispatch, `room:${roomId}`);
 
         return { success: true, roomId: roomId };
 
