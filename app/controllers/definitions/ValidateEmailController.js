@@ -1,4 +1,3 @@
-const sendUserVerifyEmail = require("../utils/sendUserVerifyEmail");
 const ioEmit = require("../utils/ioEmit");
 
 const { NotFoundError } = require("../../config/errors");
@@ -36,7 +35,7 @@ class ValidateEmailController extends Controller {
 
         if (!user) throw new NotFoundError("Email not found.");
 
-        await sendUserVerifyEmail(user);
+        await sendUserVerifyEmail(user, this.effect("token"));
     };
 
     /**

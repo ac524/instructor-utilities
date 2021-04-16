@@ -1,12 +1,10 @@
 const mail = require('../../mail');
 
-const tokenCtrl = require("../../controllers/token");
-
 const homeUrl = require("../../config/options")( "publicUrl" );
 
-const sendUserVerifyEmail = async (user) => {
+const sendUserVerifyEmail = async (user, ctrl) => {
 
-    const token = await tokenCtrl.createOne({ data: { relation: user._id } });
+    const token = await ctrl.createOne({ data: { relation: user._id } });
 
     await mail.send(
       "welcome",
