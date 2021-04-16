@@ -3,17 +3,20 @@ import { EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from "draft-convert";
 import DOMPurify from "dompurify";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "./RichText.sass";
-import ReactDOM from "react-dom";
 
-const RichTextEditor = () => {
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "./styles.sass";
+
+export const RichTextEditor = () => {
+
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+
   const [convertedContent, setConvertedContent] = useState(null);
 
   const handleEditorChange = (state) => {
+    console.log(state);
     setEditorState(state);
     convertContentToHTML();
   };
@@ -43,5 +46,3 @@ const RichTextEditor = () => {
     </div>
   );
 };
-
-export default RichTextEditor;
