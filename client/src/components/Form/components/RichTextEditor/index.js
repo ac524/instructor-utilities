@@ -9,21 +9,18 @@ import "./styles.sass";
 
 export const RichTextEditor = () => {
 
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-
-  const [convertedContent, setConvertedContent] = useState(null);
+  const [richTextState, setRichTextState] = useState(() => ({
+    editor: EditorState.createEmpty(),
+    html: ""
+  }));
+  
+  // const [convertedContent, setConvertedContent] = useState(null);
 
   const handleEditorChange = (state) => {
-    console.log(state);
-    setEditorState(state);
-    convertContentToHTML();
-  };
-
-  const convertContentToHTML = () => {
-    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
+    setRichTextState({
+      editor: state,
+      html: convertToHTML(state.getCurrentContent())
+    });
   };
 
   const createMarkup = (html) => {
@@ -36,12 +33,12 @@ export const RichTextEditor = () => {
     <div className="App">
       <header className="App-header">Rich Text Editor Example</header>
       <Editor
-        editorState={editorState}
+        editorState={richTextState.editor}
         onEditorStateChange={handleEditorChange}
       />
       <div
         className="preview"
-        dangerouslySetInnerHTML={createMarkup(convertedContent)}
+        dangerouslySetInnerHTML={createMarkup(richTextState.html)}
       ></div>
     </div>
   );

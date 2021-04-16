@@ -1,8 +1,9 @@
 const { InvalidDataError } = require("../../config/errors");
-const { populate } = require("../definitions/models/Feed");
 
 const Controller = require("./Controller");
 const SchemaController = require("./SchemaController");
+
+const library = require("./library");
 
 /**
  * TYPE DEFINITION IMPORTS
@@ -45,30 +46,31 @@ class SubSchemaController extends Controller {
     /** @type {string} */
     prop;
 
-    /** @type {SchemaController} */
-    ctrl;
+    /** @type {string} */
+    modelCtrlKey;
 
     /**
      * @param {string} key;
-     * @param {SchemaController} ctrl 
+     * @param {string} modelCtrlKey 
+     * @param {string} unique 
      */
-    constructor( key, ctrl ) {
+    constructor( key, modelCtrlKey, unique = "" ) {
 
-        super();
+        if( !library.has(modelCtrlKey) ) throw new Error("Cannot register SubSchemaController before their dependent SchemaController");
+
+        super( `${library.get(modelCtrlKey).key}.${key}` + (unique && `.${unique}`) );
 
         this.key = key;
         this.prop = key+"s";
-        this.ctrl = ctrl;
+        this.modelCtrlKey = modelCtrlKey;
 
     }
 
     /**
-     * @returns {string} - Conjoined key combining the ctrl key + sub ctrl key.
+     * @returns {SchemaController}
      */
-    get ctrlKey() {
-
-        return this.ctrl.key + this.key[0].toUpperCase() + this.key.slice(1);
-
+    get modelCtrl() {
+        return this.effect( this.modelCtrlKey );
     }
 
     /**
@@ -92,7 +94,7 @@ class SubSchemaController extends Controller {
      */
     async findOwner( { docId }, queryOptions ) {
 
-        return await this.ctrl.findOne({
+        return await this.modelCtrl.findOne({
             search: { [`${this.prop}._id`]: docId }
         }, queryOptions);
 
@@ -109,7 +111,7 @@ class SubSchemaController extends Controller {
         return (
 
             // Make the query.
-            await this.ctrl.updateOne({
+            await this.modelCtrl.updateOne({
                 docId: belongsTo,
                 data: { $push: { [this.prop]: data } }
             }, {
@@ -131,7 +133,7 @@ class SubSchemaController extends Controller {
         return (
 
             // Find and select the target subdoc.
-            await this.ctrl.findOne({
+            await this.modelCtrl.findOne({
                 search: { [`${this.prop}._id`]: docId }
             }, {
                 // Select the potential matching document.
@@ -150,12 +152,31 @@ class SubSchemaController extends Controller {
      */
     async updateOne( { docId, data } ) {
 
+        const {
+            $set,
+            $unset,
+            $push,
+            $pull,
+            ...docData
+        } = data;
+
+        const modifiers = {};
+        if($unset) modifiers.$unset = $unset;
+        if($push) modifiers.$push = $push;
+        if($pull) modifiers.$pull = $pull;
+
         return (
 
             // Find and update the target subdoc.
-            await this.ctrl.updateOne({
+            await this.modelCtrl.updateOne({
                 search: { [`${this.prop}._id`]: docId },
-                data: this.mapSubDocKeys( data, true )
+                data: {
+                    $set: {
+                        ...this.mapSubDocKeys(  docData, true ),
+                        ...$set
+                    },
+                    ...modifiers
+                }
             }, {
                 // Select the subdoc list - TODO figure out how to not have to select the entire sub doc list here. The "potential" flag ".$" doesn't work with the { new: true } flag on the mongoose query.
                 select: this.prop
@@ -176,7 +197,7 @@ class SubSchemaController extends Controller {
         return (
 
             // Find and update the target subdoc.
-            await this.ctrl.updateOne({
+            await this.modelCtrl.updateOne({
                 search: { [`${this.prop}._id`]: docId },
                 data: { $pull: { [`${this.prop}`]: { "_id": docId } } },
                 // Return the old document so we can extract the deleted student.

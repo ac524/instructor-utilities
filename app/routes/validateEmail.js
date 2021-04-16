@@ -2,10 +2,7 @@ const createRouter = require("./utils/createRouter");
 
 const { resend: resendVal } = require("./validation");
 
-const {
-    validate,
-    resend
-} = require("../controllers/validateEmail");
+const validateEmailCtrl = require("../controllers/validateEmail");
 
 const resendCtlrConfig = {
     keyMap: { body: "config" }
@@ -18,14 +15,14 @@ module.exports = createRouter([
             auth: true,
             defaultError: "resend the email",
             validation: resendVal,
-            ctrl: [ resend, resendCtlrConfig ]
+            ctrl: [ validateEmailCtrl.binding.resend, resendCtlrConfig ]
         }
     }],
 
     ["/:tokenString", {
         post: {
             defaultError: "validate the email",
-            ctrl: validate
+            ctrl: validateEmailCtrl.binding.validate
         }
     }]
 

@@ -1,4 +1,4 @@
-const { register: roomVal } = require("./validation");
+const { room: roomVal } = require("./validation");
 const { room: roomPerm } = require("../config/permissions");
 
 const roomCtrl = require("../controllers/room");
@@ -15,6 +15,14 @@ const sharedConfig = {
 };
 
 module.exports = createRouter([
+    ["/",{
+        post: {
+            defaultError: "create the room",
+            validation: roomVal,
+            auth: true,
+            ctrl: roomCtrl
+        }
+    }],
 
     ["/:roomId", {
         get: {
