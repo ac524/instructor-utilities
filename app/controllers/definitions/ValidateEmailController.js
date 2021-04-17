@@ -2,6 +2,7 @@ const ioEmit = require("../utils/ioEmit");
 
 const { NotFoundError } = require("../../config/errors");
 const Controller = require("../types/Controller");
+const sendUserVerifyEmail = require("../utils/sendUserVerifyEmail");
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('~crsm/routes/validation/definitions/resendValidation').ResendData} ResendData
@@ -29,6 +30,7 @@ class ValidateEmailController extends Controller {
      * @param {ResendValidateEmailOptions} param0
      */
     async resend ({ config }) {
+
         const { email } = config;
 
         const user = await this.effect('user').findOne({ search: { email } });

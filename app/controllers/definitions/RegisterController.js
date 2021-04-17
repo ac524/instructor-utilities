@@ -3,6 +3,7 @@ const Controller = require("../types/Controller");
 const mail = require("../../mail");
 
 const { InvalidDataError, NotFoundError } = require("../../config/errors");
+const sendUserVerifyEmail = require("../utils/sendUserVerifyEmail");
 
 /**
  * TYPE DEFINITION IMPORTS
