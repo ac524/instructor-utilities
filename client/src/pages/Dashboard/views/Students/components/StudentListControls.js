@@ -37,18 +37,6 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
     return (
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
-            <Dropdown className="ml-2" label="Adjust Priority">
-                <Button className="dropdown-item">1 (low risk)</Button>
-                <Button className="dropdown-item">2</Button>
-                <Button className="dropdown-item">3</Button>
-                <Button className="dropdown-item">4</Button>
-                <Button className="dropdown-item">5</Button>
-                <Button className="dropdown-item">6</Button>
-                <Button className="dropdown-item">7</Button>
-                <Button className="dropdown-item">8</Button>
-                <Button className="dropdown-item">9</Button>
-                <Button className="dropdown-item">10 (high risk)</Button>
-            </Dropdown>
             <Dropdown className="ml-2" label="Reassign">
                 <Button className="dropdown-item">TA 1</Button>
                 <Button className="dropdown-item">TA 2</Button>
