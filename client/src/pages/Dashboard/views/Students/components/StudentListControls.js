@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
     Form as FormCollection,
@@ -6,7 +6,8 @@ import {
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
-import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { useDashboardDispatch, getDashboardAction as gda, useStaffByRole } from "pages/Dashboard/store";
+import { getStaffOptionsList } from "../../../components/StudentModal/components/SettingsForm";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 import Dropdown from "components/Dropdown";
 import { useStudentGroupings } from "pages/Dashboard/utils/student";
@@ -15,7 +16,7 @@ import RequirePerm from "pages/Dashboard/components/RequirePerm";
 
 const { Input } = FormCollection;
 
-const StudentListControls = ( { sort, groupBy, search } ) => {
+const StudentListControls = ( { sort, groupBy, search, assignment } ) => {
 
     const dispatch = useDashboardDispatch();
     const groupTypes = useStudentGroupings().map( ({key, name, icon}) => ({
@@ -24,6 +25,14 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         icon
     }) );
     const groupLabel = <Icon icon="columns" />
+    const { ta } = useStaffByRole();
+    const [ staffOptionsList, setStaffOptionsList ] = useState([]);
+
+    useEffect(() => {
+
+        setStaffOptionsList( getStaffOptionsList(ta || []) );
+
+    }, [ ta, setStaffOptionsList ]);
 
     const AddStudentButton = () => {
         return (
@@ -38,9 +47,9 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
             <Dropdown className="ml-2" label="Reassign">
-                <Button className="dropdown-item">TA 1</Button>
-                <Button className="dropdown-item">TA 2</Button>
-                <Button className="dropdown-item">TA 3</Button>
+                {staffOptionsList.map(staff => (
+                    <Button className="dropdown-item" key={staff.value} onClick={() => assignment[1](staff.value)}>{staff.label}</Button>
+                ))}
             </Dropdown>
             <Input
                 className="ml-auto"
