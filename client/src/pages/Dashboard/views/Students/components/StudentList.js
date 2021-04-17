@@ -6,7 +6,7 @@ import { StudentCard } from "pages/Dashboard/components/StudentCard";
 import { useStudentSort, useStudentGroups } from "pages/Dashboard/utils/student";
 import { useStudents } from "pages/Dashboard/store";
 
-const StudentList = ( { sort, groupBy, search } ) => {
+const StudentList = ( { sort, groupBy, search, assignment } ) => {
 
     const students = useStudents();
     const groupedStudents = useStudentGroups( students, groupBy );
