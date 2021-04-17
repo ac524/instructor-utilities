@@ -19,7 +19,7 @@ const Students = () => {
     return (
         <Section>
             <StudentListControls sort={[ sort, setSort ]} groupBy={[ groupBy, setGroupBy ]} search={[ search, setSearch ]} assignment={[ assignment, setAssignment ]}/>
-            <StudentList sort={sort} groupBy={groupBy} search={search.toLowerCase()} />
+            <StudentList sort={sort} groupBy={groupBy} search={search.toLowerCase()} assignment={assignment} />
             <StudentModal />
         </Section>
     );
