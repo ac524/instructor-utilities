@@ -31,6 +31,13 @@ export const PrivateRoute = ({ component: Component, children, redirectTo = "/",
     const isAuth = useIsAuthenticated();
 
     const render = () => isAuth ? (Component ? <Component /> : children) : <Pages.NotFound />;
+    // const render = ({ location }) => (
+    //     isAuth
+        
+    //         ? <Redirect to={{ pathname: redirectTo, state: { from: location } }} />
+            
+    //         : (Component ? <Component /> : children)
+    // );    
 
     return (
         <Route
@@ -50,7 +57,7 @@ const Routes = () => {
     if(!authUser) {
         guestRedirect = "/";
     } else if(authUser.classrooms.length) {
-        guestRedirect = `/${authUser.classrooms[0]}`;
+        guestRedirect = `/r/${authUser.classrooms[0]}`;
     } else {
         guestRedirect = "/settings";
     }
@@ -65,7 +72,8 @@ const Routes = () => {
             <GuestRoute path="/register" exact redirectTo={guestRedirect} component={Pages.Register} />
             <GuestRoute path="/" exact redirectTo={guestRedirect} component={Pages.Home}/>
 
-            <PrivateRoute path="/:roomId" component={Pages.Dashboard} />
+            <PrivateRoute path="/r/:roomId" component={Pages.Dashboard} />
+            <PrivateRoute path="/settings" component={Pages.Dashboard} />
             
             <Route path="*" component={Pages.NotFound} />
         </Switch>
