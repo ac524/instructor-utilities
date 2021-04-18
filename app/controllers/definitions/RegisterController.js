@@ -3,7 +3,6 @@ const Controller = require("../types/Controller");
 const mail = require("../../mail");
 
 const { InvalidDataError, NotFoundError } = require("../../config/errors");
-const sendUserVerifyEmail = require("../utils/sendUserVerifyEmail");
 
 /**
  * TYPE DEFINITION IMPORTS
@@ -110,7 +109,11 @@ class RegisterController extends Controller {
 			}
 		});
 
-		if (mail.isEnabled) await sendUserVerifyEmail(user, this.effect("token"));
+		if (mail.isEnabled)
+			
+			await this
+				.effect("validate.email")
+				.createOne({ createFor: user });
     }
 }
 

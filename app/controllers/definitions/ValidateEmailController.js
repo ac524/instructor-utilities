@@ -1,8 +1,11 @@
+const mail = require("../../mail");
+const homeUrl = require("../../config/options")( "publicUrl" );
+
 const ioEmit = require("../utils/ioEmit");
 
 const { NotFoundError } = require("../../config/errors");
 const Controller = require("../types/Controller");
-const sendUserVerifyEmail = require("../utils/sendUserVerifyEmail");
+
 /**
  * TYPE DEFINITION IMPORTS
  * @typedef {import('~crsm/routes/validation/definitions/resendValidation').ResendData} ResendData
@@ -27,23 +30,56 @@ class ValidateEmailController extends Controller {
 	}
 
     /**
-     * @param {ResendValidateEmailOptions} param0
+     * @param {Object} options 
+     * @param {import('~crsmmodels/schema/UserSchema').UserDocument} options.createFor
+     * 
+     * @returns {import('~crsmmodels/schema/TokenSchema').TokenDocument}
      */
-    async resend ({ config }) {
+    async createOne ({ createFor }) {
 
-        const { email } = config;
+        const token =
+            await this
+                .effect("token")
+                .createOne({ data: { relation: createFor._id } });
+    
+        await mail.send(
+          "welcome",
+          {
+            name: createFor.name,
+            verificationLink: `${homeUrl}/validate-email/${token.tokenString}`
+          },
+          {
+            to: createFor.email,
+            subject: "Welcome to Classroom! Please verify your email"
+          }
+        );
+
+        return token;
+    
+    }
+
+    /**
+     * @param {Object} options
+     * @param {Object} options.data
+     * @param {String} options.data.email
+     *
+     * @returns {import('~crsmmodels/schema/TokenSchema').TokenDocument}
+     */
+    async resend ({ data: { email } }) {
 
         const user = await this.effect('user').findOne({ search: { email } });
 
         if (!user) throw new NotFoundError("Email not found.");
 
-        await sendUserVerifyEmail(user, this.effect("token"));
+        return await this.createOne({ createFor: user });
+
     };
 
     /**
      * @param {ValidateEmailOptions} param0
      */
     async validate ({ tokenString }) {
+
         const tokenRecord = await this.effect('token').getByTokenString({ tokenString });
 
         if (!tokenRecord) throw new NotFoundError("Token not found.");
@@ -56,7 +92,11 @@ class ValidateEmailController extends Controller {
         });
 
         ioEmit("user:update", { isVerified: true }, `user:${tokenRecord.relation}`);
+
+
+
     };
+
 }
 
 
