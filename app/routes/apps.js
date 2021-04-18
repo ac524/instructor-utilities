@@ -1,8 +1,7 @@
 const { app: appVal } = require("./validation")
 
-const appCtrl = require('../controllers/app');
-const appTypeCtrl = require('../controllers/appType');
-
+const { appCtrl } = require("../controllers");
+const { appTypeCtrl } = require("../controllers");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
 const setAppSearch = require("./middleware/setAppSearch");

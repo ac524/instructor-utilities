@@ -5,8 +5,8 @@ const {
     feedDeelevate: feedDeelevatePerm
 } = require("../config/permissions");
 
-const feedCtrl = require("../controllers/feed");
-const feedEntryCtrls = require("../controllers/feedentries");
+const { feedCtrl } = require("../controllers");
+const { feedEntryCtrls } = require("../controllers");
 
 const createRouter = require("./utils/createRouter");
 

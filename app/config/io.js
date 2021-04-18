@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { Feed } = require("../controllers/definitions/models");
-const roomCtrl = require("../controllers/room");
+const { roomCtrl } = require("../controllers");
 const secret = require("./options")( "secret" );
-
 
 const authorizeSocket = ({ handshake }) => {
 
