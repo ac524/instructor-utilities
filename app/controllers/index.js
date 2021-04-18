@@ -23,7 +23,7 @@ module.exports = {
 
 	feedEntryCtrls: {
 		commentCtrl: new FeedEntryController("comment"),
-		commentCtrl: new FeedEntryController("elevate"),
+		elevateCtrl: new FeedEntryController("elevate"),
 		deelevateCtrl: new FeedEntryController("deelevate")
 	},
 
