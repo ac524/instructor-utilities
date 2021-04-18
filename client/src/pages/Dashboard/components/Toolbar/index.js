@@ -30,7 +30,7 @@ export const useToolbarOffset = ( offset ) => {
 
 const ToolbarItem = ({ icon, exact, to="", ...props }) => {
 
-    const match = useRouteMatch({ path: `/:roomId${to}` });
+    const match = useRouteMatch({ path: `/r/:roomId${to}` });
 
     const isActive = Boolean( match && (!exact || match.isExact) );
 

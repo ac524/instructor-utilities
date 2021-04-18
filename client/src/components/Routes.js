@@ -30,14 +30,13 @@ export const PrivateRoute = ({ component: Component, children, redirectTo = "/",
 
     const isAuth = useIsAuthenticated();
 
-    const render = () => isAuth ? (Component ? <Component /> : children) : <Pages.NotFound />;
-    // const render = ({ location }) => (
-    //     isAuth
+    const render = ({ location }) => (
+        isAuth
         
-    //         ? <Redirect to={{ pathname: redirectTo, state: { from: location } }} />
+            ? (Component ? <Component /> : children) 
             
-    //         : (Component ? <Component /> : children)
-    // );    
+            : <Redirect to={{ pathname: redirectTo, state: { from: location } }} />
+    );    
 
     return (
         <Route
