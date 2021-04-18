@@ -5,7 +5,7 @@ const ValidationSchema = require("../ValidationSchema");
  * @property {string} email
  */
 const resendValidation = new ValidationSchema("resend", {
-    type: { type: "email" }
+    email: { type: "email" }
 });
 
 module.exports = resendValidation;

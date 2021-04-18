@@ -152,7 +152,7 @@ class InviteController extends Controller {
 
 		const invite = room.invites[room.invites.length - 1];
 
-		if (mail.isEnabled) await sendInvite(room, invite, user);
+		if (mail.isEnabled) await this.sendInvite(room, invite, user);
 
 		return invite;
 	}
