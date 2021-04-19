@@ -8,7 +8,7 @@ const { user: userVal, invite: inviteVal } = require("./validation");
 
 const { invite: invitePerm } = require("../config/permissions");
 
-const inviteCtrl = require("../controllers/invite");
+const { inviteCtrl } = require("../controllers");
 
 const inviteCtlrConfig = {
     keyMap: { body: "inviteData" }

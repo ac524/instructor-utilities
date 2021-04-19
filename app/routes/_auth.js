@@ -2,7 +2,7 @@ const createRouter = require("./utils/createRouter");
 
 const { login: loginVal } = require("./validation")
 
-const authCtrl = require("../controllers/auth");
+const { authCtrl } = require("../controllers");
 
 const loginCtlrConfig = {
     keyMap: { body: "credentials" }

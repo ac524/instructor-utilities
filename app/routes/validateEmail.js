@@ -2,7 +2,7 @@ const createRouter = require("./utils/createRouter");
 
 const { resend: resendVal } = require("./validation");
 
-const validateEmailCtrl = require("../controllers/validateEmail");
+const { validateEmailCtrl } = require("../controllers");
 
 module.exports = createRouter([
 
