@@ -21,11 +21,9 @@ module.exports = {
 
 	feedCtrl: new FeedController(),
 
-	feedEntryCtrls: {
-		commentCtrl: new FeedEntryController("comment"),
-		elevateCtrl: new FeedEntryController("elevate"),
-		deelevateCtrl: new FeedEntryController("deelevate")
-	},
+	feedCommentCtrl: new FeedEntryController("comment"),
+	feedElevateCtrl: new FeedEntryController("elevate"),
+	feedDeelevateCtrl: new FeedEntryController("deelevate"),
 
 	inviteCtrl: new InviteController(),
 
