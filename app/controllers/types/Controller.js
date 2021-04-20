@@ -34,7 +34,7 @@ const makeFnBindingMap = controller => {
 class Controller {
 
     constructor( ctrlKey ) {
-
+      
         /** @type {this} - A proxy of the object that can return the functions with .bind() applied. */
         this.binding = makeFnBindingMap( this );
 
