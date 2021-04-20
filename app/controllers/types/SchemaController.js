@@ -58,9 +58,9 @@ class SchemaController extends Controller {
      * @param {string} key 
      * @param {MongoModel} model 
      */
-    constructor( key, model ) {
+    constructor( key, model, unique = "" ) {
 
-        super();
+        super( key + (unique && `.${unique}`) );
 
         this.key = key;
         this.model = model;

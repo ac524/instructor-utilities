@@ -97,7 +97,8 @@ export const useStudent = ( targetId ) => {
         setStudent( students.find( ({ _id }) => _id === targetId ) || {
             name: "",
             priorityLevel: 1,
-            assignedTo: ""
+            assignedTo: "",
+            meta: {}
         } );
 
     }, [students, targetId]);

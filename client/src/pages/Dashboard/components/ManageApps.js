@@ -10,7 +10,8 @@ import {
 import Icon from "components/Icon";
 import api from "utils/api";
 import { useClassroom, useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
-import { SET_MANAGE_APPS } from "pages/Dashboard/store/actionsNames";
+import { ADD_APP, SET_MANAGE_APPS } from "pages/Dashboard/store/actionsNames";
+import { useSocket } from "utils/socket.io";
 
 
 const { Column } = Columns;
@@ -32,15 +33,25 @@ const sizes = {
 
 export const AppTypeCard = ( { appType } ) => {
 
+    const [ , dispatch ] = useDashboardContext();
+    const socket = useSocket();
     const { _id, apps: installedApps } = useClassroom();
-    const isInstalled = installedApps.includes( appType._id );
+    const isInstalled = -1 < installedApps.findIndex( (thisAppType) => thisAppType._id === appType._id );
     const icon = isInstalled ? "check" : "download";
     const color = isInstalled ? "success" : "primary";
     const text = isInstalled ? "Installed" : "Available";
 
     const toggleAppInstall = async () => {
 
-        if( ! isInstalled ) await api.installApp( _id, appType._id );
+        if( ! isInstalled ) {
+
+            const { data: app } = await api.installApp( _id, appType._id );
+
+            const action = gda( ADD_APP, app.type );
+            dispatch(action);
+            socket.emit("room:dispatch", action);
+
+        }
 
     }
 

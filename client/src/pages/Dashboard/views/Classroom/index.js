@@ -8,7 +8,7 @@ import {
     Button
 } from "react-bulma-components";
 
-import Widget from "./components/Widget";
+import Widget, { appWidgets } from "./components/Widget";
 
 import { useTopbarConfig } from "../../components/Topbar";
 import Dropdown from "components/Dropdown";
@@ -62,26 +62,26 @@ const Classroom = () => {
 
     }, [roomId, roomnames, dispatch, setTopbarTools]);
 
-
     useTopbarConfig({ name: roomName, tools: topbarTools });
 
+    const appsWithWidgets = apps.filter( (appType) => appWidgets.has( appType.type ) );
 
     return (
         <Section className="is-flex" style={{flexGrow:(apps.length ? 0 : 1),flexDirection:"column"}}>
             {
-                apps.length
+                appsWithWidgets.length
 
                 ? (
                     <Tile kind="ancestor">
                         <Tile kind="parent">
-                            { apps.map( appTypeId => (
+                            { appsWithWidgets.map( appType => (
                                 <Tile
-                                    key={appTypeId}
+                                    key={appType._id}
                                     kind="child"
                                     renderAs={Widget}
                                     size={6}
                                     roomId={roomId}
-                                    appTypeId={appTypeId}
+                                    appTypeId={appType._id}
                                 />
                             ) ) }
                         </Tile>
