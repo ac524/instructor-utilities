@@ -18,7 +18,6 @@ import { registerRoute } from "workbox-routing";
 import {
 	NetworkFirst,
 	CacheFirst,
-	StaleWhileRevalidate
 } from "workbox-strategies";
 
 clientsClaim();
@@ -61,7 +60,7 @@ registerRoute(
 	new RegExp("/(favicon|images)/.*\\.(png|jpg)"),
 
 	// Customize this strategy as needed, e.g., by changing to CacheFirst.
-	new NetworkFirst({
+	new CacheFirst({
 		
 		cacheName: "cache-images"
 		
@@ -69,14 +68,22 @@ registerRoute(
 );
 
 registerRoute(
-	new RegExp("/"),
+	new RegExp("/api"),
 
 	new NetworkFirst({
-
-		cacheName: "cache-routes"
-
+		cacheName: "cache-api-routes"
 	})
 );
+
+registerRoute(
+	new RegExp("/"),
+
+	new CacheFirst({
+		cacheName: "cache-routes"
+	})
+);
+
+
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
