@@ -7,7 +7,8 @@ import {
     Heading,
     Tag,
     Button,
-    Tabs
+    Tabs,
+	Level
 } from "react-bulma-components";
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
@@ -30,6 +31,7 @@ const StudentModal = () => {
     const [ isBulkCreate, setIsBulkCreate ] = useState(false);
     const [activityTab, setActivityTab] = useState(false);
     const [editStudentTab, setEditStudentTab] = useState(true);
+	const [commentBox, setCommentBox] = useState(false);
     const editStudent = useEditStudent();
 
     const { _id } = editStudent;
@@ -55,6 +57,10 @@ const StudentModal = () => {
 		setActivityTab(true);
 		setEditStudentTab(false);
 	};
+
+	const showCommentBox = () =>{
+		setCommentBox(!commentBox);
+	}
 
     const { width } = useWindowDimensions();
 
@@ -86,8 +92,12 @@ const StudentModal = () => {
 								</Tab>
 							</Tabs>
 						</Box>
-						{editStudentTab ? (
-							<Column className="has-filled-content">
+						{editStudentTab || width >= 1025 ? (
+							<Column
+								className="has-filled-content"
+								desktop={{
+									size: "half"
+								}}>
 								<Box className="py-5 is-shadowless">
 									<div
 										className="is-flex"
@@ -137,7 +147,11 @@ const StudentModal = () => {
 						) : null}
 						{activityTab || width >= 1025
 							? _id && (
-									<Column className="has-filled-content h-100">
+									<Column
+										className="has-filled-content h-100"
+										desktop={{
+											size: "half"
+										}}>
 										<ActivtyFeed
 											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0"
 											student={editStudent}
@@ -152,9 +166,30 @@ const StudentModal = () => {
 												borderTop: "2px solid #dfdfdf",
 												borderTopRightRadius: 0
 											}}>
-											<CommentForm
-												feedId={editStudent.feed}
-											/>
+											{commentBox ? (
+												<CommentForm
+													feedId={editStudent.feed}
+												/>
+											) : null}
+
+											<Level
+												className="mt-3"
+												
+												style={{
+													borderTop: commentBox?
+														"2px solid #dfdfdf":"0px"
+												}}>
+												<Level.Item>
+													<Button
+														onClick={()=>showCommentBox()}
+														className="mt-3"
+														color="light">
+														{commentBox
+															? "...Collapse"
+															: "Comment"}
+													</Button>
+												</Level.Item>
+											</Level>
 										</Box>
 									</Column>
 							  )

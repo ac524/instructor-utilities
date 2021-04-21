@@ -46,7 +46,8 @@ const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
         placeholder: "Add a comment...",
         name: "comment",
         type: "textarea",
-        value: values.comment
+        value: values.comment,
+        row:2
     };
 
     return (
