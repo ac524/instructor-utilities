@@ -1,7 +1,7 @@
 const appTypes  = require("./registry.json");
 const appTypeLibrary = require("./library");
 
-const appTypeCtrl = require("../../controllers/appType");
+const { appTypeCtrl } = require("../../controllers");
 
 const registerAppTypes = async () => {
 

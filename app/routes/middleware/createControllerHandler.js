@@ -13,7 +13,7 @@ const createControllerHandler = ( controller, { include = [], keyMap = {} } = {}
 
     try {
 
-        res.json( (await controller( mapRequestData( req, include, keyMap ) )) || { success: true } );
+        res.json( (await controller( mapRequestData( req, include, { body: "data", ...keyMap } ) )) || { success: true } );
 
     } catch( err ) {
 

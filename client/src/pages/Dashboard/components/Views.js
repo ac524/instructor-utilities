@@ -9,10 +9,9 @@ const Views = () => {
 
     return (
         <Switch>
-            <Route exact path="/settings" component={UserSettings} />
-            <Route exact path={`/:roomId`} component={Classroom} />
-            <Route exact path={`/:roomId/students`} component={Students} />
-            <Route path={`/:roomId/team`} component={Team} />
+            <Route exact path={`/r/:roomId`} component={Classroom} />
+            <Route exact path={`/r/:roomId/students`} component={Students} />
+            <Route path={`/r/:roomId/team`} component={Team} />
         </Switch>
     );
 

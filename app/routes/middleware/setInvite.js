@@ -1,7 +1,7 @@
 const { InvalidDataError, NotFoundError } = require("../../config/errors");
 
-const tokenCtrl = require("../../controllers/token");
-const roomCtrl = require("../../controllers/room");
+const { tokenCtrl } = require("../../controllers");
+const { roomCtrl } = require("../../controllers");
 
 const setInvite = async ( req, res, next ) => {
 

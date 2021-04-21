@@ -1,7 +1,7 @@
 const { room: roomVal } = require("./validation");
 const { room: roomPerm } = require("../config/permissions");
 
-const roomCtrl = require("../controllers/room");
+const { roomCtrl } = require("../controllers");
 
 const isRoomMember = require("./middleware/isRoomMember");
 const setRoom = require("./middleware/setRoom");
