@@ -78,7 +78,7 @@ export const StudentCard = ({ className, student: { _id, name, priorityLevel, as
 
     const dispatch = useDashboardDispatch();
     const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
-    const updateStudent = () => dispatch(gda(UPDATE_STUDENT, _id));
+    const updateStudent = () => dispatch(gda(UPDATE_STUDENT, _id, isSelected));
 
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
