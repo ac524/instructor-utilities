@@ -7,8 +7,9 @@ import {
 
 import Icon from "components/Icon";
 import { useDashboardDispatch, getDashboardAction as gda, useStaffByRole } from "pages/Dashboard/store";
-import { getStaffOptionsList } from "../../../components/StudentModal/components/SettingsForm";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
+import { getStaffOptionsList } from "pages/Dashboard/utils/staff";
+import { EDIT_STUDENT, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
+import { useStudents } from "pages/Dashboard/store";
 import Dropdown from "components/Dropdown";
 import { useStudentGroupings } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
@@ -26,13 +27,17 @@ const StudentListControls = ( { sort, groupBy, search, assignment } ) => {
     }) );
     const groupLabel = <Icon icon="columns" />
     const { ta } = useStaffByRole();
+    const learners = useStudents();
+    const [ students, setStudents ] = useState([]);
     const [ staffOptionsList, setStaffOptionsList ] = useState([]);
 
     useEffect(() => {
 
+        console.log("Change detected");
         setStaffOptionsList( getStaffOptionsList(ta || []) );
+        setStudents( learners || [] );
 
-    }, [ ta, setStaffOptionsList ]);
+    }, [ ta, setStaffOptionsList, learners, setStudents ]);
 
     const AddStudentButton = () => {
         return (
@@ -43,12 +48,31 @@ const StudentListControls = ( { sort, groupBy, search, assignment } ) => {
         );
     }
 
+    const handleBulkReassignment = staff => {
+        
+        const assignedTo = staff.value;
+        // Updating state
+        assignment[1](assignedTo);
+        
+        const selectedStudents = students.filter(student => {
+            return student.isSelected;
+        });
+        
+        for (const student of selectedStudents) {
+            dispatch(gda(UPDATE_STUDENT, student._id, student.assignedTo));
+        }
+
+        // TODO: API request to POST data
+        
+    }
+
     return (
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
+            {/* TODO: "Reassign" only appears when a student is checked */}
             <Dropdown className="ml-2" label="Reassign">
                 {staffOptionsList.map(staff => (
-                    <Button className="dropdown-item" key={staff.value} onClick={() => assignment[1](staff.value)}>{staff.label}</Button>
+                    <Button className="dropdown-item" key={staff.value} onClick={staff => handleBulkReassignment(staff)}>{staff.label}</Button>
                 ))}
             </Dropdown>
             <Input
