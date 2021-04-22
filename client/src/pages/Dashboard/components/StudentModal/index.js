@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useReducer } from "react";
 
 import {
-    Modal,
-    Box,
-    Columns,
-    Heading,
-    Tag,
-    Button,
-    Tabs,
-	Level
+	Modal,
+	Box,
+	Columns,
+	Heading,
+	Tag,
+	Button,
+	Tabs,
+	Level,
+	Form
 } from "react-bulma-components";
+const { Textarea } = Form;
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
@@ -20,7 +22,8 @@ import Icon from "components/Icon";
 import Fade from "animations/Fade";
 import CommentForm from "./components/ActivityFeed/components/CommentForm";
 import {useWindowDimensions} from "./utils"
-import "./index.sass"
+import "./index.sass" 
+import { useOutsideClickDispatch } from "../../../../utils/detection";
 
 const { Column } = Columns;
 const { Tab } = Tabs;
@@ -31,8 +34,18 @@ const StudentModal = () => {
     const [ isBulkCreate, setIsBulkCreate ] = useState(false);
     const [activityTab, setActivityTab] = useState(false);
     const [editStudentTab, setEditStudentTab] = useState(true);
-	const [commentBox, setCommentBox] = useState(false);
     const editStudent = useEditStudent();
+
+
+	const [isActive, dispatchComment] = useReducer(
+		(state, action) => action === "open"
+	);
+
+	const commentRef = useOutsideClickDispatch({
+		isActive,
+		dispatch:dispatchComment,
+		action: "close"
+	});
 
     const { _id } = editStudent;
     const show = editStudentId !== false;
@@ -58,17 +71,13 @@ const StudentModal = () => {
 		setEditStudentTab(false);
 	};
 
-	const showCommentBox = () =>{
-		setCommentBox(!commentBox);
-	}
-
     const { width } = useWindowDimensions();
 
     return (
 		// <span>test</span>
 		<Modal onClose={clearEditStudent} show={show} closeOnBlur={true}>
 			<Fade style={{ width: "100%" }} show={show} duration=".5s">
-				<Modal.Content {...contentProps}>
+				<Modal.Content {...contentProps} className="hide-overflow">
 					<Columns gapless className="h-100" breakpoint="desktop">
 						<Box
 							className="is-shadowless pb-0 mb-0 is-hidden-desktop"
@@ -94,11 +103,11 @@ const StudentModal = () => {
 						</Box>
 						{editStudentTab || width >= 1025 ? (
 							<Column
-								className="has-filled-content"
+								className="has-filled-content is-radiusless h-90"
 								desktop={{
 									size: "half"
 								}}>
-								<Box className="py-5 is-shadowless">
+								<Box className="py-5 is-shadowless is-radiusless">
 									<div
 										className="is-flex"
 										style={{ alignItems: "center" }}>
@@ -148,48 +157,51 @@ const StudentModal = () => {
 						{activityTab || width >= 1025
 							? _id && (
 									<Column
-										className="has-filled-content h-100"
+										className="has-filled-content h-90 is-radiusless"
 										desktop={{
 											size: "half"
 										}}>
 										<ActivtyFeed
-											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0"
+											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0 is-radiusless"
 											student={editStudent}
 											style={{
 												borderBottomRightRadius: 0
 											}}
 										/>
 										<Box
-											className="px-6 py-3 is-shadowless has-background-white-bis has-text-grey m-0"
+											className="p-0 has-background-white-bis has-text-grey m-0"
 											style={{
 												flexGrow: 0,
-												borderTop: "2px solid #dfdfdf",
 												borderTopRightRadius: 0
 											}}>
-											{commentBox ? (
+											{isActive ? (
 												<CommentForm
+													ifFocus="is-focused"
+													commentRef={commentRef}
 													feedId={editStudent.feed}
 												/>
-											) : null}
-
-											<Level
-												className="mt-3"
-												
-												style={{
-													borderTop: commentBox?
-														"2px solid #dfdfdf":"0px"
-												}}>
-												<Level.Item>
-													<Button
-														onClick={()=>showCommentBox()}
-														className="mt-3"
-														color="light">
-														{commentBox
-															? "...Collapse"
-															: "Comment"}
-													</Button>
-												</Level.Item>
-											</Level>
+											) : (
+												<Level className="has-background-white-bis is-flex-grow-1 has-shadow">
+													<Level.Side
+														align="left"
+														className="is-flex-grow-1">
+														<Level.Item
+															className="is-flex-grow-1"
+															onClick={() =>
+																dispatchComment(
+																	"open"
+																)
+															}
+															color="light">
+															<Textarea
+																placeholder="Add a comment..."
+																rows={
+																	1
+																}></Textarea>
+														</Level.Item>
+													</Level.Side>
+												</Level>
+											)}
 										</Box>
 									</Column>
 							  )

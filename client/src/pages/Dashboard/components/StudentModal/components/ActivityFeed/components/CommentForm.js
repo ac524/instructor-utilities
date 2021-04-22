@@ -11,58 +11,62 @@ const validateInviteData = createValidator({
     }
 });
 
-const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
+const CommentForm = ({
+	feedId,
+	entry,
+	afterComment = () => {},
+	commentRef, 
+	ifFocus
+}) => {
+	const [values, setValues] = useState(
+		entry
+			? entry.data
+			: {
+					comment: ""
+			  }
+	);
 
-    const [values, setValues] = useState( entry ? entry.data : {
-        comment: ""
-    } );
+	const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
 
-    const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
+	const handleSubmit = async (data, setErrors) => {
+		try {
+			let { data: resData } = entry
+				? await api.updateComment(entry._id, data)
+				: await api.createComment(feedId, data);
 
-    const handleSubmit = async (data, setErrors) => {
+			// Reset the form if not updating an existing comment.
+			if (!entry) setValues({ comment: "" });
 
-        try {
-            
-            let { data: resData } = entry
-                ? await api.updateComment( entry._id, data )
-                : await api.createComment( feedId, data )
+			handleFeedEventResponse(resData, entry ? "update" : "push");
 
-            // Reset the form if not updating an existing comment.
-            if(!entry) setValues({comment:""});
-            
-            handleFeedEventResponse( resData, entry ? "update" : "push" );
+			afterComment();
+		} catch (err) {
+			if (err && err.response) setErrors(err.response.data);
+		}
+	};
 
-            afterComment();
+	const commentField = {
+		placeholder: "Add a comment...",
+		name: "comment",
+		type: "textarea",
+		value: values.comment,
+		row: 2
+	};
 
-        } catch(err) {
-            
-            if( err && err.response ) setErrors(err.response.data);
-
-        }
-
-    }
-
-    const commentField = {
-        placeholder: "Add a comment...",
-        name: "comment",
-        type: "textarea",
-        value: values.comment,
-        row:2
-    };
-
-    return (
-        <div style={{flexGrow:0}}>
-            <Form
-                flat
-                fields={[ commentField ]}
-                fieldValueSource={values}
-                validation={validateInviteData}
-                onSubmit={handleSubmit}
-                buttonText="comment"
-            />
-        </div>
-    );
-
-}
+	return (
+		<div style={{ flexGrow: 0 }}>
+			<Form
+				flat
+				fields={[commentField]}
+				fieldValueSource={values}
+				validation={validateInviteData}
+				onSubmit={handleSubmit}
+				commentRef={commentRef}
+				ifFocus={ifFocus}
+				buttonText="comment"
+			/>
+		</div>
+	);
+};
 
 export default CommentForm;

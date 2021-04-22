@@ -16,6 +16,7 @@ export const FormField = ({
     options,
     inputColor,
     inputProps = {},
+    ifFocus,
     ...props
   }) => {
     const fieldInputProps = {
@@ -32,12 +33,12 @@ export const FormField = ({
       fieldInputProps.color = inputColor(name);
   
     return (
-      <Field {...props}>
-        {label && <Label>{label}</Label>}
-        <Control>
-          <FormInput {...fieldInputProps} />
-          <Error name={name} />
-        </Control>
-      </Field>
-    );
+		<Field {...props}>
+			{label && <Label>{label}</Label>}
+			<Control>
+				<FormInput {...fieldInputProps} ifFocus={ifFocus} />
+				<Error name={name} />
+			</Control>
+		</Field>
+	);
   };
