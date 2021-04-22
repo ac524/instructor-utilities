@@ -5,7 +5,7 @@ import {
 } from "react-bulma-components";
 
 import { getDashboardAction as gda, useDashboardDispatch, useStaffByRole } from "pages/Dashboard/store";
-import { getStaffOptionsList } from "../../../utils/staff";
+import { getStaffOptionsList } from "pages/Dashboard/utils/staff";
 import Form from "components/Form";
 import { createValidator } from "utils/validation";
 import { ADD_STUDENT, ADD_STUDENTS, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
