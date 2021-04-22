@@ -1,6 +1,6 @@
 {
   "name": "crsm",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Classroom student management utilities for instructors to effectively organize and keep track of student progress with a team of staff members.",
   "main": "app/server.js",
   "_moduleAliases": {
@@ -26,7 +26,7 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.4",
-    "concurrently": "^6.0.1",
+    "concurrently": "^6.0.2",
     "inquirer": "^8.0.0",
     "link-module-alias": "^1.2.0",
     "mocha": "^8.3.2",
@@ -45,7 +45,7 @@
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "mjml": "^4.9.0",
-    "mongoose": "^5.12.3",
+    "mongoose": "^5.12.5",
     "nodemailer": "^6.5.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
