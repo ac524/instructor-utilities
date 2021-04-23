@@ -16,7 +16,6 @@ export const FormField = ({
     options,
     inputColor,
     inputProps = {},
-    ifFocus,
     ...props
   }) => {
     const fieldInputProps = {
@@ -36,7 +35,7 @@ export const FormField = ({
 		<Field {...props}>
 			{label && <Label>{label}</Label>}
 			<Control>
-				<FormInput {...fieldInputProps} ifFocus={ifFocus} />
+				<FormInput {...fieldInputProps}/>
 				<Error name={name} />
 			</Control>
 		</Field>

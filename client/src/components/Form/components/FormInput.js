@@ -4,7 +4,7 @@ import { RangeInput } from "./RangeInput"
 
 const { Input, Select, Textarea } = FormCollection;
 
-export const FormInput = ({ type = "text", options = [], ifFocus, ...props }) => {
+export const FormInput = ({ type = "text", options = [], ...props }) => {
     switch (type) {
       case "select":
         return (
@@ -21,7 +21,7 @@ export const FormInput = ({ type = "text", options = [], ifFocus, ...props }) =>
       case "range":
         return <RangeInput {...props} />;
       case "textarea":
-        return <Textarea {...props} className={`${ifFocus?ifFocus:""}`} />;
+        return <Textarea {...props} style={{borderStyle:"none", borderTopStyle: "solid", borderBottomStyle: "solid", borderRadius: 0}}/>;
       default:
         return <Input type={type} {...props} />;
     }
