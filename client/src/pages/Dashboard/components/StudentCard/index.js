@@ -74,11 +74,11 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
     
 }
 
-export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo, elevation, isSelected } }) => {
+export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo, elevation, isSelected = false } }) => {
 
     const dispatch = useDashboardDispatch();
     const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
-    const updateStudent = () => dispatch(gda(UPDATE_STUDENT, _id, isSelected));
+    const updateStudent = ({target}) => dispatch(gda(UPDATE_STUDENT, { _id, isSelected: target.checked }));
 
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
@@ -88,7 +88,7 @@ export const StudentCard = ({ className, student: { _id, name, priorityLevel, as
                     type="checkbox"
                     className="ml-auto"
                     checked={isSelected}
-                    onClick={updateStudent}
+                    onChange={updateStudent}
                 />
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
