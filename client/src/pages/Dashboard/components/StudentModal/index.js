@@ -190,7 +190,10 @@ const StudentModal = () => {
 										}}
 										className={`has-filled-content ${
 											width >= 1025 ? "h-95" : "h-90"
-										}`}>
+										}`}
+										style={{ borderTopRightRadius:
+													width >= 1025 ? 6 : 0}}
+										>
 										<ActivtyFeed
 											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0"
 											student={editStudent}
