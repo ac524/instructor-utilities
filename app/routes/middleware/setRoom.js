@@ -1,7 +1,7 @@
 const { NotFoundError } = require("../../config/errors");
 
-const roomCtrl = require("../../controllers/room");
-const studentCtrl = require("../../controllers/student");
+const { roomCtrl } = require("../../controllers");
+const { studentCtrl } = require("../../controllers");
 
 const setRoom = async (req, next) => {
 

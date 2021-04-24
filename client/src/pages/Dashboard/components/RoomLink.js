@@ -8,7 +8,7 @@ const RoomLink = ( { to, ...props } ) => {
 
     return classroom
     
-        ? <Link to={`/${classroom._id}${to}`} {...props} />
+        ? <Link to={`/r/${classroom._id}${to}`} {...props} />
 
         : <Link to={to} {...props} />;
 

@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { Feed } = require("../controllers/definitions/models");
-const roomCtrl = require("../controllers/room");
+const instanceLibrary = require("../controllers/types/library.js");
 const secret = require("./options")( "secret" );
-
 
 const authorizeSocket = ({ handshake }) => {
 
@@ -26,7 +25,10 @@ const getUserFromVerify = token => {
 
 const isStaffMember = async ( userId, roomId ) => {
 
-    const room = await roomCtrl.findOne( { docId: roomId }, { select: "staff" } );
+    const room = await instanceLibrary.get("room").findOne(
+		{ docId: roomId },
+		{ select: "staff" }
+	);
 
     const staffMember = room.staff.find( member => member.user.equals(userId) );
 

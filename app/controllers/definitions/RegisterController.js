@@ -2,9 +2,6 @@ const Controller = require("../types/Controller");
 
 const mail = require("../../mail");
 
-// Load input validation
-const sendUserVerifyEmail = require("../utils/sendUserVerifyEmail");
-
 const { InvalidDataError, NotFoundError } = require("../../config/errors");
 
 /**
@@ -112,7 +109,11 @@ class RegisterController extends Controller {
 			}
 		});
 
-		if (mail.isEnabled) await sendUserVerifyEmail(user);
+		if (mail.isEnabled)
+			
+			await this
+				.effect("validate.email")
+				.createOne({ createFor: user });
     }
 }
 
