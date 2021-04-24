@@ -1,68 +1,52 @@
-import React, { useState } from "react";
-import { EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { convertToHTML } from "draft-convert";
-import DOMPurify from "dompurify";
+import  { useEffect, useState } from "react";
 
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, ContentState, convertFromRaw, convertToRaw } from "draft-js";
+import Editor from '@draft-js-plugins/editor';
+import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+
 import "./styles.sass";
+import "@draft-js-plugins/static-toolbar/lib/plugin.css";
 
-export const RichTextEditor = () => {
-  const [richTextState, setRichTextState] = useState(() => ({
-    editor: EditorState.createEmpty(),
-    html: "",
-  }));
+const toolbarPlugin = createToolbarPlugin();
 
-  // Attempt 1
-  //So the first thing I did was comment out the parts converting the state to HTML. I then tried these lines of code. I thought I could use the richTextState as my parameter. I got an odd error that prompted me to try something else. The error said: "The type cast expression is expected to be wrapped with parenthesis (18:28)"
+// A helper function to assist with converting initial values to ContentState
+const createContentState = value => {
 
-  // convertToRaw(richTextState: RichTextState): RawTextContentState;
+  return typeof value === "string"
 
-  // convertFromRaw(rawState: RawTextContentState): ContentState;
+    // Handle text based values
+    ? ContentState.createFromText(value)
 
-  //==========================================
+    // Otherwise expect the value to be a raw object
+    : convertFromRaw( value );
 
-  // Attempt 2
-  //I knew I was doing the previous attempt wrong but I wanted to see if I could learn something from the errors. I decided to go with this syntax. However, I got the error "convertToRaw is not defined". Do I need to get both of these function calls working together? I
+}
 
-  // const textToRaw = convertToRaw(richTextState);
+// A hook to simplify the code inside the component.
+const useEditorState = value => useState(() => EditorState.createWithContent(createContentState(value)));
 
-  // const textFromRaw = convertFromRaw(richTextState);
+export const RichTextEditor = ({
+  // Extract props we need to work with
+  value,
+  onChange,
+  // Collect other default props provided that should be applied to the input
+  ...props
+}) => {
 
-  // Can't get this working, just get told "Unexpected reserved word 'static' (34:2)"
-  // static createFromText(
-  //   text: string,
-  //   delimiter?: string
-  //   ): richTextState
+  const [editorState, setEditorState] = useEditorState(value);
 
-  //============================================
+  // useEffect(() => {
 
-  // const [convertedContent, setConvertedContent] = useState(null);
+  //   console.log(convertToRaw(editorState.getCurrentContent()));
 
-  // const handleEditorChange = (state) => {
-  //   setRichTextState({
-  //     editor: state,
-  //     html: convertToHTML(state.getCurrentContent())
-  //   });
-  // };
-
-  // const createMarkup = (html) => {
-  //   return {
-  //     __html: DOMPurify.sanitize(html),
-  //   };
-  // };
+  // },[editorState])
 
   return (
-    <div className="App">
-      <header className="App-header">Rich Text Editor Example</header>
-      <Editor
-        editorState={richTextState.editor}
-        onEditorStateChange={handleEditorChange}
-      />
-      <div
-        className="preview"
-        dangerouslySetInnerHTML={createMarkup(richTextState.html)}
-      ></div>
-    </div>
+    <Editor
+      {...props}
+      editorState={editorState}
+      onChange={setEditorState}
+      plugins={[toolbarPlugin]}
+    />
   );
 };
