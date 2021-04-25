@@ -1,9 +1,5 @@
 .DraftEditor-root
-  background: #fff
-  border: 1px solid #ddd
-  font-family: "Georgia", serif
-  font-size: 14px
-  padding: 15px
+  position: relative
 
 .DraftEditor-editor
   border-top: 1px solid #ddd
@@ -15,8 +11,12 @@
   position: relative
 
 .public-DraftEditor-content
-  padding: 0 15px
-  margin: 0 -15px -15px
+  margin: 0
+
+.public-DraftEditor-content[contenteditable="true"]
+  background: #fff
+  border: 1px solid #ddd
+  padding: 15px
   min-height: 100px
 
 .public-DraftEditorPlaceholder-root

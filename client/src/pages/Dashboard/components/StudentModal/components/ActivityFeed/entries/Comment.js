@@ -4,6 +4,9 @@ import {
     Button
 } from "react-bulma-components";
 
+import { Editor, EditorState, convertFromRaw } from "draft-js";
+// import Editor from '@draft-js-plugins/editor';
+
 import Date from "components/Date";
 import UserName from "components/UserName";
 import Icon from "components/Icon";
@@ -50,6 +53,22 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
 
     }
 
+    const formatComment = () => {
+
+        if( !data.comment ) return null;
+
+        if( typeof data.comment === "string" )
+
+            // Display string based comments as is.
+            return <p>data.comment</p>;
+
+        const contentState = convertFromRaw({ entityMap: {}, ...data.comment });
+        const editorState = EditorState.createWithContent(contentState);
+
+        return <Editor className="DraftEditor-readonly" editorState={editorState} readOnly={true} />;
+
+    }
+
     return (
         <FeedEntry block>
             <Button className="start is-circle">
@@ -70,7 +89,7 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
                             afterComment={closeEdit}
                             />
 
-                        : <p>{data.comment}</p>
+                        : formatComment()
                 }
             </div>
         </FeedEntry>
