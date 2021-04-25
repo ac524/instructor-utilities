@@ -15,13 +15,13 @@ const { Toolbar } = toolbarPlugin;
 // A helper function to assist with converting initial values to ContentState
 const createContentState = value => {
 
-  return typeof value === "string"
+  return (!value || typeof value === "string")
 
     // Handle text based values
-    ? ContentState.createFromText(value)
+    ? ContentState.createFromText(value || "")
 
     // Otherwise expect the value to be a raw object
-    : convertFromRaw( value );
+    : convertFromRaw( { entityMap: {}, ...value } );
 
 }
 

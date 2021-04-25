@@ -87,7 +87,7 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
                             feedId={feedId}
                             entry={{ _id, by, data }}
                             afterComment={closeEdit}
-                            />
+                        />
 
                         : formatComment()
                 }
