@@ -10,13 +10,15 @@ import { Editor, EditorState, convertFromRaw } from "draft-js";
 import Date from "components/Date";
 import UserName from "components/UserName";
 import Icon from "components/Icon";
+import Dropdown from "components/Dropdown";
+
+import { useAuthorizedUser } from "utils/auth";
+import api from "utils/api";
+
+import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 
 import FeedEntry from "../components/FeedEntry";
-import { useAuthorizedUser } from "utils/auth";
-import Dropdown from "components/Dropdown";
 import CommentForm from "../components/CommentForm";
-import api from "utils/api";
-import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 
 const CommentOptions = ({ deleteAction, editAction, ...props }) => {
 
@@ -80,17 +82,12 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
                     <Date className="end" date={date} />
                     {user._id === by._id && <CommentOptions editAction={edit} deleteAction={deleteComment} />}
                 </div>
-                {
-                    isEditing
-
-                        ? <CommentForm
-                            feedId={feedId}
-                            entry={{ _id, by, data }}
-                            afterComment={closeEdit}
-                        />
-
-                        : formatComment()
-                }
+                <CommentForm
+                    feedId={feedId}
+                    entry={{ _id, by, data }}
+                    afterComment={closeEdit}
+                    readOnly={!isEditing}
+                />
             </div>
         </FeedEntry>
     );
