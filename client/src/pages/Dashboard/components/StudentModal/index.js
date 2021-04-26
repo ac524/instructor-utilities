@@ -217,10 +217,11 @@ const StudentModal = () => {
 												borderBottomRightRadius: 6
 											}}>
 											{isActive ? (
-												<CommentForm
-													ref={commentRef}
-													feedId={editStudent.feed}
-												/>
+												<div ref={commentRef}>
+													<CommentForm
+														feedId={editStudent.feed}
+													/>
+												</div>
 											) : (
 												<Button
 													onClick={()=>dispatchComment(

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 import Form from "components/Form";
+import { RichTextDisplay } from "components/Form/components/RichTextEditor";
+
 import { createValidator } from "utils/validation";
 import api from "utils/api";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
@@ -11,52 +13,65 @@ const validateInviteData = createValidator({
     }
 });
 
-const CommentForm = React.forwardRef(
-	({ feedId, entry, afterComment = () => {} }, ref) => {
+const getEntryComment = entry => entry ? entry.data.comment : "";
 
-		const [values, setValues] = useState( entry ? entry.data : { comment: "" } );
+const CommentFormEditable = ({ feedId, entry, afterComment = () => {} }) => {
 
-		const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
+    const [comment, setComment] = useState( () => getEntryComment(entry));
 
-		const handleSubmit = async (data, setErrors) => {
-			try {
-				let { data: resData } = entry
-					? await api.updateComment(entry._id, data)
-					: await api.createComment(feedId, data);
+    const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
 
-				// Reset the form if not updating an existing comment.
-				if (!entry) setValues({ comment: "" });
+    const handleSubmit = async (data, setErrors) => {
 
-				handleFeedEventResponse(resData, entry ? "update" : "push");
+        try {
+            
+            let { data: resData } = entry
+                ? await api.updateComment( entry._id, data )
+                : await api.createComment( feedId, data )
 
-				afterComment();
-			} catch (err) {
-				if (err && err.response) setErrors(err.response.data);
-			}
-		};
+            // Reset the form if not updating an existing comment.
+            if(!entry) setComment("");
+            
+            handleFeedEventResponse( resData, entry ? "update" : "push" );
 
-		const commentField = {
-			placeholder: "Add a comment...",
-			name: "comment",
-			type: "textarea",
-			value: values.comment,
-			row: 2
-		};
+            afterComment();
 
-		return (
-			<div style={{ flexGrow: 0 }}>
-				<Form
-					flat
-					fields={[commentField]}
-					fieldValueSource={values}
-					validation={validateInviteData}
-					onSubmit={handleSubmit}
-					ref={ref}
-					buttonText="comment"
-				/>
-			</div>
-		);
-	}
-);
+        } catch(err) {
+            
+            if( err && err.response ) setErrors(err.response.data);
+
+        }
+
+    }
+
+    const commentField = {
+        placeholder: "Add a comment...",
+        name: "comment",
+        type: "richtext",
+        value: comment
+    };
+
+    return (
+        <Form
+            flat
+            fields={[ commentField ]}
+            fieldValueSource={comment}
+            validation={validateInviteData}
+            onSubmit={handleSubmit}
+            buttonText="comment"
+        />
+    );
+
+}
+
+const CommentForm = ({ readOnly = false, entry, ...editableProps }) => {
+
+    return (
+        <div style={{flexGrow:0}}>
+            {readOnly ? <RichTextDisplay value={getEntryComment(entry)} /> : <CommentFormEditable entry={entry} {...editableProps} />}
+        </div>
+    );
+
+}
 
 export default CommentForm;
