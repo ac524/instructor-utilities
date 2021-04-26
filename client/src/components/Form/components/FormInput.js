@@ -24,7 +24,7 @@ export const FormInput = ({ type = "text", options = [], ...props }) => {
       case "richtext":
         return <RichTextEditor {...props} />;
       case "textarea":
-        return <textarea {...props} />;
+        return <Textarea {...props} />;
       default:
         return <Input type={type} {...props} />;
     }
