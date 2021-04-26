@@ -50,6 +50,15 @@ export const RichTextEditor = ({
 
   const [editorState, setEditorState] = useEditorState(value);
 
+  useEffect(() => {
+
+    // Temporary fix to allow the field to be reset by passing in a new string value.
+    if(typeof value === "string" && editorState.getCurrentContent().hasText())
+    
+      setEditorState(EditorState.createWithContent(createContentState(value)));
+
+  },[value])
+
   // Watch the editor 
   useEffect(() => {
 
