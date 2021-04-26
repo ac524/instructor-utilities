@@ -3,6 +3,7 @@ node_js: "12"
 branches:
   only:
     - main
+    - staging
 cache:
   directories:
     - node_modules

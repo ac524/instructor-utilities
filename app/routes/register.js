@@ -2,7 +2,7 @@ const createRouter = require("./utils/createRouter");
 
 const { register: registerVal } = require("./validation");
 
-const registerCtrl = require("../controllers/register");
+const { registerCtrl } = require("../controllers");
 
 
 const registerCtlrConfig = {
