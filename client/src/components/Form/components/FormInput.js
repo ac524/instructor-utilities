@@ -21,7 +21,7 @@ export const FormInput = ({ type = "text", options = [], ...props }) => {
       case "range":
         return <RangeInput {...props} />;
       case "textarea":
-        return <Textarea {...props} />;
+        return <Textarea {...props} style={{borderStyle:"none", borderTopStyle: "solid", borderBottomStyle: "solid", borderRadius: 0}}/>;
       default:
         return <Input type={type} {...props} />;
     }
