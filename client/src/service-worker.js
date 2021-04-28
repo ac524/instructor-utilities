@@ -67,7 +67,7 @@ registerRoute(
 );
 
 registerRoute(
-	new RegExp("/(api)/.*"),
+	new RegExp("/api/.*"),
 
 	new NetworkFirst({
 		cacheName: "cache-api-routes"
@@ -80,7 +80,7 @@ registerRoute(
 	new CacheFirst({
 		cacheName: "cache-routes",
 		plugins: {
-			exclude: [new RegExp("(socket.io)/?(.*)")]
+			exclude: [new RegExp("socket\\.io/?.*")]
 		}
 	})
 );
