@@ -53,7 +53,10 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         const selectedStudents = students.filter(({isSelected}) => isSelected);
         
         for (const student of selectedStudents) {
-            dispatch(gda(UPDATE_STUDENT, student._id, student.assignedTo));
+            dispatch(gda(UPDATE_STUDENT, {
+                _id: student._id, 
+                assignedTo: staff.value
+            }));
         }
 
         // TODO: API request to POST data
