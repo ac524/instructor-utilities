@@ -1,14 +1,13 @@
 const { NotFoundError } = require("../../config/errors");
 
-const { roomCtrl } = require("../../controllers");
-const { studentCtrl } = require("../../controllers");
+const library = require("../../controllers");
 
 const setRoom = async (req, next) => {
 
     try {
 
         const roomId = req.crdata.get("roomId");
-        const classroom = await roomCtrl.findOne( { docId: roomId }, { select: "staff" } );
+        const classroom = await library.get("room").findOne( { docId: roomId }, { select: "staff" } );
 
         if( !classroom ) throw new NotFoundError("Classroom not found");
 
@@ -57,7 +56,7 @@ module.exports = {
 
         try {
 
-            const room = await studentCtrl.findOwner({ docId: req.params.studentId }, { select: "_id" });
+            const room = await library.get("room.student").findOwner({ docId: req.params.studentId }, { select: "_id" });
 
             req.crdata.set( "roomId", room._id );
 
