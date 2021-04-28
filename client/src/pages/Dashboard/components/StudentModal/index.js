@@ -73,19 +73,16 @@ const StudentModal = () => {
 
     return (
 		// <span>test</span>
-		<Modal onClose={clearEditStudent} show={show} closeOnBlur={true}>
+		<Modal
+			className="is-student-modal"
+			onClose={clearEditStudent}
+			show={show}
+			closeOnBlur={true}>
 			<Fade style={{ width: "100%" }} show={show} duration=".5s">
 				<Modal.Content {...contentProps} className="hide-overflow">
 					<Columns gapless className="h-100" breakpoint="desktop">
 						{_id ? (
-							<Box
-								className="is-shadowless pb-0 mb-0 is-hidden-desktop"
-								style={{
-									flexGrow: 0,
-									borderRadius: 0,
-									borderTopLeftRadius: 6,
-									borderTopRightRadius: 6
-								}}>
+							<Box className="is-tabs">
 								<Tabs centered="centered">
 									<Tab
 										onClick={() => setTabs("edit")}
@@ -113,29 +110,11 @@ const StudentModal = () => {
 									width >= 1025 ? "h-95" : "h-90"
 								}`}>
 								<Box
-									className="py-5 is-shadowless"
-									style={{
-										borderRadius: 0,
-										borderBottomLeftRadius: 6,
-										borderBottomRightRadius:
-											width >= 1025
-												? _id
-													? 0
-													: 6
-												: _id
-												? 6
-												: 6,
-										borderTopLeftRadius:
-											width >= 1025 ? 6 : _id ? 0 : 6,
-										borderTopRightRadius:
-											width >= 1025
-												? _id
-													? 0
-													: 6
-												: _id
-												? 0
-												: 6
-									}}>
+									className={`${
+										_id
+											? "is-edit-student-id"
+											: "is-edit-student"
+									}`}>
 									<div
 										className="is-flex"
 										style={{ alignItems: "center" }}>
@@ -190,48 +169,31 @@ const StudentModal = () => {
 										}}
 										className={`has-filled-content ${
 											width >= 1025 ? "h-95" : "h-90"
-										}`}
-										style={{
-											borderTopRightRadius:
-													width >= 1025 ? 6 : 0,
-											overflow: "hidden"
-										}}
-										>
+										} is-activity-feed-column`}>
 										<ActivtyFeed
-											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0"
+											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0 is-activity-feed"
 											student={editStudent}
-											style={{
-												borderRadius: 0,
-												borderTopRightRadius:
-													width >= 1025 ? 6 : 0,
-												height: 100
-											}}
 										/>
 										<Box
 											className="p-0 has-background-white-bis has-text-grey m-0 is-relative is-comment-box"
-											style={{
-												flexGrow: 0,
-												borderRadius: 0,
-												borderBottomLeftRadius:
-													width >= 1025 ? 0 : 6,
-												borderBottomRightRadius: 6
-											}}>
+										>
 											{isActive ? (
 												<div ref={commentRef}>
 													<CommentForm
-														feedId={editStudent.feed}
+														feedId={
+															editStudent.feed
+														}
 													/>
 												</div>
 											) : (
 												<Button
-													onClick={()=>dispatchComment(
-														"open"
-													)}
+													onClick={() =>
+														dispatchComment("open")
+													}
 													className="is-flex-grow-1 has-text-grey is-fullwidth"
 													style={{
 														borderRadius: 0,
-														borderLeftStyle:
-															"none",
+														borderLeftStyle: "none",
 														borderRightStyle:
 															"none",
 														borderBottomLeftRadius:

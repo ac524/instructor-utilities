@@ -7,6 +7,38 @@
 .is-comment-box
   box-shadow: 0 -8px 12px -2px rgba(0,0,0,0.1)
   border-left: 1px solid #fafafa !important
+  padding: 0
+  margin: 0
+  position: relative
+  border-radius: 0
+  border-bottom-left-radius: 6px
+  border-bottom-right-radius: 6px
+  
+.is-student-modal
+  .is-tabs
+    display: block
+    padding-bottom: 0
+    margin-bottom: 0
+    border-radius: 0
+    border-top-left-radius: 6px
+    border-top-right-radius: 6px
+
+.is-edit-student
+  box-shadow: none
+  border-radius: 6px
+
+.is-edit-student-id
+  border-radius: 0
+  border-bottom-left-radius: 6px
+  border-bottom-right-radius: 6px
+
+.is-activity-feed-column
+  overflow: "hidden"
+  border-top-right-radius: 0
+  .is-activity-feed
+    border-radius: 0
+    height: 100%
+
 
 ::-webkit-scrollbar 
   width: 7px
@@ -14,7 +46,7 @@
 /* Track */
 ::-webkit-scrollbar-track 
   background: #FFFFFF
-  border-radius: 30px
+  border-radius: 0px
 
  
 /* Handle */
@@ -25,3 +57,27 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover 
   background: #067CAC
+
+@media screen and (min-width: 1025px) 
+  .is-student-modal
+    .is-tabs
+      display: none
+
+  .is-edit-student-id
+    border-radius: 0
+    border-top-left-radius: 6px
+    border-bottom-left-radius: 6px
+    border-bottom-right-radius: 0px
+
+  .is-activity-feed-column
+    overflow: "hidden"
+    border-top-right-radius: 6px
+    .is-activity-feed
+      border-top-right-radius: 6px
+  
+  ::-webkit-scrollbar-track 
+    background: #FFFFFF
+    border-top-right-radius: 30px
+  
+  .is-comment-box
+    border-bottom-left-radius: 0px
