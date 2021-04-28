@@ -47,7 +47,7 @@ const subSchemaCtrlMap = {
     post: subCtrl => [ subCtrl.binding.createOne, {
         keyMap: {
             body: "data",
-            [`${subCtrl.ctrl.key}Id`]: "belongsTo",
+            [`${subCtrl.modelCtrl.key}Id`]: "belongsTo",
             user: "createdBy"
         }
     } ],
@@ -117,6 +117,7 @@ const addRequest = ( route, type, config ) => {
     const {
         paramCheck,
         auth,
+        unverified,
         defaultError,
         middleware,
         validation,
@@ -132,7 +133,10 @@ const addRequest = ( route, type, config ) => {
     if( defaultError )  handlers.push( setDefaultError( `An error occured trying to ${defaultError}.` ) );
 
     // Add authentication.
-    if( auth ) handlers.push( [ isAuthenticated, isVerified ] );
+    if( auth ) {
+        handlers.push( isAuthenticated );
+        if( !unverified ) handlers.push( isVerified );
+    }
 
     if( validation && validationMap[type] ) handlers.push( validationMap[type]( validation ) );
 

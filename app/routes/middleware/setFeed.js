@@ -1,4 +1,4 @@
-const feedCtrl = require("../../controllers/feed");
+const { feedCtrl} = require("../../controllers");
 const { NotFoundError } = require("../../config/errors");
 
 const setFeed = async (req, res, next) => {

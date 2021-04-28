@@ -5,7 +5,7 @@ const {
 
 const { student: studentPerm } = require("../config/permissions");
 
-const studentCtrl = require("../controllers/student");
+const { studentCtrl } = require("../controllers");
 
 const createRouter = require("./utils/createRouter");
 

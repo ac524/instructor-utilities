@@ -33,8 +33,8 @@ const Team = () => {
                 </Column>
                 <Column>
                     <Switch>
-                        <Route exact path={`/${roomId}/team/:memberId`} component={Member} />
-                        <Route render={({ location })=><Redirect to={{ pathname: `/${roomId}/team/${staff.instructor[0]._id}`, state: { from: location } }} />} />
+                        <Route exact path={`/r/${roomId}/team/:memberId`} component={Member} />
+                        <Route render={({ location })=><Redirect to={{ pathname: `/r/${roomId}/team/${staff.instructor[0]._id}`, state: { from: location } }} />} />
                     </Switch>
                 </Column>
             </Columns>
