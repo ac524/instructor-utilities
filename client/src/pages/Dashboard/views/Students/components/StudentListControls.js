@@ -49,10 +49,8 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
     }
 
     const handleBulkReassignment = staff => {
-                
-        const selectedStudents = students.filter(student => {
-            return student.isSelected;
-        });
+
+        const selectedStudents = students.filter(({isSelected}) => isSelected);
         
         for (const student of selectedStudents) {
             dispatch(gda(UPDATE_STUDENT, student._id, student.assignedTo));
