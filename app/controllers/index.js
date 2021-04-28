@@ -1,7 +1,8 @@
-/** @format */
-
 const AuthController = require("./definitions/AuthController");
+const AppController = require("./definitions/AppController");
+const AppTypeController = require("./definitions/AppTypeController");
 const FeedController = require("./definitions/FeedController");
+const FeedEntryController = require("./definitions/FeedEntryController");
 const InviteController = require("./definitions/InviteController");
 const RegisterController = require("./definitions/RegisterController");
 const RoomController = require("./definitions/RoomController");
