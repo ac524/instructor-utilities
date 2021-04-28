@@ -17,7 +17,7 @@ import RequirePerm from "pages/Dashboard/components/RequirePerm";
 
 const { Input } = FormCollection;
 
-const StudentListControls = ( { sort, groupBy, search, assignment } ) => {
+const StudentListControls = ( { sort, groupBy, search } ) => {
 
     const dispatch = useDashboardDispatch();
     const groupTypes = useStudentGroupings().map( ({key, name, icon}) => ({
@@ -49,11 +49,7 @@ const StudentListControls = ( { sort, groupBy, search, assignment } ) => {
     }
 
     const handleBulkReassignment = staff => {
-        
-        const assignedTo = staff.value;
-        // Updating state
-        assignment[1](assignedTo);
-        
+                
         const selectedStudents = students.filter(student => {
             return student.isSelected;
         });
