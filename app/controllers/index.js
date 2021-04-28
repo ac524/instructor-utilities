@@ -1,41 +1,42 @@
+/** @format */
 
-const FeedEntryController = require("./definitions/FeedEntryController");
-const AppController = require("./definitions/AppController");
-const AppTypeController = require('./definitions/AppTypeController');
 const AuthController = require("./definitions/AuthController");
 const FeedController = require("./definitions/FeedController");
 const InviteController = require("./definitions/InviteController");
 const RegisterController = require("./definitions/RegisterController");
-const RoomController = require('./definitions/RoomController');
+const RoomController = require("./definitions/RoomController");
 const StudentController = require("./definitions/StudentController");
 const TokenController = require("./definitions/TokenController");
 const UserController = require("./definitions/UserController");
 const ValidateEmailController = require("./definitions/ValidateEmailController");
+const library = require("./types/library.js");
 
-module.exports = {
-	appCtrl: new AppController(),
+new AppController();
 
-	appTypeCtrl: new AppTypeController(),
+new AppTypeController();
 
-	authCtrl: new AuthController(),
+new AuthController();
 
-	feedCtrl: new FeedController(),
+new FeedController();
 
-	feedCommentCtrl: new FeedEntryController("comment"),
-	feedElevateCtrl: new FeedEntryController("elevate"),
-	feedDeelevateCtrl: new FeedEntryController("deelevate"),
+new FeedEntryController("comment");
 
-	inviteCtrl: new InviteController(),
+new FeedEntryController("elevate");
 
-	registerCtrl: new RegisterController(),
+new FeedEntryController("deelevate");
 
-	roomCtrl: new RoomController(),
+new InviteController();
 
-	studentCtrl: new StudentController(),
+new RegisterController();
 
-	tokenCtrl: new TokenController(),
+new RoomController();
 
-	userCtrl: new UserController(),
+new StudentController();
 
-	validateEmailCtrl: new ValidateEmailController()
-};
+new TokenController();
+
+new UserController();
+
+new ValidateEmailController();
+
+module.exports = library;
