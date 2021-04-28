@@ -31,6 +31,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
 const fileExtensionRegexp = new RegExp("/[^/?]+\\.[^/]+$");
+
 registerRoute(
 	// Return false to exempt requests from being fulfilled by index.html.
 	({ request, url }) => {
@@ -74,18 +75,16 @@ registerRoute(
 	})
 );
 
-registerRoute(
-	new RegExp("/"),
+// registerRoute(
+// 	new RegExp("/"),
 
-	new CacheFirst({
-		cacheName: "cache-routes",
-		// plugins: {
-		// 	exclude: [new RegExp("socket\\.io/?.*")]
-		// }
-	})
-);
-
-
+// 	new CacheFirst({
+// 		cacheName: "cache-routes",
+// 		// plugins: {
+// 		// 	exclude: [new RegExp("socket\\.io/?.*")]
+// 		// }
+// 	})
+// );
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
