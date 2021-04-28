@@ -106,9 +106,7 @@ const StudentModal = () => {
 								desktop={{
 									size: _id ? "half" : 12
 								}}
-								className={`has-filled-content ${
-									width >= 1025 ? "h-95" : "h-90"
-								}`}>
+								className="has-filled-content is-column-has-ratio">
 								<Box
 									className={`${
 										_id
@@ -167,16 +165,12 @@ const StudentModal = () => {
 										desktop={{
 											size: "half"
 										}}
-										className={`has-filled-content ${
-											width >= 1025 ? "h-95" : "h-90"
-										} is-activity-feed-column`}>
+										className="has-filled-content is-activity-feed-column">
 										<ActivtyFeed
 											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0 is-activity-feed"
 											student={editStudent}
 										/>
-										<Box
-											className="p-0 has-background-white-bis has-text-grey m-0 is-relative is-comment-box"
-										>
+										<Box className="has-background-white-bis has-text-grey is-comment-box">
 											{isActive ? (
 												<div ref={commentRef}>
 													<CommentForm
@@ -190,18 +184,7 @@ const StudentModal = () => {
 													onClick={() =>
 														dispatchComment("open")
 													}
-													className="is-flex-grow-1 has-text-grey is-fullwidth"
-													style={{
-														borderRadius: 0,
-														borderLeftStyle: "none",
-														borderRightStyle:
-															"none",
-														borderBottomLeftRadius:
-															width >= 1025
-																? 0
-																: 6,
-														borderBottomRightRadius: 6
-													}}>
+													className="is-flex-grow-1 has-text-grey is-fullwidth is-comment-button">
 													Add a comment...
 												</Button>
 											)}
