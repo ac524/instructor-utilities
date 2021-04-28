@@ -2,7 +2,7 @@ const {
     feed: feedPerm
 } = require("../config/permissions");
 
-const { feedCtrl, feedEntryCtrls } = require("../controllers");
+const library = require("../controllers");
 
 const createRouter = require("./utils/createRouter");
 
@@ -20,26 +20,35 @@ const sharedConfig = {
 }
 
 module.exports = createRouter([
+	[
+		"/:feedId",
+		{
+			get: {
+				defaultError: "get the feed",
+				permission: feedPerm,
+				ctrl: library.get("feed")
+			}
+		},
+		sharedConfig
+	],
 
-    ["/:feedId", {
-        get: {
-            defaultError: "get the feed",
-            permission: feedPerm,
-            ctrl: feedCtrl
-        }
-    }, sharedConfig],
+	[
+		"/:feedId/items",
+		{
+			get: {
+				defaultError: "get the feed items",
+				permission: feedPerm,
+				ctrl: library.get("feed").binding.getItems
+			}
+		},
+		sharedConfig
+	],
 
-    ["/:feedId/items", {
-        get: {
-            defaultError: "get the feed items",
-            permission: feedPerm,
-            ctrl: feedCtrl.binding.getItems
-        }
-    }, sharedConfig],
-
-    ...[...searchCtrls("feed.item").entries( feedEntryCtrls )]
-        .reduce((routes,[,entryTypeCtrl]) => [
-            ...routes,
-            ...makeFeedEntryRoutesConfig(entryTypeCtrl)
-        ], [])
+	...[...searchCtrls("feed.item").entries()].reduce(
+		(routes, [, entryTypeCtrl]) => [
+			...routes,
+			...makeFeedEntryRoutesConfig(entryTypeCtrl)
+		],
+		[]
+	)
 ]);
