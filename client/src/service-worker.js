@@ -79,9 +79,9 @@ registerRoute(
 
 	new CacheFirst({
 		cacheName: "cache-routes",
-		plugins: {
-			exclude: [new RegExp("socket\\.io/?.*")]
-		}
+		// plugins: {
+		// 	exclude: [new RegExp("socket\\.io/?.*")]
+		// }
 	})
 );
 
