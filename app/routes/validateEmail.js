@@ -2,7 +2,7 @@ const createRouter = require("./utils/createRouter");
 
 const { resend: resendVal } = require("./validation");
 
-const { validateEmailCtrl } = require("../controllers");
+const library = require("../controllers");
 
 module.exports = createRouter([
 
@@ -12,14 +12,14 @@ module.exports = createRouter([
             unverified: true,
             defaultError: "resend the email",
             validation: resendVal,
-            ctrl: validateEmailCtrl.binding.resend
+            ctrl: library.get("validate.email").binding.resend
         }
     }],
 
     ["/:tokenString", {
         post: {
             defaultError: "validate the email",
-            ctrl: validateEmailCtrl.binding.validate
+            ctrl: library.get("validate.email").binding.validate
         }
     }]
 
