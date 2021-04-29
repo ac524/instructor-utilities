@@ -75,16 +75,13 @@ registerRoute(
 	})
 );
 
-// registerRoute(
-// 	new RegExp("/"),
+registerRoute(
+	new RegExp("/(?!socket.io).*(json|js)"),
 
-// 	new CacheFirst({
-// 		cacheName: "cache-routes",
-// 		// plugins: {
-// 		// 	exclude: [new RegExp("socket\\.io/?.*")]
-// 		// }
-// 	})
-// );
+	new CacheFirst({
+		cacheName: "cache-routes"
+	})
+);
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
