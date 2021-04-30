@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useRef } from "react";
 
 import {
 	Modal,
@@ -7,8 +7,6 @@ import {
 	Heading,
 	Tag,
 	Button,
-	Tabs,
-	Level,
 } from "react-bulma-components";
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
@@ -19,21 +17,21 @@ import StudentOptions from "./components/StudentOptions";
 import Icon from "components/Icon";
 import Fade from "animations/Fade";
 import CommentForm from "./components/ActivityFeed/components/CommentForm";
-import {useWindowDimensions} from "./utils"
+import {useWindowDimensions} from "../../../../utils/windowWidth"
 import "./index.sass" 
 import { useOutsideClickDispatch } from "../../../../utils/detection";
+import StudentModalTabs from "./components/StudentModalTabs";
 
 const { Column } = Columns;
-const { Tab } = Tabs;
+
 const StudentModal = () => {
     const [{ editStudent: editStudentId }] = useDashboardContext();
     const dispatch = useDashboardDispatch();
     const classroom = useClassroom();
     const [ isBulkCreate, setIsBulkCreate ] = useState(false);
-    const [activityTab, setActivityTab] = useState(false);
-    const [editStudentTab, setEditStudentTab] = useState(true);
-    const editStudent = useEditStudent();
+    
 
+    const editStudent = useEditStudent();
 
 	const [isActive, dispatchComment] = useReducer(
 		(state, action) => action === "open"
@@ -58,19 +56,18 @@ const StudentModal = () => {
         contentProps.style = {width:"100%",height:"800px"};
         contentProps.className = "has-filled-content";
     }
+	//All the variables used to create tabs and change them when need it
+	const [selectedTab, setSelectedTab] = useState("Edit Student");
 
     const setTabs = (action) => {
-		if (action === "edit") {
-			setActivityTab(false);
-			setEditStudentTab(true);
-			return;
-		}
-		setActivityTab(true);
-		setEditStudentTab(false);
+		setSelectedTab(action);
 	};
+
+	const list = ["Edit Student", "Activity"];
 
     const { width } = useWindowDimensions();
 
+	const windowBreakPoint = 1025
     return (
 		// <span>test</span>
 		<Modal
@@ -83,30 +80,21 @@ const StudentModal = () => {
 					<Columns gapless className="h-100" breakpoint="desktop">
 						{_id ? (
 							<Box className="is-tabs">
-								<Tabs centered="centered">
-									<Tab
-										onClick={() => setTabs("edit")}
-										className={
-											editStudentTab ? "is-active" : ""
-										}>
-										Edit Student
-									</Tab>
-									<Tab
-										onClick={() => setTabs("activity")}
-										className={
-											activityTab ? "is-active" : ""
-										}>
-										Activity
-									</Tab>
-								</Tabs>
+								<StudentModalTabs
+									setTabs={setTabs}
+									selectedTab={selectedTab}
+									listOfTabs={list}
+								/>
 							</Box>
 						) : null}
-						{editStudentTab || width >= 1025 ? (
+						{selectedTab === "Edit Student" ||
+						width >= windowBreakPoint ||
+						!_id ? (
 							<Column
 								desktop={{
 									size: _id ? "half" : 12
 								}}
-								className="has-filled-content is-column-has-ratio">
+								className="has-filled-content is-edit-student-column">
 								<Box
 									className={`${
 										_id
@@ -159,7 +147,7 @@ const StudentModal = () => {
 								</Box>
 							</Column>
 						) : null}
-						{activityTab || width >= 1025
+						{selectedTab === "Activity" || width >= windowBreakPoint
 							? _id && (
 									<Column
 										desktop={{
