@@ -1,4 +1,4 @@
-const library = require("./types/library.js");
+const ctrls = require("./types/library.js");
 const FeedEntryController = require("./definitions/FeedEntryController");
 
 const createController = registry =>
@@ -26,4 +26,4 @@ const createController = registry =>
     require("./definitions/ValidateEmailController")
 ].forEach(createController);
 
-module.exports = library;
+module.exports = ctrls;
