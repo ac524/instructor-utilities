@@ -1,43 +1,29 @@
-const AuthController = require("./definitions/AuthController");
-const AppController = require("./definitions/AppController");
-const AppTypeController = require("./definitions/AppTypeController");
-const FeedController = require("./definitions/FeedController");
-const FeedEntryController = require("./definitions/FeedEntryController");
-const InviteController = require("./definitions/InviteController");
-const RegisterController = require("./definitions/RegisterController");
-const RoomController = require("./definitions/RoomController");
-const StudentController = require("./definitions/StudentController");
-const TokenController = require("./definitions/TokenController");
-const UserController = require("./definitions/UserController");
-const ValidateEmailController = require("./definitions/ValidateEmailController");
 const library = require("./types/library.js");
+const FeedEntryController = require("./definitions/FeedEntryController");
 
-new AppController();
+const createController = registry =>
 
-new AppTypeController();
+    Array.isArray(registry)
 
-new AuthController();
+        ? new registry[0](...registry[1])
 
-new FeedController();
+        : new registry();
 
-new FeedEntryController("comment");
-
-new FeedEntryController("elevate");
-
-new FeedEntryController("deelevate");
-
-new InviteController();
-
-new RegisterController();
-
-new RoomController();
-
-new StudentController();
-
-new TokenController();
-
-new UserController();
-
-new ValidateEmailController();
+[
+    require("./definitions/AuthController"),
+    require("./definitions/AppController"),
+    require("./definitions/AppTypeController"),
+    require("./definitions/FeedController"),
+    [FeedEntryController,["comment"]],
+    [FeedEntryController,["elevate"]],
+    [FeedEntryController,["deelevate"]],
+    require("./definitions/InviteController"),
+    require("./definitions/RegisterController"),
+    require("./definitions/RoomController"),
+    require("./definitions/StudentController"),
+    require("./definitions/TokenController"),
+    require("./definitions/UserController"),
+    require("./definitions/ValidateEmailController")
+].forEach(createController);
 
 module.exports = library;
