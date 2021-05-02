@@ -1,4 +1,4 @@
-const library = require("../controllers");
+const ctrls = require("../controllers");
 
 const { user: userVal } = require("./validation");
 const { room: roomPerm } = require("../config/permissions");
@@ -20,7 +20,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "update the user",
             validation: userVal,
-            ctrl: library.get("user")
+            ctrl: ctrls.get("user")
         }
     }],
 
@@ -29,7 +29,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "leave the room",
             permission: roomPerm.leave,
-            ctrl: library.get("user").binding.leaveRoom
+            ctrl: ctrls.get("user").binding.leaveRoom
         }
     }, sharedRoomActionsConfig],
 
@@ -38,7 +38,7 @@ module.exports = createRouter([
             auth: true,
             defaultError: "archive the room",
             permission: roomPerm.archive,
-            ctrl: library.get("user").binding.archiveRoom
+            ctrl: ctrls.get("user").binding.archiveRoom
         }
     }, sharedRoomActionsConfig],
 
@@ -46,7 +46,7 @@ module.exports = createRouter([
         get: {
             auth: true,
             defaultError: "get short room details",
-            ctrl: library.get("user").binding.getRoomsBasics
+            ctrl: ctrls.get("user").binding.getRoomsBasics
         }
     }]
 

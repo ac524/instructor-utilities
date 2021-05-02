@@ -2,7 +2,7 @@ const {
     feed: feedPerm
 } = require("../config/permissions");
 
-const library = require("../controllers");
+const ctrls = require("../controllers");
 
 const createRouter = require("./utils/createRouter");
 
@@ -26,7 +26,7 @@ module.exports = createRouter([
 			get: {
 				defaultError: "get the feed",
 				permission: feedPerm,
-				ctrl: library.get("feed")
+				ctrl: ctrls.get("feed")
 			}
 		},
 		sharedConfig
@@ -38,7 +38,7 @@ module.exports = createRouter([
 			get: {
 				defaultError: "get the feed items",
 				permission: feedPerm,
-				ctrl: library.get("feed").binding.getItems
+				ctrl: ctrls.get("feed").binding.getItems
 			}
 		},
 		sharedConfig

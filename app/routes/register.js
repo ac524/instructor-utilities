@@ -2,7 +2,7 @@ const createRouter = require("./utils/createRouter");
 
 const { register: registerVal } = require("./validation");
 
-const library = require("../controllers");
+const ctrls = require("../controllers");
 
 
 const registerCtlrConfig = {
@@ -15,7 +15,7 @@ module.exports = createRouter([
         post: {
             defaultError: "complete the registration",
             validation: registerVal,
-            ctrl: [ library.get("register").binding.register, registerCtlrConfig ]
+            ctrl: [ ctrls.get("register").binding.register, registerCtlrConfig ]
         }
     }]
 

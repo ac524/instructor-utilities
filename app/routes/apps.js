@@ -1,6 +1,6 @@
 const { app: appVal } = require("./validation")
 
-const library = require("../controllers");
+const ctrls = require("../controllers");
 //const { appTypeCtrl } = require("../controllers");
 const setRoom = require("./middleware/setRoom");
 const isRoomMember = require("./middleware/isRoomMember");
@@ -18,7 +18,7 @@ module.exports = createRouter([
 				defaultError: "create the app",
 				validation: appVal,
 				middleware: [setRoom.fromBody, isRoomMember],
-				ctrl: library.get("app")
+				ctrl: ctrls.get("app")
 			}
 		},
 		sharedConfig
@@ -29,7 +29,7 @@ module.exports = createRouter([
 		{
 			get: {
 				defaultError: "get app types",
-				ctrl: library.get("appType").binding.getEnabled
+				ctrl: ctrls.get("appType").binding.getEnabled
 			}
 		},
 		sharedConfig
@@ -40,11 +40,11 @@ module.exports = createRouter([
 		{
 			get: {
 				defaultError: "get the app",
-				ctrl: library.get("app")
+				ctrl: ctrls.get("app")
 			},
 			patch: {
 				defaultError: "update the app",
-				ctrl: library.get("app")
+				ctrl: ctrls.get("app")
 			}
 		},
 		{

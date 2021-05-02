@@ -8,7 +8,7 @@ const { user: userVal, invite: inviteVal } = require("./validation");
 
 const { invite: invitePerm } = require("../config/permissions");
 
-const library = require("../controllers");
+const ctrls = require("../controllers");
 
 const inviteCtlrConfig = {
     keyMap: { body: "inviteData" }
@@ -29,7 +29,7 @@ module.exports = createRouter([
 				validation: inviteVal,
 				permission: invitePerm,
 				middleware: [setRoom.fromParam, isRoomMember],
-				ctrl: [library.get("invite").binding.create, inviteCtlrConfig]
+				ctrl: [ctrls.get("invite").binding.create, inviteCtlrConfig]
 			}
 		}
 	],
@@ -43,7 +43,7 @@ module.exports = createRouter([
 				defaultError: "delete the invite",
 				permission: invitePerm,
 				middleware: [setRoom.fromParam, isRoomMember],
-				ctrl: library.get("invite").binding.remove
+				ctrl: ctrls.get("invite").binding.remove
 			}
 		}
 	],
@@ -55,7 +55,7 @@ module.exports = createRouter([
 				auth: true,
 				defaultError: "accept the invite",
 				middleware: [setInvite],
-				ctrl: library.get("invite").binding.accept
+				ctrl: ctrls.get("invite").binding.accept
 			}
 		}
 	],
@@ -66,7 +66,7 @@ module.exports = createRouter([
 			get: {
 				defaultError: "check the email's status",
 				middleware: setInvite,
-				ctrl: library.get("invite").binding.emailCheck
+				ctrl: ctrls.get("invite").binding.emailCheck
 			}
 		}
 	],
@@ -79,7 +79,7 @@ module.exports = createRouter([
 				validation: userVal.clone("invite", ["name", "password"]),
 				middleware: [setInvite],
 				ctrl: [
-					library.get("invite").binding.register,
+					ctrls.get("invite").binding.register,
 					inviteRegCtlrConfig
 				]
 			}

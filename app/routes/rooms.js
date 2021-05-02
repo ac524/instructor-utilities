@@ -1,7 +1,7 @@
 const { room: roomVal } = require("./validation");
 const { room: roomPerm } = require("../config/permissions");
 
-const library = require("../controllers");
+const ctrls = require("../controllers");
 
 const isRoomMember = require("./middleware/isRoomMember");
 const setRoom = require("./middleware/setRoom");
@@ -20,7 +20,7 @@ module.exports = createRouter([
             defaultError: "create the room",
             validation: roomVal,
             auth: true,
-            ctrl: library.get("room")
+            ctrl: ctrls.get("room")
         }
     }],
 
@@ -28,20 +28,20 @@ module.exports = createRouter([
         get: {
             defaultError: "get the room",
             permission: roomPerm,
-            ctrl: library.get("room")
+            ctrl: ctrls.get("room")
         },
         patch: {
             defaultError: "update the room",
             validation: roomVal,
             permission: roomPerm,
-            ctrl: library.get("room")
+            ctrl: ctrls.get("room")
         }
     }, sharedConfig],
 
     ["/:roomId/permissions", {
         get: {
             defaultError: "get your permissions for the room",
-            ctrl: library.get("room").binding.getPermissions
+            ctrl: ctrls.get("room").binding.getPermissions
         }
     }, sharedConfig]
 

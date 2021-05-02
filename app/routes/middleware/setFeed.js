@@ -1,4 +1,4 @@
-const libary = require("../../controllers");
+const ctrls = require("../../controllers");
 const { NotFoundError } = require("../../config/errors");
 
 const setFeed = async (req, res, next) => {
@@ -11,7 +11,7 @@ const setFeed = async (req, res, next) => {
         if( req.params.itemId ) {
 
             const entryId = req.params.itemId;
-            feed = await libary.get("feed").findOne(
+            feed = await ctrls.get("feed").findOne(
                 { search: { ["items._id"]: entryId } },
                 { select: "room for in items.$" }
             );
@@ -23,7 +23,7 @@ const setFeed = async (req, res, next) => {
         } else {
 
             feedId = req.params.feedId || req.body.feedId
-            feed = await libary.get("feed").findOne(
+            feed = await ctrls.get("feed").findOne(
                 { docId: feedId },
                 { select: "room for in" }
             );

@@ -2,7 +2,7 @@ const createRouter = require("./utils/createRouter");
 
 const { login: loginVal } = require("./validation")
 
-const library = require("../controllers");
+const ctrls = require("../controllers");
 
 const loginCtlrConfig = {
     keyMap: { body: "credentials" }
@@ -15,7 +15,7 @@ module.exports = createRouter([
 			post: {
 				defaultError: "login",
 				validation: loginVal,
-				ctrl: [library.get("auth").binding.login, loginCtlrConfig]
+				ctrl: [ctrls.get("auth").binding.login, loginCtlrConfig]
 			}
 		}
 	],
@@ -26,7 +26,7 @@ module.exports = createRouter([
 			post: {
 				defaultError: "get the authenticated user",
 				auth: true,
-				ctrl: library.get("auth").binding.authenticated
+				ctrl: ctrls.get("auth").binding.authenticated
 			}
 		}
 	]

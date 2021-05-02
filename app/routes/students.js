@@ -5,7 +5,7 @@ const {
 
 const { student: studentPerm } = require("../config/permissions");
 
-const library = require("../controllers");
+const ctrls = require("../controllers");
 
 const createRouter = require("./utils/createRouter");
 
@@ -21,7 +21,7 @@ module.exports = createRouter([
             validation: createStudentVal,
             middleware: [ setRoom.fromBody, isRoomMember ],
             permission: studentPerm,
-            ctrl: library.get("room.student")
+            ctrl: ctrls.get("room.student")
         }
     }],
 
@@ -29,18 +29,18 @@ module.exports = createRouter([
         get: {
             defaultError: "get the student",
             permission: studentPerm,
-            ctrl: library.get("room.student")
+            ctrl: ctrls.get("room.student")
         },
         patch: {
             defaultError: "update the student",
             validation: studentVal,
             permission: studentPerm,
-            ctrl: library.get("room.student")
+            ctrl: ctrls.get("room.student")
         },
         delete: {
             defaultError: "delete the student",
             permission: studentPerm,
-            ctrl: library.get("room.student")
+            ctrl: ctrls.get("room.student")
         }
      }, {
         auth: true,
