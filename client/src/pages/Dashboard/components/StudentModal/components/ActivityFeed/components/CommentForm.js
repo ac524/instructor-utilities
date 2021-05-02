@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 import Form from "components/Form";
+import { RichTextDisplay } from "components/Form/components/RichTextEditor";
+
 import { createValidator } from "utils/validation";
 import api from "utils/api";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
@@ -11,11 +13,11 @@ const validateInviteData = createValidator({
     }
 });
 
-const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
+const getEntryComment = entry => entry ? entry.data.comment : "";
 
-    const [values, setValues] = useState( entry ? entry.data : {
-        comment: ""
-    } );
+const CommentFormEditable = ({ feedId, entry, afterComment = () => {} }) => {
+
+    const [comment, setComment] = useState( () => getEntryComment(entry));
 
     const handleFeedEventResponse = useHandleFeedEventResponse(feedId);
 
@@ -28,7 +30,7 @@ const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
                 : await api.createComment( feedId, data )
 
             // Reset the form if not updating an existing comment.
-            if(!entry) setValues({comment:""});
+            if(!entry) setComment("");
             
             handleFeedEventResponse( resData, entry ? "update" : "push" );
 
@@ -45,20 +47,28 @@ const CommentForm = ({ feedId, entry, afterComment = () => {} }) => {
     const commentField = {
         placeholder: "Add a comment...",
         name: "comment",
-        type: "textarea",
-        value: values.comment
+        type: "richtext",
+        value: comment
     };
 
     return (
+        <Form
+            flat
+            fields={[ commentField ]}
+            fieldValueSource={comment}
+            validation={validateInviteData}
+            onSubmit={handleSubmit}
+            buttonText="comment"
+        />
+    );
+
+}
+
+const CommentForm = ({ readOnly = false, entry, ...editableProps }) => {
+
+    return (
         <div style={{flexGrow:0}}>
-            <Form
-                flat
-                fields={[ commentField ]}
-                fieldValueSource={values}
-                validation={validateInviteData}
-                onSubmit={handleSubmit}
-                buttonText="comment"
-            />
+            {readOnly ? <RichTextDisplay value={getEntryComment(entry)} /> : <CommentFormEditable entry={entry} {...editableProps} />}
         </div>
     );
 

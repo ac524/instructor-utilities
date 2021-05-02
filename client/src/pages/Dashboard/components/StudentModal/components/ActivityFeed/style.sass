@@ -8,6 +8,10 @@ $feed-border-light: 1px solid hsl(0,0,94%)
     display: flex
     padding: .75rem 0
 
+    .date
+        text-align: right
+        margin-bottom: .75rem
+
     + .feed-entry:not(.is-block-entry)
         border-top: $feed-border-light
 
@@ -28,8 +32,12 @@ $feed-border-light: 1px solid hsl(0,0,94%)
     .box
         color: inherit
         border: $feed-border
-        box-shadow: none
+        box-shadow: none 
+        width: 80%
 
+        p
+            width: 100%
+            word-wrap: break-word
         .date
             text-align: right
             margin-bottom: .75rem

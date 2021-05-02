@@ -1,8 +1,9 @@
 import { Form as FormCollection } from "react-bulma-components";
 
-import { RangeInput } from "./RangeInput"
+import { RangeInput } from "./RangeInput";
+import { RichTextEditor } from "./RichTextEditor";
 
-const { Input, Select, Textarea } = FormCollection;
+const { Input, Select } = FormCollection;
 
 export const FormInput = ({ type = "text", options = [], ...props }) => {
     switch (type) {
@@ -20,6 +21,8 @@ export const FormInput = ({ type = "text", options = [], ...props }) => {
         );
       case "range":
         return <RangeInput {...props} />;
+      case "richtext":
+        return <RichTextEditor {...props} />;
       case "textarea":
         return <Textarea {...props} />;
       default:

@@ -32,12 +32,12 @@ export const FormField = ({
       fieldInputProps.color = inputColor(name);
   
     return (
-      <Field {...props}>
-        {label && <Label>{label}</Label>}
-        <Control>
-          <FormInput {...fieldInputProps} />
-          <Error name={name} />
-        </Control>
-      </Field>
-    );
+		<Field {...props}>
+			{label && <Label>{label}</Label>}
+			<Control>
+				<FormInput {...fieldInputProps}/>
+				<Error name={name} />
+			</Control>
+		</Field>
+	);
   };
