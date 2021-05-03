@@ -1,4 +1,4 @@
-const ctrls = require("./types/library.js");
+const ctrls = require("./types/library");
 const FeedEntryController = require("./definitions/FeedEntryController");
 
 const createController = registry =>
