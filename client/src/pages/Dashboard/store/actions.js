@@ -35,6 +35,7 @@ import {
     SET_STUDENTS,
     ADD_STUDENT,
     UPDATE_STUDENT,
+    UPDATE_STUDENT_SELECTED,
     REMOVE_STUDENT,
 
     /**
@@ -53,6 +54,11 @@ import {
 
 const makePermMap = permissions => new Map( permissions.map( perm => [perm, 1] ) );
 const makeDocIdMap = docList => new Map( docList.map( doc => [ doc._id, doc ] ) );
+const extendClassroom = room => ({
+    ...room,
+    // React application props
+    selectedStudents: []
+})
 
 export default {
     /**
@@ -63,11 +69,18 @@ export default {
     /**
      * CLASSROOM ACTIONS
      */
-    [SET_CLASSROOM]: ( state, classroom ) => ({ ...state, classroom }),
+    [SET_CLASSROOM]: ( state, classroom ) => ({
+        ...state,
+        classroom: extendClassroom( classroom )
+    }),
 
     [SET_PERMISSIONS]: ( state, permissions ) => ({ ...state, permissions: makePermMap( permissions ) }),
 
-    [SET_CR_AND_PERMS]: ( state, { classroom, permissions } ) => ({ ...state, classroom, permissions: makePermMap( permissions ) }),
+    [SET_CR_AND_PERMS]: ( state, { classroom, permissions } ) => ({
+        ...state,
+        classroom: extendClassroom( classroom ),
+        permissions: makePermMap( permissions )
+    }),
 
     /**
      * STAFF ACTIONS
@@ -146,6 +159,19 @@ export default {
         classroom: {
             ...state.classroom,
             students: state.classroom.students.map( student => student._id === payload._id ? { ...student, ...payload } : student )
+        }
+    }),
+    [UPDATE_STUDENT_SELECTED]: ( state, { _id, isSelected } ) => ({
+        ...state,
+        classroom: {
+            ...state.classroom,
+            students: state.classroom.students.map( student => student._id === _id ? { ...student, isSelected } : student ),
+            // Maintain an independent list of selected student ids
+            selectedStudents: isSelected
+            
+                ? [ ...state.classroom.selectedStudents, _id ]
+                
+                : state.classroom.selectedStudents.filter((itemId)=>itemId!==_id)
         }
     }),
     [REMOVE_STUDENT]: ( state, payload ) => ({

@@ -10,7 +10,7 @@ import api from "utils/api";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
-import { EDIT_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
+import { EDIT_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT, UPDATE_STUDENT_SELECTED } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
 import "./style.sass";
@@ -78,7 +78,7 @@ export const StudentCard = ({ className, student: { _id, name, priorityLevel, as
 
     const dispatch = useDashboardDispatch();
     const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
-    const updateStudent = ({target}) => dispatch(gda(UPDATE_STUDENT, { _id, isSelected: target.checked }));
+    const updateStudent = ({target}) => dispatch(gda(UPDATE_STUDENT_SELECTED, { _id, isSelected: target.checked }));
 
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
