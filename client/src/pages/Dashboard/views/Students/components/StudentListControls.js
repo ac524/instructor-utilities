@@ -66,13 +66,13 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
             {/* TODO: "Reassign" only appears when a student is checked */}
-            {/* {(students.some(student => {student.isSelected})) ? */}
+            {(students.some(student => {student.isSelected})) ?
             <Dropdown className="ml-2" label="Reassign">
                 {staffOptionsList.map(staff => (
                     <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff)}>{staff.label}</Button>
                 ))}
             </Dropdown> 
-            {/* : ""} */}
+            : ""}
             <Input
                 className="ml-auto"
                 type="text"
