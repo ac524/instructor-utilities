@@ -33,7 +33,6 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
 
     useEffect(() => {
 
-        console.log("Change detected");
         setStaffOptionsList( getStaffOptionsList(ta || []) );
         setStudents( learners || [] );
 
@@ -70,7 +69,7 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
             {/* {(students.some(student => {student.isSelected})) ? */}
             <Dropdown className="ml-2" label="Reassign">
                 {staffOptionsList.map(staff => (
-                    <Button className="dropdown-item" key={staff.value} onClick={handleBulkReassignment}>{staff.label}</Button>
+                    <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff)}>{staff.label}</Button>
                 ))}
             </Dropdown> 
             {/* : ""} */}
