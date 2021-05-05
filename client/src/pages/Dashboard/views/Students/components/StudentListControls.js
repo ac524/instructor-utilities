@@ -65,7 +65,7 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
     return (
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
-            {students.some(student => student.isSelected) ?
+            {students.some(({isSelected}) => isSelected) ?
             <Dropdown className="ml-2" label="Reassign">
                 {staffOptionsList.map(staff => (
                     <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff)}>{staff.label}</Button>
