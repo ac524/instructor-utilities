@@ -9,13 +9,15 @@ import {
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
+import UserName from "components/UserName";
+import Date from "components/Date";
+import { RichTextDisplay } from "components/Form/components/RichTextEditor";
+
 import { useAssignedStudents, useElevatedStudents, useDashboardDispatch, getDashboardAction as gda, useStaffMember } from "pages/Dashboard/store";
 import { useStudentSort } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
 import { StudentPriorityTag } from "pages/Dashboard/components/StudentCard";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
-import UserName from "components/UserName";
-import Date from "components/Date";
 
 const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-graduate", title="Students" } ) => {
 
@@ -51,7 +53,9 @@ const MemberAssignedStudentsPanel = ( { students, color="primary", icon="user-gr
                                         <p>
                                             Last comment from <strong><UserName user={recentComments[0].by} /></strong> <Date className="ml-auto" date={recentComments[0].date} />
                                         </p>
-                                        <p style={{padding:".5rem",background:"#F6F6F6",borderRadius:"3 px"}}>{recentComments[0].data.comment}</p>
+                                        <div style={{padding:".5rem",background:"#F6F6F6",borderRadius:"3 px"}}>
+                                            <RichTextDisplay value={recentComments[0].data.comment} />
+                                        </div>
                                     </div>
                                 )
 
