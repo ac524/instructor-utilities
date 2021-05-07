@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useRef } from "react";
 
 import {
 	Modal,
@@ -7,8 +7,6 @@ import {
 	Heading,
 	Tag,
 	Button,
-	Tabs,
-	Level,
 } from "react-bulma-components";
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
@@ -19,21 +17,21 @@ import StudentOptions from "./components/StudentOptions";
 import Icon from "components/Icon";
 import Fade from "animations/Fade";
 import CommentForm from "./components/ActivityFeed/components/CommentForm";
-import {useWindowDimensions} from "./utils"
+import {useWindowDimensions} from "../../../../utils/windowWidth"
 import "./index.sass" 
 import { useOutsideClickDispatch } from "../../../../utils/detection";
+import StudentModalTabs from "./components/StudentModalTabs";
 
 const { Column } = Columns;
-const { Tab } = Tabs;
+
 const StudentModal = () => {
     const [{ editStudent: editStudentId }] = useDashboardContext();
     const dispatch = useDashboardDispatch();
     const classroom = useClassroom();
     const [ isBulkCreate, setIsBulkCreate ] = useState(false);
-    const [activityTab, setActivityTab] = useState(false);
-    const [editStudentTab, setEditStudentTab] = useState(true);
-    const editStudent = useEditStudent();
+    
 
+    const editStudent = useEditStudent();
 
 	const [isActive, dispatchComment] = useReducer(
 		(state, action) => action === "open"
@@ -58,84 +56,51 @@ const StudentModal = () => {
         contentProps.style = {width:"100%",height:"800px"};
         contentProps.className = "has-filled-content";
     }
+	//All the variables used to create tabs and change them when need it
+	const [selectedTab, setSelectedTab] = useState("Edit Student");
 
     const setTabs = (action) => {
-		if (action === "edit") {
-			setActivityTab(false);
-			setEditStudentTab(true);
-			return;
-		}
-		setActivityTab(true);
-		setEditStudentTab(false);
+		setSelectedTab(action);
 	};
+
+	const list = ["Edit Student", "Activity"];
 
     const { width } = useWindowDimensions();
 
+	const windowBreakPoint = 1025
     return (
 		// <span>test</span>
-		<Modal onClose={clearEditStudent} show={show} closeOnBlur={true}>
+		<Modal
+			className="is-student-modal"
+			onClose={clearEditStudent}
+			show={show}
+			closeOnBlur={true}>
 			<Fade style={{ width: "100%" }} show={show} duration=".5s">
 				<Modal.Content {...contentProps} className="hide-overflow">
 					<Columns gapless className="h-100" breakpoint="desktop">
 						{_id ? (
-							<Box
-								className="is-shadowless pb-0 mb-0 is-hidden-desktop"
-								style={{
-									flexGrow: 0,
-									borderRadius: 0,
-									borderTopLeftRadius: 6,
-									borderTopRightRadius: 6
-								}}>
-								<Tabs centered="centered">
-									<Tab
-										onClick={() => setTabs("edit")}
-										className={
-											editStudentTab ? "is-active" : ""
-										}>
-										Edit Student
-									</Tab>
-									<Tab
-										onClick={() => setTabs("activity")}
-										className={
-											activityTab ? "is-active" : ""
-										}>
-										Activity
-									</Tab>
-								</Tabs>
+							<Box className="is-tabs">
+								<StudentModalTabs
+									setTabs={setTabs}
+									selectedTab={selectedTab}
+									listOfTabs={list}
+								/>
 							</Box>
 						) : null}
-						{editStudentTab || width >= 1025 ? (
+						{selectedTab === "Edit Student" ||
+						width >= windowBreakPoint ||
+						!_id ? (
 							<Column
 								desktop={{
 									size: _id ? "half" : 12
 								}}
-								className={`has-filled-content ${
-									width >= 1025 ? "h-95" : "h-90"
-								}`}>
+								className="has-filled-content is-edit-student-column">
 								<Box
-									className="py-5 is-shadowless"
-									style={{
-										borderRadius: 0,
-										borderBottomLeftRadius: 6,
-										borderBottomRightRadius:
-											width >= 1025
-												? _id
-													? 0
-													: 6
-												: _id
-												? 6
-												: 6,
-										borderTopLeftRadius:
-											width >= 1025 ? 6 : _id ? 0 : 6,
-										borderTopRightRadius:
-											width >= 1025
-												? _id
-													? 0
-													: 6
-												: _id
-												? 0
-												: 6
-									}}>
+									className={`${
+										_id
+											? "is-edit-student-id"
+											: "is-edit-student"
+									}`}>
 									<div
 										className="is-flex"
 										style={{ alignItems: "center" }}>
@@ -182,64 +147,32 @@ const StudentModal = () => {
 								</Box>
 							</Column>
 						) : null}
-						{activityTab || width >= 1025
+						{selectedTab === "Activity" || width >= windowBreakPoint
 							? _id && (
 									<Column
 										desktop={{
 											size: "half"
 										}}
-										className={`has-filled-content ${
-											width >= 1025 ? "h-95" : "h-90"
-										}`}
-										style={{
-											borderTopRightRadius:
-													width >= 1025 ? 6 : 0,
-											overflow: "hidden"
-										}}
-										>
+										className="has-filled-content is-activity-feed-column">
 										<ActivtyFeed
-											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0"
+											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0 is-activity-feed"
 											student={editStudent}
-											style={{
-												borderRadius: 0,
-												borderTopRightRadius:
-													width >= 1025 ? 6 : 0,
-												height: 100
-											}}
 										/>
-										<Box
-											className="p-0 has-background-white-bis has-text-grey m-0 is-relative is-comment-box"
-											style={{
-												flexGrow: 0,
-												borderRadius: 0,
-												borderBottomLeftRadius:
-													width >= 1025 ? 0 : 6,
-												borderBottomRightRadius: 6
-											}}>
+										<Box className="has-background-white-bis has-text-grey is-comment-box">
 											{isActive ? (
 												<div ref={commentRef}>
 													<CommentForm
-														feedId={editStudent.feed}
+														feedId={
+															editStudent.feed
+														}
 													/>
 												</div>
 											) : (
 												<Button
-													onClick={()=>dispatchComment(
-														"open"
-													)}
-													className="is-flex-grow-1 has-text-grey is-fullwidth"
-													style={{
-														borderRadius: 0,
-														borderLeftStyle:
-															"none",
-														borderRightStyle:
-															"none",
-														borderBottomLeftRadius:
-															width >= 1025
-																? 0
-																: 6,
-														borderBottomRightRadius: 6
-													}}>
+													onClick={() =>
+														dispatchComment("open")
+													}
+													className="is-flex-grow-1 has-text-grey is-fullwidth is-comment-button">
 													Add a comment...
 												</Button>
 											)}
