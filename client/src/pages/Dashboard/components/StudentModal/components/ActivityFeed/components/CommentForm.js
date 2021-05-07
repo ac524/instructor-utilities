@@ -64,7 +64,7 @@ const CommentFormEditable = ({ feedId, entry, afterComment = () => {} }) => {
 
 }
 
-const CommentForm = ({ readOnly = false, entry, ...editableProps }) => {
+export const CommentForm = ({ readOnly = false, entry, ...editableProps }) => {
 
     return (
         <div style={{flexGrow:0}}>
@@ -72,6 +72,4 @@ const CommentForm = ({ readOnly = false, entry, ...editableProps }) => {
         </div>
     );
 
-}
-
-export default CommentForm;
+};

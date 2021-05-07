@@ -1,7 +1,8 @@
 import 	{ Tabs } from "react-bulma-components";
+
 const { Tab } = Tabs;
 
-const StudentModalTabs = ({ setTabs, selectedTab, listOfTabs }) => {
+export const StudentModalTabs = ({ setTabs, selectedTab, listOfTabs }) => {
 	return (
 		<Tabs centered="centered">
 			{listOfTabs.map((tabs, index) => (
@@ -15,5 +16,3 @@ const StudentModalTabs = ({ setTabs, selectedTab, listOfTabs }) => {
 		</Tabs>
 	);
 };
-
-export default StudentModalTabs

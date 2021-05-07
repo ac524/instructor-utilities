@@ -18,7 +18,7 @@ const typeMap = {
     deelevate: Deelevate
 }
 
-const ActivtyFeed = ({ student, className = "", style = {}, ...props }) => {
+export const ActivtyFeed = ({ student, className = "", style = {}, ...props }) => {
 
     const { feed } = student;
     const feedRef = useRef();
@@ -56,6 +56,6 @@ const ActivtyFeed = ({ student, className = "", style = {}, ...props }) => {
         : <div className={`${className} box is-flex`} style={{...style, alignItems:"center"}}><Pulse /></div>
     );
 
-}
+};
 
-export default ActivtyFeed;
+export { CommentForm } from "./components/CommentForm";

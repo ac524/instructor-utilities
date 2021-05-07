@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useRef } from "react";
+import React, { useState, useReducer } from "react";
 
 import {
 	Modal,
@@ -11,23 +11,36 @@ import {
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
-import SettingsForm from "./components/SettingsForm";
-import ActivtyFeed from "./components/ActivityFeed";
-import StudentOptions from "./components/StudentOptions";
+
+import {
+	SettingsForm,
+	ActivtyFeed,
+	CommentForm,
+	StudentOptions,
+	StudentModalTabs
+} from "./components";
+
 import Icon from "components/Icon";
 import Fade from "animations/Fade";
-import CommentForm from "./components/ActivityFeed/components/CommentForm";
-import {useWindowDimensions} from "../../../../utils/windowWidth"
+
+import {useWindowDimensions} from "utils/windowWidth"
+import { useOutsideClickDispatch } from "utils/detection";
+
 import "./index.sass" 
-import { useOutsideClickDispatch } from "../../../../utils/detection";
-import StudentModalTabs from "./components/StudentModalTabs";
 
 const { Column } = Columns;
 
 const StudentModal = () => {
+
+
+	// We pull in the student to edit from the dashboard state
     const [{ editStudent: editStudentId }] = useDashboardContext();
+
+	// We get the dispatch method for updating state
     const dispatch = useDashboardDispatch();
+
     const classroom = useClassroom();
+
     const [ isBulkCreate, setIsBulkCreate ] = useState(false);
     
 
@@ -56,6 +69,8 @@ const StudentModal = () => {
         contentProps.style = {width:"100%",height:"800px"};
         contentProps.className = "has-filled-content";
     }
+
+
 	//All the variables used to create tabs and change them when need it
 	const [selectedTab, setSelectedTab] = useState("Edit Student");
 
@@ -75,9 +90,12 @@ const StudentModal = () => {
 			onClose={clearEditStudent}
 			show={show}
 			closeOnBlur={true}>
+
 			<Fade style={{ width: "100%" }} show={show} duration=".5s">
 				<Modal.Content {...contentProps} className="hide-overflow">
 					<Columns gapless className="h-100" breakpoint="desktop">
+
+						{/** Tabs displayed on mobile to toggle between columns **/}
 						{_id ? (
 							<Box className="is-tabs">
 								<StudentModalTabs
@@ -87,9 +105,10 @@ const StudentModal = () => {
 								/>
 							</Box>
 						) : null}
-						{selectedTab === "Edit Student" ||
-						width >= windowBreakPoint ||
-						!_id ? (
+
+
+						{/** Student Details Column **/}
+						{selectedTab === "Edit Student" || width >= windowBreakPoint ||!_id ? (
 							<Column
 								desktop={{
 									size: _id ? "half" : 12
@@ -147,6 +166,8 @@ const StudentModal = () => {
 								</Box>
 							</Column>
 						) : null}
+
+						{/** Student Activity Column **/}
 						{selectedTab === "Activity" || width >= windowBreakPoint
 							? _id && (
 									<Column
