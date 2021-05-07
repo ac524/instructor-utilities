@@ -1,18 +1,17 @@
 const { InvalidDataError, NotFoundError } = require("../../config/errors");
 
-const { tokenCtrl } = require("../../controllers");
-const { roomCtrl } = require("../../controllers");
+const ctrls = require("../../controllers");
 
 const setInvite = async ( req, res, next ) => {
 
     try {
 
         const { tokenString } = req.params;
-        const inviteToken = await tokenCtrl.getByTokenString({ tokenString });
+        const inviteToken = await ctrls.get("token").getByTokenString({ tokenString });
 
         if( !inviteToken ) throw new NotFoundError( "This invitation is no longer available" );
 
-        const inviteRoom = await roomCtrl.findOne({ docId: inviteToken.relation });
+        const inviteRoom = await ctrls.get("room").findOne({ docId: inviteToken.relation });
 
         if( !inviteRoom )  throw new InvalidDataError( "This invitation is not longer valid" );
 
