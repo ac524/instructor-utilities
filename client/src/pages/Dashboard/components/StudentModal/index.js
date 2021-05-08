@@ -1,10 +1,8 @@
-import React, { useState, useReducer } from "react";
+import { useState, useReducer } from "react";
 
 import {
 	Box,
 	Columns,
-	Heading,
-	Tag,
 	Button,
 } from "react-bulma-components";
 
@@ -13,14 +11,15 @@ import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 
 import {
 	ModalBox,
-	SettingsForm,
 	ActivtyFeed,
 	CommentForm,
-	StudentOptions,
 	StudentModalTabs
 } from "./components";
 
-import Icon from "components/Icon";
+import {
+	ActivityPanel,
+	StudentPanel
+} from "./panels";
 
 import {useWindowDimensions} from "utils/windowWidth"
 import { useOutsideClickDispatch } from "utils/detection";
@@ -31,7 +30,6 @@ const { Column } = Columns;
 
 const StudentModal = () => {
 
-
 	// We pull in the student to edit from the dashboard state
     const [{ editStudent: editStudentId }] = useDashboardContext();
 
@@ -39,8 +37,6 @@ const StudentModal = () => {
     const dispatch = useDashboardDispatch();
 
     const classroom = useClassroom();
-
-    const [ isBulkCreate, setIsBulkCreate ] = useState(false);
 
     const editStudent = useEditStudent();
 
@@ -58,8 +54,6 @@ const StudentModal = () => {
     const show = editStudentId !== false;
 
     const clearEditStudent = () => dispatch(gda(EDIT_STUDENT, false));
-
-    const toggleBulkCreate = () => setIsBulkCreate( !isBulkCreate );
 
     const contentProps = {};
 
@@ -100,60 +94,9 @@ const StudentModal = () => {
 			{/** Student Details Column **/}
 			{selectedTab === "Edit Student" || width >= windowBreakPoint ||!_id ? (
 				<Column
-					desktop={{
-						size: _id ? "half" : 12
-					}}
+					desktop={{ size: _id ? "half" : 12 }}
 					className="has-filled-content is-edit-student-column">
-					<Box
-						className={`${
-							_id
-								? "is-edit-student-id"
-								: "is-edit-student"
-						}`}>
-						<div
-							className="is-flex"
-							style={{ alignItems: "center" }}>
-							<Heading renderAs="h2" className="mb-0">
-								{_id ? "Edit" : "New"} Student
-							</Heading>
-							{editStudent.elevation ? (
-								<Tag
-									color="danger"
-									className="ml-2">
-									<Icon icon="level-up-alt" />
-								</Tag>
-							) : null}
-							{_id ? (
-								<span className="ml-auto">
-									<StudentOptions
-										student={editStudent}
-										labelSize="small"
-										className="is-right"
-									/>
-								</span>
-							) : (
-								<span className="ml-auto">
-									<Button
-										size="small"
-										onClick={toggleBulkCreate}
-										color={
-											isBulkCreate
-												? "primary"
-												: null
-										}>
-										Bulk Add
-									</Button>
-								</span>
-							)}
-						</div>
-						<hr />
-						<SettingsForm
-							roomId={classroom._id}
-							student={editStudent}
-							afterSubmit={clearEditStudent}
-							isBulkCreate={isBulkCreate}
-						/>
-					</Box>
+						<StudentPanel roomId={classroom._id} student={editStudent} />
 				</Column>
 			) : null}
 
