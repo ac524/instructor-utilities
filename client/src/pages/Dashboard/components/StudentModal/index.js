@@ -1,7 +1,6 @@
 import React, { useState, useReducer } from "react";
 
 import {
-	Modal,
 	Box,
 	Columns,
 	Heading,
@@ -13,6 +12,7 @@ import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDi
 import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 
 import {
+	ModalBox,
 	SettingsForm,
 	ActivtyFeed,
 	CommentForm,
@@ -21,7 +21,6 @@ import {
 } from "./components";
 
 import Icon from "components/Icon";
-import Fade from "animations/Fade";
 
 import {useWindowDimensions} from "utils/windowWidth"
 import { useOutsideClickDispatch } from "utils/detection";
@@ -42,7 +41,6 @@ const StudentModal = () => {
     const classroom = useClassroom();
 
     const [ isBulkCreate, setIsBulkCreate ] = useState(false);
-    
 
     const editStudent = useEditStudent();
 
@@ -70,7 +68,6 @@ const StudentModal = () => {
         contentProps.className = "has-filled-content";
     }
 
-
 	//All the variables used to create tabs and change them when need it
 	const [selectedTab, setSelectedTab] = useState("Edit Student");
 
@@ -82,130 +79,120 @@ const StudentModal = () => {
 
     const { width } = useWindowDimensions();
 
-	const windowBreakPoint = 1025
+	const windowBreakPoint = 1025;
+
     return (
-		// <span>test</span>
-		<Modal
-			className="is-student-modal"
-			onClose={clearEditStudent}
-			show={show}
-			closeOnBlur={true}>
+		<ModalBox onClose={clearEditStudent} show={show} contentProps={contentProps}>
 
-			<Fade style={{ width: "100%" }} show={show} duration=".5s">
-				<Modal.Content {...contentProps} className="hide-overflow">
-					<Columns gapless className="h-100" breakpoint="desktop">
+			{/** Tabs displayed on mobile to toggle between columns **/}
 
-						{/** Tabs displayed on mobile to toggle between columns **/}
-						{_id ? (
-							<Box className="is-tabs">
-								<StudentModalTabs
-									setTabs={setTabs}
-									selectedTab={selectedTab}
-									listOfTabs={list}
-								/>
-							</Box>
-						) : null}
+			{_id ? (
+				<Box className="is-tabs">
+					<StudentModalTabs
+						setTabs={setTabs}
+						selectedTab={selectedTab}
+						listOfTabs={list}
+					/>
+				</Box>
+			) : null}
 
 
-						{/** Student Details Column **/}
-						{selectedTab === "Edit Student" || width >= windowBreakPoint ||!_id ? (
-							<Column
-								desktop={{
-									size: _id ? "half" : 12
-								}}
-								className="has-filled-content is-edit-student-column">
-								<Box
-									className={`${
-										_id
-											? "is-edit-student-id"
-											: "is-edit-student"
-									}`}>
-									<div
-										className="is-flex"
-										style={{ alignItems: "center" }}>
-										<Heading renderAs="h2" className="mb-0">
-											{_id ? "Edit" : "New"} Student
-										</Heading>
-										{editStudent.elevation ? (
-											<Tag
-												color="danger"
-												className="ml-2">
-												<Icon icon="level-up-alt" />
-											</Tag>
-										) : null}
-										{_id ? (
-											<span className="ml-auto">
-												<StudentOptions
-													student={editStudent}
-													labelSize="small"
-													className="is-right"
-												/>
-											</span>
-										) : (
-											<span className="ml-auto">
-												<Button
-													size="small"
-													onClick={toggleBulkCreate}
-													color={
-														isBulkCreate
-															? "primary"
-															: null
-													}>
-													Bulk Add
-												</Button>
-											</span>
-										)}
-									</div>
-									<hr />
-									<SettingsForm
-										roomId={classroom._id}
+			{/** Student Details Column **/}
+			{selectedTab === "Edit Student" || width >= windowBreakPoint ||!_id ? (
+				<Column
+					desktop={{
+						size: _id ? "half" : 12
+					}}
+					className="has-filled-content is-edit-student-column">
+					<Box
+						className={`${
+							_id
+								? "is-edit-student-id"
+								: "is-edit-student"
+						}`}>
+						<div
+							className="is-flex"
+							style={{ alignItems: "center" }}>
+							<Heading renderAs="h2" className="mb-0">
+								{_id ? "Edit" : "New"} Student
+							</Heading>
+							{editStudent.elevation ? (
+								<Tag
+									color="danger"
+									className="ml-2">
+									<Icon icon="level-up-alt" />
+								</Tag>
+							) : null}
+							{_id ? (
+								<span className="ml-auto">
+									<StudentOptions
 										student={editStudent}
-										afterSubmit={clearEditStudent}
-										isBulkCreate={isBulkCreate}
+										labelSize="small"
+										className="is-right"
 									/>
-								</Box>
-							</Column>
-						) : null}
+								</span>
+							) : (
+								<span className="ml-auto">
+									<Button
+										size="small"
+										onClick={toggleBulkCreate}
+										color={
+											isBulkCreate
+												? "primary"
+												: null
+										}>
+										Bulk Add
+									</Button>
+								</span>
+							)}
+						</div>
+						<hr />
+						<SettingsForm
+							roomId={classroom._id}
+							student={editStudent}
+							afterSubmit={clearEditStudent}
+							isBulkCreate={isBulkCreate}
+						/>
+					</Box>
+				</Column>
+			) : null}
 
-						{/** Student Activity Column **/}
-						{selectedTab === "Activity" || width >= windowBreakPoint
-							? _id && (
-									<Column
-										desktop={{
-											size: "half"
-										}}
-										className="has-filled-content is-activity-feed-column">
-										<ActivtyFeed
-											className="p-6 is-shadowless has-background-white-bis has-text-grey m-0 is-activity-feed"
-											student={editStudent}
+			{/** Student Activity Column **/}
+			{selectedTab === "Activity" || width >= windowBreakPoint
+				? _id && (
+						<Column
+							desktop={{
+								size: "half"
+							}}
+							className="has-filled-content is-activity-feed-column">
+							<ActivtyFeed
+								className="p-6 is-shadowless has-background-white-bis has-text-grey m-0 is-activity-feed"
+								student={editStudent}
+							/>
+							<Box className="has-background-white-bis has-text-grey is-comment-box">
+								{isActive ? (
+									<div ref={commentRef}>
+										<CommentForm
+											feedId={
+												editStudent.feed
+											}
 										/>
-										<Box className="has-background-white-bis has-text-grey is-comment-box">
-											{isActive ? (
-												<div ref={commentRef}>
-													<CommentForm
-														feedId={
-															editStudent.feed
-														}
-													/>
-												</div>
-											) : (
-												<Button
-													onClick={() =>
-														dispatchComment("open")
-													}
-													className="is-flex-grow-1 has-text-grey is-fullwidth is-comment-button">
-													Add a comment...
-												</Button>
-											)}
-										</Box>
-									</Column>
-							  )
-							: null}
-					</Columns>
-				</Modal.Content>
-			</Fade>
-		</Modal>
-	);
+									</div>
+								) : (
+									<Button
+										onClick={() =>
+											dispatchComment("open")
+										}
+										className="is-flex-grow-1 has-text-grey is-fullwidth is-comment-button">
+										Add a comment...
+									</Button>
+								)}
+							</Box>
+						</Column>
+				)
+				: null}
+		</ModalBox>
+	)
 
 }
 
