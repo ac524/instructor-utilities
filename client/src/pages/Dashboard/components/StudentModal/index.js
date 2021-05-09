@@ -15,7 +15,8 @@ import {
 
 import {
 	ActivityPanel,
-	StudentPanel
+	StudentPanel,
+	usePanels
 } from "./panels";
 
 import {useWindowDimensions} from "utils/windowWidth"
@@ -31,12 +32,16 @@ const StudentModal = () => {
 
     const isViewing = editStudentId !== false;
 
-    const classroom = useClassroom();
+    const { _id: roomId } = useClassroom();
 
     const editStudent = useEditStudent();
     const { _id } = editStudent;
 
     const clearEditStudent = () => dispatch(gda(EDIT_STUDENT, false));
+
+	const [ panel, setPanel, panels ] = usePanels( roomId, editStudent );
+
+	console.log( panel, panels );
 
 	//All the variables used to create tabs and change them when need it
 	const [selectedTab, setSelectedTab] = useState("Edit Student");
@@ -46,7 +51,6 @@ const StudentModal = () => {
 	};
 
 	const list = ["Edit Student", "Activity"];
-
 
     const { width } = useWindowDimensions();
 	const windowBreakPoint = 1025;
@@ -72,7 +76,7 @@ const StudentModal = () => {
 				<Column
 					desktop={{ size: _id ? "half" : 12 }}
 					className="has-filled-content is-edit-student-column">
-						<StudentPanel roomId={classroom._id} student={editStudent} />
+						<StudentPanel roomId={roomId} student={editStudent} />
 				</Column>
 			) : null}
 
