@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { forwardRef, useState } from "react";
 
 import Form from "components/Form";
 import { RichTextDisplay } from "components/Form/components/RichTextEditor";
@@ -64,12 +64,12 @@ const CommentFormEditable = ({ feedId, entry, afterComment = () => {} }) => {
 
 }
 
-export const CommentForm = ({ readOnly = false, entry, ...editableProps }) => {
+export const CommentForm = forwardRef(({ readOnly = false, entry, ...editableProps }, ref) => {
 
     return (
-        <div style={{flexGrow:0}}>
+        <div style={{flexGrow:0}} ref={ref}>
             {readOnly ? <RichTextDisplay value={getEntryComment(entry)} /> : <CommentFormEditable entry={entry} {...editableProps} />}
         </div>
     );
 
-};
+});

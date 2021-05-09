@@ -40,16 +40,6 @@ const StudentModal = () => {
 
     const editStudent = useEditStudent();
 
-	const [isActive, dispatchComment] = useReducer(
-		(state, action) => action === "open"
-	);
-
-	const commentRef = useOutsideClickDispatch({
-		isActive,
-		dispatch:dispatchComment,
-		action: "close"
-	});
-
     const { _id } = editStudent;
     const show = editStudentId !== false;
 
@@ -108,29 +98,7 @@ const StudentModal = () => {
 								size: "half"
 							}}
 							className="has-filled-content is-activity-feed-column">
-							<ActivtyFeed
-								className="p-6 is-shadowless has-background-white-bis has-text-grey m-0 is-activity-feed"
-								student={editStudent}
-							/>
-							<Box className="has-background-white-bis has-text-grey is-comment-box">
-								{isActive ? (
-									<div ref={commentRef}>
-										<CommentForm
-											feedId={
-												editStudent.feed
-											}
-										/>
-									</div>
-								) : (
-									<Button
-										onClick={() =>
-											dispatchComment("open")
-										}
-										className="is-flex-grow-1 has-text-grey is-fullwidth is-comment-button">
-										Add a comment...
-									</Button>
-								)}
-							</Box>
+								<ActivityPanel student={editStudent} />
 						</Column>
 				)
 				: null}
