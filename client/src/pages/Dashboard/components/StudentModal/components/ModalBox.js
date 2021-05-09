@@ -5,16 +5,25 @@ import {
 
 import Fade from "animations/Fade";
 
-export const ModalBox = ({ show, onClose, contentProps, children }) => {
+export const ModalBox = ({ show, onClose, children, fullScreen }) => {
+
+    const classes = ["is-student-modal"];
+    const contentClasses = ["hide-overflow"];
+
+    if( fullScreen ) {
+        classes.push("is-fullscreen");
+        contentClasses.push("has-filled-content");
+    }
+
     return (
 		<Modal
-            className="is-student-modal"
+            className={classes.join(" ")}
             onClose={onClose}
             show={show}
             closeOnBlur={true}>
 
             <Fade style={{ width: "100%" }} show={show} duration=".5s">
-                <Modal.Content {...contentProps} className="hide-overflow">
+                <Modal.Content className={contentClasses.join(" ")}>
 			        <Columns gapless className="h-100" breakpoint="desktop">
                         {children}
                     </Columns>

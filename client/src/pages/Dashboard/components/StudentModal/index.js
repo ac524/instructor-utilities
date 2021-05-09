@@ -41,13 +41,6 @@ const StudentModal = () => {
 
     const clearEditStudent = () => dispatch(gda(EDIT_STUDENT, false));
 
-    const contentProps = {};
-
-    if(_id) {
-        contentProps.style = {width:"100%",height:"800px"};
-        contentProps.className = "has-filled-content";
-    }
-
 	//All the variables used to create tabs and change them when need it
 	const [selectedTab, setSelectedTab] = useState("Edit Student");
 
@@ -57,12 +50,12 @@ const StudentModal = () => {
 
 	const list = ["Edit Student", "Activity"];
 
-    const { width } = useWindowDimensions();
 
+    const { width } = useWindowDimensions();
 	const windowBreakPoint = 1025;
 
     return (
-		<ModalBox onClose={clearEditStudent} show={show} contentProps={contentProps}>
+		<ModalBox fullScreen onClose={clearEditStudent} show={show}>
 
 			{/** Tabs displayed on mobile to toggle between columns **/}
 
