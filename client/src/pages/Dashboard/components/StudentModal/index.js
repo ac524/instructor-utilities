@@ -1,9 +1,8 @@
-import { useState, useReducer } from "react";
+import { useState } from "react";
 
 import {
 	Box,
-	Columns,
-	Button,
+	Columns
 } from "react-bulma-components";
 
 import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
@@ -11,8 +10,6 @@ import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 
 import {
 	ModalBox,
-	ActivtyFeed,
-	CommentForm,
 	StudentModalTabs
 } from "./components";
 
@@ -22,7 +19,6 @@ import {
 } from "./panels";
 
 import {useWindowDimensions} from "utils/windowWidth"
-import { useOutsideClickDispatch } from "utils/detection";
 
 import "./index.sass" 
 
