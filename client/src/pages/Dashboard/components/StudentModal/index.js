@@ -5,7 +5,7 @@ import {
 	Columns
 } from "react-bulma-components";
 
-import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardContext } from "pages/Dashboard/store";
 import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
 
 import {
@@ -27,17 +27,14 @@ const { Column } = Columns;
 const StudentModal = () => {
 
 	// We pull in the student to edit from the dashboard state
-    const [{ editStudent: editStudentId }] = useDashboardContext();
+    const [{ editStudent: editStudentId }, dispatch] = useDashboardContext();
 
-	// We get the dispatch method for updating state
-    const dispatch = useDashboardDispatch();
+    const isViewing = editStudentId !== false;
 
     const classroom = useClassroom();
 
     const editStudent = useEditStudent();
-
     const { _id } = editStudent;
-    const show = editStudentId !== false;
 
     const clearEditStudent = () => dispatch(gda(EDIT_STUDENT, false));
 
@@ -55,7 +52,7 @@ const StudentModal = () => {
 	const windowBreakPoint = 1025;
 
     return (
-		<ModalBox fullScreen onClose={clearEditStudent} show={show}>
+		<ModalBox fullScreen onClose={clearEditStudent} show={isViewing}>
 
 			{/** Tabs displayed on mobile to toggle between columns **/}
 
