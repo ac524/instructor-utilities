@@ -1,15 +1,8 @@
-import {
-	Box,
-	Columns
-} from "react-bulma-components";
+import { Box, Columns } from "react-bulma-components";
 
-import {
-	ModalBox,
-} from "./components";
+import { ModalBox } from "./components";
 
-import {
-	PanelTabs,
-} from "./panels";
+import { PanelTabs } from "./panels";
 
 import { useStudentModalConfig } from "./utils";
 
