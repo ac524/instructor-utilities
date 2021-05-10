@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 
 import { Button } from "react-bulma-components";
 
@@ -10,7 +10,7 @@ import { useFormFields, formatValues } from "./utils"
 
 import { FormField } from "./components"
 
-const Form = React.forwardRef(
+const Form = forwardRef(
 	(
 		{
 			fields,

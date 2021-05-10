@@ -1,4 +1,3 @@
-import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Classroom from "pages/Dashboard/views/Classroom";
 import Students from "pages/Dashboard/views/Students";
