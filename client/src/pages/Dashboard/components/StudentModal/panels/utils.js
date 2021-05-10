@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ActivityPanel } from "./ActivityPanel";
 import { StudentPanel } from "./StudentPanel";
 
@@ -7,17 +7,17 @@ export const usePanels = (roomId, student) => {
     const panels = useMemo(() => new Map([
 		["student", {
 			label: "Edit Student",
-			Panel: <StudentPanel roomId={roomId} student={student} />
+			Panel: () => <StudentPanel roomId={roomId} student={student} />
 		}],
         // Only add the actity panel if the student exists
-        ...(student._id ? ["activity", {
-			label: "Edit Student",
-			Panel: <ActivityPanel student={student} />
-		}] : [])
+        ...(student._id ? [["activity", {
+			label: "Activity",
+			Panel: () => <ActivityPanel student={student} />
+		}]] : [])
 	]), [roomId, student]);
 
-    const [panel, setPanel] = useState(() => panels.keys().next().value);
+    const [activePanel, setPanel] = useState(() => panels.keys().next().value);
 
-    return [ panel, setPanel, panels ];
+    return { activePanel, setPanel, panels };
     
 }
