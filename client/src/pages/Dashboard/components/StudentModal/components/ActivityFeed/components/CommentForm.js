@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import Form from "components/Form";
 import { RichTextDisplay } from "components/Form/components/RichTextEditor";

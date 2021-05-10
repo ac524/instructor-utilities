@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useRef } from "react";
+import { useState, useReducer, useRef } from "react";
 
 import {
 	Modal,

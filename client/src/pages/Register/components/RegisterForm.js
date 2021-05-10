@@ -1,5 +1,3 @@
-import React from "react";
-
 import api from "utils/api";
 import { useLogin, validateUserData, validateRegistrationData } from "utils/auth";
 import Form from "components/Form";
