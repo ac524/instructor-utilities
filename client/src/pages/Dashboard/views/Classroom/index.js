@@ -37,10 +37,10 @@ const Classroom = () => {
     
         if( roomnames.length > 1 ) {
             tools.push((
-                <Dropdown key="rooms" label={<Icon icon="chevron-circle-down" />} labelSize="small" className="is-right">
+                <Dropdown key="rooms" label={<Icon icon="chevron-circle-down" />} labelSize="small" className="is-left">
                     {
                         roomnames.map(room => (
-                            <Button renderAs={Link} to={`/${room._id}`} className={"dropdown-item" + (roomId === room._id ? " is-active" : "")} size="small" key={room._id}>
+                            <Button renderAs={Link} to={`/r/${room._id}`} className={"dropdown-item" + (roomId === room._id ? " is-active" : "")} size="small" key={room._id}>
                                 {room.name}
                             </Button>
                         ))
