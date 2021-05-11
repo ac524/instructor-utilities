@@ -111,7 +111,9 @@ const RemoveButton = ({studentId}) => {
 
 }
 
-const StudentOptions = ({ student, ...props }) => {
+
+
+export const StudentOptions = ({ student, ...props }) => {
 
     const RemoveStudentButton = () => <RemoveButton studentId={student._id} />;
 
@@ -123,5 +125,3 @@ const StudentOptions = ({ student, ...props }) => {
     );
 
 }
-
-export default StudentOptions;

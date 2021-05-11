@@ -18,7 +18,7 @@ import api from "utils/api";
 import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 
 import FeedEntry from "../components/FeedEntry";
-import CommentForm from "../components/CommentForm";
+import { CommentForm } from "../components/CommentForm";
 
 const CommentOptions = ({ deleteAction, editAction, ...props }) => {
 
