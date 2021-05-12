@@ -1,4 +1,4 @@
-import React, { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext } from "react";
 
 import {
     Modal as BulmaModal,

@@ -1,7 +1,7 @@
 import Form from "components/Form";
 import { createValidator } from "utils/validation";
 import Pulse from "components/Pulse";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
     Modal,

@@ -1,4 +1,3 @@
-import React from "react";
 
 import Form from "components/Form";
 import { useAuthorizedUser, validateUserData } from "utils/auth";

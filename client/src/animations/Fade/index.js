@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./style.sass";
 
@@ -27,7 +27,7 @@ const Fade = ({ show = true, type = "both", duration="1s", style = {}, children,
                 style={{ ...style, animation: `${show ? "fadeIn" : "fadeOut"} ${enabled ? duration : "0s"}` }}
                 onAnimationEnd={onAnimationEnd}
             >
-                {children}
+                {show && children}
             </div>
         )
 

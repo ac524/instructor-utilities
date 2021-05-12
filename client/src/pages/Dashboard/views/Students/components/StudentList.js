@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Columns, Card } from "react-bulma-components";
 
 import { StudentCard } from "pages/Dashboard/components/StudentCard";
