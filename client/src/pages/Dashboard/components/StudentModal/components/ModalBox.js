@@ -24,7 +24,7 @@ export const ModalBox = ({ show, onClose, children, fullScreen }) => {
 
             <Fade style={{ width: "100%" }} show={show} duration=".5s">
                 <Modal.Content className={contentClasses.join(" ")}>
-			        <Columns gapless className="h-100" breakpoint="desktop">
+			        <Columns gap={0} className="h-100" breakpoint="desktop">
                         {children}
                     </Columns>
                 </Modal.Content>
