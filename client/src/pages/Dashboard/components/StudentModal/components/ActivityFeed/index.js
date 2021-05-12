@@ -1,6 +1,6 @@
 import Pulse from "components/Pulse";
 import { useStudentFeed, useStudentFeedLoader } from "pages/Dashboard/store";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import {
     Comment,

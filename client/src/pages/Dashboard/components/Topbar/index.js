@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./style.sass";
 import { useDashboardContext, getDashboardAction as gda } from "pages/Dashboard/store";
 import { SET_TOPBAR } from "pages/Dashboard/store/actionsNames";
