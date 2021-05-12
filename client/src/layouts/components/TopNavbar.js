@@ -29,7 +29,7 @@ const TopNavbar = () => {
         <Burger onClick={() => setIsNavActive( !isNavActive )} />
       </Brand>
       <Menu>
-        <Container position="end">
+        <Container align="right">
           <Item renderAs="div">
               { isAuth ? <LogoutButton color="primary" outlined /> : <LoginButton color="primary" /> }
           </Item>
