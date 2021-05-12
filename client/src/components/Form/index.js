@@ -95,13 +95,12 @@ const Form = forwardRef(
 						className={`is-flex ${
 							button
 								? ""
-								: "is-justify-content-flex-end py-2 pr-3"
+								: "is-justify-content-flex-end"
 						} `}>
 						{button ? (
 							button
 						) : (
 							<Button
-								className="is-small"
 								color="primary"
 								loading={isProcessing}>
 								{buttonText}

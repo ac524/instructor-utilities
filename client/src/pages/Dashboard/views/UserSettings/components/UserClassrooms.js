@@ -124,7 +124,7 @@ const UserClassrooms = () => {
                 <span>Classrooms</span>
                 <Button
                     size="small"
-                    class="is-primary button is-small"
+                    className="is-primary button is-small"
                     onClick={() => setEditRoomId(null)}>
                     <Icon icon="plus-circle" />
                     <span>Create Classroom</span>
