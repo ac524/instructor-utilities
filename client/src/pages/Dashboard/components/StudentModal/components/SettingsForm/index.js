@@ -10,7 +10,7 @@ import { useSocket } from "utils/socket.io";
 
 import { validateStudentData, useStudentSettingsFormFields } from "./utils";
 
-const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
+export const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
 
     const dispatch = useDashboardDispatch();
     const fields = useStudentSettingsFormFields( student, isBulkCreate );
@@ -74,6 +74,4 @@ const SettingsForm = ({ roomId, student, afterSubmit, isBulkCreate }) => {
             button={button}
             />;
 
-}
-
-export default SettingsForm;
+};

@@ -1,6 +1,4 @@
 import Icon from "components/Icon";
-import React from "react";
-
 import {
     Tag
 } from "react-bulma-components";

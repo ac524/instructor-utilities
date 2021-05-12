@@ -97,11 +97,11 @@
 .columns
     &.is-gapless
         .column:not(:first-child)
-            > .box
+            > .box:not(.is-edit-student-id):not(.is-activity-feed):not(.is-comment-box)
                 border-top-left-radius: 0
                 border-bottom-left-radius: 0
         .column:not(:last-child)
-            > .box
+            > .box:not(.is-edit-student-id):not(.is-activity-feed):not(.is-comment-box)
                 border-top-right-radius: 0
                 border-bottom-right-radius: 0
 

@@ -1,4 +1,3 @@
-import React from "react";
 
 import Date from "components/Date";
 import UserName from "components/UserName";
