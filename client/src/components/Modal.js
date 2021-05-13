@@ -25,14 +25,24 @@ export const ModalProvider = ({children, isActive = false}) => {
 
     // Create the reducer state.
      const [modalState, modalDispatch] = useReducer((state, { type, payload }) => {
-         return {
-				...state,
-				[type]: {
-					...payload,
-					isActive
-				}
-			};
-     }, {})
+
+        switch (type) {
+			case REGISTER_MODAL:
+				return {
+					...state,
+					modals: { ...state.modal, payload }
+				};
+			case SET_ACTIVE_MODAL:
+				return {
+					...state,
+					activeKey: payload
+				};
+		}
+    
+     }, { 
+            modals: { } , 
+            activeKey: "" 
+        } )
     
     //const modalState = useState( isActive );
 
