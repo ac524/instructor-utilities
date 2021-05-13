@@ -5,7 +5,7 @@ const reducer = (state, { type, payload }) => {
 		[REGISTER_MODAL]: ()=>(
 			{
 				...state,
-				modals: { ...state.modals, payload }
+				modals: { ...state.modals, ...payload }
 			}
 		),
 		[SET_ACTIVE_MODAL]: ()=>(
