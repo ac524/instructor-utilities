@@ -1,9 +1,11 @@
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useReducer } from "react";
 
 import {
     Modal as BulmaModal,
     Button
 } from "react-bulma-components";
+
+import reducer from "./Modal/modalReducer";
 
 // Define a new context
 const ModalContext = createContext(false);
@@ -24,29 +26,14 @@ export const useModalContext = () => {
 export const ModalProvider = ({children, isActive = false}) => {
 
     // Create the reducer state.
-     const [modalState, modalDispatch] = useReducer((state, { type, payload }) => {
-
-        switch (type) {
-			case REGISTER_MODAL:
-				return {
-					...state,
-					modals: { ...state.modal, payload }
-				};
-			case SET_ACTIVE_MODAL:
-				return {
-					...state,
-					activeKey: payload
-				};
-		}
-    
-     }, { 
+     const [modalState, modalDispatch] = useReducer(reducer, { 
             modals: { } , 
             activeKey: "" 
         } )
     
     //const modalState = useState( isActive );
 
-    return <Provider value={(modalState, modalDispatch)}>{children}</Provider>;
+    return <Provider value={[modalState, modalDispatch]}>{children}</Provider>;
 
 }
 

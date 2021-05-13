@@ -1,0 +1,2 @@
+export const REGISTER_MODAL = "REGISTER_MODAL";
+export const SET_ACTIVE_MODAL = "SET_ACTIVE_MODAL";
