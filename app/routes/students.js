@@ -22,6 +22,13 @@ module.exports = createRouter([
             middleware: [ setRoom.fromBody, isRoomMember ],
             permission: studentPerm,
             ctrl: ctrls.get("room.student")
+        },
+        patch: {
+            defaultError: "update the students",
+            // validation: studentVal,
+            middleware: [ setRoom.fromBody, isRoomMember ],
+            permission: studentPerm,
+            ctrl: ctrls.get("room.student").binding.updateMany
         }
     }],
 

@@ -90,6 +90,14 @@ class StudentController extends SubSchemaController {
 
     }
 
+    async updateMany( { data: { data }, roomId } ) {
+
+        console.log( roomId, data );
+
+        return { success: true };
+
+    }
+
     async createMany( { createdBy, belongsTo, data } ) {
 
         const students = [];
