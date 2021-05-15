@@ -8,11 +8,12 @@ import {
 import api from "utils/api";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
-import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
-import { EDIT_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT_SELECTED } from "pages/Dashboard/store/actionsNames";
+import { getDashboardAction as gda, useDashboardContext, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
+import { EDIT_STUDENT, REMOVE_STUDENT, SELECT_STUDENT, UNSELECT_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
 import "./style.sass";
+import { useMemo } from "react";
 
 export const StudentMenu = ({ _id, name }) => {
     
@@ -73,22 +74,33 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
     
 }
 
+const StudentBulkSelect = ({ studentId }) => {
+
+    const [ { classroom: { selectedStudents } }, dispatch ] = useDashboardContext();
+
+    const isSelected = useMemo(() => selectedStudents.includes(studentId), [selectedStudents]);
+
+    const updateStudent = () => dispatch(gda(isSelected ? UNSELECT_STUDENT : SELECT_STUDENT, studentId));
+
+    return <input
+        type="checkbox"
+        className="ml-auto"
+        checked={isSelected}
+        onChange={updateStudent}
+    />
+
+}
+
 export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo, elevation, isSelected = false } }) => {
 
     const dispatch = useDashboardDispatch();
     const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
-    const updateStudent = ({target}) => dispatch(gda(UPDATE_STUDENT_SELECTED, { _id, isSelected: target.checked }));
-
+    
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
                 <span onClick={openEdit} className="student-name">{name}</span>
-                <input
-                    type="checkbox"
-                    className="ml-auto"
-                    checked={isSelected}
-                    onChange={updateStudent}
-                />
+                <StudentBulkSelect studentId={_id} />
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />

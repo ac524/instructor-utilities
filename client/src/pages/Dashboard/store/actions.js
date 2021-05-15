@@ -35,7 +35,11 @@ import {
     SET_STUDENTS,
     ADD_STUDENT,
     UPDATE_STUDENT,
-    UPDATE_STUDENT_SELECTED,
+    SELECT_STUDENT,
+    UNSELECT_STUDENT,
+    SELECT_STUDENTS,
+    UNSELECT_STUDENTS,
+    UNSELECT_ALL_STUDENTS,
     REMOVE_STUDENT,
 
     /**
@@ -161,17 +165,44 @@ export default {
             students: state.classroom.students.map( student => student._id === payload._id ? { ...student, ...payload } : student )
         }
     }),
-    [UPDATE_STUDENT_SELECTED]: ( state, { _id, isSelected } ) => ({
+    [SELECT_STUDENT]: ( state, studentId ) => ({
         ...state,
         classroom: {
             ...state.classroom,
-            students: state.classroom.students.map( student => student._id === _id ? { ...student, isSelected } : student ),
             // Maintain an independent list of selected student ids
-            selectedStudents: isSelected
-            
-                ? [ ...state.classroom.selectedStudents, _id ]
-                
-                : state.classroom.selectedStudents.filter((itemId)=>itemId!==_id)
+            selectedStudents: [ ...state.classroom.selectedStudents, studentId ]
+        }
+    }),
+    [UNSELECT_STUDENT]: ( state, studentId ) => ({
+        ...state,
+        classroom: {
+            ...state.classroom,
+            // Maintain an independent list of selected student ids
+            selectedStudents: state.classroom.selectedStudents.filter((itemId)=>itemId!==studentId)
+        }
+    }),
+    [SELECT_STUDENTS]: ( state, studentIds ) => ({
+        ...state,
+        classroom: {
+            ...state.classroom,
+            selectedStudents: [ ...state.classroom.selectedStudents, ...studentIds ]
+        }
+    }),
+    [UNSELECT_STUDENTS]: ( state, studentIds ) => {
+        const removalMap = new Map(studentIds.map(id=>[id,id]));
+        return {
+            ...state,
+            classroom: {
+                ...state.classroom,
+                selectedStudents: state.classroom.selectedStudents.filter((itemId)=>!removalMap.has(itemId))
+            }
+        };
+    },
+    [UNSELECT_ALL_STUDENTS]: ( state ) => ({
+        ...state,
+        classroom: {
+            ...state.classroom,
+            selectedStudents: []
         }
     }),
     [REMOVE_STUDENT]: ( state, payload ) => ({
