@@ -9,7 +9,7 @@ import api from "utils/api";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
-import { EDIT_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT, UPDATE_STUDENT_SELECTED } from "pages/Dashboard/store/actionsNames";
+import { EDIT_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT_SELECTED } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
 import "./style.sass";
