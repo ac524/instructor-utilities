@@ -8,7 +8,7 @@ import {
 import Icon from "components/Icon";
 import { useDashboardContext, getDashboardAction as gda, useStaffByRole } from "pages/Dashboard/store";
 import { getStaffOptionsList } from "pages/Dashboard/utils/staff";
-import { EDIT_STUDENT, UPDATE_STUDENT } from "pages/Dashboard/store/actionsNames";
+import { EDIT_STUDENT, UPDATE_STUDENTS } from "pages/Dashboard/store/actionsNames";
 import Dropdown from "components/Dropdown";
 import { useStudentGroupings } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
@@ -18,7 +18,7 @@ const { Input } = FormCollection;
 
 const StudentListControls = ( { sort, groupBy, search } ) => {
 
-    const [ { classroom: { students, selectedStudents } }, dispatch ] = useDashboardContext();
+    const [ { classroom: { selectedStudents } }, dispatch ] = useDashboardContext();
     const groupTypes = useStudentGroupings().map( ({key, name, icon}) => ({
         key,
         label: `Group by ${name}`,
@@ -38,20 +38,7 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         );
     }
 
-    const handleBulkReassignment = staff => {
-
-        const selectedStudents = students.filter(({isSelected}) => isSelected);
-        
-        for (const student of selectedStudents) {
-            dispatch(gda(UPDATE_STUDENT, {
-                _id: student._id, 
-                assignedTo: staff.value
-            }));
-        }
-
-        // TODO: API request to POST data
-        
-    }
+    const handleBulkReassignment = assignedTo => dispatch(gda(UPDATE_STUDENTS, selectedStudents.map(_id=>({_id, assignedTo}))));
 
     return (
         <div className="is-flex mb-5">
@@ -59,7 +46,7 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
             {(selectedStudents.length || null) &&
             <Dropdown className="ml-2" label="Reassign">
                 {staffOptionsList.map(staff => (
-                    <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff)}>{staff.label}</Button>
+                    <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff.value)}>{staff.label}</Button>
                 ))}
             </Dropdown>}
             <Input

@@ -35,6 +35,7 @@ import {
     SET_STUDENTS,
     ADD_STUDENT,
     UPDATE_STUDENT,
+    UPDATE_STUDENTS,
     SELECT_STUDENT,
     UNSELECT_STUDENT,
     SELECT_STUDENTS,
@@ -165,6 +166,16 @@ export default {
             students: state.classroom.students.map( student => student._id === payload._id ? { ...student, ...payload } : student )
         }
     }),
+    [UPDATE_STUDENTS]: ( state, students ) => {
+        const updateMap = new Map( students.map(({_id,...updates})=>[_id,updates]) );
+        return {
+            ...state,
+            classroom: {
+                ...state.classroom,
+                students: state.classroom.students.map( ({_id,...student}) => updateMap.has( _id ) ? { _id, ...student, ...updateMap.get( _id ) } : student )
+            }
+        }
+    },
     [SELECT_STUDENT]: ( state, studentId ) => ({
         ...state,
         classroom: {
