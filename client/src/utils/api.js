@@ -68,12 +68,11 @@ class API {
     return this.axios.patch(`/api/students/${studentId}`, update);
   }
 
-  async updateStudents(roomId, students, data) {
+  async updateStudents(roomId, updates) {
 
     return this.axios.patch(`/api/students`, {
       roomId,
-      students,
-      data
+      students: updates
     });
     
   }

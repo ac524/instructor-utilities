@@ -23,6 +23,14 @@ export const useClassroom = () => {
 
 }
 
+export const useClassroomId = () => {
+
+    const [ { classroom: { _id: roomId } } ] = useDashboardContext();
+
+    return roomId;
+
+}
+
 export const usePermissions = () => {
 
     const [ { permissions } ] = useDashboardContext();
