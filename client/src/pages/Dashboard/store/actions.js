@@ -172,7 +172,7 @@ export default {
             ...state,
             classroom: {
                 ...state.classroom,
-                students: state.classroom.students.map( ({_id,...student}) => updateMap.has( _id ) ? { _id, ...student, ...updateMap.get( _id ) } : student )
+                students: state.classroom.students.map( ({_id,...student}) => updateMap.has( _id ) ? { _id, ...student, ...updateMap.get( _id ) } : { _id,...student } )
             }
         }
     },
