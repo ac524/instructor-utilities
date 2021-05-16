@@ -1,5 +1,5 @@
 import { useDashboardContext } from ".";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 /**
  * DASHBOARD GETTERS
@@ -83,6 +83,20 @@ export const useStudents = () => {
     const [ { classroom: { students } } ] = useDashboardContext();
 
     return students;
+
+}
+
+export const useSelectedStudents = () => {
+
+    const [ { classroom: { students, selectedStudents } } ] = useDashboardContext();
+
+    return useMemo(() => new Map(
+        selectedStudents.length
+        
+            ? selectedStudents.map(selected=>[selected,students.find(({_id})=>_id===selected)])
+            
+            : []
+    ));
 
 }
 

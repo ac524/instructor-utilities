@@ -8,12 +8,11 @@ import {
 import api from "utils/api";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
-import { getDashboardAction as gda, useDashboardContext, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
+import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
 import { EDIT_STUDENT, REMOVE_STUDENT, SELECT_STUDENT, UNSELECT_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
 import "./style.sass";
-import { useMemo } from "react";
 
 export const StudentMenu = ({ _id, name }) => {
     
@@ -74,11 +73,9 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
     
 }
 
-const StudentBulkSelect = ({ studentId }) => {
+const StudentBulkSelect = ({ studentId, isSelected }) => {
 
-    const [ { classroom: { selectedStudents } }, dispatch ] = useDashboardContext();
-
-    const isSelected = useMemo(() => selectedStudents.includes(studentId), [selectedStudents]);
+    const dispatch = useDashboardDispatch();
 
     const updateStudent = () => dispatch(gda(isSelected ? UNSELECT_STUDENT : SELECT_STUDENT, studentId));
 
@@ -91,7 +88,7 @@ const StudentBulkSelect = ({ studentId }) => {
 
 }
 
-export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo, elevation, isSelected = false } }) => {
+export const StudentCard = ({ className, isSelected, student: { _id, name, priorityLevel, assignedTo, elevation } }) => {
 
     const dispatch = useDashboardDispatch();
     const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
@@ -100,7 +97,7 @@ export const StudentCard = ({ className, student: { _id, name, priorityLevel, as
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
                 <span onClick={openEdit} className="student-name">{name}</span>
-                <StudentBulkSelect studentId={_id} />
+                <StudentBulkSelect studentId={_id} isSelected={isSelected} />
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />
