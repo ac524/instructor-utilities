@@ -44,7 +44,7 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
     const handleBulkReassignment = async assignedTo => {
 
         // Map each selected student id to an object that includes the updated `assignedTo` prop
-        const studentUpdates = selectedStudents.map(_id=>({_id, assignedTo}));
+        const studentUpdates = selectedStudents.map(_id=>({_id, assignedTo: assignedTo || null}));
 
         try {
 
