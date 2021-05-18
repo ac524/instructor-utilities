@@ -30,9 +30,13 @@ const validateLoginData = createValidator({
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
  * @param {object} props
  */
-export const LoginButton = ({ children, ...props }) => {
+export const LoginButton = ({ children,modalKey, ...props }) => {
 
-    return <ModalButton {...props}>{children || "Login"}</ModalButton>
+    return (
+		<ModalButton {...props} modalKey={modalKey}>
+			{children || "Login"}
+		</ModalButton>
+	);
 
 }
 
@@ -40,9 +44,13 @@ export const LoginButton = ({ children, ...props }) => {
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
  * @param {object} props
  */
-export const LoginLink = ({ children, ...props }) => {
+export const LoginLink = ({ children, modalKey, ...props }) => {
 
-    return <ModalLink {...props}>{children || "Login"}</ModalLink>
+    return (
+		<ModalLink {...props} modalKey={modalKey}>
+			{children || "Login"}
+		</ModalLink>
+	);
 
 }
 
@@ -76,18 +84,19 @@ export const LogoutLink = ({ children, ...props }) => {
 /**
  * Login modal component. Requires <LoginModalProvider> as an ancenstor.
  */
-export const LoginModal = () => {
-
+export const LoginModal = ({modalKey}) => {
     return (
-        <Modal>
-            <Box className="py-5">
-                <Heading renderAs="h2">Login</Heading>
-                <hr />
-                <LoginForm />
-                <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
-            </Box>
-        </Modal>
-    )
+		<Modal modalKey={"LOGIN_MODAL"}>
+			<Box className="py-5">
+				<Heading renderAs="h2">Login</Heading>
+				<hr />
+				<LoginForm />
+				<p className="mt-3 has-text-grey is-size-7">
+					Don't have an account yet? <a href="/register">Register</a>
+				</p>
+			</Box>
+		</Modal>
+	);
 
 }
 

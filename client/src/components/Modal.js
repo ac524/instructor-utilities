@@ -4,6 +4,8 @@ import {
     Modal as BulmaModal,
     Button
 } from "react-bulma-components";
+import { useModalRegistration, useSetModalKey } from "utils/modalActions";
+import { SET_ACTIVE_MODAL } from "./Modal/actions";
 
 import reducer from "./Modal/modalReducer";
 
@@ -41,52 +43,69 @@ export const ModalProvider = ({children, isActive = false}) => {
  * Open modal button component. Requires <ModalProvider> as an ancenstor.
  * @param {object} props
  */
-export const ModalButton = ({ children, ...props }) => {
+export const ModalButton = ({ children, modalKey, ...props }) => {
+	// Consume the login context to fetch the live state.
+    const [, modalDispatch] = useModalContext();
 
-    // Consume the login context to fetch the live state.
-    const [ ,setIsActive ] = useContext( ModalContext );
+    const open = () =>
+		modalDispatch({
+			type: SET_ACTIVE_MODAL,
+			payload: modalKey
+		});;
 
-    return <Button onClick={() => setIsActive(true)} {...props}>{children || "Launch Modal"}</Button>
-
-}
+	return (
+		<Button onClick={() => open()} {...props}>
+			{children || "Launch Modal"}
+		</Button>
+	);
+};
 
 /**
  * Open modal link component. Requires <ModalProvider> as an ancenstor.
  * @param {object} props
  */
-export const ModalLink = ({ children, onClick, ...props }) => {
+export const ModalLink = ({ children, onClick, modalKey, ...props }) => {
+	// Consume the login context to fetch the live state.
 
-    // Consume the login context to fetch the live state.
-    const [ ,setIsActive ] = useContext( ModalContext );
+	const [, modalDispatch] = useModalContext();
 
-    const open = () => setIsActive(true);
+	const open = () =>
+		modalDispatch({
+			type: SET_ACTIVE_MODAL,
+			payload: modalKey
+		});
 
-    const onLinkClick = () => {
-        onClick
+	const onLinkClick = () => {
+		onClick ? onClick(open) : open();
+	};
 
-            ? onClick( open )
+	return (
+		<a role="button" onClick={onLinkClick} {...props}>
+			{children || "Launch Modal"}
+		</a>
+	);
+};;
 
-            : open();
-    }
+const Modal = ( { children, onClose, contentProps = {}, modalKey, ...props } ) => {
 
-    return <a role="button" onClick={onLinkClick} {...props}>{children || "Launch Modal"}</a>
+    const modal = useModalRegistration(modalKey, {children, onClose, contentProps, modalKey, ...props});
 
-}
+    const [, modalDispatch] = useModalContext();
 
-const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
 
-    const [ isActive, setIsActive ] = useContext( ModalContext );
+    const isActive = () => modal.activeKey === modalKey
 
-    const close = () => {
-        setIsActive(false);
-    }
+    const close = () => modalDispatch({
+			type: SET_ACTIVE_MODAL,
+			payload: ""
+		});
 
     const onModalClose = () => {
         onClose ? onClose( close ) : close();
     }
 
     return (
-        <BulmaModal show={isActive} onClose={onModalClose} closeOnBlur={true} {...props}>
+        <BulmaModal show={isActive()} onClose={onModalClose} closeOnBlur={true} {...props}>
             <BulmaModal.Content {...contentProps}>
                 {children}
             </BulmaModal.Content>
