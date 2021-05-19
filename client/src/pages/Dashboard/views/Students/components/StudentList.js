@@ -2,11 +2,12 @@ import { Columns, Card } from "react-bulma-components";
 
 import { StudentCard } from "pages/Dashboard/components/StudentCard";
 import { useStudentSort, useStudentGroups } from "pages/Dashboard/utils/student";
-import { useStudents } from "pages/Dashboard/store";
+import { useSelectedStudents, useStudents } from "pages/Dashboard/store";
 
 const StudentList = ( { sort, groupBy, search } ) => {
 
     const students = useStudents();
+    const selectedStudents = useSelectedStudents();
     const groupedStudents = useStudentGroups( students, groupBy );
     const studentSort = useStudentSort( sort );
     const studentFilter = student => !search || student.name.toLowerCase().includes( search );
@@ -26,7 +27,7 @@ const StudentList = ( { sort, groupBy, search } ) => {
 
                 ? groupedStudents[0].entries.filter( studentFilter ).sort( studentSort ).map(student => (
                     <Columns.Column key={student._id} {...sizes} className="has-filled-content">
-                        <StudentCard student={student} />
+                        <StudentCard student={student} isSelected={selectedStudents.has(student._id)} />
                     </Columns.Column>
                 ))
 
