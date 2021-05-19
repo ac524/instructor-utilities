@@ -1,12 +1,12 @@
 {
   "name": "crsm",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "Classroom student management utilities for instructors to effectively organize and keep track of student progress with a team of staff members.",
   "main": "app/server.js",
   "_moduleAliases": {
-    "~crsm": "./app",
-    "~crsmmodels": "./app/controllers/definitions/models",
-    "~crsmtest": "./test"
+    "~crsm": "app",
+    "~crsmmodels": "app/controllers/definitions/models",
+    "~crsmtest": "test"
   },
   "scripts": {
     "envsetup": "node envsetup",
@@ -45,10 +45,10 @@
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "mjml": "^4.9.3",
-    "mongoose": "^5.12.8",
+    "mongoose": "^5.12.10",
     "nodemailer": "^6.6.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "socket.io": "^4.1.1"
+    "socket.io": "^4.1.2"
   }
 }
