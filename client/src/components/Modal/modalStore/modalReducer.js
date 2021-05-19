@@ -1,6 +1,7 @@
 import { SET_ACTIVE_MODAL, REGISTER_MODAL, DEREGISTER_MODAL } from "../modalActions/index.js";
 
 const reducer = (state, { type, payload }) => {
+
 	const actions = {
 		[REGISTER_MODAL]: () => ({
 			...state,
@@ -16,9 +17,11 @@ const reducer = (state, { type, payload }) => {
 				...Object.fromEntries(
 					Object.entries(state.modals).filter(([key, value]) => key !== payload)
 					)
-			}
+			},
+			activeKey: false
 		})
 	}; 
+
 	return actions.hasOwnProperty(type) ? actions[type]() : state;
 
 };

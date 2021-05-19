@@ -10,12 +10,17 @@ export const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
 
     const [modal, modalDispatch] = useModalContext();
 
+	const { component: Component } = (
+		modal.modals[modal.activeKey] ? 
+			modal.modals[modal.activeKey]: 
+			false
+		)
 
-    const isActive = () => modal.activeKey !== modal.activeKey;
+    const isActive = () => modal.activeKey
 
     const close = () => modalDispatch({
 			type: SET_ACTIVE_MODAL,
-			payload: ""
+			payload: false
 		});
 
     const onModalClose = () => {
@@ -23,11 +28,15 @@ export const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
     }
 
     return (
-        <BulmaModal show={isActive()} onClose={onModalClose} closeOnBlur={true} {...props}>
-            <BulmaModal.Content {...contentProps}>
-                {children}
-            </BulmaModal.Content>
-        </BulmaModal>
-    )
+		<BulmaModal
+			show={isActive()}
+			onClose={onModalClose}
+			closeOnBlur={true}
+			{...props}>
+			<BulmaModal.Content {...contentProps}>
+				{ Component ? <Component /> : children}
+			</BulmaModal.Content>
+		</BulmaModal>
+	);
 
 }

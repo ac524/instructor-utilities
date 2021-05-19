@@ -9,7 +9,8 @@ import Form from "./Form";
 import { createValidator } from "utils/validation";
 import { useHistory } from "react-router-dom";
 import { ModalButton, ModalLink, Modal } from "./Modal";
-
+import { useModalRegistration } from "utils/modalHooks";
+const modalKey = "LOGIN_MODAL"
 
 const validateLoginData = createValidator({
     validators: {
@@ -31,7 +32,7 @@ const validateLoginData = createValidator({
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
  * @param {object} props
  */
-export const LoginButton = ({ children,modalKey, ...props }) => {
+export const LoginButton = ({ children, ...props }) => {
 
     return (
 		<ModalButton {...props} modalKey={modalKey}>
@@ -45,7 +46,7 @@ export const LoginButton = ({ children,modalKey, ...props }) => {
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
  * @param {object} props
  */
-export const LoginLink = ({ children, modalKey, ...props }) => {
+export const LoginLink = ({ children, ...props }) => {
 
     return (
 		<ModalLink {...props} modalKey={modalKey}>
@@ -86,17 +87,23 @@ export const LogoutLink = ({ children, ...props }) => {
  * Login modal component. Requires <LoginModalProvider> as an ancenstor.
  */
 export const LoginModal = () => {
+
+    useModalRegistration(modalKey, 
+        {   
+            key: modalKey, 
+            component: ()=>(
+                <Box className="py-5">
+                    <Heading renderAs="h2">Login</Heading>
+                    <hr />
+                    <LoginForm />
+                    <p className="mt-3 has-text-grey is-size-7">
+                        Don't have an account yet? <a href="/register">Register</a>
+                    </p>
+                </Box>)
+        })
+        
     return (
-		<Modal>
-			<Box className="py-5">
-				<Heading renderAs="h2">Login</Heading>
-				<hr />
-				<LoginForm />
-				<p className="mt-3 has-text-grey is-size-7">
-					Don't have an account yet? <a href="/register">Register</a>
-				</p>
-			</Box>
-		</Modal>
+		<Modal/>
 	);
 
 }
