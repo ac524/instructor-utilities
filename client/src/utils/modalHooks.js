@@ -1,5 +1,5 @@
-import { useModalContext } from "components/Modal/components/Modal";
-import { REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/modalStore/modalActions";
+import { DEREGISTER_MODAL, REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/modalActions";
+import { useModalContext } from "components/Modal/modalStore";
 import { useEffect } from "react";
 
 export const useModalRegistration = ( key, modalConfig ) => {
@@ -17,7 +17,7 @@ export const useModalRegistration = ( key, modalConfig ) => {
         })
         return () => {
             modalDispatch({
-				type: REGISTER_MODAL,
+				type: DEREGISTER_MODAL,
 				payload: key
 			});
         }
