@@ -8,7 +8,7 @@ import { useLogout, useLogin } from "utils/auth";
 import Form from "./Form";
 import { createValidator } from "utils/validation";
 import { useHistory } from "react-router-dom";
-import Modal, { ModalButton, ModalLink } from "./Modal";
+import Modal, { ModalButton, ModalLink } from "./Modal/components/Modal";
 
 const validateLoginData = createValidator({
     validators: {

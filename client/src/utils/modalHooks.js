@@ -1,5 +1,5 @@
-import { useModalContext } from "components/Modal";
-import { REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/modalActons";
+import { useModalContext } from "components/Modal/components/Modal";
+import { REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/modalStore/modalActions";
 import { useEffect } from "react";
 
 export const useModalRegistration = ( key, modalConfig ) => {

@@ -4,9 +4,9 @@ import {
     Modal as BulmaModal,
     Button
 } from "react-bulma-components";
-import { SET_ACTIVE_MODAL } from "./Modal/modalActons";
+import { SET_ACTIVE_MODAL } from "./modalActions";
 
-import reducer from "./Modal/modalReducer";
+import reducer from "./modalReducer";
 
 // Define a new context
 const ModalContext = createContext(false);
