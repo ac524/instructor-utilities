@@ -31,7 +31,7 @@ const TopNavbar = () => {
       <Menu>
         <Container align="right">
           <Item renderAs="div">
-              { isAuth ? <LogoutButton color="primary" outlined /> : <LoginButton color="primary"  modalKey={"LOGIN_MODAL"}/> }
+              { isAuth ? <LogoutButton color="primary" outlined /> : <LoginButton color="primary"/> }
           </Item>
         </Container>
       </Menu>

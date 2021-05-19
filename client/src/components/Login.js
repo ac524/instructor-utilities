@@ -84,9 +84,9 @@ export const LogoutLink = ({ children, ...props }) => {
 /**
  * Login modal component. Requires <LoginModalProvider> as an ancenstor.
  */
-export const LoginModal = ({modalKey}) => {
+export const LoginModal = () => {
     return (
-		<Modal modalKey={"LOGIN_MODAL"}>
+		<Modal>
 			<Box className="py-5">
 				<Heading renderAs="h2">Login</Heading>
 				<hr />

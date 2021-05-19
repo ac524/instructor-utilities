@@ -1,11 +1,10 @@
-import { useContext, useState, createContext, useReducer } from "react";
+import { useContext, createContext, useReducer } from "react";
 
 import {
     Modal as BulmaModal,
     Button
 } from "react-bulma-components";
-import { useModalRegistration, useSetModalKey } from "utils/modalActions";
-import { SET_ACTIVE_MODAL } from "./Modal/actions";
+import { SET_ACTIVE_MODAL } from "./Modal/modalActons";
 
 import reducer from "./Modal/modalReducer";
 
@@ -51,7 +50,7 @@ export const ModalButton = ({ children, modalKey, ...props }) => {
 		modalDispatch({
 			type: SET_ACTIVE_MODAL,
 			payload: modalKey
-		});;
+		});
 
 	return (
 		<Button onClick={() => open()} {...props}>
@@ -86,14 +85,13 @@ export const ModalLink = ({ children, onClick, modalKey, ...props }) => {
 	);
 };;
 
-const Modal = ( { children, onClose, contentProps = {}, modalKey, ...props } ) => {
-
-    const modal = useModalRegistration(modalKey, {children, onClose, contentProps, modalKey, ...props});
-
-    const [, modalDispatch] = useModalContext();
+const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
 
 
-    const isActive = () => modal.activeKey === modalKey
+    const [modal, modalDispatch] = useModalContext();
+
+
+    const isActive = () => modal.activeKey !== modal.activeKey;
 
     const close = () => modalDispatch({
 			type: SET_ACTIVE_MODAL,

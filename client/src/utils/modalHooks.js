@@ -1,5 +1,5 @@
 import { useModalContext } from "components/Modal";
-import { REGISTER_MODAL } from "components/Modal/actions";
+import { REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/modalActons";
 import { useEffect } from "react";
 
 export const useModalRegistration = ( key, modalConfig ) => {
@@ -15,23 +15,25 @@ export const useModalRegistration = ( key, modalConfig ) => {
                 } 
             }
         })
-        return modalState
+        return () => {
+            modalDispatch({
+				type: REGISTER_MODAL,
+				payload: key
+			});
+        }
     }, []);
 
     return modalState
 }
 
-export const useSetModalKey = ( key ) =>{
+export const useOpenModal = ( key ) =>{
 
-    const [modalState, modalDispatch] = useModalContext();
+    const [, modalDispatch] = useModalContext();
 
-    useEffect(() => {
+	return useMemo(()=> () =>
 		modalDispatch({
 			type: SET_ACTIVE_MODAL,
 			payload: key
-		});
-	}, []);
-
-	return modalState;
+		}),[key]);
 
 }
