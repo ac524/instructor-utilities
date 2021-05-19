@@ -1,30 +1,27 @@
 import {
     Modal as BulmaModal,
 } from "react-bulma-components";
-import { SET_ACTIVE_MODAL } from "../modalActions";
+import { useOpenModal } from "utils/modalHooks";
 import { useModalContext } from "../modalStore";
 
 
 export const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
 
 
-    const [modal, modalDispatch] = useModalContext();
+    const [ { modal: { modals, activeKey } }, ] = useModalContext();
 
 	const { component: Component } = (
-		modal.modals[modal.activeKey] ? 
-			modal.modals[modal.activeKey]: 
+		modals[activeKey] ? 
+			modals[activeKey]: 
 			false
 		)
 
-    const isActive = () => modal.activeKey
+    const isActive = () => activeKey
 
-    const close = () => modalDispatch({
-			type: SET_ACTIVE_MODAL,
-			payload: false
-		});
+    const closeModal = useOpenModal(false);
 
     const onModalClose = () => {
-        onClose ? onClose( close ) : close();
+        onClose ? onClose(closeModal) : closeModal();
     }
 
     return (

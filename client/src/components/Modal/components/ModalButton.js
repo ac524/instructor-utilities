@@ -1,22 +1,15 @@
-import { useModalContext } from "../modalStore";
 import { Button } from "react-bulma-components";
-import { SET_ACTIVE_MODAL } from "../modalActions";
+import { useOpenModal } from "utils/modalHooks";
 /**
  * Open modal button component. Requires <ModalProvider> as an ancenstor.
  * @param {object} props
  */
 export const ModalButton = ({ children, modalKey, ...props }) => {
 	// Consume the login context to fetch the live state.
-	const [, modalDispatch] = useModalContext();
-
-	const open = () =>
-		modalDispatch({
-			type: SET_ACTIVE_MODAL,
-			payload: modalKey
-		});
+    const openModal = useOpenModal(modalKey);
 
 	return (
-		<Button onClick={() => open()} {...props}>
+		<Button onClick={() => openModal()} {...props}>
 			{children || "Launch Modal"}
 		</Button>
 	);
