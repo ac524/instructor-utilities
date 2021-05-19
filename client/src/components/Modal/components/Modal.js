@@ -8,8 +8,9 @@ import { useModalContext } from "../modalStore";
 export const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
 
 
-    const [ { modal: { modals, activeKey } }, ] = useModalContext();
-
+    const [ modal, ] = useModalContext();
+	const { modals, activeKey } = modal
+	
 	const { component: Component } = (
 		modals[activeKey] ? 
 			modals[activeKey]: 
