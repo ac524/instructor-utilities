@@ -1,4 +1,4 @@
-import { useOpenModal } from "utils/modalHooks";
+import { useOpenModal } from "components/Modal/utils";
 
 /**
  * Open modal link component. Requires <ModalProvider> as an ancenstor.

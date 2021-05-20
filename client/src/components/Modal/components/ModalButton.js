@@ -1,5 +1,5 @@
 import { Button } from "react-bulma-components";
-import { useOpenModal } from "utils/modalHooks";
+import { useOpenModal } from "components/Modal/utils";
 /**
  * Open modal button component. Requires <ModalProvider> as an ancenstor.
  * @param {object} props

@@ -9,7 +9,7 @@ import Form from "./Form";
 import { createValidator } from "utils/validation";
 import { useHistory } from "react-router-dom";
 import { ModalButton, ModalLink, Modal } from "./Modal";
-import { useModalRegistration } from "utils/modalHooks";
+import { useModalRegistration } from "components/Modal/utils";
 const modalKey = "LOGIN_MODAL"
 
 const validateLoginData = createValidator({

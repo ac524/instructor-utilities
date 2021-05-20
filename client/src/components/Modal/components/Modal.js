@@ -1,7 +1,7 @@
 import {
     Modal as BulmaModal,
 } from "react-bulma-components";
-import { useOpenModal } from "utils/modalHooks";
+import { useOpenModal } from "components/Modal/utils";
 import { useModalContext } from "../modalStore";
 
 
