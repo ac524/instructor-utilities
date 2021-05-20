@@ -10,6 +10,11 @@ const SubSchemaController = require("../types/SubSchemaController");
 
 /**
  * @typedef CreateStudentOptionsData
+ * @property {object} data
+ * @property {array} data.students
+ * @property {ObjectId} roomId
+ * 
+ * @typedef UpdateStudentsOptionsData
  * @property {number} createdBy
  * 
  * @typedef {CreateSubDocOptions & CreateStudentOptionsData} CreateStudentOptions
@@ -87,6 +92,23 @@ class StudentController extends SubSchemaController {
                 ...(meta ? { $set: mapMetaData(this,meta) } : {})
             }
         });
+
+    }
+
+    /**
+     * 
+     * @param {CreateStudentOptionsData} options 
+     * @returns {Array}
+     */
+    async updateMany( { data: { students }, roomId } ) {
+
+        const room = await this.effect('room').findOne( { docId: roomId }, { populate: [] } );
+        
+        const updatedStudents = students.map(({_id, ...updates}) => room.students.id(_id).set(updates));
+
+        await room.save();
+
+        return updatedStudents;
 
     }
 
