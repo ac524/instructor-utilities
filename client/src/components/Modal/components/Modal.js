@@ -5,7 +5,7 @@ import { useOpenModal } from "components/Modal/utils";
 import { useModalContext } from "../store";
 
 
-export const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
+export const Modal = ( { onClose, contentProps = {}, ...props } ) => {
 
 
     const [ modal, ] = useModalContext();
@@ -32,7 +32,7 @@ export const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {
 			closeOnBlur={true}
 			{...props}>
 			<BulmaModal.Content {...contentProps}>
-				{ Component ? <Component /> : children}
+				{ Component  && <Component />}
 			</BulmaModal.Content>
 		</BulmaModal>
 	);
