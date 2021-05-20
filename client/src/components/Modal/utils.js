@@ -1,6 +1,8 @@
 import { DEREGISTER_MODAL, REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/store/actions";
 import { useModalContext } from "components/Modal/store";
 import { useEffect, useMemo } from "react";
+import { Box, Heading } from "react-bulma-components";
+import { LoginForm } from "components/Login";
 
 export const useModalRegistration = ( key, modalConfig ) => {
     
@@ -36,4 +38,23 @@ export const useOpenModal = ( key ) =>{
 			payload: key
 		}),[key]);
 
+}
+
+export const useLoginModal = () =>{
+    const modalKey = "LOGIN_MODAL"
+    useModalRegistration(modalKey, {
+        key: modalKey,
+        component: () => (
+            <Box className="py-5">
+                <Heading renderAs="h2">Login</Heading>
+                <hr />
+                <LoginForm />
+                <p className="mt-3 has-text-grey is-size-7">
+                    Don't have an account yet?{" "}
+                    <a href="/register">Register</a>
+                </p>
+            </Box>
+        )
+    })
+	
 }
