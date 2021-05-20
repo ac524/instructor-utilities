@@ -1,5 +1,5 @@
 import Main from "./Main";
-import { LoginForm, LoginModal } from "components/Login"
+import { LoginForm } from "components/Login"
 import { useModalRegistration } from "components/Modal/utils";
 import { Box, Heading } from "react-bulma-components";
 const modalKey = "LOGIN_MODAL"

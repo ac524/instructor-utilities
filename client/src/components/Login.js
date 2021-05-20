@@ -82,32 +82,6 @@ export const LogoutLink = ({ children, ...props }) => {
 
 }
 
-
-/**
- * Login modal component. Requires <LoginModalProvider> as an ancenstor.
- */
-export const LoginModal = () => {
-
-    useModalRegistration(modalKey, 
-        {   
-            key: modalKey, 
-            component: ()=>(
-                <Box className="py-5">
-                    <Heading renderAs="h2">Login</Heading>
-                    <hr />
-                    <LoginForm />
-                    <p className="mt-3 has-text-grey is-size-7">
-                        Don't have an account yet? <a href="/register">Register</a>
-                    </p>
-                </Box>)
-        })
-        
-    return (
-		<Modal/>
-	);
-
-}
-
 export const LoginForm = ( { afterLogin, redirect = true, email: emailStart = "" } ) => {
 
     const login = useLogin();
