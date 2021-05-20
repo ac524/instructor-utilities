@@ -2,7 +2,7 @@ import {
     Modal as BulmaModal,
 } from "react-bulma-components";
 import { useOpenModal } from "components/Modal/utils";
-import { useModalContext } from "../modalStore";
+import { useModalContext } from "../store";
 
 
 export const Modal = ( { children, onClose, contentProps = {}, ...props } ) => {

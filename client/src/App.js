@@ -10,7 +10,7 @@ import loadGlobalIcons from "./utils/icons";
 import { useSocketConnection } from "./utils/socket.io";
 import Fade from "./animations/Fade";
 import { useUserSocketUpdates } from "utils/user";
-import { ModalProvider } from "components/Modal/modalStore";
+import { ModalProvider } from "components/Modal/store";
 
 loadGlobalIcons();
 

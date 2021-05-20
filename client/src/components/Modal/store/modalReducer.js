@@ -1,4 +1,4 @@
-import { SET_ACTIVE_MODAL, REGISTER_MODAL, DEREGISTER_MODAL } from "../modalActions/index.js";
+import { SET_ACTIVE_MODAL, REGISTER_MODAL, DEREGISTER_MODAL } from "./actions.js";
 
 const reducer = (state, { type, payload }) => {
 
