@@ -1,14 +1,11 @@
-import {
-    Button,
-    Box,
-    Heading
-} from "react-bulma-components";
-
+import { Button } from "react-bulma-components";
 import { useLogout, useLogin } from "utils/auth";
 import Form from "./Form";
 import { createValidator } from "utils/validation";
 import { useHistory } from "react-router-dom";
-import Modal, { ModalButton, ModalLink } from "./Modal";
+import { ModalButton, ModalLink } from "./Modal";
+
+const modalKey = "LOGIN_MODAL"
 
 const validateLoginData = createValidator({
     validators: {
@@ -26,13 +23,36 @@ const validateLoginData = createValidator({
     }
 });
 
+export const useLoginModal = () =>{
+    const modalKey = "LOGIN_MODAL"
+    useModalRegistration(modalKey, {
+        key: modalKey,
+        component: () => (
+            <Box className="py-5">
+                <Heading renderAs="h2">Login</Heading>
+                <hr />
+                <LoginForm />
+                <p className="mt-3 has-text-grey is-size-7">
+                    Don't have an account yet?{" "}
+                    <a href="/register">Register</a>
+                </p>
+            </Box>
+        )
+    })
+	
+}
+
 /**
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
  * @param {object} props
  */
 export const LoginButton = ({ children, ...props }) => {
 
-    return <ModalButton {...props}>{children || "Login"}</ModalButton>
+    return (
+		<ModalButton {...props} modalKey={modalKey}>
+			{children || "Login"}
+		</ModalButton>
+	);
 
 }
 
@@ -42,7 +62,11 @@ export const LoginButton = ({ children, ...props }) => {
  */
 export const LoginLink = ({ children, ...props }) => {
 
-    return <ModalLink {...props}>{children || "Login"}</ModalLink>
+    return (
+		<ModalLink {...props} modalKey={modalKey}>
+			{children || "Login"}
+		</ModalLink>
+	);
 
 }
 
@@ -69,25 +93,6 @@ export const LogoutLink = ({ children, ...props }) => {
     const logout = useLogout();
 
     return <a onClick={logout} {...props}>{children || "Login"}</a>
-
-}
-
-
-/**
- * Login modal component. Requires <LoginModalProvider> as an ancenstor.
- */
-export const LoginModal = () => {
-
-    return (
-        <Modal>
-            <Box className="py-5">
-                <Heading renderAs="h2">Login</Heading>
-                <hr />
-                <LoginForm />
-                <p className="mt-3 has-text-grey is-size-7">Don't have an account yet? <a href="/register">Register</a></p>
-            </Box>
-        </Modal>
-    )
 
 }
 
