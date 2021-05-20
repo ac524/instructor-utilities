@@ -11,15 +11,18 @@ const reducer = (state, { type, payload }) => {
 			...state,
 			activeKey: payload
 		}),
-		[DEREGISTER_MODAL]: () => ({
-			...state,
-			modals: {
-				...Object.fromEntries(
-					Object.entries(state.modals).filter(([key, value]) => key !== payload)
-					)
-			},
-			activeKey: false
-		})
+		[DEREGISTER_MODAL]: () => {
+			const {
+				[payload]: removed,
+				...modals
+			} = state.modals;
+
+			return {
+				...state,
+				modals,
+				activeKey: state.activeKey === payload ? false : state.activeKey
+			};
+		}
 	}; 
 
 	return actions.hasOwnProperty(type) ? actions[type]() : state;

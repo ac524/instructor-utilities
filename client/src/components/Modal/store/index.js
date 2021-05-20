@@ -1,5 +1,5 @@
 import { useContext, createContext, useReducer } from "react";
-import reducer from "./modalReducer";
+import reducer from "./reducer";
 // Define a new context
 const ModalContext = createContext(false);
 
