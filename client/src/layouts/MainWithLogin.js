@@ -1,5 +1,5 @@
 import Main from "./Main";
-import { useLoginModal } from "components/Modal/utils";
+import { useLoginModal } from "components/Login";
 
 const MainWithLogin = ({ children }) => {
 

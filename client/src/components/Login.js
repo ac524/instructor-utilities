@@ -23,6 +23,25 @@ const validateLoginData = createValidator({
     }
 });
 
+export const useLoginModal = () =>{
+    const modalKey = "LOGIN_MODAL"
+    useModalRegistration(modalKey, {
+        key: modalKey,
+        component: () => (
+            <Box className="py-5">
+                <Heading renderAs="h2">Login</Heading>
+                <hr />
+                <LoginForm />
+                <p className="mt-3 has-text-grey is-size-7">
+                    Don't have an account yet?{" "}
+                    <a href="/register">Register</a>
+                </p>
+            </Box>
+        )
+    })
+	
+}
+
 /**
  * Open login modal button component. Requires <LoginModalProvider> as an ancenstor.
  * @param {object} props
