@@ -15,7 +15,7 @@ import {
 const StudenPanelHeading = ({ isNew }) => {
     return (
         <Heading renderAs="h2" className="mb-0">
-            {isNew ? "Edit" : "New"} Student
+            {isNew ? "New" : "Edit"} Student
         </Heading>
     );
 }
@@ -39,20 +39,20 @@ export const StudentPanel = ( { roomId, student } ) => {
 				) : null}
 				{isNew ? (
 					<span className="ml-auto">
-						<StudentOptions
-							student={student}
-							labelSize="small"
-							className="is-right"
-						/>
-					</span>
-				) : (
-					<span className="ml-auto">
 						<Button
 							size="small"
 							onClick={toggleBulkCreate}
 							color={isBulkCreate ? "primary" : null}>
 							Bulk Add
 						</Button>
+					</span>
+				) : (
+					<span className="ml-auto">
+						<StudentOptions
+							student={student}
+							labelSize="small"
+							className="is-right"
+						/>
 					</span>
 				)}
 			</div>
