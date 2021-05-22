@@ -1,4 +1,3 @@
-import React from "react";
 
 import {
     Card,
@@ -10,7 +9,7 @@ import api from "utils/api";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 import { getDashboardAction as gda, useDashboardDispatch, useStaffMember } from "pages/Dashboard/store";
-import { EDIT_STUDENT, REMOVE_STUDENT } from "pages/Dashboard/store/actionsNames";
+import { EDIT_STUDENT, REMOVE_STUDENT, SELECT_STUDENT, UNSELECT_STUDENT } from "pages/Dashboard/store/actionsNames";
 import { getPriorityLevel } from "pages/Dashboard/utils/student";
 
 import "./style.sass";
@@ -74,16 +73,31 @@ export const StudentAssignmentTag = ( { assignedTo, ...props } ) => {
     
 }
 
-export const StudentCard = ({ className, student: { _id, name, priorityLevel, assignedTo, elevation } }) => {
+const StudentBulkSelect = ({ studentId, isSelected }) => {
+
+    const dispatch = useDashboardDispatch();
+
+    const updateStudent = () => dispatch(gda(isSelected ? UNSELECT_STUDENT : SELECT_STUDENT, studentId));
+
+    return <input
+        type="checkbox"
+        className="ml-auto"
+        checked={isSelected}
+        onChange={updateStudent}
+    />
+
+}
+
+export const StudentCard = ({ className, isSelected, student: { _id, name, priorityLevel, assignedTo, elevation } }) => {
 
     const dispatch = useDashboardDispatch();
     const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
-
+    
     return (
         <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
-                <span>{name}</span>
-                <Button aria-label="Edit student" onClick={openEdit} size="small" className="ml-auto"><Icon icon="ellipsis-h" /></Button>
+                <span onClick={openEdit} className="student-name">{name}</span>
+                <StudentBulkSelect studentId={_id} isSelected={isSelected} />
             </Card.Content>
             <Tag.Group gapless className="mt-auto">
                 <StudentPriorityTag level={priorityLevel} style={{flexGrow:1}} />

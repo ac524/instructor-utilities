@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./App.sass";
 
 import LoadingOverlay from "./components/LoadingOverlay";
@@ -10,6 +10,7 @@ import loadGlobalIcons from "./utils/icons";
 import { useSocketConnection } from "./utils/socket.io";
 import Fade from "./animations/Fade";
 import { useUserSocketUpdates } from "utils/user";
+import { Modal } from "components/Modal";
 
 loadGlobalIcons();
 
@@ -35,6 +36,7 @@ const App = () => {
         <div>
             {isAuthCheckDone ? <Routes /> : null}
             <Fade className="is-relative" show={!isReady} type="out" style={{zIndex: 100}}><LoadingOverlay /></Fade>
+            <Modal/>
         </div>
     )
 

@@ -1,0 +1,107 @@
+.tabs ul 
+    justify-content: center
+
+.hide-overflow
+    overflow: visible
+
+.is-student-column
+  padding-top: 0
+  height: 90%
+
+.is-comment-box
+  box-shadow: 0 -8px 12px -2px rgba(0,0,0,0.1)
+  border-left: 1px solid #fafafa !important
+  padding: 0
+  margin: 0
+  position: relative
+  border-radius: 0
+  border-bottom-left-radius: 6px
+  border-bottom-right-radius: 6px
+  
+.is-student-modal
+  &.is-fullscreen
+    .modal-content
+      width: 100%
+      height: 800px
+
+  .is-tabs
+    display: block
+    padding-bottom: 0
+    margin-bottom: 0
+    border-radius: 0
+    border-top-left-radius: 6px
+    border-top-right-radius: 6px
+
+.is-edit-student
+  box-shadow: none
+  border-radius: 6px
+
+.is-edit-student-id
+  border-radius: 0
+  border-bottom-left-radius: 6px
+  border-bottom-right-radius: 6px
+
+.is-activity-column
+  overflow: "hidden"
+  border-top-right-radius: 0
+  height: 90%
+  padding-top: 0
+  .is-activity-feed
+    border-radius: 0
+    height: 100%
+
+.is-comment-button
+  border-radius: 0
+  border-left-style: none
+  border-right-style: none
+  border-bottom-left-radius: 6px
+  border-bottom-right-radius: 6px
+
+
+::-webkit-scrollbar 
+  width: 7px
+
+/* Track */
+::-webkit-scrollbar-track 
+  background: #FFFFFF
+  border-radius: 0px
+
+ 
+/* Handle */
+::-webkit-scrollbar-thumb 
+  background: #6e6d6d
+  border-radius: 30px
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover 
+  background: #067CAC
+
+@media screen and (min-width: 1025px) 
+  .is-student-modal
+    .is-tabs
+      display: none
+
+  .is-edit-student-id
+    border-top-left-radius: 6px
+    border-bottom-right-radius: 0px
+
+  .is-student-column
+     height: 95%
+
+  .is-activity-column
+    border-top-right-radius: 6px
+    height: 95%
+    .is-activity-feed
+      border-top-right-radius: 6px
+  
+  ::-webkit-scrollbar-track 
+    background: #FFFFFF
+    border-top-right-radius: 30px
+  
+  .is-comment-box
+    border-bottom-left-radius: 0px
+
+  
+
+  .is-comment-button
+    border-bottom-left-radius: 0

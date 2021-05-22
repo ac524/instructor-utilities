@@ -1,91 +1,42 @@
-import React, { useState } from "react";
+import { Box, Columns } from "react-bulma-components";
 
-import {
-    Modal,
-    Box,
-    Columns,
-    Heading,
-    Tag,
-    Button
-} from "react-bulma-components";
+import { ModalBox } from "./components";
 
-import { getDashboardAction as gda, useEditStudent, useClassroom, useDashboardDispatch, useDashboardContext } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
-import SettingsForm from "./components/SettingsForm";
-import ActivtyFeed from "./components/ActivityFeed";
-import StudentOptions from "./components/StudentOptions";
-import Icon from "components/Icon";
-import Fade from "animations/Fade";
-import CommentForm from "./components/ActivityFeed/components/CommentForm";
+import { PanelTabs } from "./panels";
+
+import { useStudentModalConfig } from "./utils";
+
+import "./index.sass" ;
 
 const { Column } = Columns;
 
 const StudentModal = () => {
-    
-    const [{ editStudent: editStudentId }] = useDashboardContext();
-    const dispatch = useDashboardDispatch();
-    const classroom = useClassroom();
-    const [ isBulkCreate, setIsBulkCreate ] = useState(false);
-    
-    const editStudent = useEditStudent();
 
-    const { _id } = editStudent;
-    const show = editStudentId !== false;
-
-    const clearEditStudent = () => dispatch(gda(EDIT_STUDENT, false));
-
-    const toggleBulkCreate = () => setIsBulkCreate( !isBulkCreate );
-
-    const contentProps = {};
-
-    if(_id) {
-        contentProps.style = {width:"100%",height:"800px"};
-        contentProps.className = "has-filled-content";
-    }
+	// We pull in the student to edit from the dashboard state
+	const {
+		student,
+		isViewing,
+		panelConfig,
+		activePanels,
+		clearEditStudent
+	} = useStudentModalConfig();
 
     return (
-        // <span>test</span>
-            <Modal onClose={clearEditStudent} show={show} closeOnBlur={true}>
-                <Fade style={{width:"100%"}} show={show} duration=".5s">
-                    <Modal.Content {...contentProps}>
-                        <Columns gapless className="h-100">
-                            <Column className="has-filled-content">
-                                <Box className="py-5 is-shadowless">
-                                    <div className="is-flex" style={{alignItems:"center"}}>
-                                        <Heading renderAs="h2" className="mb-0">{_id ? "Edit" : "New"} Student</Heading>
-                                        { editStudent.elevation ? <Tag color="danger" className="ml-2"><Icon icon="level-up-alt" /></Tag> : null }
-                                        { _id
-                                            ? (
-                                                <span className="ml-auto">
-                                                    <StudentOptions student={editStudent} labelSize="small" className="is-right" />
-                                                </span>
-                                            )
-                                            : (
-                                                <span className="ml-auto">
-                                                    <Button size="small" onClick={toggleBulkCreate} color={isBulkCreate ? "primary" : null}>Bulk Add</Button>
-                                                </span>
-                                            )
-                                        }
-                                    </div>
-                                    <hr />
-                                    <SettingsForm roomId={classroom._id} student={editStudent} afterSubmit={clearEditStudent} isBulkCreate={isBulkCreate} />
-                                </Box>
-                            </Column>
-                            {
-                                _id && (
-                                    <Column className="has-filled-content h-100">
-                                        <ActivtyFeed className="p-6 is-shadowless has-background-white-bis has-text-grey m-0" student={editStudent} style={{borderBottomRightRadius:0}} />
-                                        <Box className="px-6 py-3 is-shadowless has-background-white-bis has-text-grey m-0" style={{flexGrow:0,borderTop:"2px solid #dfdfdf",borderTopRightRadius:0}}>
-                                            <CommentForm feedId={editStudent.feed} />
-                                        </Box>
-                                    </Column>
-                                )
-                            }
-                        </Columns>
-                    </Modal.Content>
-                </Fade>
-            </Modal>
-    )
+		<ModalBox fullScreen={student._id} onClose={clearEditStudent} show={isViewing}>
+			{/* Dispay panel tabs */}
+			{panelConfig.panels.size > 1 && <Box className="is-tabs"><PanelTabs {...panelConfig} /></Box>}
+
+			{/* Display each active panel */}
+			{[...activePanels].map(([key,{Panel}]) => (
+				<Column
+					key={key}
+					desktop={{ size: activePanels.size > 1 ? "half" : 12 }}
+					className={`has-filled-content is-${key}-column`}>
+						<Panel />
+				</Column>
+			))}
+		</ModalBox>
+	)
 
 }
 

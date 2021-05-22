@@ -1,4 +1,3 @@
-import React from "react";
 import { useAuthorizedUser } from "utils/auth";
 
 const UserName = ({ user: {_id, name }, ...props }) => {

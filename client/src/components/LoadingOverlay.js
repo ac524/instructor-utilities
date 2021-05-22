@@ -1,4 +1,3 @@
-import React from "react";
 import Pulse from "./Pulse";
 
 const LoadingOverlay = () => {

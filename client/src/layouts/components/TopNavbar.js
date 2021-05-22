@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Navbar } from "react-bulma-components";
 
@@ -29,9 +29,9 @@ const TopNavbar = () => {
         <Burger onClick={() => setIsNavActive( !isNavActive )} />
       </Brand>
       <Menu>
-        <Container position="end">
+        <Container align="right">
           <Item renderAs="div">
-              { isAuth ? <LogoutButton color="primary" outlined /> : <LoginButton color="primary" /> }
+              { isAuth ? <LogoutButton color="primary" outlined /> : <LoginButton color="primary"/> }
           </Item>
         </Container>
       </Menu>

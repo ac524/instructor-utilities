@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
     Button
 } from "react-bulma-components";
 
+import { Editor, EditorState, convertFromRaw } from "draft-js";
+// import Editor from '@draft-js-plugins/editor';
+
 import Date from "components/Date";
 import UserName from "components/UserName";
 import Icon from "components/Icon";
+import Dropdown from "components/Dropdown";
+
+import { useAuthorizedUser } from "utils/auth";
+import api from "utils/api";
+
+import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
 
 import FeedEntry from "../components/FeedEntry";
-import { useAuthorizedUser } from "utils/auth";
-import Dropdown from "components/Dropdown";
-import CommentForm from "../components/CommentForm";
-import api from "utils/api";
-import { useHandleFeedEventResponse } from "pages/Dashboard/utils/feed";
+import { CommentForm } from "../components/CommentForm";
 
 const CommentOptions = ({ deleteAction, editAction, ...props }) => {
 
@@ -50,6 +55,22 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
 
     }
 
+    const formatComment = () => {
+
+        if( !data.comment ) return null;
+
+        if( typeof data.comment === "string" )
+
+            // Display string based comments as is.
+            return <p>data.comment</p>;
+
+        const contentState = convertFromRaw({ entityMap: {}, ...data.comment });
+        const editorState = EditorState.createWithContent(contentState);
+
+        return <Editor className="DraftEditor-readonly" editorState={editorState} readOnly={true} />;
+
+    }
+
     return (
         <FeedEntry block>
             <Button className="start is-circle">
@@ -61,17 +82,12 @@ const Comment = ( { feedId, _id, by, data, date } ) => {
                     <Date className="end" date={date} />
                     {user._id === by._id && <CommentOptions editAction={edit} deleteAction={deleteComment} />}
                 </div>
-                {
-                    isEditing
-
-                        ? <CommentForm
-                            feedId={feedId}
-                            entry={{ _id, by, data }}
-                            afterComment={closeEdit}
-                            />
-
-                        : <p>{data.comment}</p>
-                }
+                <CommentForm
+                    feedId={feedId}
+                    entry={{ _id, by, data }}
+                    afterComment={closeEdit}
+                    readOnly={!isEditing}
+                />
             </div>
         </FeedEntry>
     );

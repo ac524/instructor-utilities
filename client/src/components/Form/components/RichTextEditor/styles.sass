@@ -1,0 +1,59 @@
+.DraftEditor-root
+  position: relative
+
+.DraftEditor-editor
+  border-top: 1px solid #ddd
+  cursor: text
+  font-size: 16px
+  margin-top: 10px
+
+.DraftEditor-editorContainer
+  position: relative
+
+.public-DraftEditor-content
+  margin: 0
+
+.public-DraftEditor-content[contenteditable="true"]
+  background: #fff
+  border: 1px solid #ddd
+  padding: 15px
+  min-height: 100px
+
+.public-DraftEditorPlaceholder-root
+  padding: 15px
+  position: absolute
+  top: 0
+  left: 0
+
+.DraftEditor-hidePlaceholder .public-DraftEditorPlaceholder-root
+  display: none
+
+.DraftEditor-blockquote
+  border-left: 5px solid #eee
+  color: #666
+  font-family: "Hoefler Text", "Georgia", serif
+  font-style: italic
+  margin: 16px 0
+  padding: 10px 20px
+
+.public-DraftStyleDefault-pre
+  background-color: rgba(0, 0, 0, 0.05)
+  font-family: "Inconsolata", "Menlo", "Consolas", monospace
+  font-size: 16px
+  padding: 20px
+
+.DraftEditor-controls
+  font-family: "Helvetica", sans-serif
+  font-size: 14px
+  margin-bottom: 5px
+  user-select: none
+
+.DraftEditor-styleButton
+  color: #999
+  cursor: pointer
+  margin-right: 16px
+  padding: 2px 0
+  display: inline-block
+
+.DraftEditor-activeButton
+  color: #5890ff

@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react";
 
 import {
     Form as FormCollection,
@@ -6,24 +6,31 @@ import {
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
-import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
-import { EDIT_STUDENT } from "pages/Dashboard/store/actionsNames";
+import { useDashboardContext, getDashboardAction as gda, useStaffByRole, useClassroomId } from "pages/Dashboard/store";
+import { getStaffOptionsList } from "pages/Dashboard/utils/staff";
+import { EDIT_STUDENT, UPDATE_STUDENTS } from "pages/Dashboard/store/actionsNames";
 import Dropdown from "components/Dropdown";
 import { useStudentGroupings } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
 import RequirePerm from "pages/Dashboard/components/RequirePerm";
+import api from "utils/api";
 
 const { Input } = FormCollection;
 
 const StudentListControls = ( { sort, groupBy, search } ) => {
 
-    const dispatch = useDashboardDispatch();
+    const roomId = useClassroomId();
+    
+    const [ { classroom: { selectedStudents } }, dispatch ] = useDashboardContext();
     const groupTypes = useStudentGroupings().map( ({key, name, icon}) => ({
         key,
         label: `Group by ${name}`,
         icon
     }) );
     const groupLabel = <Icon icon="columns" />
+    const { ta } = useStaffByRole();
+
+    const staffOptionsList = useMemo(() => getStaffOptionsList(ta || []), [ta]);
 
     const AddStudentButton = () => {
         return (
@@ -34,9 +41,35 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         );
     }
 
+    const handleBulkReassignment = async assignedTo => {
+
+        // Map each selected student id to an object that includes the updated `assignedTo` prop
+        const studentUpdates = selectedStudents.map(_id=>({_id, assignedTo: assignedTo || null}));
+
+        try {
+
+            await api.updateStudents( roomId, studentUpdates );
+            
+            dispatch(gda(UPDATE_STUDENTS, studentUpdates));
+
+        } catch( err ) {
+
+            // TODO Error handling
+            console.log(err);
+
+        }
+
+    };
+
     return (
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
+            {(selectedStudents.length || null) &&
+            <Dropdown className="ml-2" label="Reassign">
+                {staffOptionsList.map(staff => (
+                    <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff.value)}>{staff.label}</Button>
+                ))}
+            </Dropdown>}
             <Input
                 className="ml-auto"
                 type="text"

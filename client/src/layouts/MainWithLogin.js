@@ -1,15 +1,12 @@
-import React from "react";
 import Main from "./Main";
-import { LoginModal } from "components/Login"
-import { ModalProvider } from "components/Modal";
+import { useLoginModal } from "components/Login";
 
 const MainWithLogin = ({ children }) => {
-    return (
-        <ModalProvider>
-            <Main>{children}</Main>
-            <LoginModal />
-        </ModalProvider>
-    )
+
+    useLoginModal();
+
+    return <Main>{children}</Main>
+    
 }
 
 export default MainWithLogin;

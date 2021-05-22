@@ -1,4 +1,3 @@
-import React from "react";
 
 import { useClassroom } from "pages/Dashboard/store";
 import InviteModal, { InviteModalButton, useInviteModalState } from "./InviteModal";

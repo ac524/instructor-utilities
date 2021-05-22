@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
     Hero,
@@ -183,7 +183,7 @@ const Invite = () => {
                                     <Fade show={Boolean(error)} type="in"><p>Sorry! {error}</p></Fade>
                                     <Fade show={!error && accepted} type="in">
                                             <p className="mb-4"><strong>Congratulations</strong>, your invitation has been accepted!</p>
-                                            <Button to={`/${joinedRoom}`} color="light" renderAs={Link} outlined>
+                                            <Button to={`/r/${joinedRoom}`} color="light" renderAs={Link} outlined>
                                                 <span>Go to class</span>
                                                 <Icon icon={['far','arrow-alt-circle-right']} />
                                             </Button>
