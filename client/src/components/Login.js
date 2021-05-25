@@ -1,9 +1,10 @@
-import { Button } from "react-bulma-components";
+import { Box, Button, Heading } from "react-bulma-components";
 import { useLogout, useLogin } from "utils/auth";
 import Form from "./Form";
 import { createValidator } from "utils/validation";
 import { useHistory } from "react-router-dom";
 import { ModalButton, ModalLink } from "./Modal";
+import { useModalRegistration } from "./Modal/utils";
 
 const modalKey = "LOGIN_MODAL"
 

@@ -1,8 +1,6 @@
 import { DEREGISTER_MODAL, REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/store/actions";
 import { useModalContext } from "components/Modal/store";
 import { useEffect, useMemo } from "react";
-import { Box, Heading } from "react-bulma-components";
-import { LoginForm } from "components/Login";
 
 export const useModalRegistration = ( key, modalConfig ) => {
     
