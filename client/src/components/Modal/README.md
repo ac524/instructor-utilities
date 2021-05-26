@@ -117,7 +117,8 @@
 
 * #### **Step 1:** Components that activate Modal 
 
-    * Modal Activation is simple, Modal has two ways to activate with a ```<ModalButton/>``` or a ```<ModalLink/>```. Both components ```useOpenModal()``` that sets modalKey as the activeKey in ModalState. For example
+    * Modal Activation is simple, Modal has two ways to activate with a ```<ModalButton/>``` or a ```<ModalLink/>```. Both components use ```useOpenModal()``` that sets modalKey as the activeKey in ModalState. For example
+    
         * ``` 
             export const ModalLink = ({ children, onClick, modalKey, ...props }) => {
 
