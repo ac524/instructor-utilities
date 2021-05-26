@@ -118,7 +118,7 @@
 * #### **Step 1:** Components that activate Modal 
 
     * Modal Activation is simple, Modal has two ways to activate with a ```<ModalButton/>``` or a ```<ModalLink/>```. Both components use ```useOpenModal()``` that sets modalKey as the activeKey in ModalState. For example
-    
+
         * ``` 
             export const ModalLink = ({ children, onClick, modalKey, ...props }) => {
 
@@ -151,7 +151,7 @@
             }
 
 * #### **Step 3:** Call Button 
-    * Now just pop the button where you need that Modal to appear for example  ```LoginButton``` is used in ```TopNavbar```
+    * Now just pop the button link component, where you need that Modal to appear for example  ```LoginButton``` is used in ```TopNavbar```, which is called by ```MainWithLogin```
 
         *   ```
             client\src\layouts\components\TopNavbar.js
