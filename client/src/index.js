@@ -4,13 +4,16 @@ import { StoreProvider } from "./store";
 import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as serviceWorker from './utils/serviceWorker';
+import { ModalProvider } from "components/Modal/store";
 
 ReactDOM.render(
     <StrictMode>
         <StoreProvider>
-            <Router>
-                <App />
-            </Router>
+            <ModalProvider>
+                <Router>
+                    <App />
+                </Router>
+            </ModalProvider>
         </StoreProvider>
     </StrictMode>,
     document.getElementById('root')
