@@ -5,12 +5,12 @@
 
 * [**Modal Configuration Steps**](#modal-configuration-steps)
     * [Step 1:Modal Registration](#step-1-modal-registration)
-    
+
     * [Step 2: Create a Custom Hook](#step-2-create-a-custom-hook)
 
     * [Step 3: Call Custom Hook](#step-3-call-custom-hook)
 
-* [**Modal Activation**](#modal-configuration-steps)
+* [**Modal Activation Steps**](#modal-Activation-steps)
     * [Step 1: Components that Activate Modal](#step-1-components-that-activate-modal)
 
     * [Step 2: Create a Button or Link Component](#step-2-create-abutton-or-link-component)
@@ -18,7 +18,7 @@
     * [Step 3: Call Button](#step-3-call-button)
 
 
-#### **Modal Configuration Steps:**
+## **Modal Configuration Steps:**
 
 * #### **Step 1:** Modal Registration
     * useModalRegistration hook takes in two parameters, a ```key:String``` and ```modalConfig:Object```
@@ -71,7 +71,7 @@
 
     * Import ```useModalRegistration``` from             ```client\src\components\Modal\utils.js```.
 
-    * Name hook to target what modal is going to be register for example Login Modal uses ```useLoginModal```
+    * Name the hook to target what modal that is going to be register. For example Login Modal uses ```useLoginModal```
 
     * Example of simple custom hook ```client\src\components\Login.js```
         *   ```
@@ -113,7 +113,7 @@
 
             ``` 
     
-#### **Modal Activation Steps:**
+## **Modal Activation Steps:**
 
 * #### **Step 1:** Components that activate Modal 
 
