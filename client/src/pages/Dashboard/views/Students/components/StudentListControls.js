@@ -65,11 +65,14 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
             {(selectedStudents.length || null) &&
-            <Dropdown className="ml-2" label="Reassign">
-                {staffOptionsList.map(staff => (
-                    <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff.value)}>{staff.label}</Button>
-                ))}
-            </Dropdown>}
+            <div>
+                <Dropdown className="ml-2" label="Reassign">
+                    {staffOptionsList.map(staff => (
+                        <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff.value)}>{staff.label}</Button>
+                    ))}
+                </Dropdown>
+                <Button className="ml-2">Clear</Button>
+            </div>}
             <Input
                 className="ml-auto"
                 type="text"
