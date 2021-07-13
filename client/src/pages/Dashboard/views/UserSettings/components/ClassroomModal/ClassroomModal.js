@@ -1,7 +1,6 @@
 import Form from "components/Form";
 import { createValidator } from "utils/validation";
 import Pulse from "components/Pulse";
-import { useEffect, useState } from "react";
 
 import {
     Modal,
@@ -14,52 +13,13 @@ import { REFRESH_USER_ROOMS, ADD_USER_ROOM_ID } from "store/actions";
 
 import api from "utils/api";
 
+import { useClassroomModalLoader } from "./utils/useClassroomModalLoader";
+
 const validateClassroomData = createValidator({
     validators: {
         name: ({ name }) => Boolean(name) || "Classroom name is required",
     }
 });
-
-export const useClassroomModalLoader = (roomId) => {
-    
-    const [ room, setRoom ] = useState();
-
-    useEffect(() => {
-
-        if( false === roomId ) {
-            
-            setRoom(null);
-            return;
-        }
-
-        if( !roomId ) {
-
-            setRoom({name:""});
-
-        } else {
-
-            const getRoom = async () => setRoom( (await api.getClassroom( roomId )).data );
-
-            try {
-
-                getRoom();
-                
-            } catch(err) {
-
-                // TODO error handling
-                console.log(err);
-
-            }
-
-        }
-
-        return () => setRoom(null);
-
-    }, [ roomId, setRoom ]);
-
-    return room;
-
-}
 
 export const ClassroomForm = ({ room, afterUpdate }) => {
 

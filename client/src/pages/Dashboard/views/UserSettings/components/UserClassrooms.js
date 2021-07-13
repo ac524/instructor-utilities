@@ -11,7 +11,7 @@ import Dropdown from "components/Dropdown";
 import api from "utils/api";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { REMOVE_USER_ROOM_ID } from "store/actions";
-import ClassroomModal from "./ClassroomModal";
+import ClassroomModal from "./ClassroomModal/ClassroomModal.js";
 
 const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
 
