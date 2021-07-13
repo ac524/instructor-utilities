@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "utils/api";
 
 export const useClassroomModalLoader = (roomId) => {
 	const [room, setRoom] = useState();
