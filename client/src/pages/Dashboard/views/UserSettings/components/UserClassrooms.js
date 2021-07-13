@@ -11,7 +11,7 @@ import Dropdown from "components/Dropdown";
 import api from "utils/api";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { REMOVE_USER_ROOM_ID } from "store/actions";
-import ClassroomModal from "./ClassroomModal/ClassroomModal.js";
+import { useClassroomModal } from "./ClassroomModal/ClassroomModal.js";
 
 const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
 
@@ -114,7 +114,9 @@ const UserClassrooms = () => {
 
     const roomsByRole = useUserRoomsInfoByRole();
     const [ editRoomId, setEditRoomId ] = useState(false);
-
+    
+    useClassroomModal({ roomId:editRoomId, onClose:() => setEditRoomId(false) })
+                
     return (
         <Box className="is-shadowless">
             <Heading
@@ -140,10 +142,6 @@ const UserClassrooms = () => {
             {roomsByRole.ta && (
                 <TaRoomsList className="mt-5" rooms={roomsByRole.ta} />
             )}
-            <ClassroomModal
-                roomId={editRoomId}
-                onClose={() => setEditRoomId(false)}
-            />
         </Box>
     );
 

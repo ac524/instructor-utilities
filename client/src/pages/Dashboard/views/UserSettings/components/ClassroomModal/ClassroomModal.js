@@ -1,37 +1,14 @@
 
-import ClassroomForm from "./components/ClassroomForm.js"
+import { useModalRegistration } from "components/Modal/utils";
+import ClassroomModalContent from "./components/ClassroomModalContent";
 
-import {
-    Modal,
-    Box,
-    Heading
-} from "react-bulma-components";
-
-
-
-import { useClassroomModalLoader } from "./utils/useClassroomModalLoader";
-
-
-
-const ClassroomModal = ( { roomId=false, onClose } ) => {
+export const useClassroomModal = ( { roomId=false, onClose } ) => {
     
-    const room = useClassroomModalLoader( roomId );
-    return (
-        <Modal
-            show={false !== roomId}
-            closeOnBlur={true}
-            onClose={onClose}
-            >
-            <Modal.Content>
-                <Box>
-                    <Heading renderAs="h2">Classroom</Heading>
-                    <hr />
-                    <ClassroomForm room={room} afterUpdate={onClose} />
-                </Box>
-            </Modal.Content>
-        </Modal>
-    );
-
+    const modalKey = "CLASSROOM_MODAL"
+    useModalRegistration(modalKey, {
+		key: modalKey,
+		component: () => (
+			<ClassroomModalContent roomId={roomId} afterUpdate={onClose} />
+		)
+	});
 }
-
-export default ClassroomModal;
