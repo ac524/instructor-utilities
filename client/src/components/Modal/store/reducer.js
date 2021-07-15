@@ -11,11 +11,12 @@ const reducer = (state, { type, payload }) => {
 			...state,
 			activeKey: payload
 		}),
+		[SET_ACTIVE_ROOM]: () => ({
+			...state,
+			activeRoom: payload
+		}),
 		[DEREGISTER_MODAL]: () => {
-			const {
-				[payload]: removed,
-				...modals
-			} = state.modals;
+			const { [payload]: removed, ...modals } = state.modals;
 
 			return {
 				...state,

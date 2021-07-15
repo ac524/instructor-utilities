@@ -37,3 +37,16 @@ export const useOpenModal = ( key ) =>{
 		}),[key]);
 
 }
+
+export const useUpdateRoomKey = (key) => {
+	const [, modalDispatch] = useModalContext();
+
+	return useMemo(
+		() => () =>
+			modalDispatch({
+				type: SET_ACTIVE_ROOM,
+				payload: key
+			}),
+		[key]
+	);
+};
