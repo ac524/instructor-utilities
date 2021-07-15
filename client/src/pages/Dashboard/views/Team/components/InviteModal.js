@@ -14,6 +14,10 @@ import api from "utils/api";
 import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { ADD_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
+import { ModalButton } from "components/Modal";
+
+
+const modalKey = "INVITE_MODAL";
 
 const validateInviteData = createValidator({
     validators: {
@@ -34,14 +38,14 @@ export const useInviteModalState = () => {
 
 }
 
-export const InviteModalButton = ({ icon = "plus-circle", open, children }) => {
+export const InviteModalButton = ({ icon = "plus-circle", children }) => {
 
     return (
-        <Button className="is-icon-only-mobile" onClick={open}>
-            <Icon icon={icon} />
-            <span>{ children || "Invite TA" }</span>
-        </Button>
-    );
+		<ModalButton className="is-icon-only-mobile" modalKey={modalKey}>
+			<Icon icon={icon} />
+			<span>{children || "Invite TA"}</span>
+		</ModalButton>
+	);
 
 }
 
