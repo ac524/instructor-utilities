@@ -11,7 +11,7 @@ import Icon from "components/Icon";
 import Form from "components/Form";
 import { createValidator } from "utils/validation";
 import api from "utils/api";
-import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { ADD_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
 import { ModalButton } from "components/Modal";
