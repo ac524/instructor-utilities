@@ -1,6 +1,6 @@
 
 import { useClassroom } from "pages/Dashboard/store";
-import InviteModal, { InviteModalButton, useInviteModalState } from "./InviteModal";
+import InviteModal, { InviteModalButton, useInviteModal, useInviteModalState } from "./InviteModal";
 import PendingInvitesModal, { usePendingInvitesModalState, PendingInvitesModalButton } from "./PendingInvitesModal";
 
 const StaffListControls = () => {
@@ -9,9 +9,7 @@ const StaffListControls = () => {
     const invite = useInviteModalState();
     const pendingInvites = usePendingInvitesModalState();
 
-    const onInviteCreated = () => {
-        pendingInvites.open();
-    }
+    useInviteModal(room._id)
 
     return (
         <div className="staff-list-ctrls">
@@ -19,7 +17,6 @@ const StaffListControls = () => {
                 <InviteModalButton open={invite.open} />
                 { room.invites.length ? <PendingInvitesModalButton open={pendingInvites.open} /> : null }
             </div>
-            <InviteModal show={invite.isActive} onClose={invite.close} onInviteCreated={onInviteCreated} />
             { room.invites.length ? <PendingInvitesModal show={pendingInvites.isActive} onClose={pendingInvites.close} /> : null }
         </div>
     );

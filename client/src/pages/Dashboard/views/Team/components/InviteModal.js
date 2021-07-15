@@ -50,61 +50,49 @@ export const InviteModalButton = ({ icon = "plus-circle", children }) => {
 
 }
 
-export const useInviteModal = () =>{
-     useModalRegistration(modalKey, {
-			key: modalKey,
-			component: () => (<InviteModalContent/>)
-		});
-}
+export const useInviteModal = (roomId) => {
+	useModalRegistration(modalKey, {
+		key: modalKey,
+		component: () => <InviteModalContent roomId={roomId} />
+	});
+};
 
-const InviteModalContent = () => {
+const InviteModalContent = ({ roomId }) => {
+	const dispatch = useDashboardDispatch();
+	const socket = useSocket();
 
-    const dispatch = useDashboardDispatch();
-    const socket = useSocket();
+	const handleSubmit = async (data, setErrors) => {
+		try {
+			const { data: invite } = await api.createInvite(roomId, data);
 
-    const { _id } = useClassroom();
+			const dispatchData = gda(ADD_INVITE, invite);
+			dispatch(dispatchData);
+			socket.emit(`${roomId}:dispatch`, dispatchData);
 
-    const handleSubmit = async ( data, setErrors ) => {
+		} catch (err) {
+			if (err.response && err.response.data) setErrors(err.response.data);
+			// console.log(err);
+		}
+	};
 
-        try {
-
-            const { data: invite } = await api.createInvite( _id, data );
-
-            const dispatchData = gda(ADD_INVITE, invite);
-            dispatch(dispatchData);
-            socket.emit( `${_id}:dispatch`, dispatchData );
-
-            onInviteCreated && onInviteCreated();
-
-            onClose && onClose();
-
-        } catch(err) {
-
-            if( err.response && err.response.data ) setErrors(err.response.data);
-            // console.log(err);
-
-        }
-
-    }
-
-    return (
-        <Box className="py-5">
-            <Heading renderAs="h2">Invite TA</Heading>
-            <hr />
-            <Form
-                flat
-                fields={[
-                    {
-                        label: "Email",
-                        placeholder: "Provide an email to invite",
-                        name: "email",
-                        type: "text",
-                    }
-                ]}
-                onSubmit={handleSubmit}
-                validation={validateInviteData}
-                buttonText="Send Invite"
-            />
-        </Box>
-    );
-}
+	return (
+		<Box className="py-5">
+			<Heading renderAs="h2">Invite TA</Heading>
+			<hr />
+			<Form
+				flat
+				fields={[
+					{
+						label: "Email",
+						placeholder: "Provide an email to invite",
+						name: "email",
+						type: "text"
+					}
+				]}
+				onSubmit={handleSubmit}
+				validation={validateInviteData}
+				buttonText="Send Invite"
+			/>
+		</Box>
+	);
+};
