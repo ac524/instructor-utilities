@@ -1,4 +1,9 @@
-import { SET_ACTIVE_MODAL, REGISTER_MODAL, DEREGISTER_MODAL } from "./actions.js";
+import {
+	SET_ACTIVE_MODAL,
+	REGISTER_MODAL,
+	DEREGISTER_MODAL,
+	SET_ACTIVE_ROOM
+} from "./actions.js";
 
 const reducer = (state, { type, payload }) => {
 
@@ -13,7 +18,13 @@ const reducer = (state, { type, payload }) => {
 		}),
 		[SET_ACTIVE_ROOM]: () => ({
 			...state,
-			activeRoom: payload
+			modals: {
+				...state.modals,
+				[payload.key]: {
+					...state.modals[payload.key],
+					roomId: payload.roomId
+				}
+			}
 		}),
 		[DEREGISTER_MODAL]: () => {
 			const { [payload]: removed, ...modals } = state.modals;

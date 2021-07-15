@@ -15,8 +15,9 @@ import {
 	useClassroomModal,
 	ClassroomModalButton
 } from "./ClassroomModal/ClassroomModal.js";
+import { useUpdateRoomKey } from "components/Modal/utils.js";
 
-const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
+const InstructorRoomsList = ( { rooms, roomId, ...props } ) => {
 
     const dispatch = useStoreDispatch();
 
@@ -50,8 +51,8 @@ const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
                 <span>{room.name}</span>
                 <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
                   {
-                    onEdit && (
-                      <ClassroomModalButton size="small" className="dropdown-item" onEdit={() => onEdit(room._id)}>
+                    roomId && (
+                      <ClassroomModalButton size="small" className="dropdown-item" roomId={room._id}>
                         <Icon icon="cog" />
                         <span>Manage</span>
                       </ClassroomModalButton>
@@ -116,9 +117,13 @@ const TaRoomsList = ( { rooms, ...props } ) => {
 const UserClassrooms = () => {
 
     const roomsByRole = useUserRoomsInfoByRole();
-    const [ editRoomId, setEditRoomId ] = useState(false);
-    
-    useClassroomModal({ roomId:editRoomId, onClose:() => setEditRoomId(false) })
+
+    const updateRoomKey = useUpdateRoomKey(false);
+
+    useClassroomModal({
+      roomId: false,
+      onClose: () => updateRoomKey()
+	  });
 
     return (
 		<Box className="is-shadowless">
@@ -130,7 +135,7 @@ const UserClassrooms = () => {
 				<ClassroomModalButton
 					size="small"
 					className="is-primary button is-small"
-					onEdit={() => setEditRoomId(null)}>
+					roomId={null}>
 					<Icon icon="plus-circle" />
 					<span>Create Classroom</span>
 				</ClassroomModalButton>
@@ -139,7 +144,7 @@ const UserClassrooms = () => {
 				<InstructorRoomsList
 					className="mt-5"
 					rooms={roomsByRole.instructor}
-					onEdit={(roomId) => setEditRoomId(roomId)}
+					roomId={"Edit Room"}
 				/>
 			)}
 			{roomsByRole.ta && (

@@ -1,5 +1,5 @@
 
-import { useModalRegistration } from "components/Modal/utils";
+import { useModalRegistration, useUpdateRoomKey } from "components/Modal/utils";
 import ClassroomModalContent from "./components/ClassroomModalContent";
 import { ModalButton, ModalLink } from "../../../../../../components/Modal";
 
@@ -11,9 +11,9 @@ const modalKey = "CLASSROOM_MODAL";
 export const useClassroomModal = ( { roomId, onClose } ) => {
     useModalRegistration(modalKey, {
 		key: modalKey,
-        roomId: roomId,
+		roomId: roomId,
 		component: () => (
-			<ClassroomModalContent roomId={roomId} afterUpdate={onClose} />
+			<ClassroomModalContent modalKey={modalKey} afterUpdate={onClose} />
 		)
 	});
 }
@@ -22,9 +22,13 @@ export const useClassroomModal = ( { roomId, onClose } ) => {
  * ClassroomModalButton 
  * @param {object} props
  */
-export const ClassroomModalButton = ({ children, ...props }) => {
+export const ClassroomModalButton = ({ children, roomId, ...props }) => {
+
+
+	const updateRoomKey = useUpdateRoomKey(modalKey,roomId);
+
 	return (
-		<ModalButton {...props} modalKey={modalKey}>
+		<ModalButton {...props} modalKey={modalKey} onEdit={() => updateRoomKey()}>
 			{children}
 		</ModalButton>
 	);

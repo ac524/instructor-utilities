@@ -1,4 +1,9 @@
-import { DEREGISTER_MODAL, REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/store/actions";
+import {
+	DEREGISTER_MODAL,
+	REGISTER_MODAL,
+	SET_ACTIVE_MODAL,
+	SET_ACTIVE_ROOM
+} from "components/Modal/store/actions";
 import { useModalContext } from "components/Modal/store";
 import { useEffect, useMemo } from "react";
 
@@ -38,14 +43,17 @@ export const useOpenModal = ( key ) =>{
 
 }
 
-export const useUpdateRoomKey = (key) => {
+export const useUpdateRoomKey = (key, roomId) => {
 	const [, modalDispatch] = useModalContext();
 
 	return useMemo(
 		() => () =>
 			modalDispatch({
 				type: SET_ACTIVE_ROOM,
-				payload: key
+				payload: {
+					key: key,
+					roomId: roomId
+				}
 			}),
 		[key]
 	);
