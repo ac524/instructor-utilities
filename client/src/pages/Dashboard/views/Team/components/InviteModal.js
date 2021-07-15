@@ -26,19 +26,6 @@ const validateInviteData = createValidator({
     }
 });
 
-export const useInviteModalState = () => {
-
-    const [ isActive, setShowInvite ] = useState(false);
-
-    return {
-        isActive,
-        open: () => setShowInvite( true ),
-        close: () => setShowInvite( false )
-
-    }
-
-}
-
 export const InviteModalButton = ({ icon = "plus-circle", children }) => {
 
     return (
