@@ -68,55 +68,72 @@ export const CopyLinkButton = ( {token} ) => {
 
 }
 
-const PendingInvitesModal = ( { show, onClose } ) => {
+export const usePendingInvitesModal = (roomId,invites) => {
+	useModalRegistration(modalKey, {
+		key: modalKey,
+		component: () => (
+			<PendingInvitesModalContent roomId={roomId} invites={invites} />
+		)
+	});
+};
 
-    const dispatch = useDashboardDispatch();
-    const { _id, invites } = useClassroom();
-    const socket = useSocket();
+const PendingInvitesModalContent = ({ roomId, invites }) => {
+	const dispatch = useDashboardDispatch();
 
-    const deleteInvite = async ( inviteId ) => {
+	const socket = useSocket();
 
-        try {
+	const deleteInvite = async (inviteId) => {
+		try {
+			await api.deleteInvite(roomId, inviteId);
 
-            await api.deleteInvite( _id, inviteId );
+			const dispatchData = gda(DELETE_INVITE, inviteId);
+			dispatch(dispatchData);
+			socket.emit(`${roomId}:dispatch`, dispatchData);
+		} catch (err) {
+			// TODO Error handling
+		}
+	};
 
-            const dispatchData = gda(DELETE_INVITE, inviteId);
-            dispatch(dispatchData);
-            socket.emit( `${_id}:dispatch`, dispatchData );
-
-        } catch(err) {
-
-            // TODO Error handling
-
-        }
-
-    }
-
-    return (
-        <Modal
-            show={show}
-            onClose={onClose}
-            closeOnBlur={true}
-            >
-            <Modal.Content>
-                <Panel className="has-background-white is-shadowless" renderAs="div">
-                    <Heading renderAs="h2" className="is-primary">Pending Invites</Heading>
-                    {invites.map( invite => (
-                        <Panel.Block key={invite._id}>
-                            <span className="has-overflow-ellipsis mw-60">{invite.email}</span>
-                            <span className="ml-auto">
-                                {invite.token ? <Tag color="warning">Pending</Tag> : <Tag color="danger">Expired</Tag>}
-                                {invite.token && <CopyLinkButton token={invite.token.tokenString} />}
-                                {/* <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button> */}
-                                <Button size="small" className="ml-2 is-icon-only-mobile" onClick={()=>deleteInvite(invite._id)}><Icon icon="ban" /><span>Revoke</span></Button>
-                            </span>
-                        </Panel.Block>
-                    ))}
-                </Panel>
-            </Modal.Content>
-        </Modal>
-    );
-
-}
+	return (
+		<Modal show={show} onClose={onClose} closeOnBlur={true}>
+			<Modal.Content>
+				<Panel
+					className="has-background-white is-shadowless"
+					renderAs="div">
+					<Heading renderAs="h2" className="is-primary">
+						Pending Invites
+					</Heading>
+					{invites.map((invite) => (
+						<Panel.Block key={invite._id}>
+							<span className="has-overflow-ellipsis mw-60">
+								{invite.email}
+							</span>
+							<span className="ml-auto">
+								{invite.token ? (
+									<Tag color="warning">Pending</Tag>
+								) : (
+									<Tag color="danger">Expired</Tag>
+								)}
+								{invite.token && (
+									<CopyLinkButton
+										token={invite.token.tokenString}
+									/>
+								)}
+								{/* <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button> */}
+								<Button
+									size="small"
+									className="ml-2 is-icon-only-mobile"
+									onClick={() => deleteInvite(invite._id)}>
+									<Icon icon="ban" />
+									<span>Revoke</span>
+								</Button>
+							</span>
+						</Panel.Block>
+					))}
+				</Panel>
+			</Modal.Content>
+		</Modal>
+	);
+};
 
 export default PendingInvitesModal;
