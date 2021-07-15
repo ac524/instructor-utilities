@@ -1,8 +1,8 @@
 import ClassroomForm from "./ClassroomForm.js";
 
 import { Box, Heading } from "react-bulma-components";
-import { useClassroomModalLoader } from "../utils/useClassroomModalLoader.js";
 import { useModalContext } from "components/Modal/store/index.js";
+import { useClassroomModalLoader } from "../ClassroomModal.js";
 
 const ClassroomModalContent = ({ modalKey, onClose }) => {
 

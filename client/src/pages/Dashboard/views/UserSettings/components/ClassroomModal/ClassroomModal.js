@@ -2,6 +2,8 @@
 import { useModalRegistration, useUpdateRoomKey } from "components/Modal/utils";
 import ClassroomModalContent from "./components/ClassroomModalContent";
 import { ModalButton, ModalLink } from "../../../../../../components/Modal";
+import { useState, useEffect } from "react";
+import api from "utils/api";
 
 const modalKey = "CLASSROOM_MODAL";
 /**
@@ -12,9 +14,7 @@ export const useClassroomModal = ( { roomId, onClose } ) => {
     useModalRegistration(modalKey, {
 		key: modalKey,
 		roomId: roomId,
-		component: () => (
-			<ClassroomModalContent modalKey={modalKey} afterUpdate={onClose} />
-		)
+		component: () => <ClassroomModalContent modalKey = {modalKey}afterUpdate={onClose} />
 	});
 }
 
@@ -23,8 +23,6 @@ export const useClassroomModal = ( { roomId, onClose } ) => {
  * @param {object} props
  */
 export const ClassroomModalButton = ({ children, roomId, ...props }) => {
-
-
 	const updateRoomKey = useUpdateRoomKey(modalKey,roomId);
 
 	return (
@@ -45,3 +43,33 @@ export const ClassroomModalLink = ({ children, ...props }) => {
 		</ModalLink>
 	);
 };
+
+export const useClassroomModalLoader = (roomId) => {
+	const [room, setRoom] = useState();
+
+	useEffect(() => {
+		if (false === roomId) {
+			setRoom(null);
+			return;
+		}
+
+		if (!roomId) {
+			setRoom({ name: "" });
+		} else {
+			const getRoom = async () =>
+				setRoom((await api.getClassroom(roomId)).data);
+
+			try {
+				getRoom();
+			} catch (err) {
+				// TODO error handling
+				console.log(err);
+			}
+		}
+
+		return () => setRoom(null);
+	}, [roomId, setRoom]);
+
+	return room;
+};
+
