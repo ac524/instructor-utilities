@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import {
-    Modal,
     Panel,
     Heading,
     Button,
@@ -16,21 +15,9 @@ import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "p
 import { DELETE_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
 import { ModalButton } from "components/Modal";
+import { useModalRegistration } from "components/Modal/utils";
 
 const modalKey = "PENDING_MODAL"
-
-export const usePendingInvitesModalState = () => {
-
-    const [ isActive, setIsActive ] = useState(false);
-
-    return {
-        isActive,
-        open: () => setIsActive( true ),
-        close: () => setIsActive( false )
-
-    }
-
-}
 
 export const PendingInvitesModalButton = () => {
 
@@ -95,45 +82,40 @@ const PendingInvitesModalContent = ({ roomId, invites }) => {
 	};
 
 	return (
-		<Modal show={show} onClose={onClose} closeOnBlur={true}>
-			<Modal.Content>
-				<Panel
-					className="has-background-white is-shadowless"
-					renderAs="div">
-					<Heading renderAs="h2" className="is-primary">
-						Pending Invites
-					</Heading>
-					{invites.map((invite) => (
-						<Panel.Block key={invite._id}>
-							<span className="has-overflow-ellipsis mw-60">
-								{invite.email}
-							</span>
-							<span className="ml-auto">
-								{invite.token ? (
-									<Tag color="warning">Pending</Tag>
-								) : (
-									<Tag color="danger">Expired</Tag>
-								)}
-								{invite.token && (
-									<CopyLinkButton
-										token={invite.token.tokenString}
-									/>
-								)}
-								{/* <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button> */}
-								<Button
-									size="small"
-									className="ml-2 is-icon-only-mobile"
-									onClick={() => deleteInvite(invite._id)}>
-									<Icon icon="ban" />
-									<span>Revoke</span>
-								</Button>
-							</span>
-						</Panel.Block>
-					))}
-				</Panel>
-			</Modal.Content>
-		</Modal>
+        <Panel
+            className="has-background-white is-shadowless"
+            renderAs="div">
+            <Heading renderAs="h2" className="is-primary">
+                Pending Invites
+            </Heading>
+            {invites.map((invite) => (
+                <Panel.Block key={invite._id}>
+                    <span className="has-overflow-ellipsis mw-60">
+                        {invite.email}
+                    </span>
+                    <span className="ml-auto">
+                        {invite.token ? (
+                            <Tag color="warning">Pending</Tag>
+                        ) : (
+                            <Tag color="danger">Expired</Tag>
+                        )}
+                        {invite.token && (
+                            <CopyLinkButton
+                                token={invite.token.tokenString}
+                            />
+                        )}
+                        {/* <Button size="small" className="ml-2 is-icon-only-mobile"><Icon icon="paper-plane" /><span>Resend</span></Button> */}
+                        <Button
+                            size="small"
+                            className="ml-2 is-icon-only-mobile"
+                            onClick={() => deleteInvite(invite._id)}>
+                            <Icon icon="ban" />
+                            <span>Revoke</span>
+                        </Button>
+                    </span>
+                </Panel.Block>
+            ))}
+        </Panel>
+
 	);
 };
-
-export default PendingInvitesModal;
