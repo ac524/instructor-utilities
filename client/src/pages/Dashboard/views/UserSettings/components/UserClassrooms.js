@@ -11,7 +11,10 @@ import Dropdown from "components/Dropdown";
 import api from "utils/api";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { REMOVE_USER_ROOM_ID } from "store/actions";
-import { useClassroomModal } from "./ClassroomModal/ClassroomModal.js";
+import {
+	useClassroomModal,
+	ClassroomModalButton
+} from "./ClassroomModal/ClassroomModal.js";
 
 const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
 
@@ -48,10 +51,10 @@ const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
                 <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
                   {
                     onEdit && (
-                      <Button size="small" className="dropdown-item" onClick={() => onEdit(room._id)}>
+                      <ClassroomModalButton size="small" className="dropdown-item" onEdit={() => onEdit(room._id)}>
                         <Icon icon="cog" />
                         <span>Manage</span>
-                      </Button>
+                      </ClassroomModalButton>
                     )
                   }
                   <Button size="small" className="dropdown-item" onClick={() => handleArchiveRoom(room._id)}>
@@ -116,34 +119,34 @@ const UserClassrooms = () => {
     const [ editRoomId, setEditRoomId ] = useState(false);
     
     useClassroomModal({ roomId:editRoomId, onClose:() => setEditRoomId(false) })
-                
+
     return (
-        <Box className="is-shadowless">
-            <Heading
-                renderAs="h2"
-                size={4}
-                className="is-flex is-justify-content-space-between">
-                <span>Classrooms</span>
-                <Button
-                    size="small"
-                    className="is-primary button is-small"
-                    onClick={() => setEditRoomId(null)}>
-                    <Icon icon="plus-circle" />
-                    <span>Create Classroom</span>
-                </Button>
-            </Heading>
-            {roomsByRole.instructor && (
-                <InstructorRoomsList
-                    className="mt-5"
-                    rooms={roomsByRole.instructor}
-                    onEdit={(roomId) => setEditRoomId(roomId)}
-                />
-            )}
-            {roomsByRole.ta && (
-                <TaRoomsList className="mt-5" rooms={roomsByRole.ta} />
-            )}
-        </Box>
-    );
+		<Box className="is-shadowless">
+			<Heading
+				renderAs="h2"
+				size={4}
+				className="is-flex is-justify-content-space-between">
+				<span>Classrooms</span>
+				<ClassroomModalButton
+					size="small"
+					className="is-primary button is-small"
+					onEdit={() => setEditRoomId(null)}>
+					<Icon icon="plus-circle" />
+					<span>Create Classroom</span>
+				</ClassroomModalButton>
+			</Heading>
+			{roomsByRole.instructor && (
+				<InstructorRoomsList
+					className="mt-5"
+					rooms={roomsByRole.instructor}
+					onEdit={(roomId) => setEditRoomId(roomId)}
+				/>
+			)}
+			{roomsByRole.ta && (
+				<TaRoomsList className="mt-5" rooms={roomsByRole.ta} />
+			)}
+		</Box>
+	);
 
 }
 
