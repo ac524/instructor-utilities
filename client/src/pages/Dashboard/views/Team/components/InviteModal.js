@@ -15,6 +15,7 @@ import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "p
 import { ADD_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
 import { ModalButton } from "components/Modal";
+import { useModalRegistration } from "components/Modal/utils";
 
 
 const modalKey = "INVITE_MODAL";
@@ -49,7 +50,14 @@ export const InviteModalButton = ({ icon = "plus-circle", children }) => {
 
 }
 
-const InviteModal = ( { show, onClose, onInviteCreated } ) => {
+export const useInviteModal = () =>{
+     useModalRegistration(modalKey, {
+			key: modalKey,
+			component: () => (<InviteModalContent/>)
+		});
+}
+
+const InviteModalContent = () => {
 
     const dispatch = useDashboardDispatch();
     const socket = useSocket();
@@ -57,8 +65,6 @@ const InviteModal = ( { show, onClose, onInviteCreated } ) => {
     const { _id } = useClassroom();
 
     const handleSubmit = async ( data, setErrors ) => {
-
-        console.log(data);
 
         try {
 
@@ -82,34 +88,23 @@ const InviteModal = ( { show, onClose, onInviteCreated } ) => {
     }
 
     return (
-        <Modal
-            show={show}
-            onClose={onClose}
-            closeOnBlur={true}
-            >
-            <Modal.Content>
-                <Box className="py-5">
-                    <Heading renderAs="h2">Invite TA</Heading>
-                    <hr />
-                    <Form
-                        flat
-                        fields={[
-                            {
-                                label: "Email",
-                                placeholder: "Provide an email to invite",
-                                name: "email",
-                                type: "text",
-                            }
-                        ]}
-                        onSubmit={handleSubmit}
-                        validation={validateInviteData}
-                        buttonText="Send Invite"
-                    />
-                </Box>
-            </Modal.Content>
-        </Modal>
+        <Box className="py-5">
+            <Heading renderAs="h2">Invite TA</Heading>
+            <hr />
+            <Form
+                flat
+                fields={[
+                    {
+                        label: "Email",
+                        placeholder: "Provide an email to invite",
+                        name: "email",
+                        type: "text",
+                    }
+                ]}
+                onSubmit={handleSubmit}
+                validation={validateInviteData}
+                buttonText="Send Invite"
+            />
+        </Box>
     );
-
 }
-
-export default InviteModal;
