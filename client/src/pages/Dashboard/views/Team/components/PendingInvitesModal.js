@@ -15,6 +15,9 @@ import api from "utils/api";
 import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
 import { DELETE_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
+import { ModalButton } from "components/Modal";
+
+const modalKey = "PENDING_MODAL"
 
 export const usePendingInvitesModalState = () => {
 
@@ -29,15 +32,15 @@ export const usePendingInvitesModalState = () => {
 
 }
 
-export const PendingInvitesModalButton = ({ open }) => {
+export const PendingInvitesModalButton = () => {
 
     const { invites } = useClassroom();
 
     return (
-        <Button color="warning" className="has-border-1 is-light ml-2 is-icon-only-mobile" onClick={open}>
+        <ModalButton  color="warning" className="has-border-1 is-light ml-2 is-icon-only-mobile" modalKey={modalKey}>
             <span className="icon">{invites.length}</span>
             <span>Pending Invites</span>
-        </Button>
+        </ModalButton>
     );
 
 }
