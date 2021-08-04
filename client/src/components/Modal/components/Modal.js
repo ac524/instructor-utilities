@@ -3,21 +3,21 @@ import {
 } from "react-bulma-components";
 import { useOpenModal } from "components/Modal/utils";
 import { useModalContext } from "../store";
+import { useMemo } from "react";
 
 
-export const Modal = ( { onClose, contentProps = {}, ...props } ) => {
-
+export const Modal = ( { namespace = "default", onClose, contentProps = {}, ...props } ) => {
 
     const [ modal, ] = useModalContext();
-	const { modals, activeKey } = modal
+	const { modals, activeKey } = modal;
+
+	const isActive = useMemo(() => modals[activeKey] && modals[activeKey].namespace === namespace, [activeKey]);
 	
 	const { component: Component } = (
-		modals[activeKey] ? 
+		isActive ? 
 			modals[activeKey]: 
 			false
-		)
-
-    const isActive = () => activeKey
+		);
 
     const closeModal = useOpenModal(false);
 
@@ -27,7 +27,7 @@ export const Modal = ( { onClose, contentProps = {}, ...props } ) => {
 
     return (
 		<BulmaModal
-			show={isActive()}
+			show={isActive}
 			onClose={onModalClose}
 			closeOnBlur={true}
 			{...props}>
