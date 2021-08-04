@@ -1,21 +1,18 @@
 import ClassroomForm from "./ClassroomForm.js";
 
 import { Box, Heading } from "react-bulma-components";
-import { useModalContext } from "components/Modal/store/index.js";
-import { useClassroomModalLoader } from "../ClassroomModal.js";
+import { useClassroomModalLoader } from "../index.js";
 
-const ClassroomModalContent = ({ modalKey, onClose }) => {
+const ClassroomModalContent = ({ afterUpdate }) => {
 
-    const [ modalState ] = useModalContext();
-
-	const room = useClassroomModalLoader(modalState.modals[modalKey].roomId);
+	const room = useClassroomModalLoader();
 
 	return (
-        <Box>
-            <Heading renderAs="h2">Classroom</Heading>
-            <hr />
-            <ClassroomForm room={room} afterUpdate={onClose} />
-        </Box>
+		<Box>
+			<Heading renderAs="h2">Classroom</Heading>
+			<hr />
+			<ClassroomForm room={room} afterUpdate={afterUpdate} />
+		</Box>
 	);
 };
 

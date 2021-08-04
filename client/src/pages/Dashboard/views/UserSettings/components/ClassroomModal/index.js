@@ -10,23 +10,27 @@ const modalKey = "CLASSROOM_MODAL";
  * useClassroomModal hook 
  * @param {object} props
  */
-export const useClassroomModal = ( { roomId, onClose } ) => {
-    useModalRegistration(modalKey, {
+const useClassroomModal = ({ afterUpdate }) => {
+	useModalRegistration(modalKey, {
 		key: modalKey,
-		roomId: roomId,
-		component: () => <ClassroomModalContent modalKey = {modalKey}afterUpdate={onClose} />
+		namespace: "dashboard",
+		component: () => (
+			<ClassroomModalContent
+				modalKey={modalKey}
+				afterUpdate={afterUpdate}
+			/>
+		)
 	});
-}
+};
 
 /**
  * ClassroomModalButton 
  * @param {object} props
  */
-export const ClassroomModalButton = ({ children, roomId, ...props }) => {
-	const updateRoomKey = useUpdateRoomKey(modalKey,roomId);
+export const ClassroomModalButton = ({ children, onEdit, ...props }) => {
 
 	return (
-		<ModalButton {...props} modalKey={modalKey} onEdit={() => updateRoomKey()}>
+		<ModalButton {...props} modalKey={modalKey} onEdit={onEdit}>
 			{children}
 		</ModalButton>
 	);
@@ -73,3 +77,4 @@ export const useClassroomModalLoader = (roomId) => {
 	return room;
 };
 
+export default useClassroomModal;

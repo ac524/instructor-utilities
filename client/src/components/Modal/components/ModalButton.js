@@ -7,12 +7,10 @@ import { useOpenModal } from "components/Modal/utils";
 export const ModalButton = ({ children, modalKey, onEdit, ...props }) => {
 	// Consume the login context to fetch the live state.
     const openModal = useOpenModal(modalKey);
+	
 	const handleClick = () =>{
+		onEdit && onEdit();
 		openModal();
-
-		if(onEdit){
-			onEdit()
-		}
 	}
 	return (
 		<Button onClick={() => handleClick()} {...props}>
