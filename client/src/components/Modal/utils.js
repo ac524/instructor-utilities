@@ -15,7 +15,8 @@ export const useModalRegistration = ( key, modalConfig ) => {
         modalDispatch({
             type: REGISTER_MODAL,
             payload: { 
-                [ key ] : {  
+                [ key ] : {
+                    namespace: "default",  
                     ...modalConfig 
                 } 
             }
