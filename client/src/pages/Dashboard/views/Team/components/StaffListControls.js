@@ -8,7 +8,7 @@ const StaffListControls = () => {
     const room = useClassroom();
     const invite = useInviteModalState();
     
-    usePendingInvitesModal(room._id, room.invites);
+    usePendingInvitesModal();
 
     const onInviteCreated = () => {
         pendingInvites.open();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import {
     Panel,
@@ -11,11 +11,11 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import Icon from "components/Icon";
 import api from "utils/api";
-import { useClassroom, useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { useClassroom, useDashboardDispatch, getDashboardAction as gda, useClassroomId } from "pages/Dashboard/store";
 import { DELETE_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
 import { ModalButton } from "components/Modal";
-import { useModalRegistration } from "components/Modal/utils";
+import { useModalRegistration, useOpenModal } from "components/Modal/utils";
 
 const modalKey = "PENDING_MODAL"
 
@@ -55,27 +55,35 @@ export const CopyLinkButton = ( {token} ) => {
 
 }
 
-export const usePendingInvitesModal = (roomId,invites) => {
+export const usePendingInvitesModal = () => {
 	useModalRegistration(modalKey, {
 		key: modalKey,
+        namespace: "dashboard",
 		component: () => (
-			<PendingInvitesModalContent roomId={roomId} invites={invites} />
+			<PendingInvitesModalContent />
 		)
 	});
 };
 
-const PendingInvitesModalContent = ({ roomId, invites }) => {
+const PendingInvitesModalContent = () => {
+
+    const { _id, invites } = useClassroom();
+
 	const dispatch = useDashboardDispatch();
 
 	const socket = useSocket();
 
+    const close = useOpenModal();
+
+    useMemo(() => !invites.length && close(false),[invites.length]);
+
 	const deleteInvite = async (inviteId) => {
 		try {
-			await api.deleteInvite(roomId, inviteId);
+			await api.deleteInvite(_id, inviteId);
 
 			const dispatchData = gda(DELETE_INVITE, inviteId);
 			dispatch(dispatchData);
-			socket.emit(`${roomId}:dispatch`, dispatchData);
+			socket.emit(`${_id}:dispatch`, dispatchData);
 		} catch (err) {
 			// TODO Error handling
 		}
