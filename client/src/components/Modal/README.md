@@ -21,21 +21,24 @@
 ## **Modal Configuration Steps:**
 
 * #### **Step 1:** Modal Registration
-    * useModalRegistration hook takes in two parameters, a ```key:String``` and ```modalConfig:Object```
+    * useModalRegistration hook takes in two parameters, a ```key:String```, and ```modalConfig:Object```.
 
-        * ```String```: string based key, used as a key for each modal intense
+        * ```key:String```: string, used as a key for each modal intense register
             ```
             const modalKey = "LOGIN_MODAL"
             useModalRegistration(modalKey, modalConfig)
             ```
-        * ```Object```:** An object that contains modal configurations
+        * ```modalConfig:Object```:** An object that contains modal configurations
 
             **modalConfig Properties:**
             * ```key : {String}```: modal string based key
+            * ```namespace: {String}```: string, namespace of modal to render the content that is been register.  
+                * note - provide `namespace:dashboard` only if modal need use dashboard context. 
             * ```component: {Functional Component}```: component that will be used to render as Modal body when activated
             ```
             {
                 key: modalKey,
+                namespace:"dashboard"
                 component: () => (
                     <Box className="py-5">
                         <Heading renderAs="h2">Login</Heading>
@@ -53,6 +56,7 @@
         ```
         useModalRegistration(modalKey, {
             key: modalKey,
+            namespace:"dashboard",
             component: () => (
                 <Box className="py-5">
                     <Heading renderAs="h2">Login</Heading>
@@ -74,6 +78,7 @@
     * Name the hook to target what modal that is going to be register. For example Login Modal uses ```useLoginModal```
 
     * Example of simple custom hook ```client\src\components\Login.js```
+        * note: useLoginModal(), does not include namespace since there no of `dashboardContext`, and it will use the default namespace provided.  
         *   ```
             export const useLoginModal = () =>{
                 const modalKey = "LOGIN_MODAL"
