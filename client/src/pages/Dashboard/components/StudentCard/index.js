@@ -81,7 +81,7 @@ const StudentBulkSelect = ({ studentId, isSelected }) => {
 
     return <input
         type="checkbox"
-        className="ml-auto"
+        className="ml-auto circle-checkbox"
         checked={isSelected}
         onChange={updateStudent}
     />
