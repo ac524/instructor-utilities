@@ -8,7 +8,7 @@ import {
 import Icon from "components/Icon";
 import { useDashboardContext, getDashboardAction as gda, useStaffByRole, useClassroomId } from "pages/Dashboard/store";
 import { getStaffOptionsList } from "pages/Dashboard/utils/staff";
-import { EDIT_STUDENT, UPDATE_STUDENTS } from "pages/Dashboard/store/actionsNames";
+import { EDIT_STUDENT, UNSELECT_ALL_STUDENTS, UPDATE_STUDENTS } from "pages/Dashboard/store/actionsNames";
 import Dropdown from "components/Dropdown";
 import { useStudentGroupings } from "pages/Dashboard/utils/student";
 import SortSelectDropdown from "pages/Dashboard/components/SortSelectDropdown";
@@ -65,11 +65,14 @@ const StudentListControls = ( { sort, groupBy, search } ) => {
         <div className="is-flex mb-5">
             <RequirePerm item="student" action="create" component={AddStudentButton} />
             {(selectedStudents.length || null) &&
-            <Dropdown className="ml-2" label="Reassign">
-                {staffOptionsList.map(staff => (
-                    <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff.value)}>{staff.label}</Button>
-                ))}
-            </Dropdown>}
+            <div>
+                <Dropdown className="ml-2" label="Reassign">
+                    {staffOptionsList.map(staff => (
+                        <Button className="dropdown-item" key={staff.value} onClick={() => handleBulkReassignment(staff.value)}>{staff.label}</Button>
+                    ))}
+                </Dropdown>
+                <Button className="ml-2" onClick={() => dispatch(gda(UNSELECT_ALL_STUDENTS))}>Clear</Button>
+            </div>}
             <Input
                 className="ml-auto"
                 type="text"
