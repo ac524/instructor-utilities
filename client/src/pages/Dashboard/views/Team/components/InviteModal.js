@@ -62,7 +62,6 @@ const InviteModalContent = () => {
 			const dispatchData = gda(ADD_INVITE, invite);
 			await dispatch(dispatchData);
 			socket.emit(`${_id}:dispatch`, dispatchData);
-			// setRoomInvitesLength(roomInvitesLength + 1);
 		} catch (err) {
 			if (err.response && err.response.data) setErrors(err.response.data);
 			// console.log(err);
