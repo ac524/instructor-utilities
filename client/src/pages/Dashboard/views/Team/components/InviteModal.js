@@ -1,22 +1,19 @@
-import { useState } from "react";
-
 import {
-    Modal,
     Box,
     Heading,
-    Button
 } from "react-bulma-components";
 
 import Icon from "components/Icon";
 import Form from "components/Form";
 import { createValidator } from "utils/validation";
 import api from "utils/api";
-import { useDashboardDispatch, getDashboardAction as gda } from "pages/Dashboard/store";
+import { useDashboardDispatch, getDashboardAction as gda, useClassroom } from "pages/Dashboard/store";
 import { ADD_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
 import { ModalButton } from "components/Modal";
 import { useModalRegistration } from "components/Modal/utils";
-
+import { useEffect, useState } from "react";
+import { useOpenPendingModal } from "./PendingInvitesModal";
 
 const modalKey = "INVITE_MODAL";
 
@@ -37,25 +34,35 @@ export const InviteModalButton = ({ icon = "plus-circle", children }) => {
 
 }
 
-export const useInviteModal = (roomId) => {
+export const useInviteModal = () => {
 	useModalRegistration(modalKey, {
 		key: modalKey,
-		component: () => <InviteModalContent roomId={roomId} />
+		namespace: "dashboard",
+		component: () => <InviteModalContent />
 	});
 };
 
-const InviteModalContent = ({ roomId }) => {
+const InviteModalContent = () => {
+	const { _id, invites } = useClassroom();
+	const [invitesLength] = useState(invites.length)
 	const dispatch = useDashboardDispatch();
 	const socket = useSocket();
+	const openPendingModal = useOpenPendingModal();
+
+	useEffect(() => {
+		if (invites.length > invitesLength) {
+			openPendingModal();
+		}
+	}, [invites.length, invitesLength]);
 
 	const handleSubmit = async (data, setErrors) => {
 		try {
-			const { data: invite } = await api.createInvite(roomId, data);
+			const { data: invite } = await api.createInvite(_id, data);
 
 			const dispatchData = gda(ADD_INVITE, invite);
-			dispatch(dispatchData);
-			socket.emit(`${roomId}:dispatch`, dispatchData);
-
+			await dispatch(dispatchData);
+			socket.emit(`${_id}:dispatch`, dispatchData);
+			// setRoomInvitesLength(roomInvitesLength + 1);
 		} catch (err) {
 			if (err.response && err.response.data) setErrors(err.response.data);
 			// console.log(err);

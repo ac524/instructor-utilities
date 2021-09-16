@@ -1,22 +1,22 @@
-
+import { useModalContext } from "components/Modal/store";
 import { useClassroom } from "pages/Dashboard/store";
+import { useState } from "react";
 import { InviteModalButton, useInviteModal } from "./InviteModal";
-import PendingInvitesModal, { usePendingInvitesModalState, PendingInvitesModalButton } from "./PendingInvitesModal";
+import { PendingInvitesModalButton, usePendingInvitesModal } from "./PendingInvitesModal";
 
 const StaffListControls = () => {
-
     const room = useClassroom();
-    const pendingInvites = usePendingInvitesModalState();
+    
+    usePendingInvitesModal();
 
-    useInviteModal(room._id)
-
+    useInviteModal();
+    
     return (
         <div className="staff-list-ctrls">
             <div className="is-flex mb-5">
                 <InviteModalButton/>
-                { room.invites.length ? <PendingInvitesModalButton open={pendingInvites.open} /> : null }
+                { room.invites.length ? <PendingInvitesModalButton/> : null }
             </div>
-            { room.invites.length ? <PendingInvitesModal show={pendingInvites.isActive} onClose={pendingInvites.close} /> : null }
         </div>
     );
 
