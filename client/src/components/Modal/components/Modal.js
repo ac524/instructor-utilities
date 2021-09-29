@@ -13,11 +13,14 @@ export const Modal = ( { namespace = "default", onClose, contentProps = {}, ...p
 
 	const isActive = useMemo(() => modals[activeKey] && modals[activeKey].namespace === namespace, [activeKey]);
 	
-	const { component: Component } = (
-		isActive ? 
-			modals[activeKey]: 
-			false
-		);
+	const {
+		component: Component,
+		props: componentProps = {}
+	} = (
+		isActive
+			? modals[activeKey]
+			: {}
+	);
 
     const closeModal = useOpenModal(false);
 
@@ -32,7 +35,7 @@ export const Modal = ( { namespace = "default", onClose, contentProps = {}, ...p
 			closeOnBlur={true}
 			{...props}>
 			<BulmaModal.Content {...contentProps}>
-				{ Component  && <Component />}
+				{ Component  && <Component { ...componentProps } />}
 			</BulmaModal.Content>
 		</BulmaModal>
 	);
