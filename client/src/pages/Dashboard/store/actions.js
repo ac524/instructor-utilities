@@ -245,8 +245,6 @@ export default {
     }),
     [UPDATE_STUDENT_FEED_ITEMS]: ( state, itemsToUpdate ) => {
 
-        console.log("UPDATE");
-
         const updateIdMap = makeDocIdMap(itemsToUpdate);
 
         return {
@@ -262,11 +260,9 @@ export default {
 
         const deleteIdMap = makeDocIdMap(entriesToDelete);
 
-        console.log("DELETE", deleteIdMap);
-
         return {
             ...state,
             studentFeed: state.studentFeed.filter(({_id}) => !deleteIdMap.has(_id))
         }
-    },
+    }
 }
