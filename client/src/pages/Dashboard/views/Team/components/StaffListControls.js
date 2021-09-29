@@ -1,6 +1,4 @@
-import { useModalContext } from "components/Modal/store";
 import { useClassroom } from "pages/Dashboard/store";
-import { useState } from "react";
 import { InviteModalButton, useInviteModal } from "./InviteModal";
 import { PendingInvitesModalButton, usePendingInvitesModal } from "./PendingInvitesModal";
 

@@ -68,7 +68,7 @@ export const usePendingInvitesModal = () => {
 		)
 	});
 };
-//TODO: create hook that exports open or close PENDING_MODAL
+
 const PendingInvitesModalContent = () => {
 
     const { _id, invites } = useClassroom();
