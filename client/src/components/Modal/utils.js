@@ -36,10 +36,13 @@ export const useOpenModal = ( key ) =>{
 
     const [, modalDispatch] = useModalContext();
 
-	return useMemo(()=> () =>
+	return useMemo(()=> ( props ) =>
 		modalDispatch({
 			type: SET_ACTIVE_MODAL,
-			payload: key
+			payload: {
+                activeKey: key,
+                props
+            }
 		}),[key]);
 
 }

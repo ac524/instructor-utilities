@@ -6,15 +6,33 @@ import {
 
 const reducer = (state, { type, payload }) => {
 
+	// payload.data
+
 	const actions = {
 		[REGISTER_MODAL]: () => ({
 			...state,
-			modals: { ...state.modals, ...payload }
+			modals: {
+				...state.modals,
+				...payload
+			}
 		}),
-		[SET_ACTIVE_MODAL]: () => ({
-			...state,
-			activeKey: payload
-		}),
+		[SET_ACTIVE_MODAL]: ({ activeKey, props }) => {
+			console.log(activeKey, props);
+			return ({
+				...state,
+				activeKey,
+				...(activeKey ? {
+					modals: {
+						...state.modals,
+						[activeKey]: {
+							...state.modals[activeKey],
+							props: props || state.modals[activeKey].props
+						}
+					}
+				} : {})
+				
+			})
+		},
 		[DEREGISTER_MODAL]: () => {
 			const { [payload]: removed, ...modals } = state.modals;
 			return {
@@ -25,7 +43,7 @@ const reducer = (state, { type, payload }) => {
 		}
 	}; 
 
-	return actions.hasOwnProperty(type) ? actions[type]() : state;
+	return actions.hasOwnProperty(type) ? actions[type]( payload ) : state;
 
 };
 

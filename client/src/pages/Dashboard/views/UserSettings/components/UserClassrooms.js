@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
     Box,
     Heading,
@@ -11,10 +10,19 @@ import Dropdown from "components/Dropdown";
 import api from "utils/api";
 import { useStoreDispatch, getStoreAction as gsa } from "store";
 import { REMOVE_USER_ROOM_ID } from "store/actions";
-import useClassroomModal, { ClassroomModalButton } from "./ClassroomModal";
-import { useOpenModal } from "components/Modal/utils";
+import { useClassroomModalRegistration, useOpenClassroomModal } from "./ClassroomModal";
 
-const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
+const EditRoomButton = ( { roomId, children, ...props } ) => {
+
+    const openModal = useOpenClassroomModal();
+
+    const onEdit = () => openModal( { roomId } );
+
+    return <Button {...props} onClick={onEdit}>{children}</Button>;
+
+}
+
+const InstructorRoomsList = ( { rooms, ...props } ) => {
 
     const dispatch = useStoreDispatch();
 
@@ -48,12 +56,10 @@ const InstructorRoomsList = ( { rooms, onEdit, ...props } ) => {
                 <span>{room.name}</span>
                 <Dropdown label={<Icon icon="ellipsis-h" />} labelClassName="is-small" className="ml-auto is-right">
                   {
-                    onEdit && (
-                      <ClassroomModalButton size="small" className="dropdown-item" onEdit={()=>onEdit(room._id)}>
+                      <EditRoomButton size="small" className="dropdown-item" roomId={room._id}>
                         <Icon icon="cog" />
                         <span>Manage</span>
-                      </ClassroomModalButton>
-                    )
+                      </EditRoomButton>
                   }
                   <Button size="small" className="dropdown-item" onClick={() => handleArchiveRoom(room._id)}>
                     <Icon icon="archive" />
@@ -114,11 +120,8 @@ const TaRoomsList = ( { rooms, ...props } ) => {
 const UserClassrooms = () => {
 
     const roomsByRole = useUserRoomsInfoByRole();
-    const [ editRoomId, setEditRoomId ] = useState(false);
-    const close = useOpenModal();
-    useClassroomModal({
-        afterUpdate: () => {setEditRoomId(false), close(false)}
-	  })
+
+    useClassroomModalRegistration();
 
     return (
         <Box className="is-shadowless">
@@ -127,19 +130,17 @@ const UserClassrooms = () => {
                 size={4}
                 className="is-flex is-justify-content-space-between">
                 <span>Classrooms</span>
-                <ClassroomModalButton
+                <EditRoomButton
                     size="small"
-                    className="is-primary button is-small"
-                    onEdit={() => setEditRoomId(null)}>
+                    className="is-primary button is-small">
                     <Icon icon="plus-circle" />
                     <span>Create Classroom</span>
-                </ClassroomModalButton>
+                </EditRoomButton>
             </Heading>
             {roomsByRole.instructor && (
                 <InstructorRoomsList
                     className="mt-5"
                     rooms={roomsByRole.instructor}
-                    onEdit={setEditRoomId}
                 />
             )}
             {roomsByRole.ta && (
