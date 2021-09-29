@@ -11,13 +11,17 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import Icon from "components/Icon";
 import api from "utils/api";
-import { useClassroom, useDashboardDispatch, getDashboardAction as gda, useClassroomId } from "pages/Dashboard/store";
+import { useClassroom, useDashboardDispatch, getDashboardAction as gda} from "pages/Dashboard/store";
 import { DELETE_INVITE } from "pages/Dashboard/store/actionsNames";
 import { useSocket } from "utils/socket.io";
 import { ModalButton } from "components/Modal";
 import { useModalRegistration, useOpenModal } from "components/Modal/utils";
 
 const modalKey = "PENDING_MODAL"
+
+export const useOpenPendingModal = () => {
+    return useOpenModal(modalKey);
+}
 
 export const PendingInvitesModalButton = () => {
 
