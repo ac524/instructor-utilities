@@ -9,7 +9,7 @@ export const ModalButton = ({ children, modalKey, ...props }) => {
     const openModal = useOpenModal(modalKey);
 
 	return (
-		<Button onClick={() => openModal()} {...props}>
+		<Button onClick={openModal} {...props}>
 			{children || "Launch Modal"}
 		</Button>
 	);
