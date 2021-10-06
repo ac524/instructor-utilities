@@ -51,7 +51,6 @@ export const DashboardContainer = () => {
         }
 
     }, [roomId, socket, dispatch]);
-
     
     return isRoomLoaded
 
