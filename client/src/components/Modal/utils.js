@@ -1,4 +1,9 @@
-import { DEREGISTER_MODAL, REGISTER_MODAL, SET_ACTIVE_MODAL } from "components/Modal/store/actions";
+import {
+	DEREGISTER_MODAL,
+	REGISTER_MODAL,
+	SET_ACTIVE_MODAL,
+	SET_ACTIVE_ROOM
+} from "components/Modal/store/actions";
 import { useModalContext } from "components/Modal/store";
 import { useEffect, useMemo } from "react";
 
@@ -10,7 +15,8 @@ export const useModalRegistration = ( key, modalConfig ) => {
         modalDispatch({
             type: REGISTER_MODAL,
             payload: { 
-                [ key ] : {  
+                [ key ] : {
+                    namespace: "default",  
                     ...modalConfig 
                 } 
             }
@@ -30,10 +36,13 @@ export const useOpenModal = ( key ) =>{
 
     const [, modalDispatch] = useModalContext();
 
-	return useMemo(()=> () =>
+	return useMemo(()=> ( props ) =>
 		modalDispatch({
 			type: SET_ACTIVE_MODAL,
-			payload: key
+			payload: {
+                activeKey: key,
+                props
+            }
 		}),[key]);
 
 }

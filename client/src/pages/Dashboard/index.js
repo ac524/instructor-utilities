@@ -20,6 +20,7 @@ import { useSocket } from "utils/socket.io";
 import PendingVerification from "./components/PendingVerification";
 import Fade from "animations/Fade";
 import UserSettings from "./views/UserSettings";
+import { Modal } from "components/Modal";
 
 loadDashboardIcons();
 
@@ -50,7 +51,6 @@ export const DashboardContainer = () => {
         }
 
     }, [roomId, socket, dispatch]);
-
     
     return isRoomLoaded
 
@@ -101,6 +101,7 @@ const Dashboard = () => {
                 </Switch>
             </div>
             <Fade show={!isUserVerified}><PendingVerification /></Fade>
+            <Modal namespace="dashboard" />
         </DashboardProvider>
     );
 

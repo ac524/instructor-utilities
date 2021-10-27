@@ -1,6 +1,6 @@
 import { getDashboardAction as gda } from "./";
 import { useDashboardDispatch } from "./getters";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ADD_STUDENT_FEED_ITEMS, DELETE_STUDENT_FEED_ITEMS, SET_CLASSROOM, SET_CR_AND_PERMS, SET_STUDENT_FEED, UPDATE_STUDENT_FEED_ITEMS } from "./actionsNames";
 import api from "utils/api";
 import { useReadyStep } from "utils/ready";
@@ -11,12 +11,15 @@ export const useClassroomLoader = ( roomId ) => {
     const dispatch = useDashboardDispatch();
     const socket = useSocket();
     const [ completeStep, uncompleteStep, isStepComplete ] = useReadyStep("getclassroom");
+    const [ currentRoomId, setCurrentRoomId ] = useState( roomId );
 
     useEffect(() => {
 
         if( !roomId || !socket ) return;
         
         const loadClassroom = async () => {
+
+            setCurrentRoomId( roomId );
 
             try {
 
@@ -43,15 +46,15 @@ export const useClassroomLoader = ( roomId ) => {
         const timeout = setTimeout( loadClassroom, 500 );
 
         return () => {
+            uncompleteStep();
             dispatch(gda(SET_CLASSROOM, null));
             socket.emit("leave", `room/${roomId}`);
-            uncompleteStep();
             clearTimeout(timeout)
         };
         
-    }, [ roomId, socket, dispatch, completeStep, uncompleteStep ]);
+    }, [ roomId, socket, dispatch, completeStep, uncompleteStep, setCurrentRoomId ]);
 
-    return isStepComplete;
+    return isStepComplete && roomId === currentRoomId;
 
 }
 

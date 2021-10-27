@@ -3,7 +3,7 @@ import { Form as FormCollection } from "react-bulma-components";
 import { RangeInput } from "./RangeInput";
 import { RichTextEditor } from "./RichTextEditor";
 
-const { Input, Select } = FormCollection;
+const { Input, Select, Textarea } = FormCollection;
 
 export const FormInput = ({ type = "text", options = [], ...props }) => {
     switch (type) {
