@@ -8,6 +8,7 @@ require("./config/apps/register")();
 
 // Express server configuration
 const {
+    addApolloServer,
     addDataParsing,
     addCompression,
     addAuth,
@@ -15,12 +16,21 @@ const {
     listen
 } = require("./config/express");
 
-addDataParsing();
+const {typeDefs, resolvers} = require("./config/graphql_schemas")
 
-addCompression();
+async function startExpressServer() {
 
-addAuth();
+    await addApolloServer(typeDefs, resolvers);
 
-addRoutes();
+    addDataParsing();
 
-listen();
+    addCompression();
+
+    addAuth();
+
+    addRoutes();
+
+    listen();
+}
+
+startExpressServer();
