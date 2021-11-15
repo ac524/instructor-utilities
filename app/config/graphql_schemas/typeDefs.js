@@ -7,8 +7,23 @@ const typeDefs = gql`
         message: String
     }
 
+    type Auth {
+        token: String
+        success: Boolean
+        message: String
+    }
+
+    input Credentials {
+        email: String
+        password: String
+    }
+
     type Query {
         test: Answer
+    }
+
+    type Mutation {
+        login( credentials: Credentials ): Auth
     }
 `
 
