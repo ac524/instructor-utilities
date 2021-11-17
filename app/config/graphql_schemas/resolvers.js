@@ -11,13 +11,8 @@ const resolvers = {
     Mutation: {
         login: async ( parent, { credentials } ) => {
             
-            const userLoggedIn = await ctrls.get("auth").login({credentials});
+            return await ctrls.get("auth").login({ credentials });
             
-            return {
-                token: userLoggedIn.token,
-                success: true,
-                message: 'Logged In'
-            }
         }
     }
 }
