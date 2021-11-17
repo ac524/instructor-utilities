@@ -7,17 +7,33 @@ const typeDefs = gql`
         message: String
     }
 
-    type AuthUser {
-        isVerified: Boolean
-        classrooms: [ID]
+    type User {
         _id: ID
-        name: String
         email: String
+        isVerified: Boolean
+        name: String
+        classrooms: [ID]
+        isVerified: Boolean
+    }
+
+    type Auth {
+        token: String
+        success: Boolean
+        user: User
+    }
+
+    input Credentials {
+        email: String
+        password: String
     }
 
     type Query {
         test: Answer
-        authenticated: AuthUser
+        authenticated: User
+    }
+
+    type Mutation {
+        login( credentials: Credentials ): Auth
     }
 `
 

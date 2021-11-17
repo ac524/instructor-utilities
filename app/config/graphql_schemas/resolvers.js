@@ -11,6 +11,14 @@ const resolvers = {
         authenticated: (parent, args, context) => {
             return ctrls.get('user').findOne({docId: context.user.id})
         }
+    },
+
+    Mutation: {
+        login: async ( parent, { credentials } ) => {
+            
+            return await ctrls.get("auth").login({ credentials });
+            
+        }
     }
 }
 
