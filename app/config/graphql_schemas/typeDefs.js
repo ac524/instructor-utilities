@@ -7,8 +7,17 @@ const typeDefs = gql`
         message: String
     }
 
+    type AuthUser {
+        isVerified: Boolean
+        classrooms: [ID]
+        _id: ID
+        name: String
+        email: String
+    }
+
     type Query {
         test: Answer
+        authenticated: AuthUser
     }
 `
 
