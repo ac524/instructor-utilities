@@ -7,10 +7,18 @@ const typeDefs = gql`
         message: String
     }
 
+    type User {
+        _id: ID
+        email: String
+        isVerified: Boolean
+        name: String
+        classrooms: [ID]
+    }
+
     type Auth {
         token: String
         success: Boolean
-        message: String
+        user: User
     }
 
     input Credentials {
