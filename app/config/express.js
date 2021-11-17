@@ -8,7 +8,6 @@ const {ApolloServer} = require('apollo-server-express');
 
 const jwt = require('jsonwebtoken');
 const secret = require("../config/options")( "secret" );
-console.log(secret);
 
 const PORT = getOption( "port" );
 
