@@ -13,7 +13,6 @@ const typeDefs = gql`
         isVerified: Boolean
         name: String
         classrooms: [ID]
-        isVerified: Boolean
     }
 
     type Auth {
