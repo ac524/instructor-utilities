@@ -5,7 +5,10 @@ const passport = require("passport");
 const getOption = require("../config/options");
 const routeErrorMiddleware = require("./errors/routeErrorMiddleware");
 const {ApolloServer} = require('apollo-server-express');
-const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
+
+const jwt = require('jsonwebtoken');
+const secret = require("../config/options")( "secret" );
+console.log(secret);
 
 const PORT = getOption( "port" );
 
@@ -19,7 +22,26 @@ const addApolloServer = async (typeDefs, resolvers) => {
     const apolloServer = new ApolloServer({
         typeDefs,
         resolvers,
-        // plugins: [ApolloServerPluginDrainHttpServer({ server })]
+        context: ( {req} ) => {
+            let token = req.headers.authorization;
+            
+            if (req.headers.authorization) {
+                token = token.split(' ').pop().trim();
+            }
+    
+            if (!token) {
+                return req;
+            }
+
+            try {
+                const data = jwt.verify(token, secret, { maxAge: 31556926 });
+                req.user = data;
+            } catch (err) {
+                console.error(err)
+            }
+    
+            return req;
+        }
     });
 
     await apolloServer.start();
