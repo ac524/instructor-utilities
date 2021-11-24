@@ -25,6 +25,8 @@ const addApolloServer = async (typeDefs, resolvers) => {
         context: ( {req} ) => {
             let token = req.headers.authorization;
             
+            let context = {}
+
             if (req.headers.authorization) {
                 token = token.split(' ').pop().trim();
             }
@@ -35,12 +37,12 @@ const addApolloServer = async (typeDefs, resolvers) => {
 
             try {
                 const data = jwt.verify(token, secret, { maxAge: 31556926 });
-                req.user = data;
+                context.user = data;
             } catch (err) {
                 console.error(err)
             }
     
-            return req;
+            return context;
         }
     });
 
