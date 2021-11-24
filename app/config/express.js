@@ -4,7 +4,7 @@ const express = require("express");
 const passport = require("passport");
 const getOption = require("../config/options");
 const routeErrorMiddleware = require("./errors/routeErrorMiddleware");
-const {ApolloServer} = require('apollo-server-express');
+const {ApolloServer, AuthenticationError} = require('apollo-server-express');
 
 const jwt = require('jsonwebtoken');
 
@@ -39,7 +39,7 @@ const addApolloServer = async (typeDefs, resolvers) => {
                 const data = jwt.verify(token, secret, { maxAge: 31556926 });
                 context.user = data;
             } catch (err) {
-                console.error(err)
+                throw new AuthenticationError("Invalid Token")
             }
     
             return context;
