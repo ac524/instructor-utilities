@@ -28,6 +28,7 @@ const typeDefs = gql`
 
     type Query {
         test: Answer
+        authenticated: User
     }
 
     type Mutation {
