@@ -1,6 +1,8 @@
 const { createModule, gql } = require('graphql-modules');
 
-export const auth = createModule({
+const ctrls = require("../../controllers");
+
+const auth = createModule({
 	id: 'auth',
 	dirname: __dirname,
 	typeDefs: [
@@ -47,3 +49,5 @@ export const auth = createModule({
 		}
 	},
 });
+
+module.exports = auth
