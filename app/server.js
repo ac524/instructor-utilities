@@ -16,11 +16,11 @@ const {
     listen
 } = require("./config/express");
 
-const {typeDefs, resolvers} = require("./config/graphql_schemas")
+const { schema } = require("./graphql");
 
 async function startExpressServer() {
 
-    await addApolloServer(typeDefs, resolvers);
+    await addApolloServer(schema);
 
     addDataParsing();
 

@@ -17,11 +17,10 @@ const server = http.createServer(app);
 
 const io = require("./io")(server);
 
-const addApolloServer = async (typeDefs, resolvers) => {
+const addApolloServer = async (schema) => {
 
     const apolloServer = new ApolloServer({
-        typeDefs,
-        resolvers,
+        schema,
         context: ( {req} ) => {
             let token = req.headers.authorization;
             
