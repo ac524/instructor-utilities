@@ -1,25 +1,9 @@
-const { createModule, createApplication, gql } = require('graphql-modules');
-const auth = require("./modules/auth");
+const { createApplication } = require('graphql-modules');
 
-const myModule = createModule({
-  id: 'my-module',
-  dirname: __dirname,
-  typeDefs: [
-    gql`
-        type Query {
-            hello: String!
-        }
-    `,
-  ],
-  resolvers: {
-    Query: {
-      hello: () => 'world',
-    },
-  },
-});
+const authModule = require("./modules/auth");
 
 const application = createApplication({
-    modules: [ myModule, auth ],
+    modules: [ authModule ],
 });
 
 const schema = application.createSchemaForApollo();
