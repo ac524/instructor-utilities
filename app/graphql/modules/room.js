@@ -23,8 +23,16 @@ const roomModule = createModule({
                 user: User
             }
 
-            type Students {
+            type Student {
                 _id: ID
+                assignedTo: String
+                date: String
+                elevation: Int
+                feed: String
+                meta: Meta
+                name: String
+                priorityLevel: Int
+                recentComments: [Comment]
             }
 
             type Meta {
@@ -38,6 +46,18 @@ const roomModule = createModule({
 				name: String
 			}
 
+            type Comment {
+                _id: ID
+                action: String
+                by: String
+                data: CommentValue
+                date: String
+            }
+
+            type CommentValue {
+                comment: String
+            }
+
 			type Classroom {
 				_id: ID
                 apps: [ App ]
@@ -45,7 +65,7 @@ const roomModule = createModule({
                 invites: [ Invite ]
                 name: String
                 staff: [ Staff ]
-                students: [ Students ]
+                students: [ Student ]
 			}
 
             type Query {
