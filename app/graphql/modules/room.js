@@ -11,20 +11,41 @@ const roomModule = createModule({
                 id: ID
             }
 
+            type Invite {
+                id: ID
+            }
+
             type Staff {
                 _id: ID
+                date: String
+                meta: Meta
+                role: String
+                user: User
             }
 
             type Students {
                 _id: ID
             }
 
+            type Meta {
+                _id: ID
+            }
+
+            type User {
+				_id: ID
+                date: String
+				email: String
+				name: String
+			}
+
 			type Classroom {
 				_id: ID
                 apps: [ App ]
                 date: String
-                staff: [Staff]
-                students: [Students]
+                invites: [ Invite ]
+                name: String
+                staff: [ Staff ]
+                students: [ Students ]
 			}
 
             type Query {
