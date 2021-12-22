@@ -9,6 +9,9 @@ const roomModule = createModule({
         gql`
             type App {
                 id: ID
+                isDisabled: Boolean
+                name: String
+                type: String
             }
 
             type Invite {
@@ -18,9 +21,13 @@ const roomModule = createModule({
             type Staff {
                 _id: ID
                 date: String
-                meta: Meta
+                meta: StaffMeta
                 role: String
                 user: User
+            }
+
+            type StaffMeta {
+                _id: ID
             }
 
             type Student {
@@ -29,14 +36,15 @@ const roomModule = createModule({
                 date: String
                 elevation: Int
                 feed: String
-                meta: Meta
+                meta: StudentMeta
                 name: String
                 priorityLevel: Int
                 recentComments: [Comment]
             }
 
-            type Meta {
+            type StudentMeta {
                 _id: ID
+                githubUser: String
             }
 
             type User {
