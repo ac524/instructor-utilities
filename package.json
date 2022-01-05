@@ -46,6 +46,7 @@
     "fastest-validator": "^1.11.0",
     "graphql": "^15.7.2",
     "graphql-modules": "^2.0.0",
+    "graphql-type-json": "^0.3.2",
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "mjml": "^4.9.3",
