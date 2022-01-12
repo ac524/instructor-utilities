@@ -1,4 +1,5 @@
 const { createModule, gql } = require('graphql-modules');
+const { GraphQLJSON, GraphQLJSONObject } = require('graphql-type-json');
 
 const ctrls = require("../../controllers");
 
@@ -7,6 +8,8 @@ const roomModule = createModule({
 	dirname: __dirname,
 	typeDefs: [
         gql`
+            scalar JSONObject
+
             type App {
                 id: ID
                 isDisabled: Boolean
@@ -21,13 +24,9 @@ const roomModule = createModule({
             type Staff {
                 _id: ID
                 date: String
-                meta: StaffMeta
+                meta: JSONObject
                 role: String
                 user: User
-            }
-
-            type StaffMeta {
-                _id: ID
             }
 
             type Student {
@@ -36,15 +35,10 @@ const roomModule = createModule({
                 date: String
                 elevation: Int
                 feed: String
-                meta: StudentMeta
+                meta: JSONObject
                 name: String
                 priorityLevel: Int
                 recentComments: [Comment]
-            }
-
-            type StudentMeta {
-                _id: ID
-                githubUser: String
             }
 
             type User {
@@ -58,12 +52,13 @@ const roomModule = createModule({
                 _id: ID
                 action: String
                 by: String
-                data: CommentValue
+                data: CommentValueJSON
                 date: String
             }
 
-            type CommentValue {
-                comment: String
+            type CommentValueJSON {
+                feedId: ID
+                comment: JSONObject
             }
 
 			type Classroom {
@@ -86,7 +81,8 @@ const roomModule = createModule({
             room: (parent, { docId }) => {
                 return ctrls.get('room').findOne({ docId });
             }
-		}
+		},
+        JSONObject: GraphQLJSONObject,
 	},
 });
 
