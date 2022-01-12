@@ -8,7 +8,6 @@ const roomModule = createModule({
 	dirname: __dirname,
 	typeDefs: [
         gql`
-            # scalar JSON
             scalar JSONObject
 
             type App {
@@ -30,10 +29,6 @@ const roomModule = createModule({
                 user: User
             }
 
-            # type StaffMeta {
-            #     _id: ID
-            # }
-
             type Student {
                 _id: ID
                 assignedTo: String
@@ -45,11 +40,6 @@ const roomModule = createModule({
                 priorityLevel: Int
                 recentComments: [Comment]
             }
-
-            # type StudentMeta {
-            #     _id: ID
-            #     githubUser: String
-            # }
 
             type User {
 				_id: ID
@@ -92,7 +82,6 @@ const roomModule = createModule({
                 return ctrls.get('room').findOne({ docId });
             }
 		},
-        // JSON: GraphQLJSON,
         JSONObject: GraphQLJSONObject,
 	},
 });
