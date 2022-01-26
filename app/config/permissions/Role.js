@@ -3,7 +3,7 @@ const permissions = require("./");
 // console.log( 'reg permissions', permissions );
 
 const makePermEntry = permission => [ permission, 1 ];
-const permExists = permission => permissions.hasOwnProperty(permission);
+const permExists = permission => permissions.has(permission);
 
 class Role {
 
@@ -13,8 +13,6 @@ class Role {
      * @param {array} permissions 
      */
     constructor( key, name, permissions ) {
-
-        // console.log( 'permissions', permissions );
 
         this.key = key;
         this.name = name;

@@ -1,3 +1,5 @@
+const { AuthenticationError } = require("apollo-server-express");
+
 const setMemberContext = ({
     context
 }, next) => {
@@ -9,7 +11,7 @@ const setMemberContext = ({
     
     context.member = staff.find( member => member.user.equals( _id ) );
 
-    if( !context.member ) throw Error('Unable to locate user\'s associated member for room');
+    if( !context.member ) throw AuthenticationError('User is not a member of the associated room.');
 
     return next();
 

@@ -7,9 +7,6 @@ const validateMemberPermissions = ({
     }
 }, next) => {
 
-    console.log( member );
-    console.log( permission );
-
     if( !member.isAllowedTo( permission ) )
 
         throw new AuthenticationError( `You are not allowed to ${permission}.` );
