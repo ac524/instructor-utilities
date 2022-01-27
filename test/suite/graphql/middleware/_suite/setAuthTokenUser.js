@@ -12,8 +12,7 @@ const makeDb = () => {
 
     return db;
 }
-
-describe("setAuthTokenUser", () => {
+module.exports = function() {
 
     it("should add `authUser` to `context` if provided a valid user id", async () => {
 
@@ -43,4 +42,4 @@ describe("setAuthTokenUser", () => {
   
       });
 
-});
+};

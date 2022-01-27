@@ -1,9 +1,13 @@
+const useDescribe = require("~crsmtest/lib/useDescribe");
+
 const classConstructor = require("./_suite/constructor");
 
-describe("Controller", function() {
+const describe = useDescribe(this);
 
-    const addDesc = ( name, suite ) => describe(name, suite.bind(this));
+describe("Controller", () => {
 
-    addDesc( "constructor()", classConstructor );
+    const describe = useDescribe(this);
+
+    describe( "constructor()", classConstructor );
 
 });
