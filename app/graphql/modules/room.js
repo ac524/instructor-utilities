@@ -2,12 +2,17 @@ const { createModule, gql } = require('graphql-modules');
 const { GraphQLJSONObject } = require('graphql-type-json');
 
 const {
-    setAuthTokenUser,
-    requireVerifiedUser,
     setRoomContext,
     setMemberContext,
-    usePermissionContextSet
+    usePermissionContextSet,
+    useAuthUserSet
 } = require('../middleware');
+
+const sharedMiddleware = [
+    ...useAuthUserSet(),
+    setRoomContext.fromRoomId,
+    setMemberContext
+];
 
 const roomModule = createModule({
 	id: 'room',
@@ -83,16 +88,11 @@ const roomModule = createModule({
         `
     ],
     middlewares: {
-        "*": {
-            "*": [
-                setAuthTokenUser,
-                requireVerifiedUser,
-                setRoomContext.fromRoomId,
-                setMemberContext
-            ]
-        },
         Query: {
-            room: [ ...usePermissionContextSet("room","view") ]
+            room: [
+                ...sharedMiddleware,
+                ...usePermissionContextSet("room","view")
+            ]
         }
     },
 	resolvers: {
