@@ -14,6 +14,7 @@ class PermissionSet {
     constructor( name, permTypes ) {
 
         this.name = name;
+        this.key = name.split(' ').map((part,i)=>i ? (part[0].toUpperCase()+part.slice(1)) : part).join('');
         this.types = new Map( permTypes.map( makePermMap ) );
 
     }

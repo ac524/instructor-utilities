@@ -16,11 +16,11 @@ const {
     listen
 } = require("./config/express");
 
-const { schema } = require("./graphql");
+const { schema, context } = require("./graphql");
 
 async function startExpressServer() {
 
-    await addApolloServer(schema);
+    await addApolloServer(schema, context);
 
     addDataParsing();
 
@@ -31,6 +31,7 @@ async function startExpressServer() {
     addRoutes();
 
     listen();
+    
 }
 
 startExpressServer();

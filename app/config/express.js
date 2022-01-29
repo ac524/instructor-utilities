@@ -4,11 +4,7 @@ const express = require("express");
 const passport = require("passport");
 const getOption = require("../config/options");
 const routeErrorMiddleware = require("./errors/routeErrorMiddleware");
-const {ApolloServer, AuthenticationError} = require('apollo-server-express');
-
-const jwt = require('jsonwebtoken');
-
-const secret = getOption( "secret" );
+const { ApolloServer } = require('apollo-server-express');
 
 const PORT = getOption( "port" );
 
@@ -17,38 +13,18 @@ const server = http.createServer(app);
 
 const io = require("./io")(server);
 
-const addApolloServer = async (schema) => {
+const addApolloServer = async (schema, context) => {
 
     const apolloServer = new ApolloServer({
         schema,
-        context: ( {req} ) => {
-            let token = req.headers.authorization;
-            
-            let context = {}
-
-            if (req.headers.authorization) {
-                token = token.split(' ').pop().trim();
-            }
-    
-            if (!token) {
-                return req;
-            }
-
-            try {
-                const data = jwt.verify(token, secret, { maxAge: 31556926 });
-                context.user = data;
-            } catch (err) {
-                throw new AuthenticationError("Invalid Token")
-            }
-    
-            return context;
-        }
+        context
     });
 
     await apolloServer.start();
     apolloServer.applyMiddleware( {app} );
 
     console.log(`🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`);
+
 }
 
 const addDataParsing = () => {
@@ -73,8 +49,6 @@ const addAuth = () => {
     // Passport config
     passport.use( require("./jwtstrategy") );
 }
-
-
 
 const addRoutes = () => {
 

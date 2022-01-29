@@ -1,7 +1,13 @@
 const { createModule, gql } = require('graphql-modules');
-const { GraphQLJSON, GraphQLJSONObject } = require('graphql-type-json');
+const { GraphQLJSONObject } = require('graphql-type-json');
 
-const ctrls = require("../../controllers");
+const {
+    setAuthTokenUser,
+    requireVerifiedUser,
+    setRoomContext,
+    setMemberContext,
+    usePermissionContextSet
+} = require('../middleware');
 
 const roomModule = createModule({
 	id: 'room',
@@ -72,14 +78,27 @@ const roomModule = createModule({
 			}
 
             type Query {
-				room(docId: ID): Classroom
+				room(roomId: ID): Classroom
 			}
         `
     ],
+    middlewares: {
+        "*": {
+            "*": [
+                setAuthTokenUser,
+                requireVerifiedUser,
+                setRoomContext.fromRoomId,
+                setMemberContext
+            ]
+        },
+        Query: {
+            room: [ ...usePermissionContextSet("room","view") ]
+        }
+    },
 	resolvers: {
 		Query: {
-            room: (parent, { docId }) => {
-                return ctrls.get('room').findOne({ docId });
+            room: (parent, { roomId }, { db }) => {
+                return db.get('room').findOne({ docId: roomId });
             }
 		},
         JSONObject: GraphQLJSONObject,
