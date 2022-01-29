@@ -6,8 +6,7 @@ const {
     requireVerifiedUser,
     setRoomContext,
     setMemberContext,
-    makeSetPermissionContext,
-    validateMemberPermissions
+    usePermissionContextSet
 } = require('../middleware');
 
 const roomModule = createModule({
@@ -93,7 +92,7 @@ const roomModule = createModule({
             ]
         },
         Query: {
-            room: [ makeSetPermissionContext("room","view"), validateMemberPermissions ]
+            room: [ ...usePermissionContextSet("room","view") ]
         }
     },
 	resolvers: {

@@ -3,8 +3,7 @@ const requireVerifiedUser = require('./requireVerifiedUser');
 const setAuthTokenUser = require('./setAuthTokenUser');
 const setRoomContext = require('./setRoomContext');
 const setMemberContext = require('./setMemberContext');
-const makeSetPermissionContext = require('./makeSetPermissionContext');
-const validateMemberPermissions = require('./validateMemberPermissions');
+const { usePermissionContextSet } = require('./permissions');
 
 module.exports = {
     makeMiddlewareBundle,
@@ -12,6 +11,5 @@ module.exports = {
     setAuthTokenUser,
     setRoomContext,
     setMemberContext,
-    makeSetPermissionContext,
-    validateMemberPermissions
+    usePermissionContextSet
 }
