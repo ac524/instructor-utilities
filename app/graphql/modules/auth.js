@@ -1,6 +1,6 @@
 const { createModule, gql } = require('graphql-modules');
 
-const { useAuthUserSet } = require('../middleware');
+const { useAuthentication } = require('../middleware');
 
 const auth = createModule({
 	id: 'auth',
@@ -37,7 +37,7 @@ const auth = createModule({
 	],
 	middlewares: {
 		Query: {
-			authenticated: [ ...useAuthUserSet(false) ]
+			authenticated: [ ...useAuthentication(false) ]
 		}
 	},
 	resolvers: {

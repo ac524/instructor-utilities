@@ -1,5 +1,10 @@
 const { AuthenticationError } = require("apollo-server-express");
+
 const permissions = require("../../config/permissions");
+
+const { useAuthentication } = require('./authentication');
+const setRoomContext = require('./setRoomContext');
+const setMemberContext = require('./setMemberContext');
 
 const validateMemberPermissions = ({
     context: {
@@ -16,26 +21,40 @@ const validateMemberPermissions = ({
 
 }
 
-const usePermissionContextSet = (set,type) => {
+const makeSetPermissionContext = (set,type) => {
 
     if( !permissions[set] ) throw Error( `Permission ${set} does not exist.` );
 
     if( !permissions[set][type] ) throw Error( `The ${set} permission set does not support the ${type} permission.` );
 
-    const setPermissionContext = 
-        ({ context }, next) => {
+    return ({ context }, next) => {
         
-            context.permission = permissions[set][type];
-        
-            return next();
-        
-        }
+        context.permission = permissions[set][type];
+    
+        return next();
+    
+    }
+
+}
+
+const useRoomMemberPermissions = ({
+    context,
+    set,
+    type
+}) => {
+    if( !(context in setRoomContext) )
+
+        throw Error( 'Invalid room context provided for member permissions.' );
 
     return [
-        setPermissionContext,
+        ...useAuthentication(),
+        setRoomContext[context],
+        setMemberContext,
+        makeSetPermissionContext(set,type),
         validateMemberPermissions
     ]
 }
 
 exports.validateMemberPermissions = validateMemberPermissions;
-exports.usePermissionContextSet = usePermissionContextSet;
+exports.makeSetPermissionContext = makeSetPermissionContext;
+exports.useRoomMemberPermissions = useRoomMemberPermissions;

@@ -39,11 +39,11 @@ const requireVerifiedUser = ({
 
 }
 
-const useAuthUserSet = (verified = true) => [
+const useAuthentication = (verified = true) => [
     setAuthTokenUser,
     ...(verified ? [requireVerifiedUser] : [])
 ];
 
 exports.setAuthTokenUser = setAuthTokenUser;
 exports.requireVerifiedUser = requireVerifiedUser;
-exports.useAuthUserSet = useAuthUserSet;
+exports.useAuthentication = useAuthentication;

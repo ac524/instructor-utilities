@@ -1,11 +1,7 @@
-const setRoomContext = require('./setRoomContext');
-const setMemberContext = require('./setMemberContext');
-const { useAuthUserSet } = require('./authentication');
-const { usePermissionContextSet } = require('./permissions');
+const { useAuthentication } = require('./authentication');
+const { useRoomMemberPermissions } = require('./permissions');
 
 module.exports = {
-    useAuthUserSet,
-    setRoomContext,
-    setMemberContext,
-    usePermissionContextSet
+    useAuthentication,
+    useRoomMemberPermissions
 }
