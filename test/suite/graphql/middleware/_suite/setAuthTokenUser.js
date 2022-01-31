@@ -5,11 +5,12 @@ const { AuthenticationError } = require("apollo-server-express");
 
 const { setAuthTokenUser } = require("~crsm/graphql/middleware/authentication");
 
-const makeDb = () => {
+const makeDb = (customDb = {}) => {
     const db = new Map();
 
     db.set('user', {
-        findOne: stub().callsFake(({ docId }) => docId === 'AValidUserID' ? 'userFindOneResult' : false )
+        findOne: stub().callsFake(() => 'userFindOneResult' ),
+        ...customDb
     });
 
     return db;
@@ -44,34 +45,82 @@ module.exports = function() {
   
     });
 
-    /** EXCEPTION TESTS **/
 
-    it("should throw an `AuthenticationError` if not provided `authTokenData.id` in context", async () => {
 
-      // Arrange
-      const context = {};
+    it("should call the user model `findOne` with the provided user id as `docId` and select `name isVerified classrooms`", async () => {
 
-      // Act
-      const promise = setAuthTokenUser( { context }, () => {} );
-
-      // Assert - Expect a result.
-      expect( promise ).to.be.rejectedWith( new AuthenticationError("Invalid Authorization") );
-
-    });
-
-    it("should throw an `AuthenticationError` if not provided a valid user id in context", async () => {
-
-      // Arrange
+      const docId = "AValidUserID";
       const context = {
-        authTokenData: { id: "InvalidUserID" },
+        authTokenData: { id: docId },
         db: makeDb()
       }
 
-      // Act
-      const promise = setAuthTokenUser( { context }, () => {} );
+      await setAuthTokenUser( { context }, () => {} );
+
+      const userModel = context.db.get('user');
 
       // Assert - Expect a result.
-      expect( promise ).to.be.rejectedWith( new AuthenticationError("Invalid Authorization") );
+      expect( userModel.findOne )
+        .to.have.been
+        .calledWith(
+          { docId },
+          { select: "name isVerified classrooms" }
+        );
+
+    });
+
+    /** EXCEPTION TESTS **/
+
+    describe('Exceptions', () => {
+
+      it("should throw an `AuthenticationError` if not provided `authTokenData.id` in context", async () => {
+
+        // Arrange
+        const context = {};
+  
+        // Act
+        const promise = setAuthTokenUser( { context }, () => {} );
+  
+        // Assert - Expect a result.
+        expect( promise ).to.be.rejectedWith( new AuthenticationError("Invalid Authorization") );
+  
+      });
+  
+      it("should throw an `AuthenticationError` if not provided a valid user id in context", async () => {
+  
+        // Arrange
+        const context = {
+          authTokenData: { id: "InvalidUserID" },
+          db: makeDb({
+            findOne: stub()
+          })
+        }
+  
+        // Act
+        const promise = setAuthTokenUser( { context }, () => {} );
+  
+        // Assert - Expect a result.
+        expect( promise ).to.be.rejectedWith( new AuthenticationError("Invalid Authorization") );
+  
+      });
+  
+      it("should throw an `AuthenticationError` if the user model `findOne` method throws an error", async () => {
+  
+        // Arrange
+        const context = {
+          authTokenData: { id: "UserId" },
+          db: makeDb({
+            findOne: () => { throw Error('Any') }
+          })
+        }
+  
+        // Act
+        const promise = setAuthTokenUser( { context }, () => {} );
+  
+        // Assert - Expect a result.
+        expect( promise ).to.be.rejectedWith( new AuthenticationError("Invalid Authorization") );
+  
+      });
 
     });
 
