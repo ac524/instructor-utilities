@@ -45,8 +45,6 @@ module.exports = function() {
   
     });
 
-
-
     it("should call the user model `findOne` with the provided user id as `docId` and select `name isVerified classrooms`", async () => {
 
       const docId = "AValidUserID";
@@ -66,6 +64,23 @@ module.exports = function() {
           { docId },
           { select: "name isVerified classrooms" }
         );
+
+    });
+
+    it("should call the `next` method if a valid user id is provided", async () => {
+
+      const docId = "AValidUserID";
+      const context = {
+        authTokenData: { id: docId },
+        db: makeDb()
+      }
+      const next = stub();
+
+      setAuthTokenUser( { context }, next );
+
+      // Assert - Expect a result.
+      expect( 'authUser' in context ).to.be.true;
+      expect( next ).to.have.been.called;
 
     });
 
