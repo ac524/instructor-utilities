@@ -25,8 +25,9 @@ const createControllerModule = ({
     typeDefs,
     argsKey,
     abilites,
-    permissions,
-    // TODO accept custom `middlewares` and `resolves`
+    permissions = {},
+    middlewares = {},
+    resolvers,
     ...params
 }) => {
 
@@ -35,10 +36,10 @@ const createControllerModule = ({
 
     if( !argsKey ) argsKey = idKey;
 
-    const queryResolvers = {};
-    const queryMiddlewares = {};
-    const mutationResolvers = {};
-    const mutationMiddlewares = {};
+    const queryResolvers = { ...(resolvers.Query ? resolvers.Query : {}) };
+    const queryMiddlewares = { ...(middlewares.Query ? middlewares.Query : {}) };
+    const mutationResolvers = { ...(resolvers.Mutation ? resolvers.Mutation : {}) };
+    const mutationMiddlewares = { ...(middlewares.Mutation ? middlewares.Mutation : {}) };
 
     const argsTranslator = createControllerArgsTranslator( idKey );
 
@@ -59,7 +60,16 @@ const createControllerModule = ({
         id,
         dirname,
         typeDefs,
-        // TODO extend and add `middlewares` and `resolves` configuration created above
+        middlewares: {
+            ...middlewares,
+            ...(Object.keys(queryMiddlewares).length ? { Query: queryMiddlewares } : {}),
+            ...(Object.keys(mutationMiddlewares).length ? { Mutation: mutationMiddlewares } : {})
+        },
+        resolvers: {
+            ...resolvers,
+            ...(Object.keys(queryResolvers).length ? { Query: queryResolvers } : {}),
+            ...(Object.keys(mutationResolvers).length ? { Mutation: mutationResolvers } : {})
+        },
         ...params
     });
 
