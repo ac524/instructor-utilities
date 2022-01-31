@@ -1,7 +1,6 @@
 const { createModule, gql } = require('graphql-modules');
 
-const ctrls = require("../../controllers");
-const setAuthTokenUser = require('../middleware/setAuthTokenUser');
+const { useAuthentication } = require('../middleware');
 
 const auth = createModule({
 	id: 'auth',
@@ -38,17 +37,13 @@ const auth = createModule({
 	],
 	middlewares: {
 		Query: {
-			authenticated: [ setAuthTokenUser ]
+			authenticated: [ ...useAuthentication(false) ]
 		}
 	},
 	resolvers: {
 		Query: {
 			authenticated: (parent, args, { db, authUser }) => {
-				return db.get('user')
-					.findOne(
-						{ docId: authUser._id },
-						{ select: "name isVerified classrooms" }
-					)
+				return authUser;np
 			}
 		},
 

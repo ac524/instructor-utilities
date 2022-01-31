@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { stub } = require("sinon");
 
-const setAuthTokenUser = require("~crsm/graphql/middleware/setAuthTokenUser");
+const { setAuthTokenUser } = require("~crsm/graphql/middleware/authentication");
 
 const makeDb = () => {
     const db = new Map();
@@ -40,6 +40,6 @@ module.exports = function() {
         // Assert - Expect a result.
         expect( context.authUser ).to.equal( "userFindOneResult" );
   
-      });
+    });
 
 };
