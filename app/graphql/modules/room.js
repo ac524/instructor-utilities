@@ -1,9 +1,6 @@
 const { gql } = require('graphql-modules');
 const { GraphQLJSONObject } = require('graphql-type-json');
 
-const {
-    useRoomMemberPermissions
-} = require('../middleware');
 const { createControllerModule } = require('./utils');
 
 const roomModule = createControllerModule({
