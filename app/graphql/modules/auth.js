@@ -43,7 +43,7 @@ const auth = createModule({
 	resolvers: {
 		Query: {
 			authenticated: (parent, args, { db, authUser }) => {
-				return authUser;np
+				return authUser;
 			}
 		},
 
