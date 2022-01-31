@@ -1,8 +1,12 @@
+/**
+ * Extract and tranlate appropiate object keys from `args` into object keys for calling controller methods.
+ * @param {String} key 
+ * @returns 
+ */
 const createControllerArgsTranslator = key => args => {
     const {
         // Translate model name based arg keys to model methods argument names
         [`${key}Id`]: docId,
-        ...otherArgs
     } = args;
 
     return {
