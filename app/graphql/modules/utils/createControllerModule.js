@@ -1,3 +1,6 @@
+const { createModule } = require('graphql-modules');
+const { useRoomMemberPermissions } = require("../../middleware");
+
 /**
  * Extract and tranlate appropiate object keys from `args` into object keys for calling controller methods.
  * @param {String} key 
@@ -25,14 +28,14 @@ const createControllerModule = ({
     typeDefs,
     argsKey,
     abilites,
-    permissions = {},
+    memberPermission,
     middlewares = {},
-    resolvers,
+    resolvers = {},
     ...params
 }) => {
 
     // Camel cased id
-    const idKey = id.toLowerCase.split('.').map((part,i) =>i?part[0].toUpperCase()+part.slice(1):part).join('');
+    const idKey = id.toLowerCase().split('.').map((part,i) =>i?part[0].toUpperCase()+part.slice(1):part).join('');
 
     if( !argsKey ) argsKey = idKey;
 
@@ -45,10 +48,13 @@ const createControllerModule = ({
 
     for( ability of abilites ) {
 
+        if( memberPermission )
+
+            queryMiddlewares[idKey] = useRoomMemberPermissions( {  ...memberPermission, type: ability } );
+
         switch(ability) {
             case "view":
 
-                // TODO Extend `queryResolvers` and `queryMiddlewares` with appropriate configuration
                 queryResolvers[idKey] = createControllerResolver( id, 'findOne', argsTranslator );
 
                 break;

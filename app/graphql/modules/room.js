@@ -1,17 +1,13 @@
-const { createModule, gql } = require('graphql-modules');
+const { gql } = require('graphql-modules');
 const { GraphQLJSONObject } = require('graphql-type-json');
 
 const {
     useRoomMemberPermissions
 } = require('../middleware');
+const { createControllerModule } = require('./utils');
 
-const memberPermConfig = {
-    context: "fromRoomId",
-    set: "room"
-}
-
-const roomModule = createModule({
-	id: 'room',
+const roomModule = createControllerModule({
+    id: 'room',
 	dirname: __dirname,
 	typeDefs: [
         gql`
@@ -83,19 +79,16 @@ const roomModule = createModule({
 			}
         `
     ],
-    middlewares: {
-        Query: {
-            room: useRoomMemberPermissions({ ...memberPermConfig, type: "view" })
-        }
+    memberPermission: {
+        context: "fromRoomId",
+        set: "room"
     },
-	resolvers: {
-		Query: {
-            room: (parent, { roomId }, { db }) => {
-                return db.get('room').findOne({ docId: roomId });
-            }
-		},
-        JSONObject: GraphQLJSONObject,
-	},
+    abilites: [
+        "view"
+    ],
+    resolvers: {
+        JSONObject: GraphQLJSONObject
+    }
 });
 
 module.exports = roomModule
