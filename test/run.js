@@ -2,6 +2,10 @@ const fs    = require ('fs');
 const path  = require('path');
 const util = require('util');
 const mocha = require('mocha');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+
+chai.use(chaiAsPromised);
 
 const readDir = util.promisify( fs.readdir );
 

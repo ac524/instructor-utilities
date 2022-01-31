@@ -9,7 +9,7 @@ const setAuthTokenUser = async ({
         db
     } = context;
 
-    if( !authTokenData?.id ) throw new AuthenticationError("Invalid Authorization");
+    if( !(authTokenData?.id) ) throw new AuthenticationError("Invalid Authorization");
 
     const docId = authTokenData?.id;
 
@@ -17,13 +17,13 @@ const setAuthTokenUser = async ({
         
         context.authUser = await db.get('user').findOne({ docId }, { select: "name isVerified classrooms" });
 
-        if( !context.authUser ) throw new AuthenticationError("Invalid Authorization");
-
     } catch( err ) {
 
         throw new AuthenticationError("Invalid Authorization");
 
     }
+
+    if( !context.authUser ) throw new AuthenticationError("Invalid Authorization");
 
     return next();
 
