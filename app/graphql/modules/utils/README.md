@@ -4,7 +4,6 @@
 
 ```js
 createControllerModule({
-    ...commonCreateModuleParams,
     /** @see /app/controllers/definitions */
     id: "controllerkeyname",
     // List of abilities to translate into mutations and resolvers
@@ -26,5 +25,6 @@ createControllerModule({
     resolvers: {
         ...customResolvers
     }
+    ...otherCreateModuleParams,
 })
 ```
