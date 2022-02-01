@@ -48,17 +48,30 @@ const createControllerModule = ({
 
     for( ability of abilites ) {
 
-        if( memberPermission )
+        let isQuery = false;
+        let entryPoint;
+        let method;
 
-            queryMiddlewares[idKey] = useRoomMemberPermissions( {  ...memberPermission, type: ability } );
+        switch( ability ) {
 
-        switch(ability) {
             case "view":
 
-                queryResolvers[idKey] = createControllerResolver( id, 'findOne', argsTranslator );
-
+                isQuery = true;
+                entryPoint = idKey;
+                method = 'findOne';
                 break;
+
+            // TODO Build cases for "create", "update", and "delete"
+
+            // TODO Create a default case for handling custom abilities
+
         }
+
+        (isQuery ? queryResolvers : mutationResolvers)[entryPoint] = createControllerResolver( id, 'findOne', argsTranslator );
+
+        if( memberPermission )
+
+            (isQuery ? queryMiddlewares : mutationMiddlewares)[entryPoint] = useRoomMemberPermissions( {  ...memberPermission, type: ability } );
 
     }
 
