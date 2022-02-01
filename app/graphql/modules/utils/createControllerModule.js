@@ -67,7 +67,7 @@ const createControllerModule = ({
 
         }
 
-        (isQuery ? queryResolvers : mutationResolvers)[entryPoint] = createControllerResolver( id, 'findOne', argsTranslator );
+        (isQuery ? queryResolvers : mutationResolvers)[entryPoint] = createControllerResolver( id, method, argsTranslator );
 
         if( memberPermission )
 
