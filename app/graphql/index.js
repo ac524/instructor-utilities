@@ -1,13 +1,17 @@
+// Import external modules
 const { createApplication } = require('graphql-modules');
 
-const authModule = require("./modules/auth");
+// Import local modules
+const modules = require("./modules");
+const context = require("./context");
 
-const application = createApplication({
-    modules: [ authModule ],
-});
-
-const schema = application.createSchemaForApollo();
+const schema =
+  createApplication({
+    modules
+  })
+  .createSchemaForApollo();
 
 module.exports = {
-    schema
+    schema,
+    context
 }

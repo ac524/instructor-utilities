@@ -2,6 +2,12 @@ const fs    = require ('fs');
 const path  = require('path');
 const util = require('util');
 const mocha = require('mocha');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const sinonChai = require("sinon-chai");
+
+chai.use(sinonChai);
+chai.use(chaiAsPromised);
 
 const readDir = util.promisify( fs.readdir );
 

@@ -26,13 +26,15 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "concurrently": "^6.2.0",
     "inquirer": "^8.1.0",
     "link-module-alias": "^1.2.0",
     "mocha": "^8.4.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
-    "sinon": "^10.0.0"
+    "sinon": "^10.0.0",
+    "sinon-chai": "^3.7.0"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.4",
@@ -46,6 +48,7 @@
     "fastest-validator": "^1.11.0",
     "graphql": "^15.7.2",
     "graphql-modules": "^2.0.0",
+    "graphql-type-json": "^0.3.2",
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "mjml": "^4.9.3",
