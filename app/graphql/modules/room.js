@@ -74,6 +74,10 @@ const roomModule = createControllerModule({
             type Query {
 				room(roomId: ID): Classroom
 			}
+
+            type Mutation {
+				room(roomId: ID, ): Classroom
+			}
         `
     ],
     memberPermission: {
