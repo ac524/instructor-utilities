@@ -43,14 +43,11 @@ const createControllerArgsTranslator = key =>
  * @returns {graphqlResolver}
  */
 const createControllerResolver =
-( modelName, method, argsTranslator ) =>
-    (...[,args,{db}]) =>
-        db.get( modelName )[ method ]( argsTranslator ? argsTranslator( args ) : args );
+    ( modelName, method, argsTranslator ) =>
+        (...[,args,{db}]) =>
+            db.get( modelName )[ method ]( argsTranslator ? argsTranslator( args ) : args );
 
 /**
- * 
- * @typedef {import('graphql-modules').ModuleConfig} ModuleConfig
- * 
  * @typedef MemberPermissionConfig
  * @property {String} context Method name of setRoomContext to use in loading the room context for the member
  * @property {String} set The key for the permission set to use
@@ -64,7 +61,7 @@ const createControllerResolver =
  * @property {Array} abilites Array list of abilities to configure (Ex: "view", "create", "update", "delete")
  * @property {MemberPermissionConfig} memberPermission Base name of `args` properties in graphql
  * 
- * @typedef {ModuleConfig & ControllerModuleConfigOnly} ControllerModuleConfig
+ * @typedef {import('graphql-modules').ModuleConfig & ControllerModuleConfigOnly} ControllerModuleConfig
  * 
  * Creates a Module in a framworked manner given abilites and other configuration.
  * @param {ControllerModuleConfig} param0 
@@ -74,7 +71,6 @@ const createControllerModule = ({
     id,
     middlewares = {},
     resolvers = {},
-
     typeDefs,
     argsKey,
     abilites,
