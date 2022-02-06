@@ -115,13 +115,12 @@ const createControllerModule = ({
 
         if( memberPermission )
 
-            (isQuery ? queryMiddlewares : mutationMiddlewares)[entryPoint] = useRoomMemberPermissions( {  ...memberPermission, type: ability } );
+            (isQuery ? queryMiddlewares : mutationMiddlewares)[entryPoint] = useRoomMemberPermissions( {  ...memberPermission, ability } );
 
     }
 
     return createModule({
         id,
-        dirname,
         typeDefs,
         middlewares: {
             ...middlewares,

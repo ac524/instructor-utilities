@@ -6,6 +6,47 @@ const { useAuthentication } = require('./authentication');
 const setRoomContext = require('./setRoomContext');
 const setMemberContext = require('./setMemberContext');
 
+/**
+ * @callback next
+ * 
+ * @typedef PermissionContext
+ * @property {String} permission
+ * 
+ * @callback SetPermissionContext
+ * @param {String} param0
+ * @param {Object} param0.context
+ * @param {next} next
+ * @returns {*}
+ * 
+ * Validates provided permissions and makes a middleware method.
+ * @param {String} set The permission set to use
+ * @param {String} ability The permission set ability to target
+ * @returns {SetPermissionContext}
+ */
+ const makeSetPermissionContext = (set,ability) => {
+
+    if( !permissions[set] ) throw Error( 'Invalid permission set' );
+
+    if( !permissions[set][ability] ) throw Error( 'Invalid ability for permission set' );
+
+    return ({ context }, next) => {
+        
+        context.permission = permissions[set][ability];
+    
+        return next();
+    
+    }
+
+}
+
+/**
+ * @typedef {import('./setMemberContext').MemberContext & PermissionContext} ValidateMemberPermissionsContext
+ * 
+ * @param {Object} param0
+ * @param {ValidateMemberPermissionsContext} param0.context
+ * @param {next} next
+ * @returns {*}
+ */
 const validateMemberPermissions = ({
     context: {
         member,
@@ -21,26 +62,19 @@ const validateMemberPermissions = ({
 
 }
 
-const makeSetPermissionContext = (set,type) => {
-
-    if( !permissions[set] ) throw Error( `Permission ${set} does not exist.` );
-
-    if( !permissions[set][type] ) throw Error( `The ${set} permission set does not support the ${type} permission.` );
-
-    return ({ context }, next) => {
-        
-        context.permission = permissions[set][type];
-    
-        return next();
-    
-    }
-
-}
-
+/**
+ * @typedef RoomMemberPermissionsConfig
+ * @property {String} context
+ * @property {String} set
+ * @property {String} ability
+ * 
+ * @param {RoomMemberPermissionsConfig} param0 
+ * @returns {Array}
+ */
 const useRoomMemberPermissions = ({
     context,
     set,
-    type
+    ability
 }) => {
     if( !(context in setRoomContext) )
 
@@ -50,7 +84,7 @@ const useRoomMemberPermissions = ({
         ...useAuthentication(),
         setRoomContext[context],
         setMemberContext,
-        makeSetPermissionContext(set,type),
+        makeSetPermissionContext(set,ability),
         validateMemberPermissions
     ]
 }
