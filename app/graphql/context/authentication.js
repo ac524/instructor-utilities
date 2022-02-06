@@ -2,6 +2,20 @@ const { AuthenticationError } = require("apollo-server-express");
 const jwt = require("jsonwebtoken");
 const secret = require("../../config/options")("secret");
 
+/**
+ * @typedef AuthReqHeaders
+ * @property {String} authorization;
+ * 
+ * 
+ * @typedef AuthRequest
+ * @property {AuthReqHeaders} headers;
+ * 
+ * @typedef AuthTokenContext
+ * @property {import('~crsm/controllers/definitions/AuthController').JwtPayload} authTokenData;
+ * 
+ * @param {AuthRequest} param0 
+ * @returns {AuthTokenContext}
+ */
 const authorization = ({
     headers: { authorization }
 }) => {

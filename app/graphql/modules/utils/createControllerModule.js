@@ -2,35 +2,79 @@ const { createModule } = require('graphql-modules');
 const { useRoomMemberPermissions } = require("../../middleware");
 
 /**
+ * @typedef ControllerArgs
+ * @property {String} [docId]
+ * 
+ * Tranlates `args` from graphql into appropiate options for controllers
+ * @callback controllerAgsTranslator
+ * @param {Object} args 
+ * @returns {ControllerArgs}
+ * 
  * Extract and tranlate appropiate object keys from `args` into object keys for calling controller methods.
  * @param {String} key 
- * @returns 
+ * @returns {controllerAgsTranslator}
  */
-const createControllerArgsTranslator = key => args => {
-    const {
-        // Translate model name based arg keys to model methods argument names
-        [`${key}Id`]: docId,
-    } = args;
+const createControllerArgsTranslator = key =>
+    args => {
+        const {
+            // Translate model name based arg keys to model methods argument names
+            [`${key}Id`]: docId,
+        } = args;
 
-    return {
-        ...(docId ? { docId } : {})
+        return {
+            ...(docId ? { docId } : {})
+        }
     }
-}
 
+/**
+ * A simple definition of a graphql resolver method. TODO Can we find and import from graphql library?
+ * @callback graphqlResolver
+ * @param {*} parent
+ * @param {Object} args
+ * @param {Object} context
+ * @param {*} info
+ * @returns {*}
+ * 
+ * Creates a resolver for a given controller method
+ * 
+ * @param {String} modelName 
+ * @param {String} method 
+ * @param {controllerAgsTranslator} argsTranslator 
+ * @returns {graphqlResolver}
+ */
 const createControllerResolver =
     ( modelName, method, argsTranslator ) =>
         (...[,args,{db}]) =>
             db.get( modelName )[ method ]( argsTranslator ? argsTranslator( args ) : args );
 
+/**
+ * @typedef MemberPermissionConfig
+ * @property {String} context Method name of setRoomContext to use in loading the room context for the member
+ * @property {String} set The key for the permission set to use
+ * 
+ * @see /app/graphql/middleware/setRoomContext
+ * @see /app/config/permissions/sets
+ * 
+ * @typedef ControllerModuleConfigOnly
+ * @property {String} id Name of the controller to build a module for
+ * @property {String} argsKey Base name of `args` properties in graphql
+ * @property {Array} abilites Array list of abilities to configure (Ex: "view", "create", "update", "delete")
+ * @property {MemberPermissionConfig} memberPermission Base name of `args` properties in graphql
+ * 
+ * @typedef {import('graphql-modules').ModuleConfig & ControllerModuleConfigOnly} ControllerModuleConfig
+ * 
+ * Creates a Module in a framworked manner given abilites and other configuration.
+ * @param {ControllerModuleConfig} param0 
+ * @returns {import('graphql-modules').Module}
+ */
 const createControllerModule = ({
     id,
-    dirname,
+    middlewares = {},
+    resolvers = {},
     typeDefs,
     argsKey,
     abilites,
     memberPermission,
-    middlewares = {},
-    resolvers = {},
     ...params
 }) => {
 
@@ -71,13 +115,12 @@ const createControllerModule = ({
 
         if( memberPermission )
 
-            (isQuery ? queryMiddlewares : mutationMiddlewares)[entryPoint] = useRoomMemberPermissions( {  ...memberPermission, type: ability } );
+            (isQuery ? queryMiddlewares : mutationMiddlewares)[entryPoint] = useRoomMemberPermissions( {  ...memberPermission, ability } );
 
     }
 
     return createModule({
         id,
-        dirname,
         typeDefs,
         middlewares: {
             ...middlewares,

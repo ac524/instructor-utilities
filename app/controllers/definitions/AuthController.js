@@ -22,6 +22,10 @@ const jwtSign = util.promisify( jwt.sign );
  * 
  * @typedef LoginOptions
  * @property {LoginData} credentials
+ * 
+ * @typedef JwtPayload
+ * @property {import('mongoose').Schema.Types.ObjectId} id
+ * @property {String} name
  */
 
 class AuthController extends Controller {

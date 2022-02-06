@@ -1,5 +1,18 @@
 const { AuthenticationError } = require("apollo-server-express");
 
+/**
+ * @callback next
+ *
+ * @typedef {import('~crsm/graphql/context/authentication').AuthTokenContext & import('~crsm/graphql/context/db').DbContext} SetAuthTokenUserContext
+ * 
+ * @typedef AuthTokenUserContext
+ * @property {import('~crsmmodels/schema/UserSchema').UserDocument} authUser
+ * 
+ * @param {Object} param0 
+ * @param {SetAuthTokenUserContext} param0.context
+ * @param {next} next 
+ * @returns {*}
+ */
 const setAuthTokenUser = async ({
     context
 }, next ) => {
@@ -29,6 +42,14 @@ const setAuthTokenUser = async ({
 
 }
 
+/**
+ * Throw an error if the user is not verified.
+ * 
+ * @param {Object} param0 
+ * @param {AuthTokenUserContext} param0.context
+ * @param {next} next 
+ * @returns {*}
+ */
 const requireVerifiedUser = ({
     context: { authUser }
 }, next ) => {
@@ -39,9 +60,14 @@ const requireVerifiedUser = ({
 
 }
 
-const useAuthentication = (verified = true) => [
+/**
+ * 
+ * @param {boolean} isVerified Flag for requiring that the user has been verified
+ * @returns {Array} List of needed middleware for to authorize a user for a request
+ */
+const useAuthentication = (isVerified = true) => [
     setAuthTokenUser,
-    ...(verified ? [requireVerifiedUser] : [])
+    ...(isVerified ? [requireVerifiedUser] : [])
 ];
 
 exports.setAuthTokenUser = setAuthTokenUser;
