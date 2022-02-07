@@ -12,14 +12,14 @@ const studentModule = createControllerModule({
             }
 
             type Query {
-				roomStudent(studentId: ID): Test
+				roomStudent(roomStudentId: ID): Test
 			}
         `
     ],
-    // memberPermission: {
-    //     context: "fromStudentId",
-    //     set: "student"
-    // },
+    memberPermission: {
+        context: "fromStudentId",
+        set: "student"
+    },
     abilites: [
         "view"
     ],
