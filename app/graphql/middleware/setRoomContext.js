@@ -5,23 +5,19 @@
  * @property {import('~crsmmodels/schema/RoomSchema').RoomDocument} room
  */
 
+const roomQueryConfig = { select: "staff" };
+
 /**
- * Fetches a room document with staff selected
- * @param {Map} db 
- * @param {import('mongoose').Schema.Types.ObjectId} docId 
- * @returns {import('~crsmmodels/schema/RoomSchema').RoomDocument}
+ * Ensures a room was set to context
+ * @param {Object} param0
+ * @param {?import('~crsmmodels/schema/RoomSchema').RoomDocument} param0.room
  */
- const getRoom = async ( db, docId ) => {
-    const room = await db.get("room")
-        .findOne( { docId }, { select: "staff" } );
-
-    if( !room ) throw Error("Unable to locate associated room");
-
-    return room;
-}
+const validateRoomContext = ({ room }) => {
+    if( !room ) throw Error("Unable to locate associated room")
+};
 
 /**
- * Loads a room document from a provided `roomId` arg
+ * Sets `room` context from a provided `roomId` arg
  * @param {Object} param0 
  * @param {Object} param0.args
  * @param {import('mongoose').Schema.Types.ObjectId} param0.args.roomId
@@ -31,20 +27,42 @@
  */
 const fromRoomId = async ({
     args: { roomId },
-    context
+    context: { db }
+}, next) => {
+    
+    context.room = await db.get("room").findOne({ docId: roomId }, roomQueryConfig);
+
+    validateRoomContext( context );
+
+    return next();
+
+}
+
+/**
+ * Sets `room` context from a provided `studentId` arg
+ * @param {Object} param0
+ * @param {Object} param0.args
+ * @param {Object} param0.context
+ * @param {next} next 
+ * @returns {*}
+ */
+const fromStudentId = async ({
+    args: { studentId },
+    context: { db }
 }, next) => {
 
-    const { db } = context;
-    
-    context.room = await getRoom( db, roomId );
+    context.room = await db.get("room.student").findOwner({ docId: studentId }, roomQueryConfig);
+
+    validateRoomContext( context );
 
     return next();
 
 }
 
 const setRoomContext = {
-    getRoom,
-    fromRoomId
+    roomQueryConfig,
+    fromRoomId,
+    fromStudentId
 }
 
 module.exports = setRoomContext;
