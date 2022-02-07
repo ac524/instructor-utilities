@@ -8,6 +8,15 @@
 const roomQueryConfig = { select: "staff" };
 
 /**
+ * Ensures a room was set to context
+ * @param {Object} param0
+ * @param {?import('~crsmmodels/schema/RoomSchema').RoomDocument} param0.room
+ */
+const validateRoomContext = ({ room }) => {
+    if( !room ) throw Error("Unable to locate associated room")
+};
+
+/**
  * Sets `room` context from a provided `roomId` arg
  * @param {Object} param0 
  * @param {Object} param0.args
@@ -22,6 +31,8 @@ const fromRoomId = async ({
 }, next) => {
     
     context.room = await db.get("room").findOne({ docId: roomId }, roomQueryConfig);
+
+    validateRoomContext( context );
 
     return next();
 
@@ -41,6 +52,8 @@ const fromStudentId = async ({
 }, next) => {
 
     context.room = await db.get("room.student").findOwner({ docId: studentId }, roomQueryConfig);
+
+    validateRoomContext( context );
 
     return next();
 
