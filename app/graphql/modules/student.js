@@ -7,12 +7,20 @@ const studentModule = createControllerModule({
 	dirname: __dirname,
 	typeDefs: [
         gql`
-            type Test {
-                success: Boolean
+            type Student {
+                _id: ID
+                assignedTo: String
+                date: String
+                elevation: Int
+                feed: String
+                meta: JSONObject
+                name: String
+                priorityLevel: Int
+                recentComments: [Comment]
             }
-
+            
             type Query {
-				roomStudent(roomStudentId: ID): Test
+				roomStudent(roomStudentId: ID): Student
 			}
         `
     ],
@@ -23,13 +31,13 @@ const studentModule = createControllerModule({
     abilites: [
         "view"
     ],
-    resolvers: {
-        Query: {
-            roomStudent() {
-                return { success: true }
-            }
-        }
-    }
+    // resolvers: {
+    //     Query: {
+    //         roomStudent() {
+    //             return { success: true }
+    //         }
+    //     }
+    // }
 });
 
 module.exports = studentModule;
