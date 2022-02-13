@@ -76,7 +76,7 @@ module.exports = function() {
       }
       const next = stub();
 
-      setAuthTokenUser( { context }, next );
+      await setAuthTokenUser( { context }, next );
 
       // Assert - Expect a result.
       expect( 'authUser' in context ).to.be.true;
