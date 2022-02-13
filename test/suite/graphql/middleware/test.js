@@ -9,7 +9,6 @@ describe("/middleware", function() {
 
     const describe = useDescribe(this);
 
-    
     describe( 'authentication', () => {
 
         describe( 'setAuthTokenUser', setAuthTokenUser );

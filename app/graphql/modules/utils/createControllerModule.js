@@ -111,12 +111,14 @@ const createControllerModule = ({
 
         }
 
-        (isQuery ? queryResolvers : mutationResolvers)[entryPoint] = createControllerResolver( id, method, argsTranslator );
+        const resolvers = isQuery ? queryResolvers : mutationResolvers;
+        
+        resolvers[entryPoint] || (resolvers[entryPoint] = createControllerResolver( id, method, argsTranslator ));
 
-        if( memberPermission )
-
-            (isQuery ? queryMiddlewares : mutationMiddlewares)[entryPoint] = useRoomMemberPermissions( {  ...memberPermission, ability } );
-
+        if( memberPermission ) {
+            const mutations = isQuery ? queryMiddlewares : mutationMiddlewares;
+            mutations[entryPoint] || (mutations[entryPoint] = useRoomMemberPermissions( {  ...memberPermission, ability } ));
+        }
     }
 
     return createModule({
