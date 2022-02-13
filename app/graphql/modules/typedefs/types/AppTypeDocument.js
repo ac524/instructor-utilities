@@ -10,5 +10,3 @@ const AppTypeDocument = gql`
 `;
 
 exports.AppTypeDocument = AppTypeDocument;
-
-            

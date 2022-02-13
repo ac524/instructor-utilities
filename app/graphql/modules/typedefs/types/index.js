@@ -6,6 +6,7 @@ const { UserDocument } = require("./UserDocument");
 const { FeedEntryDocument } = require("./FeedEntryDocument");
 const { FeedEntryCommentDocument } = require("./FeedEntryCommentDocument");
 const { FeedEntryComment } = require("./FeedEntryComment");
+const { Auth } = require("./Auth");
 
 module.exports = {
     RoomDocument,
@@ -15,5 +16,6 @@ module.exports = {
     UserDocument,
     FeedEntryDocument,
     FeedEntryCommentDocument,
-    FeedEntryComment
+    FeedEntryComment,
+    Auth
 }

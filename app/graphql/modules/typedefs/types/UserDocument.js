@@ -6,9 +6,8 @@ const UserDocument = gql`
         date: String
         email: String
         name: String
+        classrooms: [ID]
     }
 `;
 
 exports.UserDocument = UserDocument;
-
-            
