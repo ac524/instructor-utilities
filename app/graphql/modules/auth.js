@@ -36,13 +36,13 @@ const auth = createModule({
 	},
 	resolvers: {
 		Query: {
-			authenticated: (parent, args, { db, authUser }) => {
-				return authUser;np
+			authenticated: (...[,, { authUser } ]) => {
+				return authUser;
 			}
 		},
 
 		Mutation: {
-			login: (parent, { credentials }, { db }) => {
+			login: (...[, { credentials }, { db }]) => {
 				return db.get("auth").login({ credentials });
 			}
 		}
