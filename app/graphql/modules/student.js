@@ -2,25 +2,28 @@ const { gql } = require('graphql-modules');
 
 const { createControllerModule } = require('./utils');
 
+const {
+    scalars: {
+        JSONObject
+    },
+    types: {
+        StudentDocument,
+        FeedEntryCommentDocument,
+        FeedEntryComment
+    }
+} = require('./typedefs');
+
 const studentModule = createControllerModule({
     id: 'room.student',
 	dirname: __dirname,
 	typeDefs: [
+        JSONObject,
+        StudentDocument,
+        FeedEntryCommentDocument,
+        FeedEntryComment,
         gql`
-            type Student {
-                _id: ID
-                assignedTo: String
-                date: String
-                elevation: Int
-                feed: String
-                meta: JSONObject
-                name: String
-                priorityLevel: Int
-                recentComments: [Comment]
-            }
-            
             type Query {
-				roomStudent(roomStudentId: ID): Student
+				roomStudent(roomStudentId: ID): StudentDocument
 			}
         `
     ],
