@@ -4,6 +4,7 @@ const options = {
     secret: process.env.JWT_SECRET || "more security please?",
     mongodb: process.env.MONGODB_URI || "mongodb://localhost/instructorutilities",
     publicUrl: process.env.PUBLIC_URL || "http://localhost:3000",
+    apiType: process.env.API_TYPE || "BOTH",
     email: {
         strategy: process.env.EMAIL_STRATEGY,
         from: process.env.EMAIL_FROM,
