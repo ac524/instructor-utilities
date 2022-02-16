@@ -8,59 +8,40 @@ const {
     FeedDeelevateSet
 } = require("./sets");
 
-module.exports = {
+class Permissions {
 
-    room: new RoomSet(),
-    student: new StudentSet(),
-    invite: new InviteSet(),
-    feed: new FeedSet(),
-    feedComment: new FeedCommentSet(),
-    feedElevate: new FeedElevateSet(),
-    feedDeelevate: new FeedDeelevateSet(),
+    constructor() {
 
-    /**
-     * ROOM PERMISSIONS
-     */
-    VIEW_ROOM: "VIEW_ROOM",
-    UPDATE_ROOM: "UPDATE_ROOM",
-    LEAVE_ROOM: "LEAVE_ROOM",
-    ARCHIVE_ROOM: "ARCHIVE_ROOM",
+        this.room = new RoomSet();
+        this.student = new StudentSet();
+        this.invite = new InviteSet();
+        this.feed = new FeedSet();
+        this.feedComment = new FeedCommentSet();
+        this.feedElevate = new FeedElevateSet();
+        this.feedDeelevate = new FeedDeelevateSet();
 
-    /**
-     * INVITE PERMISSIONS
-     */
-    CREATE_INVITE: "CREATE_INVITE",
-    VIEW_INVITE: "VIEW_INVITE",
-    DELETE_INVITE: "DELETE_INVITE",
+        /** Validate keys */
+        for( const key in this ) if( key !== this[key].key )
+        
+            throw Error( `Invalid permissions configuration for ${key} set. The permissions key must match the set key.` );
+
+    }
 
     /**
-     * STUDENT PERMISSIONS
+     * 
+     * @param {string} permission 
      */
-    CREATE_STUDENT: "CREATE_STUDENT",
-    VIEW_STUDENT: "VIEW_STUDENT",
-    UPDATE_STUDENT: "UPDATE_STUDENT",
-    DELETE_STUDENT: "DELETE_STUDENT",
+    has( permission ) {
+        
+        const [ verb, ...setParts ] = permission.toLowerCase().split('_');
+        const setKey = setParts.map((part,i)=>i ? (part[0].toUpperCase()+part.slice(1)) : part).join('');
 
-    /**
-     * FEED PERMISSIONS
-     */
-    VIEW_FEED: "VIEW_FEED",
+        return setKey in this && ( this[setKey][verb] === permission );
 
-    /**
-     * COMMENT PERMISSIONS
-     */
-    CREATE_FEED_COMMENT: "CREATE_FEED_COMMENT",
-    UPDATE_FEED_COMMENT: "UPDATE_FEED_COMMENT",
-    DELETE_FEED_COMMENT: "DELETE_FEED_COMMENT",
-
-    /**
-     * COMMENT PERMISSIONS
-     */
-    CREATE_FEED_ELEVATE: "CREATE_FEED_ELEVATE",
-
-    /**
-     * COMMENT PERMISSIONS
-     */
-    CREATE_FEED_DEELEVATE: "CREATE_FEED_DEELEVATE"
+    }
 
 }
+
+const permissions = new Permissions();
+
+module.exports = permissions;

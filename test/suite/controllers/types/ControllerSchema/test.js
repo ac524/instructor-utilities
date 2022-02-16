@@ -1,3 +1,5 @@
+const useDescribe = require("~crsmtest/lib/useDescribe");
+
 const classConstructor = require("./_suite/constructor");
 const makeDoc = require("./_suite/makeDoc");
 const createOne = require("./_suite/createOne");
@@ -6,16 +8,19 @@ const findOne = require("./_suite/findOne");
 const findMany = require("./_suite/findMany");
 const updateOne = require("./_suite/updateOne");
 
+
+const describe = useDescribe(this);
+
 describe("ControllerSchema", function() {
 
-    const addDesc = ( name, suite ) => describe(name, suite.bind(this));
+    const describe = useDescribe(this);
 
-    addDesc( "constructor()", classConstructor );
-    addDesc( "makeDoc()", makeDoc );
-    addDesc( "createOne()", createOne );
-    addDesc( "deleteOne()", deleteOne );
-    addDesc( "findOne()", findOne );
-    addDesc( "findMany()", findMany);
-    addDesc( "updateOne()", updateOne );
+    describe( "constructor()", classConstructor );
+    describe( "makeDoc()", makeDoc );
+    describe( "createOne()", createOne );
+    describe( "deleteOne()", deleteOne );
+    describe( "findOne()", findOne );
+    describe( "findMany()", findMany);
+    describe( "updateOne()", updateOne );
 
 });

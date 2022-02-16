@@ -4,6 +4,7 @@ const express = require("express");
 const passport = require("passport");
 const getOption = require("../config/options");
 const routeErrorMiddleware = require("./errors/routeErrorMiddleware");
+const { ApolloServer } = require('apollo-server-express');
 
 const PORT = getOption( "port" );
 
@@ -11,6 +12,20 @@ const app = express();
 const server = http.createServer(app);
 
 const io = require("./io")(server);
+
+const addApolloServer = async (schema, context) => {
+
+    const apolloServer = new ApolloServer({
+        schema,
+        context
+    });
+
+    await apolloServer.start();
+    apolloServer.applyMiddleware( {app} );
+
+    console.log(`🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`);
+
+}
 
 const addDataParsing = () => {
     // Include data parsing middleware.
@@ -35,8 +50,6 @@ const addAuth = () => {
     passport.use( require("./jwtstrategy") );
 }
 
-
-
 const addRoutes = () => {
 
     // Use the /public directory for static file loading.
@@ -58,6 +71,7 @@ const listen = () => {
 }
 
 module.exports = {
+    addApolloServer,
     addDataParsing,
     addCompression,
     addAuth,
