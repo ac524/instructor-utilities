@@ -18,9 +18,11 @@ const {
 
 const { schema, context } = require("./graphql");
 
+const apiType = require("./config/options")('apiType')
+
 async function startExpressServer() {
 
-    await addApolloServer(schema, context);
+    if( apiType === 'BOTH' || apiType === 'GRAPHQL' ) await addApolloServer(schema, context);
 
     addDataParsing();
 
