@@ -81,7 +81,7 @@ const StudentBulkSelect = ({ studentId, isSelected }) => {
 
     return <input
         type="checkbox"
-        className="ml-auto"
+        className="ml-auto circle-checkbox"
         checked={isSelected}
         onChange={updateStudent}
     />
@@ -94,7 +94,7 @@ export const StudentCard = ({ className, isSelected, student: { _id, name, prior
     const openEdit = () => dispatch(gda(EDIT_STUDENT, _id));
     
     return (
-        <Card className={"student-card is-flex"+(className ? " "+className : "")} style={{flexDirection:"column"}}>
+        <Card className={"student-card is-flex" + (isSelected ? " box-shadow " : "") + (className ? " " + className : "")} style={{flexDirection:"column"}}>
             <Card.Content className="is-flex" style={{alignItems: "center"}}>
                 <span onClick={openEdit} className="student-name">{name}</span>
                 <StudentBulkSelect studentId={_id} isSelected={isSelected} />
