@@ -1,6 +1,9 @@
 const { gql } = require('graphql-modules');
 const { GraphQLJSONObject } = require('graphql-type-json');
 const {
+    inputs: {
+        RoomPatch
+    },
     scalars: {
         JSONObject
     },
@@ -29,13 +32,15 @@ const roomModule = createControllerModule({
         FeedEntryCommentDocument,
         FeedEntryComment,
         UserDocument,
+        RoomPatch,
         gql`
             type Query {
 				room(roomId: ID): RoomDocument
 			}
 
             type Mutation {
-				room(roomId: ID, ): RoomDocument
+				room(roomId: ID): RoomDocument,
+                updateRoom(roomId: ID, data: RoomPatch): RoomDocument
 			}
         `
     ],
@@ -44,7 +49,8 @@ const roomModule = createControllerModule({
         set: "room"
     },
     abilites: [
-        "view"
+        "view",
+        "update"
     ],
     resolvers: {
         JSONObject: GraphQLJSONObject

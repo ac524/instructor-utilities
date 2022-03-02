@@ -19,10 +19,12 @@ const createControllerArgsTranslator = key =>
         const {
             // Translate model name based arg keys to model methods argument names
             [`${key}Id`]: docId,
+            data
         } = args;
 
         return {
-            ...(docId ? { docId } : {})
+            ...(docId ? { docId } : {}),
+            ...(data ? { data } : {})
         }
     }
 
@@ -80,6 +82,7 @@ const createControllerModule = ({
 
     // Camel cased id
     const idKey = id.toLowerCase().split('.').map((part,i) =>i?part[0].toUpperCase()+part.slice(1):part).join('');
+    const IdKey = idKey[0].toUpperCase()+idKey.slice(1);
 
     if( !argsKey ) argsKey = idKey;
 
@@ -106,6 +109,24 @@ const createControllerModule = ({
                 break;
 
             // TODO Build cases for "create", "update", and "delete"
+
+            case "create":
+
+                entryPoint = `create${IdKey}`;
+                method = 'createOne';
+                break;
+
+            case "update":
+
+                entryPoint = `update${IdKey}`;
+                method = 'updateOne';
+                break;
+
+            case "delete":
+
+                entryPoint = `delete${IdKey}`;
+                method = 'deleteOne';
+                break;
 
             // TODO Create a default case for handling custom abilities
 
