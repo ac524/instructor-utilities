@@ -4,7 +4,8 @@ const { createControllerModule } = require('./utils');
 
 const {
     inputs: {
-        StudentPatch
+        StudentPatch,
+        StudentNew
     },
     scalars: {
         JSONObject
@@ -25,13 +26,16 @@ const studentModule = createControllerModule({
         FeedEntryCommentDocument,
         FeedEntryComment,
         StudentPatch,
+        StudentNew,
         gql`
             type Query {
 				roomStudent(roomStudentId: ID): StudentDocument
 			}
 
             type Mutation {
+                createRoomStudent(roomId: ID, data: StudentNew) : StudentDocument
                 updateRoomStudent(roomStudentId: ID, data: StudentPatch) : StudentDocument
+                deleteRoomStudent(roomStudentId: ID) : StudentDocument
             }
         `
     ],
@@ -40,9 +44,10 @@ const studentModule = createControllerModule({
         set: "student"
     },
     abilites: [
+        "create",
         "view",
         "update",
-        // "delete"
+        "delete"
     ],
     // resolvers: {
     //     Query: {

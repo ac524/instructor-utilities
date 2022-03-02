@@ -42,6 +42,7 @@ const fromRoomId = async ({
 
 /**
  * @typedef SetRoomFromStudentIdArgs
+ * @property {import('mongoose').Schema.Types.ObjectId} roomtId
  * @property {import('mongoose').Schema.Types.ObjectId} roomStudentId
  * 
  * Sets `room` context from a provided `studentId` arg
@@ -52,13 +53,15 @@ const fromRoomId = async ({
  * @returns {*}
  */
 const fromStudentId = async ({
-    args: { roomStudentId },
+    args: { roomId, roomStudentId },
     context
 }, next) => {
 
     const { db } = context;
 
-    context.room = await db.get("room.student").findOwner({ docId: roomStudentId }, roomQueryConfig);
+    context.room = roomId
+        ? await db.get("room").findOne({ docId: roomId }, roomQueryConfig)
+        : await db.get("room.student").findOwner({ docId: roomStudentId }, roomQueryConfig);
 
     validateRoomContext( context );
 

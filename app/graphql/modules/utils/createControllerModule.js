@@ -14,17 +14,23 @@ const { useRoomMemberPermissions } = require("../../middleware");
  * @param {String} key 
  * @returns {controllerAgsTranslator}
  */
-const createControllerArgsTranslator = key =>
-    args => {
+const createControllerArgsTranslator = ( key, parentKey,  ) =>
+    ( args, context, method ) => {
         const {
             // Translate model name based arg keys to model methods argument names
             [`${key}Id`]: docId,
             data
         } = args;
 
+        const belongsTo = parentKey ? args[`${parentKey}Id`] : false;
+
+        const by = context.authUser;
+
         return {
             ...(docId ? { docId } : {}),
-            ...(data ? { data } : {})
+            ...(data ? { data } : {}),
+            ...(belongsTo ? { belongsTo } : {}),
+            ...((by && method.startsWith('create')) ? { createdBy: by } : {})
         }
     }
 
@@ -46,8 +52,16 @@ const createControllerArgsTranslator = key =>
  */
 const createControllerResolver =
     ( modelName, method, argsTranslator ) =>
-        (...[,args,{db}]) =>
-            db.get( modelName )[ method ]( argsTranslator ? argsTranslator( args ) : args );
+        (...[,args,{db, ...context}]) => 
+            db.get( modelName )[ method ]( argsTranslator ? argsTranslator( args, context, method ) : args );
+
+const getParentKey = key => {
+    const keyParts = key.split('.');
+
+    if( keyParts.length < 2 ) return false;
+
+    return keyParts[0];
+}
 
 /**
  * @typedef MemberPermissionConfig
@@ -81,8 +95,10 @@ const createControllerModule = ({
 }) => {
 
     // Camel cased id
+    
     const idKey = id.toLowerCase().split('.').map((part,i) =>i?part[0].toUpperCase()+part.slice(1):part).join('');
     const IdKey = idKey[0].toUpperCase()+idKey.slice(1);
+    const parentKey = getParentKey(id);
 
     if( !argsKey ) argsKey = idKey;
 
@@ -91,7 +107,7 @@ const createControllerModule = ({
     const mutationResolvers = { ...(resolvers.Mutation ? resolvers.Mutation : {}) };
     const mutationMiddlewares = { ...(middlewares.Mutation ? middlewares.Mutation : {}) };
 
-    const argsTranslator = createControllerArgsTranslator( idKey );
+    const argsTranslator = createControllerArgsTranslator( idKey, parentKey );
 
     for( ability of abilites ) {
 
