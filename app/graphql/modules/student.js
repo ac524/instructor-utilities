@@ -3,6 +3,9 @@ const { gql } = require('graphql-modules');
 const { createControllerModule } = require('./utils');
 
 const {
+    inputs: {
+        StudentPatch
+    },
     scalars: {
         JSONObject
     },
@@ -21,10 +24,15 @@ const studentModule = createControllerModule({
         StudentDocument,
         FeedEntryCommentDocument,
         FeedEntryComment,
+        StudentPatch,
         gql`
             type Query {
 				roomStudent(roomStudentId: ID): StudentDocument
 			}
+
+            type Mutation {
+                updateRoomStudent(roomStudentId: ID, data: StudentPatch) : StudentDocument
+            }
         `
     ],
     memberPermission: {
@@ -32,7 +40,9 @@ const studentModule = createControllerModule({
         set: "student"
     },
     abilites: [
-        "view"
+        "view",
+        "update",
+        // "delete"
     ],
     // resolvers: {
     //     Query: {
