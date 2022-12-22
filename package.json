@@ -49,7 +49,7 @@
     "graphql-modules": "2.0.0",
     "graphql-type-json": "0.3.2",
     "if-env": "1.0.4",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.0",
     "mjml": "4.12.0",
     "mongoose": "5.13.14",
     "nodemailer": "6.7.2",
